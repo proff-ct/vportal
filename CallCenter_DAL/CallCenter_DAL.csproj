@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{93D4C5B8-2CF7-468D-A872-B42FB9B58FAF}</ProjectGuid>
+    <ProjectGuid>{AEA0D243-C2BA-4EFD-9C13-92CC18466B09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VisibilityPortal_BLL.Tests</RootNamespace>
-    <AssemblyName>VisibilityPortal_BLL.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <RootNamespace>CallCenter_DAL</RootNamespace>
+    <AssemblyName>CallCenter_DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
