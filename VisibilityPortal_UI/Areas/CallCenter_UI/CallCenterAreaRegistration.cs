@@ -16,7 +16,7 @@ namespace Visibility_Portal
         {
             context.MapRoute(
                 "CallCenter_default",
-                "CallCenter_UI/{controller}/{action}/{id}",
+                "CallCenter/{controller}/{action}/{id}",
                 new { controller = "Homes", action = "Index", id = UrlParameter.Optional },
                 new string[] { "CallCenter_UI.Controllers" }
             );
