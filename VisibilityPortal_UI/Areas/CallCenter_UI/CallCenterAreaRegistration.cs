@@ -18,7 +18,7 @@ namespace Visibility_Portal
                 "CallCenter_default",
                 "CallCenter/{controller}/{action}/{id}",
                 new { controller = "Homes", action = "Index", id = UrlParameter.Optional },
-                new string[] { "CallCenter_UI.Controllers" }
+                new string[] { "CallCenter_BLL.Controllers" }
             );
         }
     }
