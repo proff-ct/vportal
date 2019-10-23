@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.852
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisibilityPortal_UI", "VisibilityPortal_UI\VisibilityPortal_UI.csproj", "{4083E8E8-C597-4EDA-990B-06363CF275DA}"
 EndProject
@@ -18,6 +18,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallCenter_BLL.Tests", "CallCenter_BLL.Tests\CallCenter_BLL.Tests.csproj", "{C421C2CA-B57F-4874-9A20-8CD71DE2E5FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallCenter_UI", "VisibilityPortal_UI\Areas\CallCenter_UI\CallCenter_UI.csproj", "{E07D0179-A853-4377-8F96-13FF94FE539F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agency_UI", "VisibilityPortal_UI\Areas\Agency_UI\Agency_UI.csproj", "{6F04A589-0578-4B72-B065-C0214B944614}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agency_BLL", "Agency_BLL\Agency_BLL.csproj", "{EA19F8A9-C55F-40A4-A072-83C58BD6AC9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agency_DAL", "Agency_DAL\Agency_DAL.csproj", "{03E2DF17-E889-456D-A4FC-71E4A1D9C8D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +63,18 @@ Global
 		{E07D0179-A853-4377-8F96-13FF94FE539F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E07D0179-A853-4377-8F96-13FF94FE539F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E07D0179-A853-4377-8F96-13FF94FE539F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F04A589-0578-4B72-B065-C0214B944614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F04A589-0578-4B72-B065-C0214B944614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F04A589-0578-4B72-B065-C0214B944614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F04A589-0578-4B72-B065-C0214B944614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA19F8A9-C55F-40A4-A072-83C58BD6AC9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA19F8A9-C55F-40A4-A072-83C58BD6AC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA19F8A9-C55F-40A4-A072-83C58BD6AC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA19F8A9-C55F-40A4-A072-83C58BD6AC9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E2DF17-E889-456D-A4FC-71E4A1D9C8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E2DF17-E889-456D-A4FC-71E4A1D9C8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E2DF17-E889-456D-A4FC-71E4A1D9C8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E2DF17-E889-456D-A4FC-71E4A1D9C8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
