@@ -8,9 +8,12 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Visibility_Portal.Models;
 
-namespace Visibility_Portal.Controllers
+using VisibilityPortal_BLL.Models.ASP_Identity;
+using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
+using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
+
+namespace VisibilityPortal_BLL.Controllers
 {
     [Authorize]
     public class AccountController : Controller
