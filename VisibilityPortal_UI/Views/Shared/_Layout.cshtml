@@ -36,34 +36,30 @@
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <!-- Messages: style can be found in dropdown.less-->
-                        <!-- User Account Menu -->
-                        <li class="dropdown user user-menu">
-                            <!-- Menu Toggle Button -->
-                            <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
-                                <i class="fa fa-user-circle fa-2x bg-white pull-left"></i>
-                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- Menu Body -->
-                                <li class="user-body">
-                                    <ul class="list-group">
-                                        <a class="list-group-item list-group-item-action">Profile</a>
-                                    </ul>
-                                    <!-- /.row -->
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                       @if (Request.IsAuthenticated)
+                       {
+                           <!-- User Account Menu -->
+                           <li class="dropdown user user-menu">
+                               <!-- Menu Toggle Button -->
+                               <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
+                                   <i class="fa fa-user-circle fa-2x pull-left"></i>
+                                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                   <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
+                               </a>
+                               <ul class="dropdown-menu">
+                                   <!-- Menu Footer-->
+                                   <li class="user-footer">
+                                       <div class="list-group-item mt-2">
+                                           <a href="#" class="">Profile</a>
+                                       </div>
+                                       <div class="list-group-item mt-2">
+                                           <a href="#" class="">Sign out</a>
+                                       </div>
+                                   </li>
+                               </ul>
+                           </li>
+                       }
+                       
 
                     </ul>
                 </div>
@@ -103,12 +99,8 @@
         <!-- /.content-wrapper -->
         <!-- Main Footer -->
         <footer class="main-footer">
-            <!-- To the right -->
-            <div class="pull-right hidden-xs">
-                Anything you want
-            </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+            <strong class="pull-right">Copyright &copy; @Html.Raw(DateTime.Now.Year); <a href="http://coretec.co.ke" target="_blank">Coretec</a>.</strong> All rights reserved.
         </footer>
 
         <!-- Control Sidebar -->
@@ -202,6 +194,6 @@
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
     Both of these plugins are recommended to enhance the
     user experience. -->
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
