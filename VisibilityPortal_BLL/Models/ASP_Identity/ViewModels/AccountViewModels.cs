@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Visibility_Portal.Models
+namespace VisibilityPortal_BLL.Models.ASP_Identity
 {
     public class ExternalLoginConfirmationViewModel
     {

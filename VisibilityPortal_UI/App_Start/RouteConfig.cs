@@ -17,7 +17,7 @@ namespace Visibility_Portal
           name: "Default",
           url: "{controller}/{action}/{id}",
           defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-          namespaces: new string[] { "Visibility_Portal.Controllers" }
+          namespaces: new string[] { "VisibilityPortal_BLL.Controllers" }
       );
     }
   }

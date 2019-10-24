@@ -6,9 +6,10 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Visibility_Portal.Models;
+using VisibilityPortal_BLL.Models.ASP_Identity;
+using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
 
-namespace Visibility_Portal.Controllers
+namespace VisibilityPortal_BLL.Controllers
 {
     [Authorize]
     public class ManageController : Controller

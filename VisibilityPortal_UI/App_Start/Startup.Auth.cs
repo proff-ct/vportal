@@ -5,7 +5,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using Visibility_Portal.Models;
+using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
+using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
 
 namespace Visibility_Portal
 {
