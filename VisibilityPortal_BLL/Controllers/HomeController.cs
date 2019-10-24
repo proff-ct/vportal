@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Visibility_Portal.Controllers
+namespace VisibilityPortal_BLL.Controllers
 {
   
   public class HomeController : Controller

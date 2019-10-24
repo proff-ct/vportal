@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Visibility_Portal.Models
+namespace VisibilityPortal_BLL.Models.ASP_Identity
 {
     public class IndexViewModel
     {
