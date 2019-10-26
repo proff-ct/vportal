@@ -186,7 +186,12 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\image\deposit.png" />
+    <Content Include="Content\image\report.png" />
+    <Content Include="Content\image\withdraw.png" />
+    <Content Include="Content\image\bankteller.png" />
     <Content Include="Content\image\coreTec-logo 1.png" />
+    <Content Include="Content\image\debt.png" />
     <Content Include="Content\image\icons_fundsmgt 1.png" />
     <Content Include="Content\image\msacco 1.png" />
     <Content Include="Content\ionicons.min.css" />
