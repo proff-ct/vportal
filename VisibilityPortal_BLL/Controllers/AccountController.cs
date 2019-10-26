@@ -44,7 +44,7 @@ namespace VisibilityPortal_BLL.Controllers
     }
     public ApplicationRoleManager RoleManager
     {
-      get => _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+      get => _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
       private set => _roleManager = value;
     }
 
