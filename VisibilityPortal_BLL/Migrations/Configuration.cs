@@ -1,10 +1,11 @@
 namespace VisibilityPortal_BLL.Migrations
 {
   using System.Data.Entity.Migrations;
+  using VisibilityPortal_BLL.InitialSetup.SetupDefaults;
   using VisibilityPortal_BLL.Models;
   using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
 
-  internal sealed class Configuration : DbMigrationsConfiguration<VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels.ApplicationDbContext>
+  internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
   {
     public Configuration()
     {
@@ -12,7 +13,7 @@ namespace VisibilityPortal_BLL.Migrations
       ContextKey = "VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels.ApplicationDbContext";
     }
 
-    protected override void Seed(VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels.ApplicationDbContext context)
+    protected override void Seed(ApplicationDbContext context)
     {
       //  This method will be called after migrating to the latest version.
 
@@ -29,11 +30,32 @@ namespace VisibilityPortal_BLL.Migrations
 
       context.Roles.AddOrUpdate(
         r => r.Name,
-        new ApplicationRole { Name = PortalUserRoles.SystemRoles.SuperAdmin.ToString() },
-        new ApplicationRole { Name = PortalUserRoles.SystemRoles.SystemAdmin.ToString() },
-        new ApplicationRole { Name = PortalUserRoles.SystemRoles.Admin.ToString() },
-        new ApplicationRole { Name = PortalUserRoles.SystemRoles.Regular.ToString() }
+        new ApplicationRole
+        {
+          Name = PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
+          SetupPassPhrase = ApplicationRoleDefaults.PASSPHRASE_DEFAULT,
+          SetupKey = ApplicationRoleDefaults.PASSKEY_DEFAULT
+        },
+        new ApplicationRole
+        {
+          Name = PortalUserRoles.SystemRoles.SystemAdmin.ToString(),
+          SetupPassPhrase = ApplicationRoleDefaults.PASSPHRASE_DEFAULT,
+          SetupKey = ApplicationRoleDefaults.PASSKEY_DEFAULT
+        },
+        new ApplicationRole
+        {
+          Name = PortalUserRoles.SystemRoles.Admin.ToString(),
+          SetupPassPhrase = ApplicationRoleDefaults.PASSPHRASE_DEFAULT,
+          SetupKey = ApplicationRoleDefaults.PASSKEY_DEFAULT
+        },
+        new ApplicationRole
+        {
+          Name = PortalUserRoles.SystemRoles.Regular.ToString(),
+          SetupPassPhrase = ApplicationRoleDefaults.PASSPHRASE_DEFAULT,
+          SetupKey = ApplicationRoleDefaults.PASSKEY_DEFAULT
+        }
         );
+
     }
   }
 }

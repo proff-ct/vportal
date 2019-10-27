@@ -40,6 +40,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="MattAdoUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MattAdoUtils.1.0.0\lib\net46\MattAdoUtils.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -120,6 +123,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="InitialSetupBLL.cs" />
     <Compile Include="Migrations\201910240749557_InitialCreate.cs" />
     <Compile Include="Migrations\201910240749557_InitialCreate.Designer.cs">
       <DependentUpon>201910240749557_InitialCreate.cs</DependentUpon>
@@ -128,8 +132,21 @@
     <Compile Include="Migrations\201910250811582_Extend_User_UserRole.Designer.cs">
       <DependentUpon>201910250811582_Extend_User_UserRole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910260808100_Add_SetupPassPhrase_To_Role.cs" />
+    <Compile Include="Migrations\201910260808100_Add_SetupPassPhrase_To_Role.Designer.cs">
+      <DependentUpon>201910260808100_Add_SetupPassPhrase_To_Role.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910261520089_Add_SetupKey_To_Role.cs" />
+    <Compile Include="Migrations\201910261520089_Add_SetupKey_To_Role.Designer.cs">
+      <DependentUpon>201910261520089_Add_SetupKey_To_Role.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.cs" />
+    <Compile Include="Migrations\201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.Designer.cs">
+      <DependentUpon>201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ASP_Identity\IdentityConfig\ApplicationRoleManager.cs" />
+    <Compile Include="Models\ASP_Identity\IdentityConfig\PortalDatabaseInitializer.cs" />
     <Compile Include="Models\ASP_Identity\IdentityModels\ApplicationRole.cs" />
     <Compile Include="Models\ASP_Identity\IdentityModels\ApplicationUserRole.cs" />
     <Compile Include="Models\ASP_Identity\ViewModels\AccountViewModels.cs" />
@@ -148,6 +165,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{6A5EC0E2-A633-420E-A14D-4C9EFAF2A9CD}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisibilityPortal_DAL\VisibilityPortal_DAL.csproj">
       <Project>{C03388C5-675B-4EEC-BCC3-67C3033C7B52}</Project>
       <Name>VisibilityPortal_DAL</Name>
@@ -159,6 +180,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910250811582_Extend_User_UserRole.resx">
       <DependentUpon>201910250811582_Extend_User_UserRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910260808100_Add_SetupPassPhrase_To_Role.resx">
+      <DependentUpon>201910260808100_Add_SetupPassPhrase_To_Role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910261520089_Add_SetupKey_To_Role.resx">
+      <DependentUpon>201910261520089_Add_SetupKey_To_Role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.resx">
+      <DependentUpon>201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

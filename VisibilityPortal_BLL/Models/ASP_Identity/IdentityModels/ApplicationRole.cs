@@ -9,6 +9,8 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
 {
   public class ApplicationRole : IdentityRole
   {
+    public string SetupPassPhrase { get; set; }
+    public string SetupKey { get; set; }
     public ApplicationRole() : base() { }
     public ApplicationRole(string roleName) : base(roleName) { }
   }
