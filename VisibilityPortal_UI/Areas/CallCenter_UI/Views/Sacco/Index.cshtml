@@ -1,0 +1,95 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@{
+  Layout = $"{CallCenterAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutCallCenter.cshtml";
+}
+@model IEnumerable<CallCenter_DAL.Sacco>
+@using CallCenter_DAL
+@{
+  ViewBag.Title = "Sacco";
+  var activeSacco = (Sacco)ViewBag.Sacco;
+}
+@section HtmlHead{
+  @{ 
+    string[] cssFiles = {
+        $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/DataTables/datatables.css",
+      };
+  }
+  @Styles.Render(cssFiles);
+}
+<section class="content-header">
+  <h1>
+    Saccos
+    <small>
+      Set the active sacco
+      <span id="currentActiveSacco">
+        | Current: <strong>
+          <i class="dynamicPlaceholder">
+            @(activeSacco != null ? activeSacco.saccoName_1 : "not set")
+          </i>
+        </strong>
+      </span>
+    </small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  </ol>
+</section>
+<section class="content">
+  <table id="saccoList" class="table table-bordered table-responsive table-striped">
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          M-Pesa Float
+        </th>
+        <th>
+          SMS Float
+        </th>
+        <th>Set Active</th>
+      </tr>
+    </thead>
+    <tbody>
+      @using (Html.BeginForm())
+      {
+        foreach (Sacco item in Model)
+        {
+          <tr>
+            <td>
+              @Html.DisplayFor(modelItem => item.saccoName_1)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.mpesaFloat)
+            </td>
+            <td>
+              SMS_FLOAT_GOES_HERE
+            </td>
+            <td>
+              <input type="radio" name="SelectedSacco"
+                     onclick="SetActiveSacco(
+                      this.value,
+                      {controlID:'#currentActiveSacco', placeholder:'.dynamicPlaceholder'},
+                      @(activeSacco != null ? "true":"false"));"
+                     value=@item.corporateNo>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+
+</section>
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @Scripts.Render($"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/DataTables/datatables.js");
+  @Scripts.Render($"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/sacco.js")
+  <!-- Define custom scripts-->
+  <script>
+    $(document).ready(function () {
+      initTable("#saccoList");
+    });
+  </script>
+}
