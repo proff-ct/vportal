@@ -16,7 +16,7 @@
 };
   }
   @Styles.Render(cssFiles)
-  @RenderSection("ViewStyles", false)
+  @RenderSection("HtmlHead", false)
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -41,7 +41,8 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-            @if (Request.IsAuthenticated)
+            @Html.Partial("_LoginPartial")
+            @*@if (Request.IsAuthenticated)
             {
               <!-- User Account Menu -->
               <li class="dropdown user user-menu">
@@ -63,7 +64,7 @@
                   </li>
                 </ul>
               </li>
-            }
+            }*@
 
 
           </ul>
@@ -78,7 +79,7 @@
         <!-- /.search form -->
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-
+          @RenderSection("MenuLinks", false)
           <!-- Optionally, you can add icons to the links -->
           @using Microsoft.AspNet.Identity
     @*  Temporarily commented the below for purposes of showcasing MVP*@      
