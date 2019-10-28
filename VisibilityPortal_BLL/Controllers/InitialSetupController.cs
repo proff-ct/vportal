@@ -9,8 +9,22 @@ namespace VisibilityPortal_BLL.Controllers
   
   public class InitialSetupController : Controller
   {
-    public ActionResult Index()
+    //
+    // GET: /InitialSetup/SetPassphrase
+    [AllowAnonymous]
+    public ActionResult SetPassphrase()
     {
+      return View();
+    }
+    //
+    // POST: /InitialSetup/SetPassphrase
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public ActionResult SetPassphrase(FormCollection form)
+    {
+
+
       return View();
     }
   }
