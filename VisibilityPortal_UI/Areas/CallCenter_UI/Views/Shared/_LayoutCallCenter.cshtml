@@ -1,0 +1,41 @@
+﻿@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HtmlHead {
+  @RenderSection("HtmlHead", false)
+}
+@section MenuLinks {
+  <li>
+    <a href="@Url.Action("Index", "Sacco")">
+      <i class="fa fa-university"></i>
+      <span>
+        Saccos
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="@Url.Action("Transactions", "Sacco")">
+      <i class="fa fa-list"></i>
+      @*<i>Tr</i>*@
+      <span>
+        Transactions
+      </span>
+    </a>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-share"></i> <span>Utilities</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li><a href="#"><i class="fa fa-money"></i>Payments</a></li>
+      <li><a href="#"><i class="fa fa-mobile"></i>Airtime</a></li>
+    </ul>
+  </li>
+}
+@RenderBody()
+@section Scripts{
+  @RenderSection("Scripts", required: false)
+}
