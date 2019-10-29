@@ -46,7 +46,7 @@
     @foreach (var menuItem in itemlist)
     {
         <div class=" col-md-4 col-sm-6  col-12 zoom">
-        <a href=@Url.Action("Index", "Summary")>
+        <a href=@Url.Action("Index", "Summary",new {type = menuItem.Actioname})>
                 <div class="info-box bg-aqua-gradient mb-4 box-shadow">
                     <div class="row no-gutters">
                         <div class="col">
