@@ -1,0 +1,33 @@
+﻿<div class="col-md-10">
+  <h4>
+    Active sacco:
+    <small>
+      <span id="activeSacco">
+        <strong>
+          <i id="activeSaccoPlaceholder">
+            @*@(activeSacco != null ? activeSacco.sacconame : "not set")*@
+            [not set]
+          </i>
+        </strong>
+      </span>
+    </small>
+    </h4>
+    <div class="input-group ">
+      @Html.DropDownList("searchSacco",
+      Enumerable.Empty<SelectListItem>(),
+      "Select Sacco",
+      htmlAttributes: new
+      {
+        @class = "form-control show-tick",
+        @id = "searchSacco"
+      }
+    )
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-flat"
+                id="refreshSaccoSelectbox"
+                onclick="RefreshSaccoSelectBox('#searchSacco')">
+          <i class="fa fa-refresh" aria-hidden="true"></i>
+        </button>
+      </span>
+    </div>
+</div>
