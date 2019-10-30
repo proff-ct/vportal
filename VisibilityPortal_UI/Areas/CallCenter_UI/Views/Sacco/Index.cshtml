@@ -12,33 +12,26 @@
 @section HtmlHead{
   @{ 
     string[] cssFiles = {
-        $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/DataTables/datatables.css",
+        //$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/DataTables/datatables.css",
       };
   }
   @Styles.Render(cssFiles);
 }
 <section class="content-header">
-  <h1>
-    Saccos
-    <small>
-      Set the active sacco
-      <span id="currentActiveSacco">
-        | Current: <strong>
-          <i class="dynamicPlaceholder">
-            @(activeSacco != null ? activeSacco.saccoName_1 : "not set")
-          </i>
-        </strong>
-      </span>
-    </small>
-  </h1>
+  <h3>
+    Sacco
+</h3>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
   </ol>
 </section>
 <section class="content">
-  <table id="saccoList" class="table table-bordered table-responsive table-striped">
+  @*<table id="saccoList" class="table table-bordered table-responsive table-striped">
     <thead>
       <tr>
+        <th>
+          Corporate No
+        </th>
         <th>
           Name
         </th>
@@ -57,6 +50,9 @@
         foreach (Sacco item in Model)
         {
           <tr>
+            <td>
+              @Html.DisplayFor(modelItem => item.corporateNo)
+            </td>
             <td>
               @Html.DisplayFor(modelItem => item.saccoName_1)
             </td>
@@ -78,18 +74,46 @@
         }
       }
     </tbody>
-  </table>
+  </table>*@
+  <div class="col-md-20">
+    <div class="panel">
+      <div class="panel-heading">
+        <div class="pull-left">
+          <h5 class="panel-info"><strong>MPesa Float | BULK SMS Float | Transactional SMS Float</strong></h5>
+        </div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-labeled btn-primary btn-sm" onclick="LoadData()">
+            <span class="btn-label"><i class="fa fa-refresh"></i></span>
+            Reload
+          </button>
+          <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters()">
+            <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+            Clear filters
+          </button>
+        </div>
 
+      </div>
+      <div class="panel-body">
+        <div id="saccoPrimaryInfoTable"></div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
 @section Scripts {
   <!-- Include external scripts-->
-  @Scripts.Render($"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/DataTables/datatables.js");
+  @*@Scripts.Render($"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/DataTables/datatables.js");*@
   @Scripts.Render($"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/sacco.js")
   <!-- Define custom scripts-->
   <script>
     $(document).ready(function () {
-      initTable("#saccoList");
+      initTabulator("#saccoPrimaryInfoTable");
+      $("#selectSacco").change(function () {
+        var selectedSaccoCorporateNo = $(this).val();
+        if (!selectedSaccoCorporateNo) return;
+        LoadData("@Url.Action("LoadPrimaryInfo","Sacco")", selectedSaccoCorporateNo);
+      });
     });
   </script>
 }
