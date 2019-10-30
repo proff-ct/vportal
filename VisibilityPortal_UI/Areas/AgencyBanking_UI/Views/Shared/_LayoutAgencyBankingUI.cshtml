@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.Owin;
+@using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section MenuLinks{
+
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-list-ol" style="color:brown"></i>
+            <span>
+                DashBoard
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Agents", "Summary")">
+            <i class="fa fa-list-ol" style="color:brown"></i>
+            <span>
+                Reports
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Agents", "Summary")">
+            <i class="fa fa-university" style="color:brown"></i>
+            <span>
+                View Agents
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Devices", "Summary")">
+            <i class="fa fa-list" style="color:coral"></i>
+            <span>
+                View Devices
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "Sacco")">
+            <i class="fa fa-university"></i>
+            <span>
+                Assign
+            </span>
+        </a>
+    </li>
+    @{
+         
+        if (User.IsInRole("SuperAdmin") || User.IsInRole("SystemAdmin"))
+        {
+            <li>
+                <a href="@Url.Action("Index", "Home")">
+                    <i class="fa fa-list-ol" style="color:brown"></i>
+                    <span>
+                        Create User
+                    </span>
+                </a>
+            </li>
+        }
+    }
+}
+@section HtmlHead{
+    @RenderSection("HtmlHead", false)
+}
+
+@RenderBody()
+
+@section scripts{
+    @RenderSection("scripts", false)
+}

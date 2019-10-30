@@ -52,9 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentsBLL.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
+    <Compile Include="SummaryBLL.cs" />
     <Compile Include="util\TableHeader.cs" />
     <Compile Include="DapperORM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

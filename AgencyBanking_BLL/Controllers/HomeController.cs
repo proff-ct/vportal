@@ -10,7 +10,10 @@ namespace AgencyBanking_BLL.Controllers
   {
     public ActionResult Index()
     {
-      return View();
+        var Summarybll = new SummaryBLL();
+        var data = Summarybll.GetSummary();
+        ViewBag.Data = data;
+            return View();
     }
 
     public ActionResult About()
