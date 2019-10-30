@@ -56,6 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
+    <Compile Include="Controllers\AirtimeTopupsController.cs" />
+    <Compile Include="Controllers\UtilityPaymentsController.cs" />
+    <Compile Include="Controllers\WithdrawalsController.cs" />
+    <Compile Include="Controllers\LoansController.cs" />
     <Compile Include="Controllers\SaccoController.cs" />
     <Compile Include="DapperORM.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
