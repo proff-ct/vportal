@@ -15,7 +15,7 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
     {
     }
   #else
-    public AppDBContext()
+    public ApplicationDbContext()
         : base(Connection.ProductionConnectionString, throwIfV1Schema: false)
     {
     }

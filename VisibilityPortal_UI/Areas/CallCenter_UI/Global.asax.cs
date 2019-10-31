@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using CallCenter_BLL.Utilities.AutoMapper;
 
 namespace CallCenter_UI
 {
@@ -13,6 +14,7 @@ namespace CallCenter_UI
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-        }
+            //Mappings.RegisterMappings();
+    }
     }
 }

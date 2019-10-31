@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using CallCenter_DAL;
 
 namespace CallCenter_BLL.Controllers
@@ -6,6 +8,7 @@ namespace CallCenter_BLL.Controllers
   public class SaccoController : Controller
   {
     private SaccoBLL _saccoBLL = new SaccoBLL();
+    public Sacco ActiveSacco => (Sacco)Session["ActiveSacco"];
 
     // GET: Index
     public ActionResult Index()
@@ -13,6 +16,13 @@ namespace CallCenter_BLL.Controllers
 
       SetSaccoForView();
       return View(_saccoBLL.GetSaccoList());
+    }
+    [HttpGet]
+    public ActionResult LoadPrimaryInfo()
+    {
+      // Primary info is:
+      //M-Pesa float, Bulk SMS float, Transactional SMS float
+      return null;
     }
 
     [HttpPost]
@@ -23,13 +33,7 @@ namespace CallCenter_BLL.Controllers
 
       return activeSacco.saccoName_1;
     }
-    public Sacco ActiveSacco
-    {
-      get
-      {
-        return (Sacco)Session["ActiveSacco"];
-      }
-    }
+    
     public void SetSaccoForView()
     {
       ViewBag.Sacco = ActiveSacco;
@@ -48,6 +52,26 @@ namespace CallCenter_BLL.Controllers
       catch
       {
         return View();
+      }
+    }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult GetSaccoList(string mode="forTable")
+    {
+
+      IEnumerable<Sacco> saccoList = _saccoBLL.GetSaccoList();
+      switch (mode)
+      {
+        case "forSelect":
+          return Json(saccoList.OrderBy(s => s.saccoName_1).Select(s => new SelectListItem()
+          {
+            Text = s.saccoName_1,
+            Value = s.corporateNo
+          }).ToList(), JsonRequestBehavior.AllowGet);
+
+        default:
+          return null;
       }
     }
 

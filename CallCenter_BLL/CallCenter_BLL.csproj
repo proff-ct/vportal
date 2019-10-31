@@ -33,6 +33,9 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
     </Reference>
@@ -40,8 +43,13 @@
       <HintPath>..\packages\Dapper.FluentMap.1.8.0\lib\net451\Dapper.FluentMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -56,16 +64,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
+    <Compile Include="Controllers\AirtimeTopupsController.cs" />
+    <Compile Include="Controllers\UtilityPaymentsController.cs" />
+    <Compile Include="Controllers\WithdrawalsController.cs" />
+    <Compile Include="Controllers\LoansController.cs" />
     <Compile Include="Controllers\SaccoController.cs" />
     <Compile Include="DapperORM.cs" />
+    <Compile Include="GuarantorsBLL.cs" />
+    <Compile Include="Models\LoansPlusGuarantors.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
+    <Compile Include="MSaccoSalaryAdvanceBLL.cs" />
+    <Compile Include="MSSQLOperators.cs" />
     <Compile Include="SaccoBLL.cs" />
     <Compile Include="Controllers\HomesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\AutoMapper\AutoMapperExtensions.cs" />
+    <Compile Include="Utilities\AutoMapper\MappedDataAnnotationsModelMetadataProvider.cs" />
+    <Compile Include="Utilities\AutoMapper\Mappings.cs" />
+    <Compile Include="Utilities\AutoMapper\ModelMetadataProviderConfig.cs" />
+    <Compile Include="ViewModels\LoanListViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CallCenter_DAL\CallCenter_DAL.csproj">

@@ -229,6 +229,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -308,6 +309,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CallCenter_BLL\CallCenter_BLL.csproj">
+      <Project>{01299762-99F8-4932-BD58-829B8E0F1606}</Project>
+      <Name>CallCenter_BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisibilityPortal_BLL\VisibilityPortal_BLL.csproj">
       <Project>{B6AA0DA3-35E2-4767-9902-DD6FFDF92171}</Project>
       <Name>VisibilityPortal_BLL</Name>

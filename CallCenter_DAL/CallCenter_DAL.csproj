@@ -45,7 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBConnection.cs" />
+    <Compile Include="GFLLoan.cs" />
+    <Compile Include="Guarantors.cs" />
     <Compile Include="IDBModel.cs" />
+    <Compile Include="MobileWithdrawals.cs" />
+    <Compile Include="MSaccoAirtimeTopup.cs" />
+    <Compile Include="MSaccoSalaryAdvance.cs" />
+    <Compile Include="MSaccoUtilityPayment.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
