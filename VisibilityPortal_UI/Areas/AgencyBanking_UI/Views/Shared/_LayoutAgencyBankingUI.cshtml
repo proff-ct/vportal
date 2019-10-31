@@ -1,7 +1,12 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using System.Security.Claims
+@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework
 @using Microsoft.AspNet.Identity.Owin;
+@using VisibilityPortal_BLL.Models
 @using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig
+@using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -49,11 +54,11 @@
         </a>
     </li>
     @{
-         
-        if (User.IsInRole("SuperAdmin") || User.IsInRole("SystemAdmin"))
+        if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
         {
+
             <li>
-                <a href="@Url.Action("Index", "Home")">
+                <a href="@Url.Action("Index", "User")">
                     <i class="fa fa-list-ol" style="color:brown"></i>
                     <span>
                         Create User
@@ -63,6 +68,8 @@
         }
     }
 }
+
+
 @section HtmlHead{
     @RenderSection("HtmlHead", false)
 }
