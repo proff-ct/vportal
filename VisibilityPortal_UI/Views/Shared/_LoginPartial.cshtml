@@ -16,7 +16,11 @@
                     <a href="#" class="">Profile</a>
                 </div>
                 <div class="list-group-item mt-2">
-                    <a href="#" class="">Sign out</a>
+                    <form  method="post" action="@Url.Action("LogOff","Account",new {Area=""})">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-info btn-lg d-block">Sign out</button>
+                    </form>
+                   
                 </div>
             </li>
         </ul>
