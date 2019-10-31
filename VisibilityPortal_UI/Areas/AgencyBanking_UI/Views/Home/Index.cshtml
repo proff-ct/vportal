@@ -1,10 +1,67 @@
-﻿@{
+﻿@using AgencyBanking_UI.Model
+@using AgencyBanking_BLL.Controllers
+@{
     ViewBag.Title = "Agency Banking Home Page";
-}
+    List<MenuItem> itemlist = new List<MenuItem>();
+    //Prepare menu items
+    itemlist.Add(new MenuItem("WithDrawals Summary","/Content/image/withdraw.png","withdrawals"));
+    itemlist.Add(new MenuItem("Deposits Summary","/Content/image/deposit.png","deposits"));
+    itemlist.Add(new MenuItem("Branch Summary","/Content/image/report.png","branches"));
+    itemlist.Add(new MenuItem("Agents Summary","/Content/image/bankteller.png","agents"));
 
-<div class="jumbotron">
-  <h2>Agency Banking</h2>
-  <p>
-    This is the Agency Banking landing page!
-  </p>
-</div>
+}
+@section css{
+    <style>
+        @@media only screen and (min-width:  768px) {
+            .box-shadow {
+                box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05);
+            }
+            .zoom {
+                padding: 20px;
+                -ms-transition: transform .2s;
+                -o-transition: transform .2s;
+                -webkit-transition: transform .2s;
+                transition: transform .2s; /* Animation */
+                width: 200px;
+                margin: 0 auto;
+            }
+
+            .zoom:hover {
+                transform: scale(1.1);
+            }
+
+        }
+        @@media only screen and (max-width: 600px) {
+            .zoom {
+                margin-top: 10px;
+            }
+
+        }
+
+    </style>
+
+}
+<section class="content">
+    <div class="row">
+    @foreach (var menuItem in itemlist)
+    {
+        <div class=" col-md-4 col-sm-6  col-12 zoom">
+        <a href=@Url.Action("Index", "Summary",new {type = menuItem.Actioname})>
+                <div class="info-box bg-aqua-gradient mb-4 box-shadow">
+                    <div class="row no-gutters">
+                        <div class="col">
+                            <img class="img-fluid rounded p-3" src="@Html.Raw(menuItem.Imagelink)" alt="@Html.Raw(menuItem.Title)">
+                        </div>
+                        <div class="col">
+                            <div class="card-body">
+                                <p class="text-uppercase info-box-text">@Html.Raw(menuItem.Title)</p>
+                                <p class="card-subtitle info-box-number">Kshs 1000.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+    </div>
+</section>
