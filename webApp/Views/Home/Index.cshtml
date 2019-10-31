@@ -1,0 +1,24 @@
+﻿@{
+  ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+  <h1>Mobility Visibility Portal</h1>
+  <p class="lead">Multiple services, Single View Point</p>
+  <p><small>currently in development</small></p>
+  @if (Request.IsAuthenticated)
+  {
+    <p>
+      <a href=@Url.Action("Index", "Homes", new { Area = "CallCenter_UI"}) 
+         class="btn btn-primary btn-lg">
+      Call Center &raquo;
+      </a>
+    </p>
+
+  }
+  else
+  {
+    <p><a href=@Url.Action("Login", "Account") class="btn btn-primary btn-lg">Login &raquo;</a></p>
+  }
+</div>
+
