@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CallCenter_BLL.Utilities.AutoMapper;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
 
 namespace Visibility_Portal
@@ -19,6 +20,7 @@ namespace Visibility_Portal
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Database.SetInitializer(new PortalDatabaseInitializer());
-        }
+            Mappings.RegisterMappings();
+    }
     }
 }

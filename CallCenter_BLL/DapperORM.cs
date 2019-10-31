@@ -23,11 +23,16 @@ namespace CallCenter_BLL
     //private static string connectionString = Connection.ProductionConnectionString;
     static DapperORM()
     {
+      ConnectionString = connectionString;
       FluentMapper.Initialize(config =>
       {
         config.AddMap(new SaccoMap());
+        config.AddMap(new MSaccoSalaryAdvanceMap());
+        //config.AddMap(new GFLLoanMap());
+        config.AddMap(new GuarantorsMap());
       });
     }
+    public static string ConnectionString { get; }
     public static T ExecuteReturnScalar<T>(string procedureName, DynamicParameters param = null)
     {
       using (SqlConnection sqlCon = new SqlConnection(connectionString))

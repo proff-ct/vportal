@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBConnection.cs" />
+    <Compile Include="GFLLoan.cs" />
     <Compile Include="Guarantors.cs" />
     <Compile Include="IDBModel.cs" />
     <Compile Include="MobileWithdrawals.cs" />
