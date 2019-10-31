@@ -5,15 +5,15 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace AgencyBanking_BLL.Controllers
-{
-  public class HomeController : Controller
+{[Authorize]
+    public class HomeController : Controller
   {
     public ActionResult Index()
     {
         var Summarybll = new SummaryBLL();
         var data = Summarybll.GetSummary();
         ViewBag.Data = data;
-            return View();
+        return View();
     }
 
     public ActionResult About()
