@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+   
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <link href="~/Content/account.css" rel="stylesheet" />
+    <style>
+        .coreetec-logo {
+          background-image: url('../../Content/image/coreTec-logo 1.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .msacco-logo {
+            background-image: url('../../Content/image/msacco 1.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 100px;
+            height: 100px;
+        }
+        .agency-logo {
+            background-image: url('../../Content/image/icons_fundsmgt 1.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 100px;
+            height: 100px;}
+        .logo-caption {
+            font-family: Roboto Mono;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 24px;
+            line-height: 28px;
+            text-align: center;
+            color: #000000;
+        }
+        .pagetitle {
+            height: 76px;
+            font-family: Roboto Mono;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 42px;
+            line-height: 49px;
+            text-align: center;
+
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+
+<div class="row py-2">
+    <div class="col-4 coreetec-logo">
+    </div>
+    <div class="col-6">
+        <p class="pagetitle py-3">M-Sacco Service Portal</p>
+        <div class="row ml-5">
+            <div class="text-center ml-5 mr-5">
+                <p class="msacco-logo"></p>
+                <p class="logo-caption"> M-Sacco</p>
+            </div>
+            <div class="text-center ml-5">
+                <p class="agency-logo"></p>
+                <p class="logo-caption"> Agency </p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="container" style="margin-left: 20%;width:500px">
+    @RenderBody()
+</div>
+
+</div>
+<!-- ./wrapper -->
+<!-- REQUIRED JS SCRIPTS -->
+<!-- jQuery 3 -->
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="~/Scripts/bootstrap.min.js"></script>
+@RenderSection("scripts", required: false)
+</body>
+</html>

@@ -170,20 +170,33 @@ namespace VisibilityPortal_BLL.Controllers
 
     //
     // GET: /Account/ConfirmEmail
+    /// <summary>
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="emailConfirmationCode"></param>
+    /// <param name="passwordSetCode"></param>
+    /// <returns></returns>
     [AllowAnonymous]
-    public async Task<ActionResult> ConfirmEmail(string userId, string code)
+  
+    public async Task<ActionResult> ConfirmEmail(string userId, string emailConfirmationCode, string passwordSetCode = null)
     {
-      if (userId == null || code == null)
-      {
-        return View("Error");
-      }
-      IdentityResult result = await UserManager.ConfirmEmailAsync(userId, code);
-      return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        if (userId == null || emailConfirmationCode == null)
+        {
+            return View("Error");
+        }
+        var result = await UserManager.ConfirmEmailAsync(userId, emailConfirmationCode);
+
+        if (result.Succeeded && !string.IsNullOrEmpty(passwordSetCode))
+        {
+            return RedirectToAction("ResetPassword", "Account", new { userId = userId, code = passwordSetCode, firstPassword = true });
+        }
+
+        return View(result.Succeeded ? "ConfirmEmail" : "Error");
     }
 
-    //
-    // GET: /Account/ForgotPassword
-    [AllowAnonymous]
+        //
+        // GET: /Account/ForgotPassword
+        [AllowAnonymous]
     public ActionResult ForgotPassword()
     {
       return View();

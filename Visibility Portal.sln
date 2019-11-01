@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisibilityPortal_UI", "VisibilityPortal_UI\VisibilityPortal_UI.csproj", "{4083E8E8-C597-4EDA-990B-06363CF275DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E07D0179-A853-4377-8F96-13FF94FE539F} = {E07D0179-A853-4377-8F96-13FF94FE539F}
+		{43AB579F-52DB-4914-B759-478E99E2287A} = {43AB579F-52DB-4914-B759-478E99E2287A}
+		{30D4BBCA-65D2-4C11-86CD-1F5F461840D1} = {30D4BBCA-65D2-4C11-86CD-1F5F461840D1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisibilityPortal_DAL", "VisibilityPortal_DAL\VisibilityPortal_DAL.csproj", "{C03388C5-675B-4EEC-BCC3-67C3033C7B52}"
 EndProject
