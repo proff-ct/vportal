@@ -76,7 +76,7 @@
     <Compile Include="MSaccoSalaryAdvanceBLL.cs" />
     <Compile Include="MSSQLOperators.cs" />
     <Compile Include="SaccoBLL.cs" />
-    <Compile Include="Controllers\HomesController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\AutoMapper\AutoMapperExtensions.cs" />
     <Compile Include="Utilities\AutoMapper\MappedDataAnnotationsModelMetadataProvider.cs" />

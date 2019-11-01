@@ -109,6 +109,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\portal\view\_setActiveSacco.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="plugins\bootstrap-select-1.13.9\css\bootstrap-select.css" />
@@ -708,7 +709,7 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Web.config" />
-    <Content Include="Views\Homes\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
