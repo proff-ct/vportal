@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace CallCenter_BLL.Controllers
 {
-    public class HomesController : Controller
+    public class HomeController : Controller
     {
         // GET: Home
         public ActionResult Index()
