@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -228,6 +229,25 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="AppDBConnectionStrings.config">
+      <TransformOnBuild>true</TransformOnBuild>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="AppDBConnectionStrings.Debug.config">
+      <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="AppDBConnectionStrings.FolderProfile.config">
+      <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="AppDBConnectionStrings.Release.config">
+      <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -250,12 +270,17 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -357,25 +382,35 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets'))" />
   </Target>
+  <Import Project="..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets')" />
+  <!--<None Include="Web.config">
+    <SubType>Designer</SubType>
+    <TransformOnBuild>true</TransformOnBuild>
+  </None>
+  <None Include="Web.QA.config">
+    <DependentUpon>Web.config</DependentUpon>
+    <IsTransformFile>True</IsTransformFile>
+  </None>-->
   <!-- <Target Name="CustomDeployAreas"> -->
-    <!-- <ItemGroup> -->
-        <!-- <AreasFiles Include="$(MSBuildProjectDirectory)\Areas\**" /> -->
-        <!-- <FilesForPackagingFromProject Include="%(AreasFiles.Identity)"> -->
-            <!-- <DestinationRelativePath>Areas\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath> -->
-        <!-- </FilesForPackagingFromProject> -->
-    <!-- </ItemGroup> -->
-<!-- </Target> -->
-<!-- <PropertyGroup> -->
-    <!-- <CopyAllFilesToSingleFolderForPackageDependsOn> -->
-        <!-- CustomDeployAreas; -->
-        <!-- $(CopyAllFilesToSingleFolderForPackageDependsOn); -->
-    <!-- </CopyAllFilesToSingleFolderForPackageDependsOn> -->
-    <!-- <CopyAllFilesToSingleFolderForMsdeployDependsOn> -->
-        <!-- CustomDeployAreas; -->
-        <!-- $(CopyAllFilesToSingleFolderForPackageDependsOn); -->
-    <!-- </CopyAllFilesToSingleFolderForMsdeployDependsOn> -->
-<!-- </PropertyGroup> -->
+  <!-- <ItemGroup> -->
+  <!-- <AreasFiles Include="$(MSBuildProjectDirectory)\Areas\**" /> -->
+  <!-- <FilesForPackagingFromProject Include="%(AreasFiles.Identity)"> -->
+  <!-- <DestinationRelativePath>Areas\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath> -->
+  <!-- </FilesForPackagingFromProject> -->
+  <!-- </ItemGroup> -->
+  <!-- </Target> -->
+  <!-- <PropertyGroup> -->
+  <!-- <CopyAllFilesToSingleFolderForPackageDependsOn> -->
+  <!-- CustomDeployAreas; -->
+  <!-- $(CopyAllFilesToSingleFolderForPackageDependsOn); -->
+  <!-- </CopyAllFilesToSingleFolderForPackageDependsOn> -->
+  <!-- <CopyAllFilesToSingleFolderForMsdeployDependsOn> -->
+  <!-- CustomDeployAreas; -->
+  <!-- $(CopyAllFilesToSingleFolderForPackageDependsOn); -->
+  <!-- </CopyAllFilesToSingleFolderForMsdeployDependsOn> -->
+  <!-- </PropertyGroup> -->
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
