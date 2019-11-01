@@ -11,13 +11,19 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/bootstrap/tabulator_bootstrap4.css",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSacco.css",
 };
-    
+
   }
   @Styles.Render(cssFiles)
 
   @RenderSection("HtmlHead", false)
 }
 @section MenuLinks {
+  <li class="header">CALL CENTER |> NAVIGATION</li>
+  <li class="active">
+    <a href="@Url.Action("Index", "Home")">
+      <i class="fa fa-dashboard"></i>Dashboard
+    </a>
+  </li>
   <li class="treeview">
     <a href="#">
       <i class="fa fa-bank"></i> <span>Saccos</span>
@@ -42,7 +48,6 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSa
           <i class="fa fa-credit-card"></i>Loans
         </a>
       </li>
-      @*<li><a href="@Url.Action("Transactions", "Sacco")">*@
       <li>
         <a href="#">
           <i class="fa fa-money"></i>Withdrawals
