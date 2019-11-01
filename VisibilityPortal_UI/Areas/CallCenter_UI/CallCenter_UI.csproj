@@ -109,6 +109,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\portal\view\_setActiveSacco.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="plugins\bootstrap-select-1.13.9\css\bootstrap-select.css" />
