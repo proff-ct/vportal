@@ -1,11 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-
+using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
@@ -68,7 +70,23 @@ namespace VisibilityPortal_BLL.Controllers
       {
         return View(model);
       }
+      // Do not allow log in of users whose emails are not confirmed
+      ApplicationUser user = UserManager.Find(model.Email, model.Password);
+      if (user == null)
+      {
+        ModelState.AddModelError("", "No user found matching supplied credentials");
+        return View(model);
+      }
+      if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+      {
+        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        var callbackUrl = Url.Action(
+          "ResendConfirmEmail", "Account", new { userId = user.Id },
+          protocol: Request.Url.Scheme);
+        ViewBag.EmailConfirmationLink = callbackUrl;
 
+        return View("CheckEmailForConfirmationLink");
+      }
       // This doesn't count login failures towards account lockout
       // To enable password failures to trigger account lockout, change to shouldLockout: true
       SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -169,6 +187,57 @@ namespace VisibilityPortal_BLL.Controllers
     }
 
     //
+    // GET: /Account/CreateSuperAdmin
+    [AllowAnonymous]
+    public ActionResult CreateSuperAdmin()
+    {
+      return View();
+    }
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> CreateSuperAdmin(RegisterSuperUserViewModel model)
+    {
+      if (!ModelState.IsValid)
+      {
+        return View(model);
+      }
+      // verify the pass phrase
+
+      bool isValidPassPhrase = await VerifyPassPhraseAsync(RoleManager, model.setupPassPhrase);
+      if (!isValidPassPhrase)
+      {
+        ModelState.AddModelError("setupPassPhrase", "Passphrase verification failed");
+        return View(model);
+      }
+
+      ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+      IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+      if (result.Succeeded)
+      {
+        // add the superadmin role to the user
+        user.ClientCorporateNo = CoreTecOrganisation.CorporateNo;
+        UserManager.AddToRole(user.Id, PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+        UserManager.Update(user);
+        try
+        {
+          await SendActivationEmailAsync(user);
+          return RedirectToAction("Login", "Account");
+        }
+        catch(SmtpException ex)
+        {
+          ViewBag.ErrorMessage = ex.Message;
+          return View("ErrorSendEmail");
+        }
+      }
+      else
+      {
+        AddErrors(result);
+        return View(model);
+      }
+
+    }
+    //
     // GET: /Account/ConfirmEmail
     /// <summary>
     /// </summary>
@@ -177,26 +246,58 @@ namespace VisibilityPortal_BLL.Controllers
     /// <param name="passwordSetCode"></param>
     /// <returns></returns>
     [AllowAnonymous]
-  
+
     public async Task<ActionResult> ConfirmEmail(string userId, string emailConfirmationCode, string passwordSetCode = null)
     {
-        if (userId == null || emailConfirmationCode == null)
-        {
-            return View("Error");
-        }
-        var result = await UserManager.ConfirmEmailAsync(userId, emailConfirmationCode);
+      if (userId == null || emailConfirmationCode == null)
+      {
+        return View("Error");
+      }
+      IdentityResult result = await UserManager.ConfirmEmailAsync(userId, emailConfirmationCode);
 
-        if (result.Succeeded && !string.IsNullOrEmpty(passwordSetCode))
-        {
-            return RedirectToAction("ResetPassword", "Account", new { userId = userId, code = passwordSetCode, firstPassword = true });
-        }
+      if (result.Succeeded && !string.IsNullOrEmpty(passwordSetCode))
+      {
+        return RedirectToAction("ResetPassword", "Account", new { userId = userId, code = passwordSetCode, firstPassword = true });
+      }
 
-        return View(result.Succeeded ? "ConfirmEmail" : "Error");
+      return View(result.Succeeded ? "ConfirmEmail" : "Error");
     }
 
-        //
-        // GET: /Account/ForgotPassword
-        [AllowAnonymous]
+    //
+    // GET: /Account/ResendConfirmEmail
+    [AllowAnonymous]
+    public async Task<ActionResult> ResendConfirmEmail(string userId)
+    {
+      var user = UserManager.FindById(userId);
+      if (user == null)
+      {
+        return View("~/Views/Shared/Error"); // use a 404 page instead
+      }
+
+      string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+      var callbackUrl = Url.Action(
+        "ConfirmEmail", "Account", new { userId = user.Id, code = code },
+        protocol: Request.Url.Scheme);
+      IdentityMessage message = new IdentityMessage
+      {
+        Destination = user.Email,
+        Subject = "Visibility Portal: Activate your account",
+        Body = $"Please activate your account by clicking <a href ='{callbackUrl}'>here</a>",
+      };
+      try
+      {
+      await UserManager.EmailService.SendAsync(message);
+      return RedirectToAction("Login", "Account");
+      }
+      catch (SmtpException ex)
+      {
+        ViewBag.ErrorMessage = ex.Message;
+        return View("ErrorSendEmail");
+      }
+    }
+    //
+    // GET: /Account/ForgotPassword
+    [AllowAnonymous]
     public ActionResult ForgotPassword()
     {
       return View();
@@ -455,6 +556,38 @@ namespace VisibilityPortal_BLL.Controllers
       return RedirectToAction("Index", "Home");
     }
 
+    private async Task SendActivationEmailAsync(ApplicationUser user)
+    {
+
+      string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+
+      string callbackUrl = Url.Action(
+            "ConfirmEmail", "Account", new { userId = user.Id, code },
+            protocol: Request.Url.Scheme);
+
+      IdentityMessage _confirmationEmail = new IdentityMessage
+      {
+        Destination = user.Email,
+        Subject = "CoreTec Visibility Portal: Activate your account",
+        Body = $"Please activate your account by clicking <a href ='{callbackUrl}'>here</a>",
+      };
+
+      await UserManager.EmailService.SendAsync(_confirmationEmail);
+    }
+    private async Task<bool> VerifyPassPhraseAsync(ApplicationRoleManager roleManager, string passPhrase)
+    {
+      InitialSetupBLL initialSetupBLL = new InitialSetupBLL();
+      try
+      {
+        return await initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase);
+      }
+      catch (ArgumentException)
+      {
+        //TO-DO:
+        // Log that an exception occurred
+        return false;
+      }
+    }
     internal class ChallengeResult : HttpUnauthorizedResult
     {
       public ChallengeResult(string provider, string redirectUri)

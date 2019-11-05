@@ -77,6 +77,31 @@ namespace VisibilityPortal_BLL.Tests
         Assert.IsInstanceOf<bool>(result, "Boolean not returned!!!");
         Assert.IsFalse(result, "False not returned for empty string passphrase!!");
       }
+
+      [Test]
+      public void Throws_an_exception_if_passphrase_in_db_is_still_default()
+      {
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+
+        suRole.SetupPassPhrase = ApplicationRoleDefaults.PASSPHRASE_DEFAULT;
+        RoleManager.Update(suRole);
+        var ex = Assert.ThrowsAsync<ArgumentException>(
+          () =>  _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase.ToLower()),
+          "Argument Exception not thrown!");
+        Assert.IsTrue(ex.Message.Contains("Passphrase not configured!"));
+      }
+      [Test]
+      public void Throws_an_exception_if_passphrase_in_db_has_null_or_empty_value()
+      {
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+        suRole.SetupPassPhrase = "";
+        RoleManager.Update(suRole);
+
+        var ex = Assert.ThrowsAsync<ArgumentNullException>(
+          () => _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase.ToLower()),
+          "Argument Null Exception not thrown!");
+        Assert.IsTrue(ex.Message.Contains("Passphrase not defined!"));
+      }
     }
 
     [TestFixture]

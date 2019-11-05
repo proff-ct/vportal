@@ -201,6 +201,32 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard.min.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_arrows.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_arrows.min.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_circles.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_circles.min.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_dots.css" />
+    <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_dots.min.css" />
+    <Content Include="plugins\SmartWizard-master\dist\js\jquery.smartWizard.js" />
+    <Content Include="plugins\SmartWizard-master\dist\js\jquery.smartWizard.min.js" />
+    <Content Include="plugins\SmartWizard-master\examples\ajaxtest.php" />
+    <Content Include="plugins\SmartWizard-master\examples\index.html" />
+    <Content Include="plugins\SmartWizard-master\examples\smartwizard-ajax.html" />
+    <Content Include="plugins\SmartWizard-master\examples\smartwizard-events.html" />
+    <Content Include="plugins\SmartWizard-master\examples\smartwizard-input.html" />
+    <Content Include="plugins\SmartWizard-master\examples\smartwizard-modal.html" />
+    <Content Include="plugins\SmartWizard-master\examples\smartwizard-multiple.html" />
+    <Content Include="plugins\SmartWizard-master\gulpfile.js" />
+    <Content Include="plugins\SmartWizard-master\karma.conf.js" />
+    <Content Include="plugins\SmartWizard-master\src\css\smart_wizard.css" />
+    <Content Include="plugins\SmartWizard-master\src\css\smart_wizard_theme_arrows.css" />
+    <Content Include="plugins\SmartWizard-master\src\css\smart_wizard_theme_circles.css" />
+    <Content Include="plugins\SmartWizard-master\src\css\smart_wizard_theme_dots.css" />
+    <Content Include="plugins\SmartWizard-master\src\js\jquery.smartWizard.js" />
+    <Content Include="plugins\SmartWizard-master\test\test-template.html" />
+    <Content Include="plugins\SmartWizard-master\test\test.js" />
     <Content Include="Scripts\adminlte.min.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -248,6 +274,15 @@
       <IsTransformFile>true</IsTransformFile>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="plugins\SmartWizard-master\.gitignore" />
+    <Content Include="plugins\SmartWizard-master\.npmignore" />
+    <Content Include="plugins\SmartWizard-master\.travis.yml" />
+    <Content Include="plugins\SmartWizard-master\bower.json" />
+    <Content Include="plugins\SmartWizard-master\composer.json" />
+    <Content Include="plugins\SmartWizard-master\CONTRIBUTING.md" />
+    <Content Include="plugins\SmartWizard-master\LICENSE" />
+    <Content Include="plugins\SmartWizard-master\package.json" />
+    <Content Include="plugins\SmartWizard-master\README.md" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -264,6 +299,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\createSuperAdmin.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -320,6 +356,11 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\_AccountShared.cshtml" />
     <Content Include="Views\InitialSetup\SetPassphrase.cshtml" />
+    <Content Include="Views\Account\CreateSuperAdmin.cshtml" />
+    <Content Include="Views\Account\CreatePortalUser.cshtml" />
+    <Content Include="Views\InitialSetup\PassphraseSuccess.cshtml" />
+    <Content Include="Views\Account\ErrorSendEmail.cshtml" />
+    <Content Include="Views\Account\CheckEmailForConfirmationLink.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

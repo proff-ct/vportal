@@ -19,9 +19,10 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSa
 }
 @section MenuLinks {
   <li class="header">CALL CENTER |> NAVIGATION</li>
-  <li class="active">
+  <li>
     <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>Dashboard
+      <i class="fa fa-dashboard"></i>
+      <span>Dashboard</span>
     </a>
   </li>
   <li class="treeview">
@@ -80,7 +81,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_setActiveSacco.js"
 };
   }
-  @Scripts.Render(scriptFiles);
+  @Scripts.Render(scriptFiles)
   <!-- Define custom scripts-->
   <script type="text/javascript">
       $(document).ready(function () {

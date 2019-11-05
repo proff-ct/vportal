@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace VisibilityPortal_BLL
 {
 
-    public class GMAILConfig
+    public static class GMAILConfig
     {
         public static string username { get; set; }
         public static string password { get; set; }

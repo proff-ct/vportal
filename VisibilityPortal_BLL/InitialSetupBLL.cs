@@ -16,7 +16,15 @@ namespace VisibilityPortal_BLL
     {
       ApplicationRole superUserRole = await roleManager.FindByNameAsync(
         PortalUserRoles.SystemRoles.SuperAdmin.ToString());
-      return superUserRole.SetupPassPhrase == passPhrase;
+      if(string.IsNullOrEmpty(superUserRole.SetupPassPhrase))
+      {
+        throw new ArgumentNullException("SetupPassPhrase","Passphrase not defined!");
+      }
+      else if(superUserRole.SetupPassPhrase == ApplicationRoleDefaults.PASSPHRASE_DEFAULT){
+        throw new ArgumentException("SetupPassPhrase", "Passphrase not configured!");
+      }
+
+      return passPhrase == Encryption.Decrypt(superUserRole.SetupPassPhrase, superUserRole.SetupKey);
     }
 
     public string GenerateSuperUserSetupPassPhrase(string passPhrase, out string encryptionKey)
@@ -68,9 +76,9 @@ namespace VisibilityPortal_BLL
 
     public bool CheckForDefaultSuperUserPassphrase(ApplicationRoleManager roleManager)
     {
-     string rolePassPhrase = roleManager
-        .FindByNameAsync(PortalUserRoles.SystemRoles.SuperAdmin.ToString())
-        .Result.SetupPassPhrase;
+      string rolePassPhrase = roleManager
+         .FindByNameAsync(PortalUserRoles.SystemRoles.SuperAdmin.ToString())
+         .Result.SetupPassPhrase;
 
       return rolePassPhrase == ApplicationRoleDefaults.PASSPHRASE_DEFAULT;
     }

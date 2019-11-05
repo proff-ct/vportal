@@ -128,7 +128,7 @@
     <Compile Include="Controllers\InitialSetupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Gmail.cs" />
+    <Compile Include="GmailConfig.cs" />
     <Compile Include="InitialSetupBLL.cs" />
     <Compile Include="Migrations\201910240749557_InitialCreate.cs" />
     <Compile Include="Migrations\201910240749557_InitialCreate.Designer.cs">
@@ -161,6 +161,7 @@
     <Compile Include="Models\ASP_Identity\IdentityModels\ApplicationDbContext.cs" />
     <Compile Include="Models\ASP_Identity\IdentityModels\ApplicationUser.cs" />
     <Compile Include="Models\ASP_Identity\ViewModels\ManageViewModels.cs" />
+    <Compile Include="Models\CoreTecOrganisation.cs" />
     <Compile Include="Models\PortalUserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />

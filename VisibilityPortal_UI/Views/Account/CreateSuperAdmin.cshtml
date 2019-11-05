@@ -1,0 +1,197 @@
+﻿
+@model VisibilityPortal_BLL.Models.ASP_Identity.RegisterSuperUserViewModel
+@{
+  ViewBag.Title = "Visibility Portal";
+}
+@*@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+//$"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/jquery.steps.css",
+//$"~/plugins/SmartWizard-master/dist/css/smart_wizard_theme_arrows.css"
+};
+
+  }
+  @Styles.Render(cssFiles)
+
+}*@
+<div class="card">
+  <h4 class="card-header">Create a new SuperAdmin account</h4>
+  <div class="card-body">
+    @using (Html.BeginForm(
+      "CreateSuperAdmin", "Account", FormMethod.Post, new
+      {
+        @class = "form-horizontal",
+        role = "form",
+        @id = "frmCreateSuperAdmin"
+      }))
+    {
+      @Html.AntiForgeryToken()
+      //this is for the jquery steps plugin
+      @*<div id="wizard">
+        <h5>Setup passphrase</h5>
+        <section>
+          @Html.ValidationSummary("", new { @class = "text-danger" })
+          <div class="form-group">
+            @Html.Label("Setup passphrase", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+              @Html.TextBox("txtPassphrase", null, new { @class = "form-control", @id = "txtPassphrase" })
+            </div>
+          </div>
+        </section>
+
+        <h5>Account details</h5>
+        <section>
+
+          @Html.ValidationSummary("", new { @class = "text-danger" })
+          <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+              @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+          </div>
+          <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+              @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+          </div>
+          <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+              @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+              <input type="submit" class="btn btn-default" value="Create" />
+            </div>
+          </div>
+        </section>
+      </div>*@
+      //this is for the smart wizard plugin
+      @*<div id="smartwizard">
+        <ul>
+          <li>
+            <a href="#step-1">Passphrase<small>Enter the setup passphrase</small></a>
+          </li>
+          <li>
+            <a href="#step-2">Account<small>Enter the account info</small></a>
+          </li>
+        </ul>
+        <div>
+          <div id="step-1" class="">
+            <div id="form-step-0" role="form" data-toggle="validator">
+              <h5>Enter the Setup Passphrase</h5>
+              @Html.ValidationSummary("", new { @class = "text-danger" })
+              <div class="form-group">
+                @Html.Label("Setup passphrase", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                  @Html.TextBox("txtPassphrase", null, new { @class = "form-control", @id = "txtPassphrase" })
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="step-2" class="">
+            <div id="form-step-1" role="form" data-toggle="validator">
+              <h5>Enter account info</h5>
+              @Html.ValidationSummary("", new { @class = "text-danger" })
+              <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                  @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+              <div class="col-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+              </div>
+            </div>
+            <div class="form-group">
+              @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+              <div class="col-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Create" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>*@
+
+      @Html.ValidationSummary("", new { @class = "text-danger" })
+
+      <div class="form-group">
+        @Html.LabelFor(m => m.setupPassPhrase, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+          @Html.TextBoxFor(m => m.setupPassPhrase, new { @class = "form-control" })
+        </div>
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+          @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+          @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+          @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <input type="submit" class="btn btn-default" value="Create" />
+        </div>
+      </div>
+    }
+  </div>
+</div>
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  @{
+    string[] scriptFiles = {
+//$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/jquery.steps.js",
+//$"~/plugins/SmartWizard-master/dist/js/jquery.smartWizard.js",
+//$"~/Scripts/portal/view/createSuperAdmin.js"
+
+};
+<script type="text/javascript">
+  $(document).ready(function () {
+      // This is for the jquery steps plugin
+      @*var configDetails = {
+        headerTag: "h5",
+        bodyTag: "section",
+        txtPassphrase: "#txtPassphrase",
+        validateUrl: "@Url.Action("ValidatePassPhrase", "InitialSetup")"
+      };
+
+      initJQueryStepsWizard("#wizard", configDetails);*@
+
+      // This is for the smart wizard plugin
+      @*var ajaxValidationConfig = {
+        txtPassphrase: "#txtPassphrase",
+        validateUrl: "@Url.Action("ValidatePassPhrase", "InitialSetup")"
+      };
+      InitSmartWizard('#smartwizard', '#frmCreateSuperAdmin', ajaxValidationConfig);
+      SmartWizardEnableFinishButtonOnLastStep('#smartwizard', 1);*@
+    });
+
+</script>
+  }
+
+
+
+  @Scripts.Render(scriptFiles)
+}
