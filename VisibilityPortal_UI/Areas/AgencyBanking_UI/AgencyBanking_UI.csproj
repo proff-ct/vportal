@@ -226,6 +226,9 @@
     <Content Include="Views\Summary\Index.cshtml" />
     <Content Include="Views\Summary\list.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Device\create.cshtml" />
+    <Content Include="Views\Device\Edit.cshtml" />
+    <Content Include="Views\Device\Assign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -241,6 +244,10 @@
     <ProjectReference Include="..\..\..\AgencyBanking_BLL\AgencyBanking_BLL.csproj">
       <Project>{c6fcd371-feb9-49c3-bc7c-1eaff85ded88}</Project>
       <Name>AgencyBanking_BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\AgencyBanking_DAL\AgencyBanking_DAL.csproj">
+      <Project>{2ffcbcb1-4d5d-4ad1-b34c-01d2cfc16b15}</Project>
+      <Name>AgencyBanking_DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\VisibilityPortal_BLL\VisibilityPortal_BLL.csproj">
       <Project>{B6AA0DA3-35E2-4767-9902-DD6FFDF92171}</Project>
