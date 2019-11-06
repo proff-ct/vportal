@@ -45,14 +45,6 @@
             </span>
         </a>
     </li>
-    <li>
-        <a href="@Url.Action("Index", "Sacco")">
-            <i class="fa fa-university"></i>
-            <span>
-                Assign
-            </span>
-        </a>
-    </li>
     @{
         if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
         {
