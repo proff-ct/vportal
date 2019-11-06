@@ -1,11 +1,4 @@
-﻿@using System.Security.Claims
-@using Microsoft.AspNet.Identity
-@using Microsoft.AspNet.Identity;
-@using Microsoft.AspNet.Identity.EntityFramework
-@using Microsoft.AspNet.Identity.Owin;
-@using VisibilityPortal_BLL.Models
-@using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig
-@using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
+﻿@using VisibilityPortal_BLL.Models
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,8 +30,24 @@
             </span>
         </a>
     </li>
-    
     @{
+        if (User.IsInRole(PortalUserRoles.SystemRoles.Regular.ToString()))
+        {
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>Devices</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Devices", "Summary")"><i class="fa fa-circle-o"></i> View All Device</a></li>
+                </ul>
+            </li>
+        }
+    }
+
+        @{
         if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
         {
             <li class="treeview">
@@ -50,6 +59,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="@Url.Action("Index","Device")"><i class="fa fa-circle-o"></i> Add New Devices</a></li>
+
                     <li><a href="@Url.Action("Devices", "Summary")"><i class="fa fa-circle-o"></i> View All Device</a></li>  
                     <li><a href="@Url.Action("Assign","Device")"><i class="fa fa-circle-o"></i> Assign Device</a></li>
                     <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> Device Repair Log</a></li>
@@ -67,8 +77,6 @@
         }
     }
 }
-
-
 @section HtmlHead{
     <style>
 
