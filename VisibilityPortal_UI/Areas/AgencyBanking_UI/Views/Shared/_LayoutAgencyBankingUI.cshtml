@@ -37,14 +37,7 @@
             </span>
         </a>
     </li>
-    <li>
-        <a href="@Url.Action("Devices", "Summary")">
-            <i class="fa fa-list" style="color:coral"></i>
-            <span>
-                View Devices
-            </span>
-        </a>
-    </li>
+    
     @{
         if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
         {
@@ -57,6 +50,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="@Url.Action("Index","Device")"><i class="fa fa-circle-o"></i> Add New Devices</a></li>
+                    <li><a href="@Url.Action("Devices", "Summary")"><i class="fa fa-circle-o"></i> View All Device</a></li>  
                     <li><a href="@Url.Action("Assign","Device")"><i class="fa fa-circle-o"></i> Assign Device</a></li>
                     <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> Device Repair Log</a></li>
                 </ul>
