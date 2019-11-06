@@ -257,22 +257,22 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="AppDBConnectionStrings.config">
       <TransformOnBuild>true</TransformOnBuild>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="AppDBConnectionStrings.Debug.config">
       <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="AppDBConnectionStrings.FolderProfile.config">
       <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="AppDBConnectionStrings.Release.config">
       <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="plugins\SmartWizard-master\.gitignore" />
     <Content Include="plugins\SmartWizard-master\.npmignore" />
