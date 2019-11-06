@@ -262,3 +262,4 @@ __pycache__/
 
 # Custom file for specifying db connection strings
 /**/AppDBConnectionStrings*.config
+/**/TestingAppDBConnectionStrings*.config
