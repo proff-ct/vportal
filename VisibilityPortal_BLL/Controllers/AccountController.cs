@@ -276,7 +276,7 @@ namespace VisibilityPortal_BLL.Controllers
 
       string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
       var callbackUrl = Url.Action(
-        "ConfirmEmail", "Account", new { userId = user.Id, code = code },
+        "ConfirmEmail", "Account", new { userId = user.Id, emailConfirmationCode = code },
         protocol: Request.Url.Scheme);
       IdentityMessage message = new IdentityMessage
       {
@@ -562,7 +562,7 @@ namespace VisibilityPortal_BLL.Controllers
       string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
       string callbackUrl = Url.Action(
-            "ConfirmEmail", "Account", new { userId = user.Id, code },
+            "ConfirmEmail", "Account", new { userId = user.Id, emailConfirmationCode = code },
             protocol: Request.Url.Scheme);
 
       IdentityMessage _confirmationEmail = new IdentityMessage
