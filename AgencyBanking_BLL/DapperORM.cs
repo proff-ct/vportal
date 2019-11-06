@@ -51,13 +51,13 @@ namespace AgencyBanking_BLL
                 return sqlCon.Query<T>(query, commandType: CommandType.Text);
             }
         }
-        public static T QueryGetSingle<T>(string query)
+        public static T QueryGetSingle<T>(string query,DynamicParameters parameters =null)
         {
 
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
             {
                 sqlCon.Open();
-                return sqlCon.QuerySingleOrDefault<T>(query, commandType: CommandType.Text);
+                return sqlCon.QuerySingleOrDefault<T>(query, parameters,commandType: CommandType.Text);
             }
 
 
@@ -69,6 +69,19 @@ namespace AgencyBanking_BLL
                 sqlCon.Open();
                 sqlCon.Execute(query, commandType: CommandType.Text);
             }
+        }
+
+        public static int ExecuteInsert(string query, DynamicParameters parameters = null)
+        {
+            int affectedrows = -1;
+            using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
+            {
+                sqlCon.Open();
+               affectedrows =  sqlCon.Execute(query,parameters);
+            }
+
+            return affectedrows;
+
         }
     }
 }
