@@ -14,16 +14,25 @@ namespace VisibilityPortal_BLL
     public async Task<bool> VerifySuperUserPassphraseAsync(
       ApplicationRoleManager roleManager, string passPhrase)
     {
+      if (string.IsNullOrEmpty(passPhrase)) return false;
+
       ApplicationRole superUserRole = await roleManager.FindByNameAsync(
         PortalUserRoles.SystemRoles.SuperAdmin.ToString());
-      if(string.IsNullOrEmpty(superUserRole.SetupPassPhrase))
+      if (string.IsNullOrEmpty(superUserRole.SetupPassPhrase))
       {
         throw new ArgumentNullException("SetupPassPhrase","Passphrase not defined!");
       }
-      else if(superUserRole.SetupPassPhrase == ApplicationRoleDefaults.PASSPHRASE_DEFAULT){
+      else if(superUserRole.SetupPassPhrase == ApplicationRoleDefaults.PASSPHRASE_DEFAULT)
+      {
         throw new ArgumentException("SetupPassPhrase", "Passphrase not configured!");
       }
-
+      else if(
+        superUserRole.SetupKey == ApplicationRoleDefaults.PASSKEY_DEFAULT 
+        || string.IsNullOrEmpty(superUserRole.SetupKey))
+      {
+        throw new ArgumentException("SetupPassKey", "SetupKey not configured!");
+      }
+      
       return passPhrase == Encryption.Decrypt(superUserRole.SetupPassPhrase, superUserRole.SetupKey);
     }
 

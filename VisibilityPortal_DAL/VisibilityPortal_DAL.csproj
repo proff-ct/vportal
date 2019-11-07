@@ -71,6 +71,7 @@
     <Compile Include="PortalDBContext.cs" />
     <Compile Include="PortalModuleForClient.cs" />
     <Compile Include="EF6 related\PortalModule.cs" />
+    <Compile Include="Sacco.cs" />
     <Compile Include="VisibilityPortalModule.cs" />
     <Compile Include="ClientUser.cs" />
     <Compile Include="CoreTecClient.cs" />

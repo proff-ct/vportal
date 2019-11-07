@@ -1,7 +1,13 @@
 ﻿namespace VisibilityPortal_DAL
 {
-  public partial class PortalModule
+  public partial class PortalModule: IDBModel
   {
+    public static string DBName => "VisibilityPortal";
+    public static string DBTableName => "PortalModule";
+    public string databaseName => DBName;
+
+    public string tableName => DBTableName;
+
     public enum modules
     {
       AgencyBanking,
