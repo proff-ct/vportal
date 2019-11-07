@@ -166,5 +166,17 @@ namespace CallCenter_BLL.Models.Mappings
       Map(m => m.Transaction_Date).ToColumn("Transaction Date");
     }
   }
+  internal class LinkMonitoringMap : EntityMap<LinkMonitoring>
+  {
+    internal LinkMonitoringMap()
+    {
+      Map(m => m.Corporate_Name).ToColumn("Corporate Name");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Http_Status).ToColumn("Http Status");
+      Map(m => m.Last_Check).ToColumn("Last Check");
+      Map(m => m.Last_Email_Sent).ToColumn("Last Email Sent");
+      Map(m => m.Ping_Result).ToColumn("Ping Result");
+    }
+  }
 }
-      

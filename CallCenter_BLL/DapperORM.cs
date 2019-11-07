@@ -33,6 +33,7 @@ namespace CallCenter_BLL
         config.AddMap(new MSaccoUtilityPaymentMap());
         config.AddMap(new MSaccoAirtimeTopupMap());
         config.AddMap(new MobileWithdrawalsMap());
+        config.AddMap(new LinkMonitoringMap());
       });
     }
     public static string ConnectionString { get; }
