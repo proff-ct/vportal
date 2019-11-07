@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GuarantorBLLTests.cs" />
+    <Compile Include="MobileWithdrawalsBLLTests.cs" />
     <Compile Include="MSaccoAirtimeTopupBLLTests.cs" />
     <Compile Include="MSaccoUtilityPaymentBLLTests.cs" />
     <Compile Include="MSaccoSalaryAdvanceBLLTests.cs" />

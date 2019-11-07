@@ -32,6 +32,7 @@ namespace CallCenter_BLL
         config.AddMap(new GuarantorsMap());
         config.AddMap(new MSaccoUtilityPaymentMap());
         config.AddMap(new MSaccoAirtimeTopupMap());
+        config.AddMap(new MobileWithdrawalsMap());
       });
     }
     public static string ConnectionString { get; }
