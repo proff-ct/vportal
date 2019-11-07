@@ -78,4 +78,32 @@ namespace CallCenter_BLL.Models.Mappings
     }
   }
 
+  internal class MSaccoUtilityPaymentMap : EntityMap<MSaccoUtilityPayment>
+  {
+    internal MSaccoUtilityPaymentMap()
+    {
+      Map(s => s.Account_Balance).ToColumn("Account Balance");
+      Map(s => s.Account_Name).ToColumn("Account Name");
+      Map(s => s.Account_No).ToColumn("Account No");
+      Map(s => s.Corporate_No).ToColumn("Corporate No");
+      Map(s => s.Date_Created).ToColumn("Date Created");
+      Map(s => s.Date_Sent_To_Journal).ToColumn("Date Sent To Journal");
+      Map(s => s.Document_No).ToColumn("Document No");
+      Map(s => s.Entry_No).ToColumn("Entry No");
+      Map(s => s.Request_Confirmed).ToColumn("Request Confirmed");
+      Map(s => s.Response_Status).ToColumn("Response Status");
+      Map(s => s.Response_Value).ToColumn("Response Value");
+      Map(s => s.Sent_To_Journal).ToColumn("Sent To Journal");
+      Map(s => s.SESSION_ID).ToColumn("SESSION_ID");
+      Map(s => s.Telephone_No).ToColumn("Telephone No");
+      Map(s => s.Time_Created).ToColumn("Time Created");
+      Map(s => s.Time_Sent_To_Journal).ToColumn("Time Sent To Journal");
+      Map(s => s.Transaction_Date).ToColumn("Transaction Date");
+      Map(s => s.Utility_Float_Balance).ToColumn("Utility Float Balance");
+      Map(s => s.Utility_Payment_Account).ToColumn("Utility Payment Account");
+      Map(s => s.Utility_Payment_Type).ToColumn("Utility Payment Type");
+      Map(s => s.Utility_Received).ToColumn("Utility Received");
+      Map(s => s.Utility_Result_Type).ToColumn("Utility Result Type");
+    }
+  }
 }

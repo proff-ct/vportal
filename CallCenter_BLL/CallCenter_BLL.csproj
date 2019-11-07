@@ -73,6 +73,7 @@
     <Compile Include="GuarantorsBLL.cs" />
     <Compile Include="Models\LoansPlusGuarantors.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
+    <Compile Include="MSaccoUtilityPaymentBLL.cs" />
     <Compile Include="MSaccoSalaryAdvanceBLL.cs" />
     <Compile Include="MSSQLOperators.cs" />
     <Compile Include="SaccoBLL.cs" />

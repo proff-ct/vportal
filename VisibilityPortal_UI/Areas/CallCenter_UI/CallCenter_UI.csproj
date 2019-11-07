@@ -703,6 +703,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\utilityPayments.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\sacco.js" />
     <Content Include="Scripts\portal\view\shared.js" />
@@ -743,6 +744,7 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Shared\_SetActiveSaccoPartial.cshtml" />
     <Content Include="Views\Loans\Index.cshtml" />
+    <Content Include="Views\UtilityPayments\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

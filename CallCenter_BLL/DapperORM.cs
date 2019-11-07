@@ -30,6 +30,7 @@ namespace CallCenter_BLL
         config.AddMap(new MSaccoSalaryAdvanceMap());
         //config.AddMap(new GFLLoanMap());
         config.AddMap(new GuarantorsMap());
+        config.AddMap(new MSaccoUtilityPaymentMap());
       });
     }
     public static string ConnectionString { get; }
