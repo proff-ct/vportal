@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CallCenter_DAL;
+﻿using CallCenter_DAL;
 using Dapper.FluentMap.Mapping;
 
 namespace CallCenter_BLL.Models.Mappings
 {
-  class SaccoMap : EntityMap<Sacco>
+  internal class SaccoMap : EntityMap<Sacco>
   {
     internal SaccoMap()
     {
@@ -104,6 +99,30 @@ namespace CallCenter_BLL.Models.Mappings
       Map(s => s.Utility_Payment_Type).ToColumn("Utility Payment Type");
       Map(s => s.Utility_Received).ToColumn("Utility Received");
       Map(s => s.Utility_Result_Type).ToColumn("Utility Result Type");
+    }
+  }
+  internal class MSaccoAirtimeTopupMap : EntityMap<MSaccoAirtimeTopup>
+  {
+    internal MSaccoAirtimeTopupMap()
+    {
+      Map(m => m.Account_Balance).ToColumn("Account Balance");
+      Map(m => m.Account_Name).ToColumn("Account Name");
+      Map(m => m.Account_No).ToColumn("Account No");
+      Map(m => m.Airtime_Float_Balance).ToColumn("Airtime Float Balance");
+      Map(m => m.Airtime_Received).ToColumn("Airtime Received");
+      Map(m => m.Airtime_Result_Type).ToColumn("Airtime Result Type");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Date_Created).ToColumn("Date Created");
+      Map(m => m.Date_Sent_To_Journal).ToColumn("Date Sent To Journal");
+      Map(m => m.Document_No).ToColumn("Document No");
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.From_MSISDN).ToColumn("From MSISDN");
+      Map(m => m.Response_Status).ToColumn("Response Status");
+      Map(m => m.Response_Value).ToColumn("Response Value");
+      Map(m => m.Sent_To_Journal).ToColumn("Sent To Journal");
+      Map(m => m.Time_Created).ToColumn("Time Created");
+      Map(m => m.Time_Sent_To_Journal).ToColumn("Time Sent To Journal");
+      Map(m => m.Transaction_Date).ToColumn("Transaction Date");
     }
   }
 }
