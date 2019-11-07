@@ -19,9 +19,10 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSa
 }
 @section MenuLinks {
   <li class="header">CALL CENTER |> NAVIGATION</li>
-  <li class="active">
+  <li>
     <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>Dashboard
+      <i class="fa fa-dashboard"></i>
+      <span>Dashboard</span>
     </a>
   </li>
   <li class="treeview">
@@ -49,7 +50,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSa
         </a>
       </li>
       <li>
-        <a href="#">
+        <a href="@Url.Action("Index", "MobileWithdrawals")">
           <i class="fa fa-money"></i>Withdrawals
         </a>
       </li>
@@ -63,8 +64,8 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSa
       </span>
     </a>
     <ul class="treeview-menu">
-      <li><a href="#"><i class="fa fa-money"></i>Payments</a></li>
-      <li><a href="#"><i class="fa fa-mobile"></i>Airtime</a></li>
+      <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
+      <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
     </ul>
   </li>
 }
@@ -80,7 +81,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_setActiveSacco.js"
 };
   }
-  @Scripts.Render(scriptFiles);
+  @Scripts.Render(scriptFiles)
   <!-- Define custom scripts-->
   <script type="text/javascript">
       $(document).ready(function () {
