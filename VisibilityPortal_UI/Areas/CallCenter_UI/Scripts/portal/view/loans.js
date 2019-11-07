@@ -39,7 +39,7 @@ function initTabulator(tableContainerID) {
       },
       { title: "Telephone No", field: "Telephone_No", headerFilter: true },
       { title: "Amount", field: "Amount", headerFilter: true },
-      { title: "Session ID", field: "SESSION_ID", headerFilter: true },
+      //{ title: "Session ID", field: "SESSION_ID", headerFilter: true },
       {
         title: "Sent to Journal?", field: "Sent_To_Journal",
         headerFilter: "select", headerFilterFunc: "=",
