@@ -13,6 +13,13 @@ namespace CallCenter_BLL
   {
     private string _query;
     private readonly string _tblLinkMonitoring = LinkMonitoring.DBTableName;
+    public string GetLinkStatusForClient(string corporateNo)
+    {
+      _query = $@"SELECT * FROM {_tblLinkMonitoring} WHERE [Corporate No]='{corporateNo}'";
+      LinkMonitoring statusRecord =  DapperORM.QueryGetSingle<LinkMonitoring>(_query);
+
+      return statusRecord.Http_Status;
+    }
     public LinkMonitoring GetLinkInfoForClient(string corporateNo)
     {
       _query = $@"SELECT * FROM {_tblLinkMonitoring} WHERE [Corporate No]='{corporateNo}'";

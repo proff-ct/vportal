@@ -703,6 +703,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\home.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\airtimeTopups.js" />
@@ -715,7 +716,9 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

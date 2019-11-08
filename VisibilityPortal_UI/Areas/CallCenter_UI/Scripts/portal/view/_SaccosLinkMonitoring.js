@@ -77,7 +77,7 @@ function ClearFilters() {
   tblTabulator.clearFilter(true);
 }
 
-function LoadData(restUrl, corporateNo, getAll = false) {
+function LoadTabulatorData(restUrl, corporateNo, getAll = false) {
   if (!getAll && (corporateNo == '' || corporateNo == undefined)) return;
   var ajaxParams = {
     clientCorporateNo: corporateNo,
