@@ -1,0 +1,47 @@
+﻿@model AgencyBanking_DAL.DeviceAssignModel
+
+@{
+    Layout = "~/Areas/AgencyBanking_UI/Views/Shared/_LayoutAgencyBankingUI.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Assign", "Device", FormMethod.Post, new { id = "form", @class = "card card-body px-3 col-md-8" }))
+{
+    <h2>@Html.Raw(ViewBag.Title)</h2>
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.AgentCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.AgentCode, new { htmlAttributes = new { @class = "form-control" ,required = true} })
+                @Html.ValidationMessageFor(model => model.AgentCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeviceImei, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.DeviceImei, new { htmlAttributes = new { @class = "form-control",required = true } })
+                @Html.ValidationMessageFor(model => model.DeviceImei, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-6">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script src="~/Scripts/submitform.js"></script>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

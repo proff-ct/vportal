@@ -1,16 +1,19 @@
-﻿@using AgencyBanking_UI.Model
-@using AgencyBanking_BLL.Controllers
+﻿@{
+    Layout = "../Shared/_LayoutAgencyBankingUI.cshtml";
+ }
+@using AgencyBanking_UI.Model
 @{
     ViewBag.Title = "Agency Banking Home Page";
-    List<MenuItem> itemlist = new List<MenuItem>();
+    List<SummaryMenuItem> itemlist = new List<SummaryMenuItem>();
     //Prepare menu items
-    itemlist.Add(new MenuItem("WithDrawals Summary","/Content/image/withdraw.png","withdrawals"));
-    itemlist.Add(new MenuItem("Deposits Summary","/Content/image/deposit.png","deposits"));
-    itemlist.Add(new MenuItem("Branch Summary","/Content/image/report.png","branches"));
-    itemlist.Add(new MenuItem("Agents Summary","/Content/image/bankteller.png","agents"));
+    itemlist.Add(new SummaryMenuItem("Withdrawals Summary","/Content/image/withdraw.png","WIthdrawal",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Deposits Summary","/Content/image/deposit.png","Deposit",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Branch Summary","/Content/image/report.png","#",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Agents Summary","/Content/image/bankteller.png","#",ViewBag.Data));
 
 }
-@section css{
+
+@section HtmlHead{
     <style>
         @@media only screen and (min-width:  768px) {
             .box-shadow {
@@ -41,12 +44,16 @@
     </style>
 
 }
+
 <section class="content">
     <div class="row">
     @foreach (var menuItem in itemlist)
     {
-        <div class=" col-md-4 col-sm-6  col-12 zoom">
-        <a href=@Url.Action("Index", "Summary",new {type = menuItem.Actioname})>
+        <div class=" col-md-4 col-sm-6  col-12 zoom">            
+            @{
+                var link = (menuItem.FieldName == "#" ? String.Empty : "summary");
+            }
+            <a href=@Url.Action("Index",link, new {type = menuItem.FieldName})>
                 <div class="info-box bg-aqua-gradient mb-4 box-shadow">
                     <div class="row no-gutters">
                         <div class="col">
@@ -55,7 +62,7 @@
                         <div class="col">
                             <div class="card-body">
                                 <p class="text-uppercase info-box-text">@Html.Raw(menuItem.Title)</p>
-                                <p class="card-subtitle info-box-number">Kshs 1000.00</p>
+                                <p class="card-subtitle info-box-number">Kshs @Html.Raw(menuItem.Amount)</p>
                             </div>
                         </div>
                     </div>
