@@ -100,12 +100,12 @@
     </div>
   </div>
 </div>
-@*Transactions*@
+@*Saccos Link Monitoring*@
 <div class="row">
   <div class="col-sm-12 col-md-12 col-md-lg-12">
     <div class="box box-info">
       <div class="box-header with-border">
-        <h3 class="box-title">Transactions</h3>
+        <h3 class="box-title">Saccos Link Monitoring</h3>
 
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -116,109 +116,98 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3>150, 000</h3>
-
-                <p>Loans</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- /.small box -->
-          <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3>10,000</h3>
-
-                <p>Withdrawals</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-            <!-- /.small box -->
-          </div>
+          @Html.Partial("_SaccosLinkMonitoringPartial")
         </div>
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+        @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
           <span>
             <i class="fa fa-refresh"></i>
           </span>
           Refresh Data
-        </a>
+        </a>*@
       </div>
       <!-- /.box-footer -->
     </div>
   </div>
 </div>
 @*Utilites*@
-<div class="row">
-  <div class="col-sm-12 col-md-12 col-md-lg-12">
-    <div class="box box-info">
-      <div class="box-header with-border">
-        <h3 class="box-title">Utilities</h3>
+@*<div class="row">
+    <div class="col-sm-12 col-md-12 col-md-lg-12">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Utilities</h3>
 
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse">
-            <i class="fa fa-minus"></i>
-          </button>
-        </div>
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body">
-        <div class="row">
-          <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3>150, 000</h3>
-
-                <p>Utility payment trx</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
           </div>
-          <!-- /.small box -->
-          <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3>120,000</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>150, 000</h3>
 
-                <p>Airtime Top-ups</p>
+                  <p>Utility payment trx</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
               </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
             <!-- /.small box -->
+            <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>120,000</h3>
+
+                  <p>Airtime Top-ups</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+              <!-- /.small box -->
+            </div>
           </div>
         </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+            <span>
+              <i class="fa fa-refresh"></i>
+            </span>
+            Refresh Data
+          </a>
+        </div>
+        <!-- /.box-footer -->
       </div>
-      <!-- /.box-body -->
-      <div class="box-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
-          <span>
-            <i class="fa fa-refresh"></i>
-          </span>
-          Refresh Data
-        </a>
-      </div>
-      <!-- /.box-footer -->
     </div>
-  </div>
-</div>
+  </div>*@
+@section Scripts {
+  <!-- Include external scripts-->
+  @Scripts.Render(
+  $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_SaccosLinkMonitoring.js")
+  <!-- Define local scripts-->
+  <script>
+    $(document).ready(function () {
+      initTabulator("#linkMonitoringListTable");
+      LoadData("@Url.Action("GetLinkInfoForClient", "LinkMonitoring")", "", true);
+      $("#selectSacco").change(function () {
+        var selectedSaccoCorporateNo = $(this).val();
+        if (!selectedSaccoCorporateNo) return;
+        // here, refresh the widgets
+        alert("Refreshing sacco data");
+      });
+    });
+  </script>
+}

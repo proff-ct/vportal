@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CallCenter_BLL.MSSQLOperators;
 using CallCenter_DAL;
 using NUnit.Framework;
 
@@ -27,16 +28,30 @@ namespace CallCenter_BLL.Tests
     {
       private LinkMonitoringBLL _linkMonitoringBLL = new LinkMonitoringBLL();
       private dynamic _expectedLinkMonitoring;
-      [Test]
-      public void Returns_IEnumerable_of_link_monitoring_records_for_all_clients()
-      {
-        _expectedLinkMonitoring = _linkMonitoringBLL.GetLinkInfoForAllClients();
+      int lastPage = 0;
 
-        Assert.IsInstanceOf<IEnumerable<LinkMonitoring>>(
-          _expectedLinkMonitoring, "LinkMonitoring IEnumerable not returned!");
-        Assert.GreaterOrEqual(
-          _expectedLinkMonitoring.Count, 2, "LinkMonitoring list count less than 2");
+      [Test]
+      public void Returns_enumerable_of_link_monitoring_records_when_called_without_pagination()
+      {
+        _expectedLinkMonitoring = _linkMonitoringBLL.GetLinkInfoForAllClients(out lastPage);
+
+        Assert.IsInstanceOf<IEnumerable<LinkMonitoring>>(_expectedLinkMonitoring);
       }
+      [Test]
+      public void Returns_enumerable_of_link_monitoring_records_when_called_with_pagination()
+      {
+        int page = 1;
+        int pageSize = 10;
+        PaginationParameters pagingParams = new PaginationParameters(page, pageSize, null);
+
+        _expectedLinkMonitoring = _linkMonitoringBLL.GetLinkInfoForAllClients(
+          out lastPage, true, pagingParams);
+
+        Assert.IsInstanceOf<IEnumerable<LinkMonitoring>>(_expectedLinkMonitoring);
+        Assert.LessOrEqual(_expectedLinkMonitoring.Count, pageSize, "Records returned > Expected!");
+        Assert.Greater(lastPage, 0, "last_page parameter value NOT greater than zero!");
+      }
+
     }
   }
 
