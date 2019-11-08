@@ -14,29 +14,29 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
-    <link href="~/Content/account.css" rel="stylesheet" />
+    @Styles.Render("~/Content/account.css");
     <style>
         .coreetec-logo {
-          background-image: url('../../Content/image/coreTec-logo 1.png');
+          background-image: url('@Url.Content("~/Content/image/coreTec-logo 1.png")');
             background-repeat: no-repeat;
             background-size: contain;
         }
         .msacco-logo {
-            background-image: url('../../Content/image/msacco 1.png');
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 100px;
-            height: 100px;
-        }
+            background-image: url('@Url.Content("~/Content/image/msacco 1.png")');
+            background -repeat: no-repeat;
+                  background-size: contain;
+                width: 100px;
+                height: 100px;
+                }
         .agency-logo {
-            background-image: url('../../Content/image/icons_fundsmgt 1.png');
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 100px;
-            height: 100px;}
+            background-image: url('@Url.Content("~/Content/image/icons_fundsmgt 1.png")');
+                background -repeat: no-repeat;
+                  background-size: contain;
+                width: 100px;
+                height: 100px;}
         .logo-caption {
             font-family: Roboto Mono;
-            font-style: normal;
+                font-style: normal;
             font-weight: normal;
             font-size: 24px;
             line-height: 28px;
@@ -46,7 +46,7 @@
         .pagetitle {
             height: 76px;
             font-family: Roboto Mono;
-            font-style: normal;
+              font-style: normal;
             font-weight: normal;
             font-size: 42px;
             line-height: 49px;

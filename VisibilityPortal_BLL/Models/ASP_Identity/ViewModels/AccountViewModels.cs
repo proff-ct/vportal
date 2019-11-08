@@ -89,6 +89,7 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity
     [EmailAddress]
     [Display(Name = "Email")]
     public new string Email { get; set; }
+    public string setupPassPhrase { get; set; }
   }
   public class ResetPasswordViewModel
   {

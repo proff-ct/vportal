@@ -18,7 +18,8 @@ namespace CallCenter_BLL
     public IEnumerable<Sacco> GetSaccoList()
     {
       query = $@"SELECT {string.Join(",",_saccoColumnNames)}
-             FROM {tblSacco}";
+              FROM {tblSacco}
+              WHERE Active='1'";
       return DapperORM.QueryGetList<Sacco>(query);
     }
     

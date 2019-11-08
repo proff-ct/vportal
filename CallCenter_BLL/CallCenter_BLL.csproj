@@ -65,14 +65,20 @@
   <ItemGroup>
     <Compile Include="Connection.cs" />
     <Compile Include="Controllers\AirtimeTopupsController.cs" />
+    <Compile Include="Controllers\LinkMonitoringController.cs" />
     <Compile Include="Controllers\UtilityPaymentsController.cs" />
-    <Compile Include="Controllers\WithdrawalsController.cs" />
+    <Compile Include="Controllers\MobileWithdrawalsController.cs" />
     <Compile Include="Controllers\LoansController.cs" />
     <Compile Include="Controllers\SaccoController.cs" />
     <Compile Include="DapperORM.cs" />
     <Compile Include="GuarantorsBLL.cs" />
+    <Compile Include="LinkMonitoringBLL.cs" />
     <Compile Include="Models\LoansPlusGuarantors.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
+    <Compile Include="MobileWithdrawalsBLL.cs" />
+    <Compile Include="Models\ViewModels\LinkMonitoringViewModel.cs" />
+    <Compile Include="MSaccoAirtimeTopupBLL.cs" />
+    <Compile Include="MSaccoUtilityPaymentBLL.cs" />
     <Compile Include="MSaccoSalaryAdvanceBLL.cs" />
     <Compile Include="MSSQLOperators.cs" />
     <Compile Include="SaccoBLL.cs" />
@@ -82,10 +88,11 @@
     <Compile Include="Utilities\AutoMapper\MappedDataAnnotationsModelMetadataProvider.cs" />
     <Compile Include="Utilities\AutoMapper\Mappings.cs" />
     <Compile Include="Utilities\AutoMapper\ModelMetadataProviderConfig.cs" />
-    <Compile Include="ViewModels\LoanListViewModel.cs" />
+    <Compile Include="Models\ViewModels\LoanListViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

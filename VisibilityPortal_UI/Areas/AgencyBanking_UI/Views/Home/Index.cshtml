@@ -2,15 +2,14 @@
     Layout = "../Shared/_LayoutAgencyBankingUI.cshtml";
  }
 @using AgencyBanking_UI.Model
-@using AgencyBanking_BLL.Controllers
 @{
     ViewBag.Title = "Agency Banking Home Page";
     List<SummaryMenuItem> itemlist = new List<SummaryMenuItem>();
     //Prepare menu items
     itemlist.Add(new SummaryMenuItem("Withdrawals Summary","/Content/image/withdraw.png","WIthdrawal",ViewBag.Data));
     itemlist.Add(new SummaryMenuItem("Deposits Summary","/Content/image/deposit.png","Deposit",ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Branch Summary","/Content/image/report.png","branches",ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Agents Summary","/Content/image/bankteller.png","agents",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Branch Summary","/Content/image/report.png","#",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Agents Summary","/Content/image/bankteller.png","#",ViewBag.Data));
 
 }
 
@@ -50,8 +49,11 @@
     <div class="row">
     @foreach (var menuItem in itemlist)
     {
-        <div class=" col-md-4 col-sm-6  col-12 zoom">
-        <a href=@Url.Action("Index", "Summary",new {type = menuItem.FieldName})>
+        <div class=" col-md-4 col-sm-6  col-12 zoom">            
+            @{
+                var link = (menuItem.FieldName == "#" ? String.Empty : "summary");
+            }
+            <a href=@Url.Action("Index",link, new {type = menuItem.FieldName})>
                 <div class="info-box bg-aqua-gradient mb-4 box-shadow">
                     <div class="row no-gutters">
                         <div class="col">

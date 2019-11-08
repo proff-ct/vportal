@@ -15,9 +15,16 @@ namespace AgencyBanking_BLL.Controllers
         [HttpGet]
         public ActionResult Index(string type)
         {
-            return Content(type);
-        }
+            var summary  = new SummaryBLL();
+            var data = summary.GetSummaryByName(type);
+            ViewBag.caption = $"Summary of {type}";
+            ViewBag.link = "";
+            ViewBag.columns = SetHeaders(new TransactionModel());
+           ViewBag.Title = ViewBag.caption;
+            ViewBag.data = JsonConvert.SerializeObject(data);
+            return View("list");
 
+        }
         [HttpGet]
         public ActionResult Agents(string BankNo)
         {
@@ -25,7 +32,7 @@ namespace AgencyBanking_BLL.Controllers
             ViewBag.caption = "Agents Belonging to";
             ViewBag.link = "Agents";
             ViewBag.Title = "Agents";
-            ViewBag.columns = SetAgentHeaders();
+            ViewBag.columns = SetHeaders(new AgentModel());
             var devices = agents.GetAgentsByOrganization();
             ViewBag.data = JsonConvert.SerializeObject(devices);
             return View("List");
@@ -43,9 +50,9 @@ namespace AgencyBanking_BLL.Controllers
             return View("list");
         }
 
-        private string SetAgentHeaders()
+        private string SetHeaders<T>(T t)
         {
-            var Properties = GetProperties(new AgentModel());
+            var Properties = GetProperties(t);
             var list = new List<TableHeader>();
             foreach (var pro in Properties)
             {

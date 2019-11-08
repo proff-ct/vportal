@@ -48,6 +48,7 @@
     <Compile Include="GFLLoan.cs" />
     <Compile Include="Guarantors.cs" />
     <Compile Include="IDBModel.cs" />
+    <Compile Include="LinkMonitoring.cs" />
     <Compile Include="MobileWithdrawals.cs" />
     <Compile Include="MSaccoAirtimeTopup.cs" />
     <Compile Include="MSaccoSalaryAdvance.cs" />

@@ -1,11 +1,18 @@
-﻿namespace VisibilityPortal_DAL
+namespace VisibilityPortal_DAL
 {
-  public static class PortalModule
+  using System.ComponentModel.DataAnnotations;
+  using System.ComponentModel.DataAnnotations.Schema;
+
+  [Table("PortalModule")]
+  public partial class PortalModule
   {
-    public static string[] modules = new string[] {
-      "AgencyBanking",
-      "MSacco",
-      "CallCenter"
-      };
+    [Key]
+    [StringLength(256)]
+    public string ModuleName { get; set; }
+
+    [StringLength(256)]
+    public string CoreTecProductName { get; set; }
+    [StringLength(256)]
+    public string RoutePrefix { get; set; }
   }
 }

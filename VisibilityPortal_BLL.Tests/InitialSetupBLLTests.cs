@@ -21,6 +21,7 @@ namespace VisibilityPortal_BLL.Tests
 
       public string passPhrase = "MyPassPhrase";
       public ApplicationRoleManager RoleManager;
+      private string _encryptionKey = "";
 
       [OneTimeSetUp]
       public void InitTest()
@@ -44,6 +45,11 @@ namespace VisibilityPortal_BLL.Tests
       [Test]
       public void Returns_true_if_passphrase_correct()
       {
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+        suRole.SetupPassPhrase = _initialSetupBLL.GenerateSuperUserSetupPassPhrase(passPhrase, out _encryptionKey);
+        suRole.SetupKey = _encryptionKey;
+        RoleManager.Update(suRole);
+
         bool result = Task.Run(() =>
           _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase)).Result;
 
@@ -53,6 +59,11 @@ namespace VisibilityPortal_BLL.Tests
       [Test]
       public void Returns_false_if_passphrase_not_correct()
       {
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+        suRole.SetupPassPhrase = _initialSetupBLL.GenerateSuperUserSetupPassPhrase("passPhrase", out _encryptionKey);
+        suRole.SetupKey = _encryptionKey;
+        RoleManager.Update(suRole);
+
         bool result = Task.Run(() =>
          _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, "Incorrect")).Result;
 
@@ -62,6 +73,8 @@ namespace VisibilityPortal_BLL.Tests
       [Test]
       public void Returns_false_if_empty_string_passphrase_supplied()
       {
+        
+
         bool result = Task.Run(() =>
         _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, "")).Result;
 
@@ -69,13 +82,40 @@ namespace VisibilityPortal_BLL.Tests
         Assert.IsFalse(result, "False not returned for empty string passphrase!!");
       }
       [Test]
-      public void Returns_false_if_passphrase_case_not_equal_to_expected_passphrase_case()
+      public void Throws_an_exception_if_passphrase_in_db_is_still_default()
       {
-        bool result = Task.Run(() =>
-        _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase.ToLower())).Result;
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
 
-        Assert.IsInstanceOf<bool>(result, "Boolean not returned!!!");
-        Assert.IsFalse(result, "False not returned for empty string passphrase!!");
+        suRole.SetupPassPhrase = ApplicationRoleDefaults.PASSPHRASE_DEFAULT;
+        RoleManager.Update(suRole);
+        var ex = Assert.ThrowsAsync<ArgumentException>(
+          () =>  _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase.ToLower()),
+          "Argument Exception not thrown!");
+        Assert.IsTrue(ex.Message.Contains("Passphrase not configured!"));
+      }
+      [Test]
+      public void Throws_an_exception_if_passphrase_in_db_has_null_or_empty_value()
+      {
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+        suRole.SetupPassPhrase = "";
+        RoleManager.Update(suRole);
+
+        var ex = Assert.ThrowsAsync<ArgumentNullException>(
+          () => _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase.ToLower()),
+          "Argument Null Exception not thrown!");
+        Assert.IsTrue(ex.Message.Contains("Passphrase not defined!"));
+      }
+      [Test]
+      public void Throws_an_exception_if_setup_key_is_null_or_has_default_value()
+      {
+        ApplicationRole suRole = RoleManager.FindByName(PortalUserRoles.SystemRoles.SuperAdmin.ToString());
+
+        suRole.SetupPassPhrase = _initialSetupBLL.GenerateSuperUserSetupPassPhrase("passPhrase", out _encryptionKey);
+        RoleManager.Update(suRole);
+        var ex = Assert.ThrowsAsync<ArgumentException>(
+          () => _initialSetupBLL.VerifySuperUserPassphraseAsync(RoleManager, passPhrase.ToLower()),
+          "Argument Exception not thrown!");
+        Assert.IsTrue(ex.Message.Contains("SetupKey not configured!"));
       }
     }
 

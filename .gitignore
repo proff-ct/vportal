@@ -259,3 +259,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Custom file for specifying db connection strings
+/**/AppDBConnectionStrings*.config
+/**/TestingAppDBConnectionStrings*.config
