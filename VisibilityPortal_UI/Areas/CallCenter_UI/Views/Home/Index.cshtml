@@ -1,13 +1,13 @@
 ﻿@using System.Web.Optimization
 @using Visibility_Portal
 @{
-  Layout = $"{CallCenterAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutCallCenter.cshtml";
+  Layout = $"{CallCenterAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutCallCenterDashboard.cshtml";
   ViewBag.Title = "Home - Call Center";
 }
 
 <h2>Call Center</h2>
 <div class="row">
-  <div class="col-sm-12 col-md-12 col-md-lg-12">
+  @*<div class="col-sm-12 col-md-12 col-md-lg-12">
     <div class="box box-info">
       <div class="box-header with-border">
         <h3 class="box-title">Sacco Floats | Link Status</h3>
@@ -33,7 +33,7 @@
                 <i class="ion ion-bag"></i>
               </div>
               <a class="small-box-footer"
-                 href="javascript:RefreshSaccoVitals(saccoVitals, SACCO_VITALS.Floats.MPESA)" >
+                 href="javascript:RefreshSaccoVitals(saccoVitals, SACCO_VITALS.Floats.MPESA)">
                 <i class="fa fa-refresh"></i>
                 <span>Refresh</span>
               </a>
@@ -49,11 +49,10 @@
                 <p>Link Status</p>
               </div>
               <div class="icon">
-                @*<i class="ion ion-bag"></i>*@
-                <ion-icon ios="ios-cellular"></ion-icon>
+                <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
               </div>
-              <a class="small-box-footer" 
-                 href="javascript:RefreshSaccoVitals(saccoVitals, SACCO_VITALS.LinkStatus)">
+              <a class="small-box-footer"
+                 href="javascript:RefreshSaccoVitals(saccoVitals, LoadVitalsCallback, SACCO_VITALS.LinkStatus)">
                 <i class="fa fa-refresh"></i>
                 <span>Refresh</span>
               </a>
@@ -74,7 +73,7 @@
                 <i class="ion ion-bag"></i>
               </div>
               <a class="small-box-footer"
-                 href="javascript:RefreshSaccoVitals(saccoVitals, SACCO_VITALS.Floats.BULK_SMS)" >
+                 href="javascript:RefreshSaccoVitals(saccoVitals, LoadVitalsCallback, SACCO_VITALS.Floats.BULK_SMS)">
                 <i class="fa fa-refresh"></i>
                 <span>Refresh</span>
               </a>
@@ -92,7 +91,8 @@
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="javascript:RefreshSaccoVitals(saccoVitals, SACCO_VITALS.Floats.TRX_SMS)" class="small-box-footer">
+              <a href="javascript:RefreshSaccoVitals(saccoVitals, LoadVitalsCallback, SACCO_VITALS.Floats.TRX_SMS)"
+                 class="small-box-footer">
                 <i class="fa fa-refresh"></i>
                 <span>Refresh</span>
               </a>
@@ -104,7 +104,8 @@
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="javascript:RefreshSaccoVitals(saccoVitals)" class="btn btn-sm btn-info btn-flat pull-right">
+        <a href="javascript:RefreshSaccoVitals(saccoVitals, LoadVitalsCallback)"
+           class="btn btn-sm btn-info btn-flat pull-right">
           <span>
             <i class="fa fa-refresh"></i>
           </span>
@@ -113,15 +114,21 @@
       </div>
       <!-- /.box-footer -->
     </div>
-  </div>
+  </div>*@
 </div>
 @*Saccos Link Monitoring*@
 <div class="row">
-  <div class="col-sm-12 col-md-12 col-md-lg-12">
+  <!-- Left col -->
+  <section class="col-lg-6 connectedSortable">
     <div class="box box-info">
       <div class="box-header with-border">
-        <h3 class="box-title">Saccos Link Monitoring</h3>
-
+        <h3 class="box-title">
+          Saccos Link Monitoring
+          <i class="fa fa-signal" aria-hidden="true"></i>
+        </h3>
+        <!----div class="icon">
+          <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+        </div-->
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-widget="collapse">
             <i class="fa fa-minus"></i>
@@ -137,92 +144,192 @@
       <!-- /.box-body -->
       <div class="box-footer clearfix">
         @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
-            <span>
-              <i class="fa fa-refresh"></i>
-            </span>
-            Refresh Data
-          </a>*@
+          <span>
+            <i class="fa fa-refresh"></i>
+          </span>
+          Refresh Data
+        </a>*@
+      </div>
+      <!-- /.box-footer -->
+    </div>
+  </section>
+  <!-- /.Left col -->
+  <!-- right col (We are only adding the ID to make the widgets sortable)-->
+  <section class="col-lg-6 connectedSortable">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">
+          Saccos Floats
+          <i class="fa fa-money" aria-hidden="true"></i>
+        </h3>
+        <!----div class="icon">
+          <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+        </div-->
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          @Html.Partial("_SaccosFloatsPartial")
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer clearfix">
+        @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+          <span>
+            <i class="fa fa-refresh"></i>
+          </span>
+          Refresh Data
+        </a>*@
+      </div>
+      <!-- /.box-footer -->
+    </div>
+  </section>
+  <!-- /.right col -->
+  @*<div class="col-sm-12 col-md-12 col-md-lg-12">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">
+          Saccos Link Monitoring
+          <i class="fa fa-signal" aria-hidden="true"></i>
+        </h3>
+        <!----div class="icon">
+          <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+        </div-->
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          Html.Partial("_SaccosLinkMonitoringPartial")
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer clearfix">
+        @<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+          <span>
+            <i class="fa fa-refresh"></i>
+          </span>
+          Refresh Data
+        </a>@
+      </div>
+      <!-- /.box-footer -->
+    </div>
+  </div>*@
+</div>
+@*Utilites*@
+@*<div class="row">
+  <div class="col-sm-12 col-md-12 col-md-lg-12">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Utilities</h3>
+
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3>150, 000</h3>
+
+                <p>Utility payment trx</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- /.small box -->
+          <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3>120,000</h3>
+
+                <p>Airtime Top-ups</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+            <!-- /.small box -->
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer clearfix">
+        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+          <span>
+            <i class="fa fa-refresh"></i>
+          </span>
+          Refresh Data
+        </a>
       </div>
       <!-- /.box-footer -->
     </div>
   </div>
-</div>
-@*Utilites*@
-@*<div class="row">
-    <div class="col-sm-12 col-md-12 col-md-lg-12">
-      <div class="box box-info">
-        <div class="box-header with-border">
-          <h3 class="box-title">Utilities</h3>
-
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse">
-              <i class="fa fa-minus"></i>
-            </button>
-          </div>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-          <div class="row">
-            <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
-              <!-- small box -->
-              <div class="small-box bg-yellow">
-                <div class="inner">
-                  <h3>150, 000</h3>
-
-                  <p>Utility payment trx</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-bag"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-            </div>
-            <!-- /.small box -->
-            <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5">
-              <!-- small box -->
-              <div class="small-box bg-yellow">
-                <div class="inner">
-                  <h3>120,000</h3>
-
-                  <p>Airtime Top-ups</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-bag"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-              <!-- /.small box -->
-            </div>
-          </div>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer clearfix">
-          <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
-            <span>
-              <i class="fa fa-refresh"></i>
-            </span>
-            Refresh Data
-          </a>
-        </div>
-        <!-- /.box-footer -->
-      </div>
-    </div>
-  </div>*@
+</div>*@
 @section Scripts {
-  <!-- Include external scripts-->
+<!-- Include external scripts-->
   @{
     string[] scriptFiles = {
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_SaccosLinkMonitoring.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_SaccosFloats.js",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
 };
   }
   @Scripts.Render(scriptFiles)
-  
-  <!-- Define local scripts-->
-  <script>
+
+<!-- Define local scripts-->
+  <script type="text/javascript">
+    function LoadVitalsCallback(vitalToLoad, response) {
+      switch (vitalToLoad) {
+        case SACCO_VITALS.LinkStatus:
+          var linkStatus;
+          switch (response.status) {
+            case CALLBACK_RESPONSE.STATUS.OK:
+              var pingResult = response.data.Ping_Result;
+              var httpStatus = response.data.Http_Status;
+
+              linkStatus = httpStatus == "OK" ? "UP" : "DOWN";
+              break;
+            case CALLBACK_RESPONSE.STATUS.ERROR:
+              linkStatus = response.data.error;
+          };
+          $(saccoVitals.linkStatus.contentContainer).text(linkStatus);
+          break;
+        case SACCO_VITALS.Floats.MPESA:
+          break;
+        case SACCO_VITALS.Floats.BULK_SMS:
+          break;
+        case SACCO_VITALS.Floats.TRX_SMS:
+          break;
+      };
+    }
+
     $(document).ready(function () {
-      initTabulator("#linkMonitoringListTable");
-      LoadTabulatorData("@Url.Action("GetLinkInfoForClient", "LinkMonitoring")", "", true);
+      initTabulatorLinkMonitoring("#linkMonitoringListTable");
+      LoadTabulatorLinkMonitoringData('@Url.Action("GetLinkInfoForClient", "LinkMonitoring")', "", true);
+
+      initTabulatorFloat("#floatListTable");
+      LoadSaccoFloatsData("@Url.Action("GetClientFloats", "Home")", "", true);
 
       saccoVitals = {
         corporateNo: null,
@@ -248,8 +355,10 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
         if (!selectedSaccoCorporateNo) return;
         // here, refresh the widgets
         saccoVitals.corporateNo = selectedSaccoCorporateNo;
-        RefreshSaccoVitals(saccoVitals);
+        RefreshSaccoVitals(saccoVitals, LoadVitalsCallback);
       });
     });
+
+
   </script>
 }

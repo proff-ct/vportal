@@ -708,6 +708,7 @@
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\airtimeTopups.js" />
     <Content Include="Scripts\portal\view\utilityPayments.js" />
+    <Content Include="Scripts\portal\view\_SaccosFloats.js" />
     <Content Include="Scripts\portal\view\_SaccosLinkMonitoring.js" />
     <Content Include="Scripts\portal\view\sacco.js" />
     <Content Include="Scripts\portal\view\shared.js" />
@@ -754,6 +755,8 @@
     <Content Include="Views\AirtimeTopups\Index.cshtml" />
     <Content Include="Views\MobileWithdrawals\Index.cshtml" />
     <Content Include="Views\Home\_SaccosLinkMonitoringPartial.cshtml" />
+    <Content Include="Views\Shared\_LayoutCallCenterDashboard.cshtml" />
+    <Content Include="Views\Home\_SaccosFloatsPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
