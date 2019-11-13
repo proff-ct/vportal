@@ -55,7 +55,8 @@ function initTabulatorLinkMonitoring(tableContainerID) {
     movableColumns: true,
     index: "Corporate_Name",
     initialSort: [
-      { column: "Corporate_Name", dir: "asc" }
+      { column: "Http_Status", dir: "desc" },
+      { column: "Corporate_Name", dir: "asc" },
     ],
     headerSortTristate: true,
   });
