@@ -1,10 +1,10 @@
-﻿var tblTabulator;
-var tabulatorAjaxUrlForReload;
-var tabulatorAjaxParamsForReload;
+﻿var tblTabulatorLinkMonitoring;
+var tabulatorLinkMonitoringAjaxUrlForReload;
+var tabulatorLinkMonitoringAjaxParamsForReload;
 
-function initTabulator(tableContainerID) {
+function initTabulatorLinkMonitoring(tableContainerID) {
   //create Tabulator on DOM element with id == tableContainerID
-  tblTabulator = new Tabulator(tableContainerID, {
+  tblTabulatorLinkMonitoring = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     //data: tabledata, //assign data to table
     placeholder: "No Link Status Records Found ",
@@ -36,61 +36,56 @@ function initTabulator(tableContainerID) {
       },
       //{ title: "Corporate No", field: "Corporate_No", visible: "false" },
       { title: "Sacco", field: "Corporate_Name", headerFilter: true },
-      {
-        title: "Ping Result", field: "Ping_Result",
-        headerFilter: "select", headerFilterFunc: "=",
-        headerFilterParams: { values: true }
-      },
-      { title: "Http Status", field: "Http_Status", headerFilter: false },
+      { title: "Http Link Status", field: "Http_Status", headerFilter: true },
       {
         title: "Time Last Checked", field: "Last_Check",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
-          return GetFormattedDate(cell.getValue());
+          return LinkMonitoringGetFormattedDate(cell.getValue());
         }
       },
-      {
-        title: "Time Last Email Sent", field: "Last_Email_Sent",
-        align: "center", headerFilter: true,
-        formatter: function (cell, formatterParams) {
-          return GetFormattedDate(cell.getValue());
-        }
-      },
-      { title: "Overall Link Status", field: "Overall_Link_Status" },
+      //{
+      //  title: "Time Last Email Sent", field: "Last_Email_Sent",
+      //  align: "center", headerFilter: true,
+      //  formatter: function (cell, formatterParams) {
+      //    return LinkMonitoringGetFormattedDate(cell.getValue());
+      //  }
+      //},
     ],
     movableColumns: true,
     index: "Corporate_Name",
     initialSort: [
-      { column: "Corporate_Name", dir: "asc" }
+      { column: "Http_Status", dir: "desc" },
+      { column: "Corporate_Name", dir: "asc" },
     ],
     headerSortTristate: true,
   });
-  $(tblTabulator.element).addClass("table table-striped table-condensed table-hover");
+  $(tblTabulatorLinkMonitoring.element).addClass("table table-striped table-condensed table-hover");
 }
 
-function GetFormattedDate(objDate) {
+function LinkMonitoringGetFormattedDate(objDate) {
   return (objDate == null) ?
     'No Date' : moment(objDate).format("DD-MMM-YYYY hh:mm:ss A")
 }
 
-function ClearFilters() {
-  tblTabulator.clearFilter(true);
+function LinkMonitoringClearFilters() {
+  tblTabulatorLinkMonitoring.clearFilter(true);
 }
 
-function LoadTabulatorData(restUrl, corporateNo, getAll = false) {
+function LoadTabulatorLinkMonitoringData(restUrl, corporateNo, getAll = false) {
   if (!getAll && (corporateNo == '' || corporateNo == undefined)) return;
   var ajaxParams = {
     clientCorporateNo: corporateNo,
     loadAll: getAll
   };
 
-  tabulatorAjaxUrlForReload = restUrl;
-  tabulatorAjaxParamsForReload = ajaxParams
+  tabulatorLinkMonitoringAjaxUrlForReload = restUrl;
+  tabulatorLinkMonitoringAjaxParamsForReload = ajaxParams
 
-  ClearFilters();
-  tblTabulator.setData(restUrl, ajaxParams);
+  LinkMonitoringClearFilters();
+  tblTabulatorLinkMonitoring.setData(restUrl, ajaxParams);
 }
 
-function ReloadData() {
-  tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
+function LinkMonitoringReloadData() {
+  tblTabulatorLinkMonitoring.setData(tabulatorLinkMonitoringAjaxUrlForReload, tabulatorLinkMonitoringAjaxParamsForReload);
 }
