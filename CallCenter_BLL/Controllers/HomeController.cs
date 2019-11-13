@@ -1,9 +1,17 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+
+using CallCenter_BLL.Models.ViewModels;
+using CallCenter_DAL;
 
 namespace CallCenter_BLL.Controllers
 {
   public class HomeController : Controller
   {
+    private SaccoBLL _saccoBLL = new SaccoBLL();
+    private MobileWithdrawalsBLL _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
+
     // GET: Home
     public ActionResult Index()
     {
@@ -84,25 +92,81 @@ namespace CallCenter_BLL.Controllers
     #region Others
     [HttpGet]
     [Authorize]
-    public ActionResult GetMPesaFloat(string clientCorporateNo) {
+    public ActionResult GetAllClientsFloats(string clientCorporateNo, bool loadAll)
+    {
+
+      /**
+       * As at this point in time, calculation of sms floats
+       * is on hold owing to the amount of time it takes to
+       * query the archive db
+       * 
+       * There's a proposed approach for how to set the 
+       * float running balance on every topup
+       * 
+       * This will be implemented at a later time.
+       * Matthew Adote - 13Nov2019_1121
+       **/
+
+      // the flow:
+      // get the float from the appropriate bll
+      // compose the view model object
+
+      List<SaccoFloatsViewModel> saccoFloatsVM = new List<SaccoFloatsViewModel>();
+      List<Sacco> saccosList = new List<Sacco>();
+      saccosList = _saccoBLL.GetSaccoList().ToList();
+      List<MobileWithdrawals> saccoMobileWithdrawals = new List<MobileWithdrawals>();
+
+      // get the float records for each sacco
+      saccosList.Select(s => s.corporateNo).ToList().ForEach(s =>
+      {
+        MobileWithdrawals withdrawalRecord = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(s);
+        if (withdrawalRecord == null) return;
+        saccoMobileWithdrawals.Add(withdrawalRecord);
+        // add the one for bulk sms here too
+
+      });
+
+      // prepare the data to return
+      saccosList
+        .Select(s => new { s.corporateNo, s.saccoName_1 })
+        .ToList()
+        .ForEach(s =>
+        {
+          MobileWithdrawals withdrawalRecord = saccoMobileWithdrawals
+              .FirstOrDefault(w => w.Corporate_No == s.corporateNo);
+          
+          saccoFloatsVM.Add(
+            new SaccoFloatsViewModel
+            {
+              CorporateNo = s.corporateNo,
+              SaccoName = s.saccoName_1,
+              MPesaFloat = withdrawalRecord == null ? null : withdrawalRecord.MPESA_Float_Amount,
+              MpesaFloatDate = withdrawalRecord == null ? null : withdrawalRecord.MPESA_DateTime,
+              BulkSMSFloat = null,
+              BulkSMSFloatDate = null
+            }
+          );
+        });
+      return Json(saccoFloatsVM.ToArray(), JsonRequestBehavior.AllowGet);
+    }
+    [HttpGet]
+    [Authorize]
+    public ActionResult GetMPesaFloat(string clientCorporateNo)
+    {
 
       return null;
     }
     [HttpGet]
     [Authorize]
-    public ActionResult GetBulkSMSFloat(string clientCorporateNo) {
+    public ActionResult GetBulkSMSFloat(string clientCorporateNo)
+    {
 
       return null;
     }
     [HttpGet]
     [Authorize]
-    public ActionResult GetTrxSMSFloat(string clientCorporateNo) {
-
-      return null;
-    }
-    [HttpGet]
-    [Authorize]
-    public ActionResult GetLinkStatus(string clientCorporateNo) {
+    public ActionResult GetLinkStatus(string clientCorporateNo)
+    {
 
       //return this.RedirectToAction<LinkMonitoringController>(
       //  a => a.GetLinkStatusForClient(clientCorporateNo));

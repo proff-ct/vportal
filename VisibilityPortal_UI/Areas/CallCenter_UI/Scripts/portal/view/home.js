@@ -1,8 +1,7 @@
 ﻿const SACCO_VITALS = {
   Floats: {
     MPESA: "MPESA",
-    BULK_SMS: "BULK_SMS",
-    TRX_SMS: "TRX_SMS"
+    BULK_SMS: "BULK_SMS"
   },
   LinkStatus: "LinkStatus"
 };
@@ -52,10 +51,6 @@ function RefreshSaccoVitals(saccoVitals, callBack, vitalToLoad = null) {
               case SACCO_VITALS.Floats.BULK_SMS:
                 vitalLabel = float;
                 vitalRestUrl = saccoVitals.bulkSMSFloat.restUrl;
-                break;
-              case SACCO_VITALS.Floats.TRX_SMS:
-                vitalLabel = float;
-                vitalRestUrl = saccoVitals.trxSMSFloat.restUrl;
                 break;
             };
           };

@@ -319,8 +319,6 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
           break;
         case SACCO_VITALS.Floats.BULK_SMS:
           break;
-        case SACCO_VITALS.Floats.TRX_SMS:
-          break;
       };
     }
 
@@ -329,7 +327,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
       LoadTabulatorLinkMonitoringData('@Url.Action("GetLinkInfoForClient", "LinkMonitoring")', "", true);
 
       initTabulatorFloat("#floatListTable");
-      LoadSaccoFloatsData("@Url.Action("GetClientFloats", "Home")", "", true);
+      LoadSaccoFloatsData("@Url.Action("GetAllClientsFloats", "Home")", "", true);
 
       saccoVitals = {
         corporateNo: null,
@@ -340,10 +338,6 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
         bulkSMSFloat: {
           contentContainer: "#BULKSMSFloat",
           restUrl: "@Url.Action("GetBulkSMSFloat", "Home")"
-        },
-        trxSMSFloat: {
-          contentContainer: "#TrxSMSFloat",
-          restUrl: "@Url.Action("GetTrxSMSFloat", "Home")"
         },
         linkStatus: {
           contentContainer: "#LinkStatus",

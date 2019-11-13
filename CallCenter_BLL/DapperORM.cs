@@ -11,19 +11,27 @@ using CallCenter_BLL.Models.Mappings;
 namespace CallCenter_BLL
 {
 
-  public static class DapperORM
+  public class DapperORM
   {
-    //private static string connectionString = @"Data Source=MATT-HP-PAV-450;Initial Catalog=DCS;Integrated Security=True";
+    //private static string _connectionString = @"Data Source=MATT-HP-PAV-450;Initial Catalog=DCS;Integrated Security=True";
 #if DEBUG
-    private static string connectionString = Connection.TestingConnectionString;
+    private static string _connectionString = Connection.TestingConnectionString;
 #else
-    private static string connectionString = Connection.ProductionConnectionString;
+    private static string _connectionString = Connection.ProductionConnectionString;
 #endif
 
-    //private static string connectionString = Connection.ProductionConnectionString;
+    public DapperORM(string conString = null)
+    {
+      _connectionString = conString ?? _connectionString;
+      //InitDapper();
+    }
     static DapperORM()
     {
-      ConnectionString = connectionString;
+      InitDapper();
+    }
+    
+    private static void InitDapper()
+    {
       FluentMapper.Initialize(config =>
       {
         config.AddMap(new SaccoMap());
@@ -34,12 +42,14 @@ namespace CallCenter_BLL
         config.AddMap(new MSaccoAirtimeTopupMap());
         config.AddMap(new MobileWithdrawalsMap());
         config.AddMap(new LinkMonitoringMap());
+        config.AddMap(new ArchivedBulkSMSDebitMap());
+        config.AddMap(new UnarchivedBulkSMSDebitMap());
       });
     }
-    public static string ConnectionString { get; }
-    public static T ExecuteReturnScalar<T>(string procedureName, DynamicParameters param = null)
+    public string ConnectionString { get => _connectionString; }
+    public T ExecuteReturnScalar<T>(string procedureName, DynamicParameters param = null)
     {
-      using (SqlConnection sqlCon = new SqlConnection(connectionString))
+      using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
         return (T)Convert.ChangeType(
@@ -48,43 +58,44 @@ namespace CallCenter_BLL
         );
       }
     }
-    public static void ExecuteWithoutReturn(string procedureName, DynamicParameters param)
+    public void ExecuteWithoutReturn(string procedureName, DynamicParameters param)
     {
-      using (SqlConnection sqlCon = new SqlConnection(connectionString))
+      using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
         sqlCon.Execute(procedureName, param, commandType: CommandType.StoredProcedure);
       }
     }
 
-    public static IEnumerable<T> ReturnList<T>(string procedureName, DynamicParameters param = null)
+    public IEnumerable<T> ReturnList<T>(string procedureName, DynamicParameters param = null)
     {
-      using (SqlConnection sqlCon = new SqlConnection(connectionString))
+      using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
         return sqlCon.Query<T>(procedureName, param, commandType: CommandType.StoredProcedure);
       }
     }
 
-    public static IEnumerable<T> QueryGetList<T>(string query)
+    public IEnumerable<T> QueryGetList<T>(string query)
     {
-      using (SqlConnection sqlCon = new SqlConnection(connectionString))
+      using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
-        return sqlCon.Query<T>(query, commandType: CommandType.Text);
+        return sqlCon.Query<T>(
+          query, commandType: CommandType.Text, commandTimeout: sqlCon.ConnectionTimeout);
       }
     }
-    public static T QueryGetSingle<T>(string query)
+    public T QueryGetSingle<T>(string query)
     {
-      using (SqlConnection sqlCon = new SqlConnection(connectionString))
+      using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
         return sqlCon.QuerySingleOrDefault<T>(query, commandType: CommandType.Text);
       }
     }
-    public static void ExecuteQuery(string query)
+    public void ExecuteQuery(string query)
     {
-      using (SqlConnection sqlCon = new SqlConnection(connectionString))
+      using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
         sqlCon.Execute(query, commandType: CommandType.Text);

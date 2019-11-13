@@ -8,7 +8,7 @@ function initTabulatorFloat(tableContainerID) {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     //data: tabledata, //assign data to table
     placeholder: "No Float Records Found ",
-    pagination: "remote", // setting this to local v4.4 has buggy behaviour in which not all columns show
+    pagination: "local", // setting this to local v4.4 has buggy behaviour in which not all columns show
     paginationSize: 100,
     paginationSizeSelector: true,
     // DO NOT USE any of the peristence settings! Matthew Adote 08NOV2019_0842
@@ -35,36 +35,38 @@ function initTabulatorFloat(tableContainerID) {
         align: "center", resizable: false, headerSort: false
       },
       //{ title: "Corporate No", field: "Corporate_No", visible: "false" },
-      { title: "Sacco", field: "Corporate_Name", headerFilter: true },
-      { title: "M-Pesa Float", field: "Http_Status", headerFilter: true },
-      { title: "BULK SMS Float", field: "Http_Status", headerFilter: true },
-      { title: "Trx SMS Float", field: "Http_Status", headerFilter: true },
+      { title: "Sacco", field: "SaccoName", headerFilter: true },
       {
-        title: "M-Pesa Date", field: "Last_Check",
+        title: "M-Pesa Float", field: "MPesaFloat", headerFilter: true,
+        formatter: function (cell) {
+          return SetCellValueToNullIfNoData(cell.getValue())
+        }
+      },
+      {
+        title: "BULK SMS Float", field: "BulkSMSFloat", headerFilter: true,
+        formatter: function (cell) {
+          return SetCellValueToNullIfNoData(cell.getValue(), "Not Calculated")
+        }
+      },
+      {
+        title: "M-Pesa Date", field: "MpesaFloatDate",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return SaccoFloatsGetFormattedDate(cell.getValue());
         }
       },
       {
-        title: "BULK SMS Date", field: "Last_Check",
+        title: "BULK SMS Date", field: "BulkSMSFloatDate",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return SaccoFloatsGetFormattedDate(cell.getValue());
         }
-      },
-      {
-        title: "Trx SMS Date", field: "Last_Check",
-        align: "center", headerFilter: true,
-        formatter: function (cell, formatterParams) {
-          return SaccoFloatsGetFormattedDate(cell.getValue());
-        }
-      },
+      }
     ],
     movableColumns: true,
-    index: "Corporate_Name",
+    index: "SaccoName",
     initialSort: [
-      { column: "Corporate_Name", dir: "asc" }
+      { column: "SaccoName", dir: "asc" }
     ],
     headerSortTristate: true,
   });
@@ -74,6 +76,11 @@ function initTabulatorFloat(tableContainerID) {
 function SaccoFloatsGetFormattedDate(objDate) {
   return (objDate == null) ?
     'No Date' : moment(objDate).format("DD-MMM-YYYY hh:mm:ss A")
+}
+
+function SetCellValueToNullIfNoData(cellValue, valueToSet = null) {
+  if (valueToSet != null) return valueToSet;
+  return (cellValue==null) ? "No Data" : cellValue
 }
 
 function SaccoFloatsClearFilters() {

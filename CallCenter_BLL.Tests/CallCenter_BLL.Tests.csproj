@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkSMSBLLTests.cs" />
     <Compile Include="GuarantorBLLTests.cs" />
     <Compile Include="LinkMonitoringBLLTests.cs" />
     <Compile Include="MobileWithdrawalsBLLTests.cs" />
@@ -79,6 +80,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="TestingAppDBConnectionStrings.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CallCenter_BLL\CallCenter_BLL.csproj">

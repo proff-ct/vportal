@@ -16,7 +16,7 @@ namespace CallCenter_BLL
     public LinkMonitoring GetLinkInfoForClient(string corporateNo)
     {
       _query = $@"SELECT * FROM {_tblLinkMonitoring} WHERE [Corporate No]='{corporateNo}'";
-      return DapperORM.QueryGetSingle<LinkMonitoring>(_query);
+      return new DapperORM().QueryGetSingle<LinkMonitoring>(_query);
     }
 
     public IEnumerable<LinkMonitoring> GetLinkInfoForAllClients(
@@ -41,7 +41,7 @@ namespace CallCenter_BLL
         dp.Add("PageSize", pagingParams.PageSize);
         dp.Add("PageNumber", pagingParams.PageToLoad);
 
-        using (SqlConnection sqlCon = new SqlConnection(DapperORM.ConnectionString))
+        using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
           using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
@@ -58,7 +58,7 @@ namespace CallCenter_BLL
       else
       {
         _query = $@"SELECT * FROM {_tblLinkMonitoring}";
-        return DapperORM.QueryGetList<LinkMonitoring>(_query);
+        return new DapperORM().QueryGetList<LinkMonitoring>(_query);
       }
 
     }
