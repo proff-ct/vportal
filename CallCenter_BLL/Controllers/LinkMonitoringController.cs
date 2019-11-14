@@ -60,6 +60,46 @@ namespace CallCenter_BLL.Controllers
         }, JsonRequestBehavior.AllowGet);
       }
     }
+    [HttpGet]
+    [Authorize]
+    public ActionResult GetLinkInfoWithDowntimesForClient(
+      string clientCorporateNo, bool loadAll=false, int page=0, int size=0)
+    {
+      if (string.IsNullOrEmpty(clientCorporateNo) && !loadAll)
+      {
+        return null;
+      }
+      dynamic linkInfo = null;
+
+      if (!loadAll)
+      {
+        linkInfo = _linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForClient(clientCorporateNo);
+
+        return Json(new
+        {
+          data = linkInfo
+        }, JsonRequestBehavior.AllowGet);
+      }
+      else
+      {
+        // the flow:
+        // 1. get the pagination parameters
+        // 2. pass the pagination parameters to the bll function
+        // 3. retrieve the data from the bll function
+
+
+        //PaginationParameters pagingParams = new PaginationParameters(
+        //  int.Parse(page), int.Parse(size), null);
+        PaginationParameters pagingParams = new PaginationParameters(page, size, null);
+        linkInfo = _linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForAllClients(out int lastPage, true, pagingParams).ToArray();
+
+        return Json(new
+        {
+          last_page = lastPage, // last page from the fetched recordset
+          data = linkInfo
+        }, JsonRequestBehavior.AllowGet);
+      }
+    }
     #endregion
 
   }

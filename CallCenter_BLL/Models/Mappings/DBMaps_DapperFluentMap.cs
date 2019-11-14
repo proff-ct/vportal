@@ -229,5 +229,20 @@ namespace CallCenter_BLL.Models.Mappings
       Map(m => m.Time_Payment_Processed).ToColumn("Time Payment Processed");
     }
   }
+
+  internal class LinkDowntimeMap : EntityMap<LinkDowntime>
+  {
+    internal LinkDowntimeMap()
+    {
+      Map(m => m.Corporate_Name).ToColumn("Corporate Name");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Downtime_Duration).ToColumn("Downtime Duration");
+      Map(m => m.Downtime_Start).ToColumn("Downtime Start");
+      Map(m => m.Downtime_Stop).ToColumn("Downtime Stop");
+      Map(m => m.Last_Check).ToColumn("Last Check");
+    }
   }
-           
+
+}
+     
