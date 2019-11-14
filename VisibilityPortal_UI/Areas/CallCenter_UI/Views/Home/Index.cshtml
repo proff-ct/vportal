@@ -351,6 +351,9 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
         saccoVitals.corporateNo = selectedSaccoCorporateNo;
         RefreshSaccoVitals(saccoVitals, LoadVitalsCallback);
       });
+
+      setInterval(LinkMonitoringReloadData, 600000);
+      setInterval(SaccoFloatsReloadData, 600000);
     });
 
 
