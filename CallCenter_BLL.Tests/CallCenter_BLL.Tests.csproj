@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="BulkSMSBLLTests.cs" />
     <Compile Include="GuarantorBLLTests.cs" />
+    <Compile Include="LinkDowntimeBLLTests.cs" />
     <Compile Include="LinkMonitoringBLLTests.cs" />
     <Compile Include="MobileWithdrawalsBLLTests.cs" />
     <Compile Include="MSaccoAirtimeTopupBLLTests.cs" />
@@ -80,7 +81,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="TestingAppDBConnectionStrings.config" />
+    <None Include="TestingAppDBConnectionStrings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CallCenter_BLL\CallCenter_BLL.csproj">

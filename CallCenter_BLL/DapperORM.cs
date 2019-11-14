@@ -42,6 +42,7 @@ namespace CallCenter_BLL
         config.AddMap(new MSaccoAirtimeTopupMap());
         config.AddMap(new MobileWithdrawalsMap());
         config.AddMap(new LinkMonitoringMap());
+        config.AddMap(new LinkDowntimeMap());
         config.AddMap(new ArchivedBulkSMSDebitMap());
         config.AddMap(new UnarchivedBulkSMSDebitMap());
       });
