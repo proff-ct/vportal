@@ -55,11 +55,10 @@
     <Compile Include="MSaccoUtilityPayment.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMSFloat\Credit\BulkSMS\BulkSMSCredit.cs" />
+    <Compile Include="SMSFloat\Debit\Archived\ArchivedBulkSMSDebit.cs" />
+    <Compile Include="SMSFloat\Debit\Unarchived\UnarchivedBulkSMSDebit.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ConnectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

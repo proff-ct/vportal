@@ -38,7 +38,7 @@ namespace CallCenter_BLL
         dp.Add("PageSize", pagingParams.PageSize);
         dp.Add("PageNumber", pagingParams.PageToLoad);
 
-        using (SqlConnection sqlCon = new SqlConnection(DapperORM.ConnectionString))
+        using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
           using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
@@ -55,9 +55,22 @@ namespace CallCenter_BLL
       else
       {
         _query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]='{corporateNo}'";
-        return DapperORM.QueryGetList<MobileWithdrawals>(_query);
+        return new DapperORM().QueryGetList<MobileWithdrawals>(_query);
       }
 
+    }
+
+    public MobileWithdrawals GetLatestWithdrawalForClient(string corporateNo)
+    {
+      _query = $@"SELECT TOP 1 *
+                  FROM {_tblMobileWithdrawals}
+                  WHERE [Corporate No] = '{corporateNo}'
+                  AND Status='Completed' 
+                  AND [MPESA Result Code]='0' 
+                  AND [MPESA Result Type]='Completed'
+                  ORDER BY [Transaction Date] DESC";
+
+      return new DapperORM().QueryGetSingle<MobileWithdrawals>(_query);
     }
   }
 }

@@ -1,4 +1,6 @@
 ﻿using CallCenter_DAL;
+using CallCenter_DAL.SMSFloat.Debit.Archived;
+using CallCenter_DAL.SMSFloat.Debit.Unarchived;
 using Dapper.FluentMap.Mapping;
 
 namespace CallCenter_BLL.Models.Mappings
@@ -179,4 +181,53 @@ namespace CallCenter_BLL.Models.Mappings
       Map(m => m.Ping_Result).ToColumn("Ping Result");
     }
   }
-}
+  internal class UnarchivedBulkSMSDebitMap : EntityMap<UnarchivedBulkSMSDebit>
+  {
+    internal UnarchivedBulkSMSDebitMap()
+    {
+      Map(m => m.Back_Up_SMS).ToColumn("Back Up SMS");
+      Map(m => m.Batch_No).ToColumn("Batch No");
+      Map(m => m.Bulk_SMS).ToColumn("Bulk SMS");
+      Map(m => m.Bulk_SMS_Date).ToColumn("Bulk SMS Date");
+      Map(m => m.Bulk_SMS_ID).ToColumn("Bulk SMS ID");
+      Map(m => m.Bulk_SMS_No).ToColumn("Bulk SMS No");
+      Map(m => m.Bulk_SMS_Time).ToColumn("Bulk SMS Time");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Date_Payment_Processed).ToColumn("Date Payment Processed");
+      Map(m => m.EMail_Sent).ToColumn("E-Mail Sent");
+      Map(m => m.From_Portal).ToColumn("From Portal");
+      Map(m => m.Marked_For_Email).ToColumn("Marked For E-mail");
+      Map(m => m.Message_Type_ID).ToColumn("Message Type ID");
+      Map(m => m.Payment_Processed).ToColumn("Payment Processed");
+      Map(m => m.Processed_By).ToColumn("Processed By");
+      Map(m => m.Reply_Sent).ToColumn("Reply Sent");
+      Map(m => m.SMS_Date).ToColumn("SMS Date");
+      Map(m => m.SMS_Sent).ToColumn("SMS Sent");
+      Map(m => m.Time_Payment_Processed).ToColumn("Time Payment Processed");
+    }
+  }
+  internal class ArchivedBulkSMSDebitMap : EntityMap<ArchivedBulkSMSDebit>
+  {
+    internal ArchivedBulkSMSDebitMap()
+    {
+      Map(m => m.Back_Up_SMS).ToColumn("Back Up SMS");
+      Map(m => m.Bulk_SMS).ToColumn("Bulk SMS");
+      Map(m => m.Bulk_SMS_Date).ToColumn("Bulk SMS Date");
+      Map(m => m.Bulk_SMS_ID).ToColumn("Bulk SMS ID");
+      Map(m => m.Bulk_SMS_No).ToColumn("Bulk SMS No");
+      Map(m => m.Bulk_SMS_Time).ToColumn("Bulk SMS Time");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Date_Payment_Processed).ToColumn("Date Payment Processed");
+      Map(m => m.EMail_Sent).ToColumn("E-Mail Sent");
+      Map(m => m.Marked_For_Email).ToColumn("Marked For E-mail");
+      Map(m => m.Message_Type_ID).ToColumn("Message Type ID");
+      Map(m => m.Payment_Processed).ToColumn("Payment Processed");
+      Map(m => m.Processed_By).ToColumn("Processed By");
+      Map(m => m.Reply_Sent).ToColumn("Reply Sent");
+      Map(m => m.SMS_Date).ToColumn("SMS Date");
+      Map(m => m.SMS_Sent).ToColumn("SMS Sent");
+      Map(m => m.Time_Payment_Processed).ToColumn("Time Payment Processed");
+    }
+  }
+  }
+           

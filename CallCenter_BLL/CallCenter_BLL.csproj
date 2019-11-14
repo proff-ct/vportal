@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ViewModels\SaccoFloatsViewModel.cs" />
+    <Compile Include="BulkSMSBLL.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Controllers\AirtimeTopupsController.cs" />
     <Compile Include="Controllers\LinkMonitoringController.cs" />

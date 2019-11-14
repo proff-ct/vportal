@@ -1,0 +1,105 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
+//$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/bootstrap/tabulator_bootstrap4.css",
+      $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css",
+//$"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSacco.css",
+};
+
+  }
+  @Styles.Render(cssFiles)
+
+  @RenderSection("HtmlHead", false)
+}
+@section MenuLinks {
+  <li class="header">CALL CENTER |> NAVIGATION</li>
+  <li>
+    <a href="@Url.Action("Index", "Home")">
+      <i class="fa fa-dashboard"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-bank"></i> <span>Saccos</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li><a href="@Url.Action("Index", "Sacco")"><i class="fa fa-money"></i>Float</a></li>
+    </ul>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-database"></i> <span>Transactions</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li>
+        <a href="@Url.Action("Index", "Loans")">
+          <i class="fa fa-credit-card"></i>Loans
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "MobileWithdrawals")">
+          <i class="fa fa-money"></i>Withdrawals
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
+      <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
+    </ul>
+  </li>
+}
+@*@Html.Partial("_SetActiveSaccoPartial")*@
+@RenderBody()
+@section Scripts{
+  @{
+    string[] scriptFiles = {
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/moment.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
+//$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_setActiveSacco.js"
+};
+  }
+  @Scripts.Render(scriptFiles)
+  <!-- Define custom scripts-->
+  <script type="text/javascript">
+      $(document).ready(function () {
+        @*// 1. Initialize the select
+        initSelectPicker('#selectSacco');
+        // 2. Load data for the select
+        LoadSaccoList("@Url.Action("GetSaccoList","Sacco")", '#selectSacco');
+
+        // this sets the active sacco name
+        $('#selectSacco').change(function () {
+          if (!this.value) return;
+          SetActiveSacco(
+            this.value,
+            { placeholderContainerId: '#currentActiveSacco', placeholder:'#activeSaccoPlaceholder'});
+        });*@
+      });
+  </script>
+
+  @RenderSection("Scripts", required: false)
+}

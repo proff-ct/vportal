@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CallCenter_BLL.MSSQLOperators;
 using CallCenter_DAL;
 using NUnit.Framework;
@@ -37,6 +36,22 @@ namespace CallCenter_BLL.Tests
         Assert.IsInstanceOf<IEnumerable<MobileWithdrawals>>(_enMobileWithdrawals);
         Assert.LessOrEqual(_enMobileWithdrawals.Count, pageSize, "Records returned > Expected!");
         Assert.Greater(lastPage, 0, "last_page parameter value NOT greater than zero!");
+      }
+    }
+    [TestFixture]
+    public class GetLatestWithdrawalForClient
+    {
+      private MobileWithdrawalsBLL _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
+      private readonly string corporateNo = 525201.ToString();
+
+      [Test]
+      public void Returns_latest_mobile_withdrawal_record_for_specified_client()
+      {
+
+        MobileWithdrawals output = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(corporateNo);
+
+        Assert.IsInstanceOf<MobileWithdrawals>(output, "Mobile Withdrawal instance not returned!");
+        Assert.AreEqual(output.Corporate_No, corporateNo, "Corporate No MISMATCH!!");
       }
     }
   }

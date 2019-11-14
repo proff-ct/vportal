@@ -38,7 +38,7 @@ namespace CallCenter_BLL
         dp.Add("PageSize", pagingParams.PageSize);
         dp.Add("PageNumber", pagingParams.PageToLoad);
 
-        using (SqlConnection sqlCon = new SqlConnection(DapperORM.ConnectionString))
+        using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
           using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
@@ -55,7 +55,7 @@ namespace CallCenter_BLL
       else
       {
         _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} WHERE [Corporate No]='{corporateNo}'";
-        return DapperORM.QueryGetList<MSaccoAirtimeTopup>(_query);
+        return new DapperORM().QueryGetList<MSaccoAirtimeTopup>(_query);
       }
 
     }
