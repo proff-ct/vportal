@@ -1,18 +1,22 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@using VisibilityPortal_BLL.Models;
+
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <title>@ViewBag.Title - Visibility Portal</title>
   @{
     string[] cssFiles = {
-  "~/Content/bootstrap.css",
-  "~/Content/AdminLTE.min.css",
-  "~/Content/ionicons.min.css",
-  "~/Content/skin-blue.min.css",
-  "~/Content/font-awesome.min.css",
-  // Google Font
-  "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"
+"~/Content/bootstrap.css",
+"~/Content/AdminLTE.min.css",
+"~/Content/ionicons.min.css",
+"~/Content/skin-blue.min.css",
+"~/Content/font-awesome.min.css",
+// Google Font
+"https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"
 };
   }
   @Styles.Render(cssFiles)
@@ -43,28 +47,28 @@
           <ul class="nav navbar-nav">
             @Html.Partial("_LoginPartial")
             @*@if (Request.IsAuthenticated)
-            {
-              <!-- User Account Menu -->
-              <li class="dropdown user user-menu">
-                <!-- Menu Toggle Button -->
-                <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
-                  <i class="fa fa-user-circle fa-2x pull-left"></i>
-                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
-                </a>
-                <ul class="dropdown-menu">
-                  <!-- Menu Footer-->
-                  <li class="user-footer">
-                    <div class="list-group-item mt-2">
-                      <a href="#" class="">Profile</a>
-                    </div>
-                    <div class="list-group-item mt-2">
-                      <a href="#" class="">Sign out</a>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-            }*@
+              {
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu">
+                  <!-- Menu Toggle Button -->
+                  <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
+                    <i class="fa fa-user-circle fa-2x pull-left"></i>
+                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                    <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
+                  </a>
+                  <ul class="dropdown-menu">
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                      <div class="list-group-item mt-2">
+                        <a href="#" class="">Profile</a>
+                      </div>
+                      <div class="list-group-item mt-2">
+                        <a href="#" class="">Sign out</a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              }*@
 
 
           </ul>
@@ -81,14 +85,12 @@
         <ul class="sidebar-menu" data-widget="tree">
           @RenderSection("MenuLinks", false)
           <!-- Optionally, you can add icons to the links -->
-          @using Microsoft.AspNet.Identity
-    @*  Temporarily commented the below for purposes of showcasing MVP*@      
-    @*@if (!Request.IsAuthenticated)
+          @*  Temporarily commented the below for purposes of showcasing MVP*@
+          @if(Request.IsAuthenticated && (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
           {
-            <li class="header">#######</li>
-            <li><a href="/Account/Login"><i class="fa fa-dribbble"></i> <span>Login</span></a></li>
-            <li><a href="/Account/Register"><i class="fa fa-link"></i> <span>Register</span></a></li>
-          }*@
+          <li class="header"><span>USER MANAGEMENT</span></li>
+          <li><a href="#"><i class="fa fa-users"></i><span>Create User</span></a></li>
+          }
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -97,12 +99,9 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper container">
-        <div class="content">
-
-      
-        @RenderBody()
-        </div>
+    @*<div class="content-wrapper container">*@
+    <div class="content-wrapper">
+      @RenderBody()
     </div>
     <!-- /.content-wrapper -->
     <!-- Main Footer -->

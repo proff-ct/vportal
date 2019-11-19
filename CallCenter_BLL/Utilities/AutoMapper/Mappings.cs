@@ -18,6 +18,8 @@ namespace CallCenter_BLL.Utilities.AutoMapper
         config => {
           config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
           config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
+          config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
+          config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
         });
     }
   }

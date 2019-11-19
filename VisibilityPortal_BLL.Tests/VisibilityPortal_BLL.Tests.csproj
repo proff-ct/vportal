@@ -99,8 +99,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationRoleBLLTests.cs" />
     <Compile Include="InitialSetupBLLTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PortalModuleBLLTests.cs" />
+    <Compile Include="SaccoBLLTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -109,11 +112,18 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="TestingAppDBConnectionStrings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisibilityPortal_BLL\VisibilityPortal_BLL.csproj">
       <Project>{b6aa0da3-35e2-4767-9902-dd6ffdf92171}</Project>
       <Name>VisibilityPortal_BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisibilityPortal_DAL\VisibilityPortal_DAL.csproj">
+      <Project>{C03388C5-675B-4EEC-BCC3-67C3033C7B52}</Project>
+      <Name>VisibilityPortal_DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

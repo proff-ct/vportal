@@ -48,17 +48,18 @@
     <Compile Include="GFLLoan.cs" />
     <Compile Include="Guarantors.cs" />
     <Compile Include="IDBModel.cs" />
+    <Compile Include="LinkDowntime.cs" />
+    <Compile Include="LinkMonitoring.cs" />
     <Compile Include="MobileWithdrawals.cs" />
     <Compile Include="MSaccoAirtimeTopup.cs" />
     <Compile Include="MSaccoSalaryAdvance.cs" />
     <Compile Include="MSaccoUtilityPayment.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMSFloat\Credit\BulkSMS\BulkSMSCredit.cs" />
+    <Compile Include="SMSFloat\Debit\Archived\ArchivedBulkSMSDebit.cs" />
+    <Compile Include="SMSFloat\Debit\Unarchived\UnarchivedBulkSMSDebit.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ConnectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

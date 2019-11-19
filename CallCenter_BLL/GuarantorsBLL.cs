@@ -14,12 +14,12 @@ namespace CallCenter_BLL
     public IEnumerable<Guarantors> GetGuarantorsForLoan(string loanSessionID)
     {
       _query = $@"SELECT * FROM {_tblGuarantors} WHERE Session='{loanSessionID}'";
-      return DapperORM.QueryGetList<Guarantors>(_query);
+      return new DapperORM().QueryGetList<Guarantors>(_query);
     }
     public IEnumerable<Guarantors> GetGuarantorsForManyLoans(IEnumerable<string> loanSessionIDs)
     {
       _query = $@"SELECT * FROM {_tblGuarantors} WHERE Session IN ({string.Join(",", loanSessionIDs.Select(s => string.Format("'{0}'", s)))})";
-      return DapperORM.QueryGetList<Guarantors>(_query);
+      return new DapperORM().QueryGetList<Guarantors>(_query);
     }
   }
 

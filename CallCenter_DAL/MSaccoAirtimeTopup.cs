@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CallCenter_DAL
 {
-  public class MsaccoAirtimeTopup : IDBModel
+  public class MSaccoAirtimeTopup : IDBModel
   {
     public int Entry_No { get; set; }
 

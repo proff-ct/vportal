@@ -18,14 +18,15 @@ namespace CallCenter_BLL
     public IEnumerable<Sacco> GetSaccoList()
     {
       query = $@"SELECT {string.Join(",",_saccoColumnNames)}
-             FROM {tblSacco}";
-      return DapperORM.QueryGetList<Sacco>(query);
+              FROM {tblSacco}
+              WHERE Active='1'";
+      return new DapperORM().QueryGetList<Sacco>(query);
     }
     
     public Sacco GetSaccoById(int id)
     {
       query = $@"SELECT {string.Join(",", _saccoColumnNames)} FROM {tblSacco} WHERE id='{id.ToString()}'";
-      return DapperORM.QueryGetSingle<Sacco>(query);
+      return new DapperORM().QueryGetSingle<Sacco>(query);
     }
     public Sacco GetSaccoByUniqueParam(string corporateNo = null, string saccoName = null)
     {
@@ -38,7 +39,7 @@ namespace CallCenter_BLL
         query = $@"SELECT {string.Join(",", _saccoColumnNames)} FROM {tblSacco} WHERE [Sacco Name 1]='{saccoName}'";
       }
       else return null;
-      return DapperORM.QueryGetSingle<Sacco>(query);
+      return new DapperORM().QueryGetSingle<Sacco>(query);
     }
     
   }

@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,9 +42,18 @@
     <Reference Include="Dapper.FluentMap, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.FluentMap.1.8.0\lib\net451\Dapper.FluentMap.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +62,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EF6 related\PortalDatabaseInitializer_DAL.cs" />
+    <Compile Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs" />
+    <Compile Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.Designer.cs">
+      <DependentUpon>201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="PortalDBContext.cs" />
+    <Compile Include="PortalModuleForClient.cs" />
+    <Compile Include="EF6 related\PortalModule.cs" />
+    <Compile Include="Sacco.cs" />
     <Compile Include="VisibilityPortalModule.cs" />
     <Compile Include="ClientUser.cs" />
     <Compile Include="CoreTecClient.cs" />
@@ -61,7 +82,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.resx">
+      <DependentUpon>201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
