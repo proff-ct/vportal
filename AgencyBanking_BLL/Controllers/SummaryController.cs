@@ -15,8 +15,8 @@ namespace AgencyBanking_BLL.Controllers
         [HttpGet]
         public ActionResult Index(string type)
         {
-            var summary  = new SummaryBLL();
-            var data = summary.GetSummaryByName(type);
+            SummaryBLL summary  = new SummaryBLL();
+            IEnumerable<TransactionModel> data = summary.GetSummaryByName(type);
             ViewBag.caption = $"Summary of {type}";
             ViewBag.link = "";
             ViewBag.columns = SetHeaders(new TransactionModel());
@@ -28,33 +28,33 @@ namespace AgencyBanking_BLL.Controllers
         [HttpGet]
         public ActionResult Agents(string BankNo)
         {
-            var agents = new AgentsBLL();
+            AgentsBLL agents = new AgentsBLL();
             ViewBag.caption = "Agents Belonging to";
             ViewBag.link = "Agents";
             ViewBag.Title = "Agents";
             ViewBag.columns = SetHeaders(new AgentModel());
-            var devices = agents.GetAgentsByOrganization();
+            IEnumerable<AgentModel> devices = agents.GetAgentsByOrganization();
             ViewBag.data = JsonConvert.SerializeObject(devices);
             return View("List");
         }
         public ActionResult Devices()
         {
-            var deviceinfo = new DeviceInfoBLL();
+            DeviceInfoBLL deviceinfo = new DeviceInfoBLL();
            
             ViewBag.caption = "Registered Devices Belonging to";
             ViewBag.link = "devices";
             ViewBag.Title = "Registered Devices Belonging to";
             ViewBag.columns = DeviceinfoHeader();
-            var devices = deviceinfo.GetDevicesByOrganization("mama");
+            IEnumerable<DeviceInfo> devices = deviceinfo.GetDevicesByOrganization("mama");
             ViewBag.data = JsonConvert.SerializeObject(devices);
             return View("list");
         }
 
         private string SetHeaders<T>(T t)
         {
-            var Properties = GetProperties(t);
-            var list = new List<TableHeader>();
-            foreach (var pro in Properties)
+            PropertyInfo[] Properties = GetProperties(t);
+            List<TableHeader> list = new List<TableHeader>();
+            foreach (PropertyInfo pro in Properties)
             {
                list.Add(new TableHeader()
                {

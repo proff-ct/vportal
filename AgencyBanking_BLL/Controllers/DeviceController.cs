@@ -45,7 +45,7 @@ namespace AgencyBanking_BLL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var devicebll = new DeviceInfoBLL();
+                DeviceInfoBLL devicebll = new DeviceInfoBLL();
 
                 if (devicebll.AssignDevice(model))
                 {

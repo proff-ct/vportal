@@ -10,8 +10,8 @@ namespace AgencyBanking_BLL.Controllers
   {
     public ActionResult Index()
     {
-        var Summarybll = new SummaryBLL();
-        var data = Summarybll.GetSummary();
+        SummaryBLL Summarybll = new SummaryBLL();
+        Dictionary<string, string> data = Summarybll.GetSummary();
         ViewBag.Data = data;
         return View();
     }

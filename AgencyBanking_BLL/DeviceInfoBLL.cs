@@ -32,7 +32,7 @@ namespace AgencyBanking_BLL
 
         public string InsertNewDevice(DeviceModel model)
         {
-            var query =
+            string query =
                 "INSERT INTO [dbo].[DeviceInfo]         ([Name]        ,[IMEI]        ,[Enabled]        ,[TypeCode]        ,[TypeName]        ,[Assigned]        ,[Organization]        ,[Region])  VALUES  " +
                 "      (@name,@imei,0,@TypeCode,@TypeName,0,@org,@region)";
             DynamicParameters parameters = new DynamicParameters();
@@ -62,19 +62,19 @@ namespace AgencyBanking_BLL
         public bool AssignDevice(DeviceAssignModel model)
         {
 
-            using (var connection = new SqlConnection(new DBConnection().ConnectionString))
+            using (SqlConnection connection = new SqlConnection(new DBConnection().ConnectionString))
             {
                 connection.Open();
-                using (var transaction = connection.BeginTransaction())
+                using (SqlTransaction transaction = connection.BeginTransaction())
                 {   
-                    var parameters  = new DynamicParameters();
+                    DynamicParameters parameters  = new DynamicParameters();
                     parameters.Add("imei",model.DeviceImei);
                     DeviceInfo info = DapperOrm.QueryGetSingle<DeviceInfo>("select id from deviceinfo where imei =@imei",parameters);
                     if (info is null)
                     {
                         return false;
                     }
-                    var query = "update agents set deviceid = @id where [agent code] = @agentcode";
+                    string query = "update agents set deviceid = @id where [agent code] = @agentcode";
                     parameters = new DynamicParameters();
                     parameters.Add("agentcode",model.AgentCode);
                     parameters.Add("id", info.ID);

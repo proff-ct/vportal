@@ -6,14 +6,14 @@
     ViewBag.Title = "Agency Banking Home Page";
     List<SummaryMenuItem> itemlist = new List<SummaryMenuItem>();
     //Prepare menu items
-    itemlist.Add(new SummaryMenuItem("Withdrawals Summary","/Content/image/withdraw.png","WIthdrawal",ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Deposits Summary","/Content/image/deposit.png","Deposit",ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Branch Summary","/Content/image/report.png","#",ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Agents Summary","/Content/image/bankteller.png","#",ViewBag.Data));
-
+    itemlist.Add(new SummaryMenuItem("Withdrawals","/Content/image/withdraw.png","WIthdrawal",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Deposits","/Content/image/deposit.png","Deposit",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Loan Repayment","/Content/image/report.png","Loan Replayment",ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("New Agents","/Content/image/bankteller.png","#",ViewBag.Data));
 }
 
 @section HtmlHead{
+    <link href="~/Content/ionicons.min.css" rel="stylesheet" />
     <style>
         @@media only screen and (min-width:  768px) {
             .box-shadow {
@@ -42,33 +42,40 @@
         }
 
     </style>
+    <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet"/>
 
 }
 
 <section class="content">
     <div class="row">
-    @foreach (var menuItem in itemlist)
-    {
-        <div class=" col-md-4 col-sm-6  col-12 zoom">            
-            @{
-                var link = (menuItem.FieldName == "#" ? String.Empty : "summary");
-            }
-            <a href=@Url.Action("Index",link, new {type = menuItem.FieldName})>
-                <div class="info-box bg-aqua-gradient mb-4 box-shadow">
-                    <div class="row no-gutters">
-                        <div class="col">
-                            <img class="img-fluid rounded p-3" src="@Html.Raw(menuItem.Imagelink)" alt="@Html.Raw(menuItem.Title)">
+     
+        @foreach (var menuItem in itemlist)
+        {
+            <div class="col-lg-3 col-6 zoom">
+                @{
+                    var link = (menuItem.FieldName == "#" ? String.Empty : "summary");
+                }
+                <a href=@Url.Action("Index", link, new {type = menuItem.FieldName})>
+
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3> @Html.Raw(menuItem.Amount)</h3>
+
+                            <p>@Html.Raw(menuItem.Title)</p>
                         </div>
-                        <div class="col">
-                            <div class="card-body">
-                                <p class="text-uppercase info-box-text">@Html.Raw(menuItem.Title)</p>
-                                <p class="card-subtitle info-box-number">Kshs @Html.Raw(menuItem.Amount)</p>
-                            </div>
+                        <div class="icon">
+                            <i class="ion ion-star"></i>
                         </div>
+                        <div href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></div>
                     </div>
-                </div>
-            </a>
-        </div>
-    }
+                
+                </a>
+            </div>
+
+        }
+    </div>
+
+    <div class="row">
+
     </div>
 </section>

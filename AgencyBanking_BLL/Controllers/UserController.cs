@@ -79,14 +79,14 @@ namespace AgencyBanking_BLL.Controllers
                 if (result.Succeeded)
                 {
                     
-                    var userID = UserManager.FindByEmailAsync(model.Email).Result.Id;
+                    string userID = UserManager.FindByEmailAsync(model.Email).Result.Id;
                    await UserManager.AddToRoleAsync(userID, model.Role);
                     string emailConfirmationCode = await
                         UserManager.GenerateEmailConfirmationTokenAsync(userID);
                     //Generate a random password
                     string passwordSetCode = await UserManager.GeneratePasswordResetTokenAsync(userID);
                     //Generate Callback email
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userID, emailConfirmationCode = emailConfirmationCode, passwordSetCode = passwordSetCode }, protocol: Request.Url.Scheme);
+                    string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userID, emailConfirmationCode = emailConfirmationCode, passwordSetCode = passwordSetCode }, protocol: Request.Url.Scheme);
                     //Send email Notification
                     await UserManager.SendEmailAsync(userID, "Confirm Your Account",
                         $"Please confirm your account by clicking <a href=\"{callbackUrl}\">here</a>");
@@ -108,7 +108,7 @@ namespace AgencyBanking_BLL.Controllers
             }
             else
             {
-                var status = new HttpStatusCodeResult(500);
+                HttpStatusCodeResult status = new HttpStatusCodeResult(500);
                 return status;
             }
         }

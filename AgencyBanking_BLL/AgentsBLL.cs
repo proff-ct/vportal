@@ -8,7 +8,7 @@ public class AgentsBLL
    
         public IEnumerable<AgentModel> GetAgentsByOrganization(string orgname=null)
         {
-          var
+          string
               //TODO: use where condition
               query =
                  "SELECT TOP (100) [Entry No],[Agent Code] as \"AgentCode\",[Date Registered] as \"DateRegistered\",[Location] as \"Location\",[Active],[Name],[Telephone],[DeviceID] FROM[AGENCY BANKING].[dbo].[Agents]";
