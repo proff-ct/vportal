@@ -9,6 +9,6 @@ namespace VisibilityPortal_DAL
   public class ClientUser
   {
     public string email { get; set; }
-    public CoreTecClient sacco { get; set; }
+    //public CoreTecClient sacco { get; set; }
   }
 }

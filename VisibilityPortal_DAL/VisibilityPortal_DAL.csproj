@@ -63,9 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF6 related\PortalDatabaseInitializer_DAL.cs" />
+    <Compile Include="EF6 related\PortalModuleForClient.cs" />
     <Compile Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs" />
     <Compile Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.Designer.cs">
       <DependentUpon>201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.cs" />
+    <Compile Include="Migrations\201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.Designer.cs">
+      <DependentUpon>201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PortalDBContext.cs" />
@@ -74,9 +79,7 @@
     <Compile Include="Sacco.cs" />
     <Compile Include="VisibilityPortalModule.cs" />
     <Compile Include="ClientUser.cs" />
-    <Compile Include="CoreTecClient.cs" />
     <Compile Include="DBConnection.cs" />
-    <Compile Include="DBMaps_DapperFluentMap.cs" />
     <Compile Include="IDBModel.cs" />
     <Compile Include="PortalModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +91,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.resx">
       <DependentUpon>201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.resx">
+      <DependentUpon>201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

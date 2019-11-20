@@ -1,0 +1,84 @@
+﻿@*@model VisibilityPortal_BLL.Models.ViewModels.AddPortalModuleForClientViewModel*@
+@*@using VisibilityPortal_BLL.Models.ViewModels*@
+@{
+  ViewBag.Title = "Coretec Client Setup";
+
+  //List<PortalModuleViewModel> portalModuleList = ViewBag.PortalModuleViewModelList;
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"~/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
+$"~/plugins/multiselect/css/multi-select.css"
+};
+  }
+  @Styles.Render(cssFiles)
+}
+<section class="content-header">
+  <h1>
+    @ViewBag.Title
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  </ol>
+</section>
+<section class="content">
+  @using (Html.BeginForm())
+  {
+    @Html.AntiForgeryToken()
+
+    switch (ViewBag.ActionMode)
+    {
+      case "New":
+        @Html.Partial("_RegisterClientPartial")
+        break;
+      case "Update":
+        @Html.Partial("_UpdateClientPartial")
+        break;
+    }
+
+  }
+
+  @*<div>
+      @Html.ActionLink("Back to List", "Index")
+    </div>*@
+</section>
+@section Scripts {
+  <!-- Include external scripts-->
+  @{
+      string[] scriptFiles = {
+$"~/bundles/jqueryval",
+$"~/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
+$"~/plugins/multiselect/js/jquery.multi-select.js",
+$"~/Scripts/portal/view/coretecClient.js",
+};
+    }
+    @Scripts.Render(scriptFiles);
+
+  <!-- Define custom scripts-->
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // 1. Initialize the select picker
+      var selectPickerId = '#selectClient';
+      InitSelectPicker(selectPickerId);
+      // 2. Load data for the select
+      LoadClientList("@Url.Action("GetUnregisteredClients", "CoretecClient")", selectPickerId);
+      // 4. Set up an event change listener
+      // this sets the active sacco name
+      $(selectPickerId).change(function () {
+        if (!this.value) return;
+        SetPlaceholderText('#activeSaccoPlaceholder', $(this).find(":selected").text());
+      });
+
+      // 3. Initialize the multiselect
+      var multiSelectId = '#selectModule';
+      var multiselectOptions = {
+        selectableHeader: "Select Portal Module(s)",
+        selectionHeader: "Selected Portal Modules"
+      };
+    InitMultiselect(multiSelectId, multiselectOptions);
+
+  });
+  </script>
+}

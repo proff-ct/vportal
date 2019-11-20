@@ -85,11 +85,21 @@
         <ul class="sidebar-menu" data-widget="tree">
           @RenderSection("MenuLinks", false)
           <!-- Optionally, you can add icons to the links -->
-          @*  Temporarily commented the below for purposes of showcasing MVP*@
-          @if(Request.IsAuthenticated && (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
+          @if (Request.IsAuthenticated && (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
           {
-          <li class="header"><span>USER MANAGEMENT</span></li>
-          <li><a href="#"><i class="fa fa-users"></i><span>Create User</span></a></li>
+            if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+            {
+              <li class="header"><span>CLIENT SETUP</span></li>
+              <li><a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
+                <i class="fa fa-wrench"></i><span>Activate Module</span>
+                </a></li>
+            }
+            else
+            {
+              <li class="header"><span>USER MANAGEMENT</span></li>
+            }
+              <li><a href="#"><i class="fa fa-users"></i><span>Create User</span></a></li>
+
           }
 
         </ul>

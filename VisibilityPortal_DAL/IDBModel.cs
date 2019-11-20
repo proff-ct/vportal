@@ -6,4 +6,11 @@
     string tableName { get; }
 
   }
+
+  public enum ModelOperation
+  {
+    AddNew,
+    Update,
+    Delete
+  }
 }
