@@ -119,4 +119,23 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity
     [Display(Name = "Email")]
     public string Email { get; set; }
   }
+
+  #region Portal
+  public class ClientUserViewModel
+  {
+    [Required]
+    public string ClientCorporateNo { get; set; }
+    [Required]
+    public string ClientModuleId { get; set; }
+    [Required]
+    public string RoleId { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+    [Required]
+    public string FirstName { get; set; }
+    [Required]
+    public string LastName { get; set; }
+  }
+  #endregion
 }

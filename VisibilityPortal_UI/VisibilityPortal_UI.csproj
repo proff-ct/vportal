@@ -51,6 +51,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
@@ -121,12 +127,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -1931,7 +1931,9 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\accountAddOrUpdate.js" />
     <Content Include="Scripts\portal\view\coretecClient.js" />
+    <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\submitform.js" />
     <Content Include="Scripts\portal\view\createSuperAdmin.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
@@ -2000,6 +2002,17 @@
     <Content Include="Views\CoretecClient\_RegisterClientPartial.cshtml" />
     <Content Include="Views\CoretecClient\_UpdateClientPartial.cshtml" />
     <Content Include="Views\CoretecClient\View.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\AddOrUpdate.cshtml" />
+    <Content Include="Views\User\_SelectClientPartial.cshtml" />
+    <Content Include="Views\User\_SelectClientModulePartial.cshtml" />
+    <Content Include="Views\Account\_SelectClientModulePartial.cshtml" />
+    <Content Include="Views\Account\_SelectClientPartial.cshtml" />
+    <Content Include="Views\Account\AddOrUpdate.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Shared\Unauthorized.cshtml" />
+    <Content Include="Views\User\ViewCreateClientUser.cshtml" />
+    <Content Include="Views\Account\_EnterClientUserInfoPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

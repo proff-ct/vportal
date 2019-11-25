@@ -1,0 +1,79 @@
+﻿@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"~/plugins/tabulator_4.4/css/tabulator_simple.css"
+};
+  }
+  @Styles.Render(cssFiles)
+}
+<section class="content-header">
+  <h1>
+    User Accounts
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="panel">
+        <div class="panel-heading">
+          <div class="pull-left">
+            <h5 class="panel-info">
+              <strong>Registered Users</strong>
+            </h5>
+            <p>
+              <a href="@Url.Action("AddOrUpdate", "Account")">
+                <span>Add New</span>
+              </a>
+            </p>
+          </div>
+          <div class="pull-right">
+            <button type="button"
+                    class="btn btn-labeled btn-primary btn-sm"
+                    onclick="ReloadData()">
+              <span class="btn-label"><i class="fa fa-refresh"></i></span>
+              Reload
+            </button>
+            <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters()">
+              <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+              Clear filters
+            </button>
+          </div>
+
+        </div>
+        <div class="panel-body">
+          <div id="portalUsersListTable"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @{
+    string[] scriptFiles = {
+      $"~/Scripts/moment.js",
+      $"~/plugins/tabulator_4.4/js/tabulator.js",
+      $"~/Scripts/portal/view/account.js"
+};
+  }
+  @Scripts.Render(scriptFiles)
+  <!-- Define local scripts-->
+  <script>
+    $(document).ready(function () {
+      initTabulator("#portalUsersListTable", "@Url.Action("AddOrUpdate","Account")");
+  LoadData("@Url.Action("GetPortalUsers", "CoretecClient")");
+});
+  </script>
+}

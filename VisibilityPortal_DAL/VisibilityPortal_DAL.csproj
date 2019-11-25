@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF6 related\PortalDatabaseInitializer_DAL.cs" />
+    <Compile Include="EF6 related\PortalUserRole.cs" />
     <Compile Include="EF6 related\PortalModuleForClient.cs" />
     <Compile Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.cs" />
     <Compile Include="Migrations\201911060808459_Add_Route_Prefix_to_PortalModule_and_CreatedBy_to_PortalModuleForClient.Designer.cs">
@@ -72,8 +73,13 @@
     <Compile Include="Migrations\201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.Designer.cs">
       <DependentUpon>201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911251012143_Add_PortalUserRole.cs" />
+    <Compile Include="Migrations\201911251012143_Add_PortalUserRole.Designer.cs">
+      <DependentUpon>201911251012143_Add_PortalUserRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PortalDBContext.cs" />
+    <Compile Include="PortalUserRole.cs" />
     <Compile Include="PortalModuleForClient.cs" />
     <Compile Include="EF6 related\PortalModule.cs" />
     <Compile Include="Sacco.cs" />
@@ -94,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.resx">
       <DependentUpon>201911150829418_Rename_IsActivated_to_IsEnabled_on_PortalModuleForClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911251012143_Add_PortalUserRole.resx">
+      <DependentUpon>201911251012143_Add_PortalUserRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -42,12 +42,16 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
     public string FirstName { get; set; }
     public string MiddleName { get; set; }
     public string LastName { get; set; }
+    public bool IsDefaultPassword { get; set; }
+    public virtual IEnumerable<PortalRole> PortalRoles { get; set; }
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
     {
       // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
       var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
       // Add custom user claims here
+      
       return userIdentity;
     }
+
   }
 }

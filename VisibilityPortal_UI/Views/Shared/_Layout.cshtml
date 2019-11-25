@@ -90,15 +90,19 @@
             if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
             {
               <li class="header"><span>CLIENT SETUP</span></li>
-              <li><a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
-                <i class="fa fa-wrench"></i><span>Activate Module</span>
-                </a></li>
+              <li>
+                <a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
+                  <i class="fa fa-wrench"></i><span>Activate Module</span>
+                </a>
+              </li>
             }
             else
             {
               <li class="header"><span>USER MANAGEMENT</span></li>
             }
-              <li><a href="#"><i class="fa fa-users"></i><span>Create User</span></a></li>
+            <li>
+              <a href="@Url.Action("Index","Account", new { Area = "" })"><i class="fa fa-users"></i><span>Users</span></a>
+            </li>
 
           }
 
@@ -202,10 +206,10 @@
   @{
     string[] scriptsToLoad =
     {
-      "~/Scripts/jquery-3.3.1.min.js",
-      "~/bundles/bootstrap",
-      "~/Scripts/adminlte.min.js"
-    };
+    "~/Scripts/jquery-3.3.1.min.js",
+    "~/bundles/bootstrap",
+    "~/Scripts/adminlte.min.js"
+  };
   }
   @Scripts.Render(scriptsToLoad)
   <!-- Optionally, you can add Slimscroll and FastClick plugins.

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -47,10 +46,10 @@
       <HintPath>..\packages\Dapper.FluentMap.1.8.0\lib\net451\Dapper.FluentMap.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="MattAdoUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MattAdoUtils.1.0.0\lib\net46\MattAdoUtils.dll</HintPath>
@@ -140,12 +139,15 @@
     <Compile Include="ApplicationRoleBLL.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\PortalController.cs" />
     <Compile Include="Controllers\CoretecClientController.cs" />
     <Compile Include="Controllers\InitialSetupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="CoretecClientBLL.cs" />
+    <Compile Include="CustomFilters\AuthorizationFilters.cs" />
     <Compile Include="DapperORM.cs" />
     <Compile Include="GmailConfig.cs" />
     <Compile Include="InitialSetupBLL.cs" />
@@ -169,6 +171,14 @@
     <Compile Include="Migrations\201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.Designer.cs">
       <DependentUpon>201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911211015572_Annotate_ClientModuleId_as_Key_and_Add_AppRoles_isDefaultPassword_to_ApplicationUser.cs" />
+    <Compile Include="Migrations\201911211015572_Annotate_ClientModuleId_as_Key_and_Add_AppRoles_isDefaultPassword_to_ApplicationUser.Designer.cs">
+      <DependentUpon>201911211015572_Annotate_ClientModuleId_as_Key_and_Add_AppRoles_isDefaultPassword_to_ApplicationUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911211235196_Add_Id_to_ApplicationUserRole.cs" />
+    <Compile Include="Migrations\201911211235196_Add_Id_to_ApplicationUserRole.Designer.cs">
+      <DependentUpon>201911211235196_Add_Id_to_ApplicationUserRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ASP_Identity\IdentityConfig\ApplicationRoleManager.cs" />
     <Compile Include="Models\ASP_Identity\IdentityConfig\PortalDatabaseInitializer.cs" />
@@ -188,7 +198,9 @@
     <Compile Include="Models\PortalUserRoles.cs" />
     <Compile Include="Models\ViewModels\CoretecClientModuleViewModel.cs" />
     <Compile Include="Models\ViewModels\AddPortalModuleForClientViewModel.cs" />
+    <Compile Include="Models\ViewModels\PortalApplicationRoleViewModel.cs" />
     <Compile Include="Models\ViewModels\PortalModuleViewModel.cs" />
+    <Compile Include="PortalUserRoleBLL.cs" />
     <Compile Include="PortalModuleBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaccoBLL.cs" />
@@ -199,6 +211,7 @@
     <Compile Include="Utilities\AutoMapper\Mappings.cs" />
     <Compile Include="Utilities\AutoMapper\ModelMetadataProviderConfig.cs" />
     <Compile Include="Utilities\MSSQLOperators.cs" />
+    <Compile Include="Utilities\PortalDefaults.cs" />
     <Compile Include="Utilities\Validators.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -233,14 +246,12 @@
     <EmbeddedResource Include="Migrations\201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.resx">
       <DependentUpon>201910271650359_Set_DBGenerated_Option_to_ApplicationUser_CreatedOn_ModifiedOn_fields.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911211015572_Annotate_ClientModuleId_as_Key_and_Add_AppRoles_isDefaultPassword_to_ApplicationUser.resx">
+      <DependentUpon>201911211015572_Annotate_ClientModuleId_as_Key_and_Add_AppRoles_isDefaultPassword_to_ApplicationUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911211235196_Add_Id_to_ApplicationUserRole.resx">
+      <DependentUpon>201911211235196_Add_Id_to_ApplicationUserRole.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
-  </Target>
-  <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
 </Project>

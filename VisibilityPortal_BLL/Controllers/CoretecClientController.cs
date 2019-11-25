@@ -75,7 +75,7 @@ namespace Visibility_Portal.Controllers
       else if (updateClientModule.ClientModuleId != null && registerClientModule.PortalModules == null)
       {
         // Not checking the model state because the only thing to be modified is the IsEnabled boolean
-        
+
         // Proceed with saving to db
         _coretecClientBLL.Save(updateClientModule, ModelOperation.Update);
       }
@@ -86,29 +86,34 @@ namespace Visibility_Portal.Controllers
     #region Others
     [HttpGet]
     [Authorize]
-    public ActionResult GetRegisteredClients(int page, int size)
+    public ActionResult GetRegisteredClients(int page, int size, string mode = "default")
     {
 
-      // the flow:
-      // 1. get the pagination parameters
-      // 2. pass the pagination parameters to the bll function
-      // 3. retrieve the data from the bll function
-
-
-      //PaginationParameters pagingParams = new PaginationParameters(
-      //  int.Parse(page), int.Parse(size), null);
-      PaginationParameters pagingParams = new PaginationParameters(page, size, null);
-
-      dynamic registeredClientsRecords = _coretecClientBLL
-        .GetListOfClientsWithModules(out int lastPage, true, pagingParams)
-        .ToArray();
-
-      return Json(new
+      switch (mode)
       {
-        last_page = lastPage, // last page from the fetched recordset
-        data = registeredClientsRecords
-      }, JsonRequestBehavior.AllowGet);
+        case "forSelect":
+          IEnumerable<CoretecClientWithModule> registeredClientsRecordsForSelect = _coretecClientBLL
+            .GetListOfClientsWithModules(out int last)
+            .OrderBy(c => c.saccoName_1)
+            .ToArray();
 
+          return Json(registeredClientsRecordsForSelect, JsonRequestBehavior.AllowGet);
+
+        default:
+          // the flow:
+          // 1. get the pagination parameters
+          // 2. pass the pagination parameters to the bll function
+          // 3. retrieve the data from the bll function
+          PaginationParameters pagingParams = new PaginationParameters(page, size, null);
+          dynamic registeredClientsRecords = _coretecClientBLL
+            .GetListOfClientsWithModules(out int lastPage, true, pagingParams)
+            .ToArray();
+          return Json(new
+          {
+            last_page = lastPage, // last page from the fetched recordset
+            data = registeredClientsRecords
+          }, JsonRequestBehavior.AllowGet);
+      }
     }
     [HttpGet]
     [Authorize]
