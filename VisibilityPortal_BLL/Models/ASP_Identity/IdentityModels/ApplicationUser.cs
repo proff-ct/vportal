@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using VisibilityPortal_DAL;
 
 namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
 {
@@ -32,6 +33,8 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
      * Matthew Adote
      * 27_Oct_2019 2000HRS
      */
+    private CoretecClientBLL _coretecClientBLL = new CoretecClientBLL();
+    private PortalUserRoleBLL _portalUserRoleBLL = new PortalUserRoleBLL();
     public string ClientCorporateNo { get; set; }
     public string CreatedBy { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
@@ -39,17 +42,36 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
     public string ModifiedBy { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime ModifiedOn { get; private set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime DateEmailConfirmed { get; set; }
     public string FirstName { get; set; }
     public string MiddleName { get; set; }
     public string LastName { get; set; }
     public bool IsDefaultPassword { get; set; }
     public virtual IEnumerable<PortalRole> PortalRoles { get; set; }
+    //public ApplicationUser()
+    //{
+    //  PortalRoles = Mapper.Map<IEnumerable<PortalRole>>(
+    //    _portalUserRoleBLL.GetPortalUserRoleListForUser(Id));
+    //}
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
     {
       // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-      var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+      ClaimsIdentity userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
       // Add custom user claims here
-      
+      List<string> appRoles = manager.GetRoles(Id).ToList();
+      PortalRoles = Mapper.Map<IEnumerable<PortalRole>>(
+        _portalUserRoleBLL.GetPortalUserRoleListForUser(Id));
+      PortalRoles.ToList().ForEach(pr =>
+      {
+        PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
+          pr.ClientModuleId);
+        if (appRoles.Contains(pr.AspRoleName))
+        {
+          userIdentity.AddClaim(new Claim(clientModule.PortalModuleName, pr.AspRoleName));
+        }
+      });
+
       return userIdentity;
     }
 

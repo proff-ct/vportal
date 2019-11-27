@@ -1931,6 +1931,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\account.js" />
     <Content Include="Scripts\portal\view\accountAddOrUpdate.js" />
     <Content Include="Scripts\portal\view\coretecClient.js" />
     <Content Include="Scripts\portal\view\shared.js" />
@@ -2013,6 +2014,10 @@
     <Content Include="Views\Shared\Unauthorized.cshtml" />
     <Content Include="Views\User\ViewCreateClientUser.cshtml" />
     <Content Include="Views\Account\_EnterClientUserInfoPartial.cshtml" />
+    <Content Include="Views\Shared\ModuleNotFound.cshtml" />
+    <Content Include="Views\Home\_SelectModulePartial.cshtml" />
+    <Content Include="Views\Shared\UserModuleError.cshtml" />
+    <Content Include="Views\Shared\_SelectModuleHeaderPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,10 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Module Error";
+}
+
+<h1 class="text-danger">@ViewBag.Title</h1>
+<h2 class="text-danger">No configuration found for the module: @ViewBag.ModuleName</h2>
+<a href="@Url.Action("Index","Home", new { Area = "" })"><i class="fa fa-home"></i><span> Home</span></a>
+

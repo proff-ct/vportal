@@ -42,33 +42,34 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
+        @Html.Partial("_SelectModuleHeaderPartial")
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
             @Html.Partial("_LoginPartial")
             @*@if (Request.IsAuthenticated)
-              {
-                <!-- User Account Menu -->
-                <li class="dropdown user user-menu">
-                  <!-- Menu Toggle Button -->
-                  <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
-                    <i class="fa fa-user-circle fa-2x pull-left"></i>
-                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                    <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
-                  </a>
-                  <ul class="dropdown-menu">
-                    <!-- Menu Footer-->
-                    <li class="user-footer">
-                      <div class="list-group-item mt-2">
-                        <a href="#" class="">Profile</a>
-                      </div>
-                      <div class="list-group-item mt-2">
-                        <a href="#" class="">Sign out</a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              }*@
+        {
+          <!-- User Account Menu -->
+          <li class="dropdown user user-menu">
+            <!-- Menu Toggle Button -->
+            <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
+              <i class="fa fa-user-circle fa-2x pull-left"></i>
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
+            </a>
+            <ul class="dropdown-menu">
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="list-group-item mt-2">
+                  <a href="#" class="">Profile</a>
+                </div>
+                <div class="list-group-item mt-2">
+                  <a href="#" class="">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        }*@
 
 
           </ul>
@@ -92,7 +93,7 @@
               <li class="header"><span>CLIENT SETUP</span></li>
               <li>
                 <a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
-                  <i class="fa fa-wrench"></i><span>Activate Module</span>
+                  <i class="fa fa-wrench"></i><span>Register Client</span>
                 </a>
               </li>
             }
@@ -101,7 +102,9 @@
               <li class="header"><span>USER MANAGEMENT</span></li>
             }
             <li>
-              <a href="@Url.Action("Index","Account", new { Area = "" })"><i class="fa fa-users"></i><span>Users</span></a>
+              <a href="@Url.Action("Index","Account", new { Area = "" })">
+                <i class="fa fa-users"></i><span>Users</span>
+              </a>
             </li>
 
           }
@@ -206,10 +209,10 @@
   @{
     string[] scriptsToLoad =
     {
-    "~/Scripts/jquery-3.3.1.min.js",
-    "~/bundles/bootstrap",
-    "~/Scripts/adminlte.min.js"
-  };
+  "~/Scripts/jquery-3.3.1.min.js",
+  "~/bundles/bootstrap",
+  "~/Scripts/adminlte.min.js"
+};
   }
   @Scripts.Render(scriptsToLoad)
   <!-- Optionally, you can add Slimscroll and FastClick plugins.

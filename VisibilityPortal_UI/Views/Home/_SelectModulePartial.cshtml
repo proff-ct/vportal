@@ -1,0 +1,11 @@
+﻿@model IEnumerable<VisibilityPortal_BLL.Models.ModuleUrl>
+<p>
+  @foreach (var module in Model)
+  {
+    <a href=@Url.RouteUrl(module.DefaultRoute)
+       class="btn btn-primary btn-lg">
+      @module.ModuleName &raquo;
+    </a>
+  }
+</p>
+

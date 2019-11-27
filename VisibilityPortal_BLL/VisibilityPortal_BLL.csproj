@@ -179,6 +179,10 @@
     <Compile Include="Migrations\201911211235196_Add_Id_to_ApplicationUserRole.Designer.cs">
       <DependentUpon>201911211235196_Add_Id_to_ApplicationUserRole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911261009250_Add_DateEmailConfirmed_to_ApplicationUser.cs" />
+    <Compile Include="Migrations\201911261009250_Add_DateEmailConfirmed_to_ApplicationUser.Designer.cs">
+      <DependentUpon>201911261009250_Add_DateEmailConfirmed_to_ApplicationUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ASP_Identity\IdentityConfig\ApplicationRoleManager.cs" />
     <Compile Include="Models\ASP_Identity\IdentityConfig\PortalDatabaseInitializer.cs" />
@@ -195,6 +199,7 @@
     <Compile Include="Models\CoretecClientWithUsers.cs" />
     <Compile Include="Models\CoreTecOrganisation.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
+    <Compile Include="Models\ModuleUrl.cs" />
     <Compile Include="Models\PortalUserRoles.cs" />
     <Compile Include="Models\ViewModels\CoretecClientModuleViewModel.cs" />
     <Compile Include="Models\ViewModels\AddPortalModuleForClientViewModel.cs" />
@@ -251,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911211235196_Add_Id_to_ApplicationUserRole.resx">
       <DependentUpon>201911211235196_Add_Id_to_ApplicationUserRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911261009250_Add_DateEmailConfirmed_to_ApplicationUser.resx">
+      <DependentUpon>201911261009250_Add_DateEmailConfirmed_to_ApplicationUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

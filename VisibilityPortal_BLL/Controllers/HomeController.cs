@@ -11,7 +11,9 @@ namespace VisibilityPortal_BLL.Controllers
   {
     public ActionResult Index()
     {
-      return View();
+      dynamic model = Session["ClientModuleUrls"];
+      if (model != null) ViewBag.ClientModuleUrls = model;
+      return model!=null ? View(model) : View();
       //return RedirectToAction("Login", "Account");
     }
 

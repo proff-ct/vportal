@@ -77,6 +77,10 @@
     <Compile Include="Migrations\201911251012143_Add_PortalUserRole.Designer.cs">
       <DependentUpon>201911251012143_Add_PortalUserRole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911270859496_Add_AspRoleName_to_PortalUserRole.cs" />
+    <Compile Include="Migrations\201911270859496_Add_AspRoleName_to_PortalUserRole.Designer.cs">
+      <DependentUpon>201911270859496_Add_AspRoleName_to_PortalUserRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PortalDBContext.cs" />
     <Compile Include="PortalUserRole.cs" />
@@ -84,7 +88,6 @@
     <Compile Include="EF6 related\PortalModule.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="VisibilityPortalModule.cs" />
-    <Compile Include="ClientUser.cs" />
     <Compile Include="DBConnection.cs" />
     <Compile Include="IDBModel.cs" />
     <Compile Include="PortalModule.cs" />
@@ -103,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911251012143_Add_PortalUserRole.resx">
       <DependentUpon>201911251012143_Add_PortalUserRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911270859496_Add_AspRoleName_to_PortalUserRole.resx">
+      <DependentUpon>201911270859496_Add_AspRoleName_to_PortalUserRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

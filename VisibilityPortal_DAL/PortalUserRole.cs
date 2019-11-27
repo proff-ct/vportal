@@ -19,6 +19,8 @@ namespace VisibilityPortal_DAL
 
     [StringLength(50)]
     public string AspRoleId { get; set; }
+    [StringLength(50)]
+    public string AspRoleName { get; set; }
     public string CreatedBy { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime CreatedOn { get; private set; }
