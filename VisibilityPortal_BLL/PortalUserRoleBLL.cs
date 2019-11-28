@@ -40,11 +40,13 @@ namespace VisibilityPortal_BLL
                   (ClientModuleId,
                   UserId,
                   AspRoleId,
+                  AspRoleName,
                   CreatedBy)
                   VALUES(
                   '{portalUserRole.ClientModuleId}',
                   '{portalUserRole.UserId}',
                   '{portalUserRole.AspRoleId}',
+                  '{portalUserRole.AspRoleName}',
                   '{portalUserRole.CreatedBy}')
                 ";
           break;
