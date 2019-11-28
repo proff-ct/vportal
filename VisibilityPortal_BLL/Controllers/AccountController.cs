@@ -445,7 +445,7 @@ namespace VisibilityPortal_BLL.Controllers
       if (user == null)
       {
         // Don't reveal that the user does not exist
-        return RedirectToAction("ResetPasswordConfirmation", "Account");
+        return View("ResetPasswordFail");
       }
       IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
       if (result.Succeeded)
