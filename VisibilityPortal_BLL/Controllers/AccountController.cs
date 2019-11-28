@@ -103,6 +103,12 @@ namespace VisibilityPortal_BLL.Controllers
       switch (result)
       {
         case SignInStatus.Success:
+          // Check if user is using the default password and redirect them to reset the password
+          if (UserManager.CheckPassword(user, ApplicationUserDefaults.PASSWORD_DEFAULT))
+          {
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            return RedirectToAction("ResetPassword", "Account", new { userId = user.Id, code = code });
+          }
           // redirect the user to appropriate module
           if (user.PortalRoles.Count() == 1)
           {
@@ -444,6 +450,11 @@ namespace VisibilityPortal_BLL.Controllers
       IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
       if (result.Succeeded)
       {
+        if(!UserManager.CheckPassword(user, ApplicationUserDefaults.PASSWORD_DEFAULT))
+        {
+          user.IsDefaultPassword = false;
+          UserManager.Update(user);
+        }
         return RedirectToAction("ResetPasswordConfirmation", "Account");
       }
       AddErrors(result);
