@@ -1,10 +1,16 @@
-﻿var tblTabulator;
-var tabulatorAjaxUrlForReload;
-var tabulatorAjaxParamsForReload;
+﻿// Sacco dataset
+var tblSaccoTabulator;
+var saccoTabulatorAjaxUrlForReload;
+var saccoTabulatorAjaxParamsForReload;
 
-function initTabulator(tableContainerID) {
+// CoreTec dataset
+var tblCoretecTabulator;
+var coretecTabulatorAjaxUrlForReload;
+var coretecTabulatorAjaxParamsForReload;
+
+function initSaccoTabulator(tableContainerID, editUrl) {
   //create Tabulator on DOM element with id == tableContainerID
-  tblTabulator = new Tabulator(tableContainerID, {
+  tblSaccoTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     //data: tabledata, //assign data to table
     placeholder: "No User Records Found ",
@@ -32,29 +38,29 @@ function initTabulator(tableContainerID) {
         align: "center", resizable: false, headerSort: false
       },
       { title: "Client", field: "SaccoName", headerFilter: true },
-      { title: "First Name", field: "Entry_No", headerFilter: true },
-      { title: "Last Name", field: "Entry_No", headerFilter: true },
-      { title: "Phone Number", field: "TelephoneNo", headerFilter: true },
-      { title: "Email", field: "Entry_No", headerFilter: true },
+      { title: "First Name", field: "FirstName", headerFilter: true },
+      { title: "Last Name", field: "LastName", headerFilter: true },
+      { title: "Phone Number", field: "PhoneNumber", headerFilter: true },
+      { title: "Email", field: "Email", headerFilter: true },
       {
-        title: "Email Confirmed?", field: "Status",
+        title: "Email Confirmed?", field: "EmailConfirmed",
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
       {
-        title: "Default Password?", field: "Status",
+        title: "Default Password?", field: "IsDefaultPassword",
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
       {
-        title: "Date Email Confirmed", field: "Transaction_Date",
+        title: "Date Email Confirmed", field: "DateEmailConfirmed",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return GetFormattedDate(cell.getValue());
         }
       },
       {
-        title: "Date Created", field: "Transaction_Date",
+        title: "Date Created", field: "CreatedOn",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return GetFormattedDate(cell.getValue());
@@ -73,7 +79,75 @@ function initTabulator(tableContainerID) {
     headerSortTristate: true,
 
   });
-  $(tblTabulator.element).addClass("table table-striped table-condensed table-hover");
+  $(tblSaccoTabulator.element).addClass("table table-striped table-condensed table-hover");
+}
+function initCoretecTabulator(tableContainerID, editUrl) {
+  //create Tabulator on DOM element with id == tableContainerID
+  tblSaccoTabulator = new Tabulator(tableContainerID, {
+    height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+    //data: tabledata, //assign data to table
+    placeholder: "No User Records Found ",
+    pagination: "remote", //enable remote pagination
+    paginationSize: 100,
+    paginationSizeSelector: true,
+    //ajaxProgressiveLoad: "scroll",
+    //ajaxURL: 'Loans/GetLoanRecords',
+    //ajaxResponse: function (url, params, response) {
+    //  //url - the URL of the request
+    //  //params - the parameters passed with the request
+    //  //response - the JSON object returned in the body of the response.
+
+    //  return response.data; //return the tableData property of a response json object
+    //},
+    // collapse columns that no longer fit on the table into a list under the row
+    responsiveLayout: "collapse",
+    responsiveLayoutCollapseStartOpen: false,
+    layout: "fitDataFill", //fit columns to width of table (optional),
+    headerFilterPlaceholder: "filter ...",
+    tooltipsHeader: true,
+    columns: [ //Define Table Columns
+      {
+        formatter: "responsiveCollapse", width: 30, minWidth: 30,
+        align: "center", resizable: false, headerSort: false
+      },
+      { title: "First Name", field: "FirstName", headerFilter: true },
+      { title: "Last Name", field: "LastName", headerFilter: true },
+      { title: "Email", field: "Email", headerFilter: true },
+      {
+        title: "Email Confirmed?", field: "EmailConfirmed",
+        headerFilter: "select", headerFilterFunc: "=",
+        headerFilterParams: { values: true }
+      },
+      {
+        title: "Default Password?", field: "IsDefaultPassword",
+        headerFilter: "select", headerFilterFunc: "=",
+        headerFilterParams: { values: true }
+      },
+      {
+        title: "Date Email Confirmed", field: "DateEmailConfirmed",
+        align: "center", headerFilter: true,
+        formatter: function (cell, formatterParams) {
+          return GetFormattedDate(cell.getValue());
+        }
+      },
+      {
+        title: "Date Created", field: "CreatedOn",
+        align: "center", headerFilter: true,
+        formatter: function (cell, formatterParams) {
+          return GetFormattedDate(cell.getValue());
+        }
+      },
+      { title: "Created By", field: "CreatedBy", headerFilter: true }
+    ],
+    movableColumns: true,
+    index: "Email",
+    initialSort: [
+      { column: "FirstName", dir: "asc" }
+    ],
+    headerSortTristate: true,
+
+  });
+  $(tblSaccoTabulator.element).addClass("table table-striped table-condensed table-hover");
 }
 
 
@@ -82,21 +156,52 @@ function GetFormattedDate(objDate) {
     'No Date' : moment(objDate).format("DD-MMM-YYYY hh:mm:ss A")
 }
 
-function ClearFilters() {
-  tblTabulator.clearFilter(true);
+function ClearFilters(dataSetName) {
+  switch (dataSetName) {
+    case "SaccoUsers":
+      tblSaccoTabulator.clearFilter(true);
+      break;
+    case "CoretecUsers":
+      tblCoretecTabulator.clearFilter(true);
+      break;
+  }
 }
 
-function LoadData(restUrl, corporateNo) {
-  if (corporateNo == '' || corporateNo == undefined) return;
+function LoadSaccoData(restUrl, corporateNo=null) {
   var ajaxParams = { clientCorporateNo: corporateNo };
 
-  tabulatorAjaxUrlForReload = restUrl;
-  tabulatorAjaxParamsForReload = ajaxParams
+  saccoTabulatorAjaxUrlForReload = restUrl;
+  saccoTabulatorAjaxParamsForReload = ajaxParams
 
-  ClearFilters();
-  tblTabulator.setData(restUrl, ajaxParams);
+  ClearFilters("SaccoUsers");
+  tblSaccoTabulator.setData(restUrl, ajaxParams);
+}
+function LoadCoretecData(restUrl) {
+  var ajaxParams = { clientCorporateNo: "CORETEC" };
+
+  coretecTabulatorAjaxUrlForReload = restUrl;
+  coretecTabulatorAjaxParamsForReload = ajaxParams
+
+  ClearFilters("CoretecUsers");
+  tblCoretecTabulator.setData(restUrl);
 }
 
-function ReloadData() {
-  tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
+function ReloadData(dataSetName) {
+  switch (dataSetName) {
+    case "SaccoUsers":
+      tblSaccoTabulator.setData(saccoTabulatorAjaxUrlForReload, saccoTabulatorAjaxParamsForReload);
+      break;
+    case "CoretecUsers":
+      tblCoretecTabulator.setData(coretecTabulatorAjaxUrlForReload, coretecTabulatorAjaxParamsForReload);
+      break;
+  }
+}
+
+function initIonTabs(ionTabsRef) {
+  $.ionTabs(ionTabsRef);
+}
+function initResponsiveTabs(tabsContainerRef) {
+  $(tabsContainerRef).responsiveTabs({
+    startCollapsed: 'accordion'
+  });
 }
