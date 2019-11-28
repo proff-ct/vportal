@@ -7,7 +7,7 @@
     @foreach (var moduleUrl in ClientModuleUrls)
     {
       <li>
-        <a href="@Url.RouteUrl(moduleUrl.DefaultRoute)">
+        <a href="@Url.RouteUrl(moduleUrl.DefaultRoute, (RouteTable.Routes[moduleUrl.DefaultRoute] as Route).Defaults)">
           @moduleUrl.ModuleName
         </a>
       </li>
