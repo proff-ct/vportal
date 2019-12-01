@@ -59,7 +59,7 @@ function initTabulator(tableContainerID) {
       { title: "MPESA Result Type", field: "MPESA_Result_Type", headerFilter: true },
       { title: "MPESA Result Desc", field: "MPESA_Result_Desc", headerFilter: true },
       {
-        title: "MPESA DateTime", field: "[MPESA_DateTime",
+        title: "MPESA DateTime", field: "MPESA_DateTime",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return GetFormattedDate(cell.getValue());

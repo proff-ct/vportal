@@ -22,5 +22,24 @@ namespace CallCenter_BLL.Utilities.AutoMapper
           config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
         });
     }
+    public static MapperConfiguration GetMapConfig()
+    {
+      return new MapperConfiguration(config =>
+      {
+        config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
+        config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
+        config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
+        config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+      });
+    }
+
+    public static Action<IMapperConfigurationExpression> MapperConfigExpr = new Action<IMapperConfigurationExpression>(
+      config =>
+    {
+      config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
+      config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
+      config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
+      config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+    });
   }
 }

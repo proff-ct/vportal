@@ -1,0 +1,58 @@
+﻿@model VisibilityPortal_BLL.Models.ASP_Identity.ClientUserViewModel
+<div class="form-group">
+  @Html.LabelFor(model => model.ClientCorporateNo, "Client", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col input-group">
+      @Html.DropDownListFor(model=>model.ClientCorporateNo,
+      Enumerable.Empty<SelectListItem>(),
+      "Select Client",
+      htmlAttributes: new
+      {
+        @class = "form-control portal-selectpicker show-tick",
+        @id = "selectClient"
+      }
+    )
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-flat"
+                id="refreshClientSelectbox"
+                onclick="LoadClientList('@Url.Action("GetRegisteredClients","CoretecClient")', '#selectClient')">
+          <i class="fa fa-refresh" aria-hidden="true"></i>
+        </button>
+      </span>
+    </div>
+  
+  @*<div class="row">
+    <div class="col">
+      <h4>
+        Selected client:
+        <small>
+          <span id="currentSelectedClient">
+            <strong>
+              <i id="selectedClientPlaceholder">
+                [not set]
+              </i>
+            </strong>
+          </span>
+        </small>
+      </h4>
+      @Html.ValidationMessageFor(model => model.ClientCorporateNo, "", new { @class = "text-danger" })
+    </div>
+    <div class="col input-group">
+      @Html.DropDownListFor(model=>model.ClientCorporateNo,
+      Enumerable.Empty<SelectListItem>(),
+      "Select Client",
+      htmlAttributes: new
+      {
+        @class = "form-control portal-selectpicker show-tick",
+        @id = "selectClient"
+      }
+    )
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-flat"
+                id="refreshClientSelectbox"
+                onclick="LoadClientList('@Url.Action("GetRegisteredClients","CoretecClient")', '#selectClient')">
+          <i class="fa fa-refresh" aria-hidden="true"></i>
+        </button>
+      </span>
+    </div>
+  </div>*@
+</div>

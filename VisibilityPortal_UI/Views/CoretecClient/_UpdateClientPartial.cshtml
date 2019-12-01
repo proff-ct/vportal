@@ -1,0 +1,68 @@
+﻿@model VisibilityPortal_BLL.Models.ViewModels.CoretecClientModuleViewModel
+
+<div class="form-horizontal">
+  <h4>Update Client Module</h4>
+  <span> @Html.ActionLink("Back to List", "Index")</span>
+  <hr />
+  @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+  @Html.HiddenFor(model => model.ClientModuleId)
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.SaccoName, "Sacco", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(
+  model => model.SaccoName, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+      @Html.ValidationMessageFor(model => model.SaccoName, "", new { @class = "text-danger" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(model => model.ClientCorporateNo, "Corporate No", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(
+  model => model.ClientCorporateNo, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+      @Html.ValidationMessageFor(model => model.ClientCorporateNo, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.PortalModuleName, "Portal Module", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(model => model.PortalModuleName, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+      @Html.ValidationMessageFor(model => model.PortalModuleName, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.CreatedBy, "Registered By", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.TextBoxFor(model => model.CreatedBy, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+      @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+    </div>
+  </div>
+  <div class="form-group">
+    @Html.LabelFor(model => model.CreatedOn, "Registered On", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @{ 
+        var createdOn = Model.CreatedOn;
+      }
+      @Html.TextBox("RegisteredOn", createdOn, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+      @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.IsEnabled, "Enabled?", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      <div class="checkbox">
+        @Html.EditorFor(model => model.IsEnabled)
+        @Html.ValidationMessageFor(model => model.IsEnabled, "", new { @class = "text-danger" })
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+  </div>
+</div>

@@ -21,6 +21,7 @@ namespace VisibilityPortal_DAL
 #endif
     public virtual DbSet<PortalModuleForClient> PortalModuleForClients { get; set; }
     public virtual DbSet<PortalModule> PortalModules { get; set; }
+    public virtual DbSet<PortalUserRole> PortalUserRoles { get; set; }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {

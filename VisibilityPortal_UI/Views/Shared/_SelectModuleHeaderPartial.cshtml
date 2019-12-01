@@ -1,0 +1,16 @@
+﻿@{
+  IEnumerable<VisibilityPortal_BLL.Models.ModuleUrl> ClientModuleUrls = Session["ClientModuleUrls"] as IEnumerable<VisibilityPortal_BLL.Models.ModuleUrl>;
+}
+@if (ClientModuleUrls != null)
+{
+  <ul>
+    @foreach (var moduleUrl in ClientModuleUrls)
+    {
+      <li>
+        <a href="@Url.RouteUrl(moduleUrl.DefaultRoute)">
+          @moduleUrl.ModuleName
+        </a>
+      </li>
+    }
+  </ul>
+}

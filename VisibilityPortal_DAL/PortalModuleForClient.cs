@@ -19,7 +19,7 @@ namespace VisibilityPortal_DAL
     [StringLength(256)]
     public string PortalModuleName { get; set; }
 
-    public bool IsActivated { get; set; }
+    public bool IsEnabled{ get; set; }
     public string CreatedBy { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime CreatedOn { get; private set; }

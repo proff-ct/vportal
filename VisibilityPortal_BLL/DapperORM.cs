@@ -15,14 +15,17 @@ namespace VisibilityPortal_BLL
   {
     //private static string _connectionString = @"Data Source=MATT-HP-PAV-450;Initial Catalog=DCS;Integrated Security=True";
 #if DEBUG
-    private static string _connectionString = Connection.TestingConnectionString;
+    private readonly string _connectionString = Connection.TestingConnectionString;
 #else
-    private static string _connectionString = Connection.ProductionConnectionString;
+    private readonly string _connectionString = Connection.ProductionConnectionString;
 #endif
 
     public DapperORM(string conString=null)
     {
       _connectionString = conString?? _connectionString;
+    }
+    static DapperORM()
+    {
       InitDapper();
     }
     private static void InitDapper()

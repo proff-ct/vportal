@@ -18,4 +18,22 @@ namespace VisibilityPortal_BLL.Models
       Regular
     }
   }
+
+  public class PortalRole
+  {
+    public string AspRoleId { get; set; }
+    public string AspRoleName { get; set; }
+    public string ClientModuleId { get; set; }
+
+    public PortalRole()
+    {
+
+    }
+    public PortalRole(string clientModuleId, string aspRoleId, string aspRoleName)
+    {
+      ClientModuleId = clientModuleId;
+      AspRoleId = aspRoleId;
+      AspRoleName = aspRoleName;
+    }
+  }
 }

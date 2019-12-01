@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<VisibilityPortal_BLL.Models.ModuleUrl>
+@{
   ViewBag.Title = "Home Page";
 }
 
@@ -8,10 +9,14 @@
   <p><small>currently in development</small></p>
   @if (Request.IsAuthenticated)
   {
+    if (Model != null)
+    {
+      @Html.Partial("_SelectModulePartial", Model);
+    }
     <p>
-      <a href=@Url.Action("Index", "Home", new { Area = "CallCenter_UI"}) 
+      <a href=@Url.Action("Index", "Home", new { Area = "CallCenter_UI"})
          class="btn btn-primary btn-lg">
-      Call Center &raquo;
+        Call Center &raquo;
       </a>
     </p>
 

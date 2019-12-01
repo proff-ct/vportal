@@ -29,5 +29,36 @@ namespace VisibilityPortal_BLL
       _query = $@"SELECT * FROM {_tblPortalModule} WHERE ModuleName='{moduleName}'";
       return new DapperORM(_connString).QueryGetSingle<PortalModule>(_query);
     }
+
+    public string GetDefaultRouteForModule(string moduleName)
+    {
+      
+      if (moduleName == PortalModule.AgencyBankingModule.moduleName)
+      {
+        return PortalModule.AgencyBankingModule.defaultRoute;
+      }
+      else if (moduleName == PortalModule.MSaccoModule.moduleName)
+      {
+        return PortalModule.MSaccoModule.defaultRoute;
+      }
+      else if (moduleName == PortalModule.CallCenterModule.moduleName)
+      {
+        return PortalModule.MSaccoModule.defaultRoute;
+      }
+      else
+      {
+        if (string.IsNullOrEmpty(moduleName))
+        {
+          throw new ArgumentNullException(
+            message:"No module supplied!", paramName: nameof(moduleName));
+        }
+        else
+        {
+          throw new ArgumentException(
+            message: $"No configuration found for module: {moduleName}", paramName: nameof(moduleName));
+        }
+        
+      }
+    }
   }
 }

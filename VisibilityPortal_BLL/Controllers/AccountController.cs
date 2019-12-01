@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
+using VisibilityPortal_BLL.Models.ViewModels;
+using VisibilityPortal_BLL.Utilities.PortalDefaults;
+using VisibilityPortal_DAL;
 
 namespace VisibilityPortal_BLL.Controllers
 {
@@ -20,6 +27,9 @@ namespace VisibilityPortal_BLL.Controllers
     private ApplicationSignInManager _signInManager;
     private ApplicationUserManager _userManager;
     private ApplicationRoleManager _roleManager;
+    private PortalModuleBLL _portalModuleBLL = new PortalModuleBLL();
+    private PortalUserRoleBLL _portalUserRoleBLL = new PortalUserRoleBLL();
+    private CoretecClientBLL _coretecClientBLL = new CoretecClientBLL();
 
     public AccountController()
     {
@@ -80,7 +90,7 @@ namespace VisibilityPortal_BLL.Controllers
       if (!await UserManager.IsEmailConfirmedAsync(user.Id))
       {
         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        var callbackUrl = Url.Action(
+        string callbackUrl = Url.Action(
           "ResendConfirmEmail", "Account", new { userId = user.Id },
           protocol: Request.Url.Scheme);
         ViewBag.EmailConfirmationLink = callbackUrl;
@@ -93,6 +103,65 @@ namespace VisibilityPortal_BLL.Controllers
       switch (result)
       {
         case SignInStatus.Success:
+          // redirect the user to appropriate module
+          if (user.PortalRoles.Count() == 1)
+          {
+            PortalRole pr = user.PortalRoles.Single();
+            PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
+             pr.ClientModuleId);
+
+            if (clientModule.PortalModuleName == PortalModule.AgencyBankingModule.moduleName)
+            {
+
+              return RedirectToRoute(
+                PortalModule.AgencyBankingModule.defaultRoute, 
+                (RouteTable.Routes[PortalModule.AgencyBankingModule.defaultRoute] as Route).Defaults);
+            }
+            else if(clientModule.PortalModuleName == PortalModule.MSaccoModule.moduleName)
+            {
+              
+              return RedirectToRoute(
+                PortalModule.MSaccoModule.defaultRoute,
+                (RouteTable.Routes[PortalModule.MSaccoModule.defaultRoute] as Route).Defaults);
+            }
+            else if (clientModule.PortalModuleName == PortalModule.CallCenterModule.moduleName)
+            {
+              return RedirectToRoute(
+                PortalModule.CallCenterModule.defaultRoute,
+                (RouteTable.Routes[PortalModule.CallCenterModule.defaultRoute] as Route).Defaults);
+            }
+            else
+            {
+              ViewBag.ModuleName = clientModule.PortalModuleName;
+              return View("ModuleNotFound");
+            }
+                
+          }
+          else if(user.PortalRoles.Count() > 1)
+          {
+            try
+            {
+              List<ModuleUrl> moduleUrls = new List<ModuleUrl>();
+              user.PortalRoles.ToList().ForEach(pr =>
+              {
+                PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
+                  pr.ClientModuleId);
+                moduleUrls.Add(new ModuleUrl
+                {
+                  ModuleName = clientModule.PortalModuleName,
+                  DefaultRoute = _portalModuleBLL.GetDefaultRouteForModule(clientModule.PortalModuleName)
+                });
+              });
+              Session["ClientModuleUrls"] = moduleUrls.AsEnumerable();
+              return RedirectToAction("Index","Home");
+            }
+            catch(ArgumentException ex)
+            {
+              ViewBag.ErrorMessage = ex.Message;
+              return View("UserModuleError");
+            }
+          }
+          // leaving this here for the time being
           return RedirectToLocal(returnUrl);
         case SignInStatus.LockedOut:
           return View("Lockout");
@@ -224,7 +293,7 @@ namespace VisibilityPortal_BLL.Controllers
           await SendActivationEmailAsync(user);
           return RedirectToAction("Login", "Account");
         }
-        catch(SmtpException ex)
+        catch (SmtpException ex)
         {
           ViewBag.ErrorMessage = ex.Message;
           return View("ErrorSendEmail");
@@ -255,6 +324,14 @@ namespace VisibilityPortal_BLL.Controllers
       }
       IdentityResult result = await UserManager.ConfirmEmailAsync(userId, emailConfirmationCode);
 
+      if (result.Succeeded)
+      {
+        ApplicationUser user = UserManager.FindById(userId);
+        user.DateEmailConfirmed = DateTime.Now;
+        UserManager.Update(user);
+      }
+
+
       if (result.Succeeded && !string.IsNullOrEmpty(passwordSetCode))
       {
         return RedirectToAction("ResetPassword", "Account", new { userId = userId, code = passwordSetCode, firstPassword = true });
@@ -268,14 +345,14 @@ namespace VisibilityPortal_BLL.Controllers
     [AllowAnonymous]
     public async Task<ActionResult> ResendConfirmEmail(string userId)
     {
-      var user = UserManager.FindById(userId);
+      ApplicationUser user = UserManager.FindById(userId);
       if (user == null)
       {
         return View("~/Views/Shared/Error"); // use a 404 page instead
       }
 
       string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-      var callbackUrl = Url.Action(
+      string callbackUrl = Url.Action(
         "ConfirmEmail", "Account", new { userId = user.Id, emailConfirmationCode = code },
         protocol: Request.Url.Scheme);
       IdentityMessage message = new IdentityMessage
@@ -286,8 +363,8 @@ namespace VisibilityPortal_BLL.Controllers
       };
       try
       {
-      await UserManager.EmailService.SendAsync(message);
-      return RedirectToAction("Login", "Account");
+        await UserManager.EmailService.SendAsync(message);
+        return RedirectToAction("Login", "Account");
       }
       catch (SmtpException ex)
       {
@@ -533,6 +610,122 @@ namespace VisibilityPortal_BLL.Controllers
       base.Dispose(disposing);
     }
 
+    #region Portal
+    //
+    // GET: /Account/Index
+    [Authorize]
+    [RequireSuperOrSystemAdmin]
+    public ActionResult Index()
+    {
+      return View();
+    }
+    // GET: /Account/AddOrUpdate
+    [Authorize]
+    [RequireSuperOrSystemAdmin]
+    public ActionResult AddOrUpdate(string id = null)
+    {
+      if (id == null)
+      {
+        SetApplicationRoleList();
+        return View();
+      }
+      else
+      {
+        return null;
+      }
+
+    }
+    //
+    // POST: /Account/AddOrUpdate
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    //public async Task<ActionResult> AddOrUpdate(RegisterViewModel model)
+    //{
+    //  if (ModelState.IsValid)
+    //  {
+    //    ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+    //    IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+    //    if (result.Succeeded)
+    //    {
+    //      await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+    //      // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+    //      // Send an email with this link
+    //      // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+    //      // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+    //      // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+    //      return RedirectToAction("Index", "Home");
+    //    }
+    //    AddErrors(result);
+    //  }
+
+    //  // If we got this far, something failed, redisplay form
+    //  return View(model);
+    //}
+    public async Task<ActionResult> AddOrUpdate(ClientUserViewModel clientUser)
+    {
+      if (!ModelState.IsValid)
+      {
+        return View(clientUser);
+      }
+      // validate that we have a valid role
+      ApplicationRole roleToAssign = RoleManager.FindById(clientUser.RoleId);
+      if (roleToAssign == null)
+      {
+        ModelState.AddModelError("role", "Role DOES NOT EXIST!");
+        return View(clientUser);
+      }
+      // Create user
+      ApplicationUser user = new ApplicationUser
+      {
+        ClientCorporateNo = clientUser.ClientCorporateNo,
+        FirstName = clientUser.FirstName,
+        LastName = clientUser.LastName,
+        UserName = clientUser.Email,
+        Email = clientUser.Email,
+        IsDefaultPassword = true,
+        CreatedBy = User.Identity.GetUserName()
+      };
+      IdentityResult result = await UserManager.CreateAsync(user, ApplicationUserDefaults.PASSWORD_DEFAULT);
+      if (result.Succeeded)
+      {
+        UserManager.AddToRole(user.Id, roleToAssign.Name);
+        List<PortalRole> listPortalRolesForUser = new List<PortalRole>();
+        PortalRole portalRole = new PortalRole(
+          clientUser.ClientModuleId, roleToAssign.Id, roleToAssign.Name);
+        listPortalRolesForUser.Add(portalRole);
+        user.PortalRoles = listPortalRolesForUser.AsEnumerable();
+
+        PortalUserRole portalUserRole = Mapper.Map<PortalUserRole>(portalRole);
+        portalUserRole.UserId = user.Id;
+        portalUserRole.CreatedBy = User.Identity.GetUserName();
+
+        UserManager.Update(user);
+        _portalUserRoleBLL.Save(portalUserRole, ModelOperation.AddNew);
+        // send activation email and redirect to index
+        try
+        {
+          await SendActivationEmailAsync(user);
+          return RedirectToAction("Index", "Account");
+        }
+        catch (SmtpException ex)
+        {
+          ViewBag.ErrorMessage = ex.Message;
+          return View("ErrorSendEmail");
+        }
+      }
+      else
+      {
+        AddErrors(result);
+        SetApplicationRoleList();
+        return View(clientUser);
+      }
+    }
+    #endregion
+
+
     #region Helpers
     // Used for XSRF protection when adding external logins
     private const string XsrfKey = "XsrfId";
@@ -569,9 +762,16 @@ namespace VisibilityPortal_BLL.Controllers
       {
         Destination = user.Email,
         Subject = "CoreTec Visibility Portal: Activate your account",
-        Body = $"Please activate your account by clicking <a href ='{callbackUrl}'>here</a>",
+        Body = $"Please activate your account by clicking <a href ='{callbackUrl}'>here</a>@" +
+        $"Once you activate your account, login using password {ApplicationUserDefaults.PASSWORD_DEFAULT}@" +
+        $"You will then change this password and set one of your own choosing.@" +
+        $"@" +
+        $"@" +
+        $"Best regards," +
+        $"" +
+        $"NB: This is a system generated email. You do not need to reply to this message"
       };
-
+      _confirmationEmail.Body = _confirmationEmail.Body.Replace("@", Environment.NewLine);
       await UserManager.EmailService.SendAsync(_confirmationEmail);
     }
     private async Task<bool> VerifyPassPhraseAsync(ApplicationRoleManager roleManager, string passPhrase)
@@ -616,6 +816,22 @@ namespace VisibilityPortal_BLL.Controllers
         context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
       }
     }
+
+    private void SetApplicationRoleList()
+    {
+      if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+      {
+        ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager.Roles.ToList());
+      }
+      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      {
+        ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager
+          .Roles
+          .Where(r => r.Name != PortalUserRoles.SystemRoles.SuperAdmin.ToString())
+          .ToList());
+      }
+    }
+
     #endregion
   }
 }
