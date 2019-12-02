@@ -37,7 +37,7 @@ function initSaccoTabulator(tableContainerID, editUrl) {
         formatter: "responsiveCollapse", width: 30, minWidth: 30,
         align: "center", resizable: false, headerSort: false
       },
-      { title: "Client", field: "SaccoName", headerFilter: true },
+      { title: "Client", field: "ClientName", headerFilter: true },
       { title: "First Name", field: "FirstName", headerFilter: true },
       { title: "Last Name", field: "LastName", headerFilter: true },
       { title: "Phone Number", field: "PhoneNumber", headerFilter: true },
@@ -66,15 +66,15 @@ function initSaccoTabulator(tableContainerID, editUrl) {
           return GetFormattedDate(cell.getValue());
         }
       }      
-      //{ title: "Corporate No", field: "Corporate_No" },
+      //{ title: "Corporate No", field: "ClientCorporateNo" },
     ],
     movableColumns: true,
-    index: "Corporate_No",
-    groupBy: "SaccoName",
+    index: "ClientCorporateNo",
+    groupBy: "ClientName",
     groupToggleElement: "header", //toggle group on click anywhere in the group header
     groupStartOpen: false,
     initialSort: [
-      { column: "SaccoName", dir: "asc" }
+      { column: "ClientName", dir: "asc" }
     ],
     headerSortTristate: true,
 
@@ -83,7 +83,7 @@ function initSaccoTabulator(tableContainerID, editUrl) {
 }
 function initCoretecTabulator(tableContainerID, editUrl) {
   //create Tabulator on DOM element with id == tableContainerID
-  tblSaccoTabulator = new Tabulator(tableContainerID, {
+  tblCoretecTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     //data: tabledata, //assign data to table
     placeholder: "No User Records Found ",
@@ -147,7 +147,7 @@ function initCoretecTabulator(tableContainerID, editUrl) {
     headerSortTristate: true,
 
   });
-  $(tblSaccoTabulator.element).addClass("table table-striped table-condensed table-hover");
+  $(tblCoretecTabulator.element).addClass("table table-striped table-condensed table-hover");
 }
 
 
@@ -174,7 +174,7 @@ function LoadSaccoData(restUrl, corporateNo=null) {
   saccoTabulatorAjaxParamsForReload = ajaxParams
 
   ClearFilters("SaccoUsers");
-  tblSaccoTabulator.setData(restUrl, ajaxParams);
+  tblSaccoTabulator.setData(saccoTabulatorAjaxUrlForReload, saccoTabulatorAjaxParamsForReload);
 }
 function LoadCoretecData(restUrl) {
   var ajaxParams = { clientCorporateNo: "CORETEC" };
@@ -183,7 +183,7 @@ function LoadCoretecData(restUrl) {
   coretecTabulatorAjaxParamsForReload = ajaxParams
 
   ClearFilters("CoretecUsers");
-  tblCoretecTabulator.setData(restUrl);
+  tblCoretecTabulator.setData(coretecTabulatorAjaxUrlForReload, coretecTabulatorAjaxParamsForReload);
 }
 
 function ReloadData(dataSetName) {

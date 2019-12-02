@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PagedList;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity;
@@ -734,7 +735,95 @@ namespace VisibilityPortal_BLL.Controllers
         return View(clientUser);
       }
     }
+    [HttpGet]
+    [Authorize]
+    public ActionResult GetPortalUsers(
+      int page, int size, string clientCorporateNo, string clientModuleId = null)
+    {
+      IPagedList<IEnumerable<ApplicationUserViewModel>> pagedUserList = null;
+      List<ApplicationUserViewModel> clientUsers = new List<ApplicationUserViewModel>();
+      List<CoretecClientWithUsers> clientsWithUsers = new List<CoretecClientWithUsers>();
+      clientsWithUsers = Mapper.Map<List<CoretecClientWithUsers>>(
+          _coretecClientBLL.GetRegisteredClients());
+
+      if (string.IsNullOrEmpty(clientCorporateNo))
+      {
+        // load all users
+        clientsWithUsers.ForEach(c =>
+        {
+          c.Users = Mapper.Map<IEnumerable<ApplicationUserViewModel>>(
+            UserManager.Users.Where(u => u.ClientCorporateNo == c.corporateNo).ToList());
+
+          if (c.Users.Count() > 0)
+          {
+            c.Users = c.Users
+            .Select(user => {
+              user.ClientName = (c.corporateNo == CoreTecOrganisation.CorporateNo) ?
+                CoreTecOrganisation.CorporateName : c.saccoName_1;
+              return user;
+            })
+            .ToList();
+          }
+        });
+        
+        pagedUserList = clientsWithUsers.Where(c => c.Users.Count() > 0)
+          .Select(c => c.Users)
+          .ToPagedList(page, size);
+        return Json(new
+        {
+          last_page = pagedUserList.PageCount, // last page in fetched recordset
+          data = clientsWithUsers
+          .Where(c => c.Users.Count() > 0 && pagedUserList.ToList().Contains(c.Users))
+          .SelectMany(clients => clients.Users)
+          .ToArray()
+        }, JsonRequestBehavior.AllowGet);
+      }
+      else
+      {
+        // load users for specified client
+        CoretecClientWithUsers client = clientsWithUsers
+          .Where(c => c.corporateNo == clientCorporateNo).SingleOrDefault();
+        if (client != null)
+        {
+          if(client.Users.Count() > 0)
+          {
+            client.Users = Mapper.Map<IEnumerable<ApplicationUserViewModel>>(
+              UserManager.Users.Where(u => u.ClientCorporateNo == client.corporateNo))
+              .Select(user => {
+                user.ClientName = (client.corporateNo == CoreTecOrganisation.CorporateNo) ?
+                CoreTecOrganisation.CorporateName : client.saccoName_1;
+
+                return user;
+              });
+            return Json(new
+            {
+              last_page = client.Users.ToPagedList(page, size).PageCount, // last page in recordset
+              data = client.Users.ToPagedList(page, size).ToArray()
+            }, JsonRequestBehavior.AllowGet);
+          }
+          else
+          {
+            return Json(new
+            {
+              last_page = 0, // last page in fetched recordset
+              data = Array.Empty<IEnumerable<ApplicationUserViewModel>>()
+            }, JsonRequestBehavior.AllowGet);
+          }
+        }
+        else
+        {
+          return Json(new
+          {
+            last_page = 0, // last page in fetched recordset
+            data = Array.Empty<IEnumerable<ApplicationUserViewModel>>()
+          }, JsonRequestBehavior.AllowGet);
+        }
+
+
+      }
+    }
     #endregion
+
 
 
     #region Helpers

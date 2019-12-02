@@ -158,6 +158,22 @@ namespace VisibilityPortal_BLL
       return listCurrentClients
         .Where(c => listRegisteredClientsCorporateNos.All(cNo => cNo != c.corporateNo));
     }
+    public IEnumerable<CoreTecClient> GetRegisteredClients()
+    {
+      List<CoreTecClient> listCurrentClients = new List<CoreTecClient>();
+      List<CoreTecClient> listRegisteredClients = new List<CoreTecClient>();
+      List<string> listRegisteredClientsCorporateNos = new List<string>();
+
+      _query = $@"SELECT * FROM {_tblClientModule}";
+      listRegisteredClientsCorporateNos = new DapperORM()
+        .QueryGetList<PortalModuleForClient>(_query)
+        .ToList()
+        .Select(r => r.ClientCorporateNo).Distinct().ToList();
+
+      listCurrentClients = Mapper.Map<List<CoreTecClient>>(_saccoBLL.GetSaccoList().ToList());
+      return listCurrentClients
+        .Where(c => listRegisteredClientsCorporateNos.Contains(c.corporateNo));
+    }
 
     public PortalModuleForClient GetPortalModuleForClient(string clientModuleId)
     {
