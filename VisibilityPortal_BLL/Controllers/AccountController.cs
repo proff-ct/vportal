@@ -110,6 +110,13 @@ namespace VisibilityPortal_BLL.Controllers
             string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
             return RedirectToAction("ResetPassword", "Account", new { userId = user.Id, code = code });
           }
+          // initialize the activeUserParams session object
+          ActiveUserParams activeUserParams = new ActiveUserParams
+          {
+            ClientCorporateNo = user.ClientCorporateNo,
+            ClientModuleId = string.Empty // will get set when the user selects a module on login
+          };
+          Session["ActiveUserParams"] = activeUserParams;
           // redirect the user to appropriate module
           if (user.PortalRoles.Count() == 1)
           {
@@ -117,16 +124,20 @@ namespace VisibilityPortal_BLL.Controllers
             PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
              pr.ClientModuleId);
 
+            // Set the ClientModuleId for the ActiveUserParams object
+            activeUserParams.ClientModuleId = pr.ClientModuleId;
+            Session["ActiveUserParams"] = activeUserParams;
+
             if (clientModule.PortalModuleName == PortalModule.AgencyBankingModule.moduleName)
             {
 
               return RedirectToRoute(
-                PortalModule.AgencyBankingModule.defaultRoute, 
+                PortalModule.AgencyBankingModule.defaultRoute,
                 (RouteTable.Routes[PortalModule.AgencyBankingModule.defaultRoute] as Route).Defaults);
             }
-            else if(clientModule.PortalModuleName == PortalModule.MSaccoModule.moduleName)
+            else if (clientModule.PortalModuleName == PortalModule.MSaccoModule.moduleName)
             {
-              
+
               return RedirectToRoute(
                 PortalModule.MSaccoModule.defaultRoute,
                 (RouteTable.Routes[PortalModule.MSaccoModule.defaultRoute] as Route).Defaults);
@@ -142,9 +153,9 @@ namespace VisibilityPortal_BLL.Controllers
               ViewBag.ModuleName = clientModule.PortalModuleName;
               return View("ModuleNotFound");
             }
-                
+
           }
-          else if(user.PortalRoles.Count() > 1)
+          else if (user.PortalRoles.Count() > 1)
           {
             try
             {
@@ -160,9 +171,9 @@ namespace VisibilityPortal_BLL.Controllers
                 });
               });
               Session["ClientModuleUrls"] = moduleUrls.AsEnumerable();
-              return RedirectToAction("Index","Home");
+              return RedirectToAction("Index", "Home");
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
               ViewBag.ErrorMessage = ex.Message;
               return View("UserModuleError");
@@ -451,7 +462,7 @@ namespace VisibilityPortal_BLL.Controllers
       IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
       if (result.Succeeded)
       {
-        if(!UserManager.CheckPassword(user, ApplicationUserDefaults.PASSWORD_DEFAULT))
+        if (!UserManager.CheckPassword(user, ApplicationUserDefaults.PASSWORD_DEFAULT))
         {
           user.IsDefaultPassword = false;
           UserManager.Update(user);
@@ -639,6 +650,7 @@ namespace VisibilityPortal_BLL.Controllers
       if (id == null)
       {
         SetApplicationRoleList();
+        SetClientPortalModuleParamsForUser();
         return View();
       }
       else
@@ -689,6 +701,52 @@ namespace VisibilityPortal_BLL.Controllers
         ModelState.AddModelError("role", "Role DOES NOT EXIST!");
         return View(clientUser);
       }
+
+      // check if user is new or existing
+      ApplicationUser existingUser = UserManager.FindByEmail(clientUser.Email);
+      if (existingUser != null)
+      {
+        // user already exists. By design, a given email address can only be used for one client
+
+        // check that the CorporateNo of existing user matches the one selected else return error
+        if (existingUser.ClientCorporateNo != clientUser.ClientCorporateNo)
+        {
+          ModelState.AddModelError("Email", "Email already registered in a different organisation");
+          SetApplicationRoleList();
+          return View(clientUser);
+        }
+
+        // check that we are not assigning an existing role for a given module
+        existingUser.PortalRoles = Mapper.Map<IEnumerable<PortalRole>>(
+          _portalUserRoleBLL.GetPortalUserRoleListForUser(existingUser.Id));
+        List<PortalRole> listExistingUserPortalRoles = new List<PortalRole>();
+
+        // By design, a user can have only one role per client module.
+        // So, if the user already has any other role for the client module, do not create
+        if (existingUser.PortalRoles.ToList().Exists(r => r.ClientModuleId == clientUser.ClientModuleId))
+        {
+          ModelState.AddModelError("", "User already has a role for the selected module");
+          SetApplicationRoleList();
+          return View(clientUser);
+        }
+        // role does not exist. Create the role
+        UserManager.AddToRole(existingUser.Id, roleToAssign.Name);
+        PortalRole portalRole = new PortalRole(
+        clientUser.ClientModuleId, roleToAssign.Id, roleToAssign.Name);
+        listExistingUserPortalRoles.Add(portalRole);
+        existingUser.PortalRoles = listExistingUserPortalRoles.AsEnumerable();
+
+        PortalUserRole portalUserRole = Mapper.Map<PortalUserRole>(portalRole);
+        portalUserRole.UserId = existingUser.Id;
+        portalUserRole.CreatedBy = User.Identity.GetUserName();
+        UserManager.Update(existingUser);
+        _portalUserRoleBLL.Save(portalUserRole, ModelOperation.AddNew);
+
+
+
+        return RedirectToAction("Index", "Account");
+      }
+
       // Create user
       ApplicationUser user = new ApplicationUser
       {
@@ -757,7 +815,8 @@ namespace VisibilityPortal_BLL.Controllers
           if (c.Users.Count() > 0)
           {
             c.Users = c.Users
-            .Select(user => {
+            .Select(user =>
+            {
               user.ClientName = (c.corporateNo == CoreTecOrganisation.CorporateNo) ?
                 CoreTecOrganisation.CorporateName : c.saccoName_1;
               return user;
@@ -765,7 +824,7 @@ namespace VisibilityPortal_BLL.Controllers
             .ToList();
           }
         });
-        
+
         pagedUserList = clientsWithUsers.Where(c => c.Users.Count() > 0)
           .Select(c => c.Users)
           .ToPagedList(page, size);
@@ -785,11 +844,12 @@ namespace VisibilityPortal_BLL.Controllers
           .Where(c => c.corporateNo == clientCorporateNo).SingleOrDefault();
         if (client != null)
         {
-          if(client.Users.Count() > 0)
+          if (client.Users.Count() > 0)
           {
             client.Users = Mapper.Map<IEnumerable<ApplicationUserViewModel>>(
               UserManager.Users.Where(u => u.ClientCorporateNo == client.corporateNo))
-              .Select(user => {
+              .Select(user =>
+              {
                 user.ClientName = (client.corporateNo == CoreTecOrganisation.CorporateNo) ?
                 CoreTecOrganisation.CorporateName : client.saccoName_1;
 
@@ -931,7 +991,13 @@ namespace VisibilityPortal_BLL.Controllers
           .ToList());
       }
     }
-
+    private void SetClientPortalModuleParamsForUser()
+    {
+      if (Session != null && Session["ActiveUserParams"] != null)
+      {
+        ViewBag.ActiveUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+      }
+    }
     #endregion
   }
 }
