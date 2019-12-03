@@ -601,6 +601,8 @@ namespace VisibilityPortal_BLL.Controllers
     [ValidateAntiForgeryToken]
     public ActionResult LogOff()
     {
+      Session.Clear();
+      Session.Abandon();
       AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
       return RedirectToAction("Index", "Home");
     }
@@ -1003,6 +1005,10 @@ namespace VisibilityPortal_BLL.Controllers
       if (Session != null && Session["ActiveUserParams"] != null)
       {
         ViewBag.ActiveUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+      }
+      else
+      {
+        RedirectToAction("Login");
       }
     }
     #endregion
