@@ -14,6 +14,7 @@
 
 @section HtmlHead{
     <link href="~/Content/ionicons.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     <style>
         @@media only screen and (min-width:  768px) {
             .box-shadow {
@@ -74,8 +75,171 @@
 
         }
     </div>
+    <section class="container">
+        <div class="row">
+            <!-- Line -->
+            <div class="card box-success col-sm-12 col-md-6 ">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Member Registration </h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="memberregistrationgraph" style="height:230px"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            <!-- BAR CHART -->
+            <div class=" col-sm-12 col-md-6 card">
+                <div class=" box-header with-border">
+                    <h3 class="box-title">Deposit vs Shares Deposit</h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="barChart" style="height: 230px"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            <!-- Line -->
+            <div class="card box-success col-sm-12 col-md-6 ">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Loan Application </h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="lineChart" style="height: 230px"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box --> <div class="card box-success col-sm-12 col-md-6 ">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Loan Repayment </h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="loanreplaymentgraph" style="height: 230px"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            </div>
 
-    <div class="row">
-
-    </div>
 </section>
+
+
+@section scripts{
+   
+    <script>
+        function bargraph() {
+            var chart = $('#barChart');
+            var months = [];
+            var deposits = [];
+            var shares = [];
+            var ctx = $('#barChart');
+
+            $.get('@Url.Action("GetDeposits", "Home")',
+                function(data) {
+                   
+                    for (var i in data) {
+                        months.push(data[i].month);
+                        if (data[i].type === 'Share Deposit') {
+                            shares.push(data[i].total);
+                        } else {
+                            deposits.push(data[i].total);
+                        }
+                    }
+                    var chartdata = {
+                        labels: remove_duplicate_months(months),
+                        datasets: [
+                            {
+                                label: 'Deposits',
+                                backgroundColor: '#49e2ff',
+                                borderColor: '#46d5f1',
+                                hoverBackgroundColor: '#CCCCCC',
+                                hoverBorderColor: '#666666',
+                                data: deposits
+                            },
+                            {
+                                label: 'Share Deposits',
+                                backgroundColor: '#00FF00',
+                                borderColor: '#46d5f1',
+                                hoverBackgroundColor: '#CCCCCC',
+                                hoverBorderColor: '#666666',
+                                data: shares
+                            }
+                        ]
+                    };
+                    var chart = new Chart(ctx,
+                        {
+                            type: 'bar',
+                            data: chartdata
+                        }
+                    );
+                });
+
+            function remove_duplicate_months(arr) {
+                var seen = {};
+                var ret_arr = [];
+                for (var i = 0; i < arr.length; i++) {
+                    if (!(arr[i] in seen)) {
+                        ret_arr.push(arr[i]);
+                        seen[arr[i]] = true;
+                    }
+                }
+                return ret_arr;
+
+            }
+        }
+
+        function linegraph(link,id,caption) {
+            var labels = [];
+            var dat = [];
+            var ctx = $(id);
+
+
+            $.get(link,
+                function(data) {
+                    for (var i in data) {
+                        console.log(data);
+                        labels.push(data[i].month);
+                        dat.push(data[i].total);
+                    }
+
+                    var chartdata = {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: caption,
+                                backgroundColor: '#49e2ff',
+                                borderColor: '#46d5f1',
+                                hoverBackgroundColor: '#CCCCCC',
+                                hoverBorderColor: '#666666',
+                                data: dat
+                            }]
+                    }
+                    var chart = new Chart(ctx,
+                        {
+                            type: 'line',
+                            data: chartdata
+                        }
+                    );
+
+
+                });
+
+        }
+
+    </script>
+    <script>
+        bargraph();
+        linegraph('@Url.Action("GetLoanRepaymentStats","Home")',"#loanreplaymentgraph","Loan Repayment")
+        linegraph('@Url.Action("GetLoanStats", "Home")', '#lineChart', "Loan Application");
+        linegraph('@Url.Action("GetMemberRegistrationStats", "Home")','#memberregistrationgraph','Total Number of Loan ApplicationsTotal Number of Loan Applications')
+    </script>
+
+}
