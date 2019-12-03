@@ -692,6 +692,8 @@ namespace VisibilityPortal_BLL.Controllers
     {
       if (!ModelState.IsValid)
       {
+        SetApplicationRoleList();
+        SetClientPortalModuleParamsForUser();
         return View(clientUser);
       }
       // validate that we have a valid role
@@ -699,6 +701,8 @@ namespace VisibilityPortal_BLL.Controllers
       if (roleToAssign == null)
       {
         ModelState.AddModelError("role", "Role DOES NOT EXIST!");
+        SetApplicationRoleList();
+        SetClientPortalModuleParamsForUser();
         return View(clientUser);
       }
 
@@ -713,6 +717,7 @@ namespace VisibilityPortal_BLL.Controllers
         {
           ModelState.AddModelError("Email", "Email already registered in a different organisation");
           SetApplicationRoleList();
+          SetClientPortalModuleParamsForUser();
           return View(clientUser);
         }
 
@@ -727,6 +732,7 @@ namespace VisibilityPortal_BLL.Controllers
         {
           ModelState.AddModelError("", "User already has a role for the selected module");
           SetApplicationRoleList();
+          SetClientPortalModuleParamsForUser();
           return View(clientUser);
         }
         // role does not exist. Create the role
@@ -790,6 +796,7 @@ namespace VisibilityPortal_BLL.Controllers
       {
         AddErrors(result);
         SetApplicationRoleList();
+        SetClientPortalModuleParamsForUser();
         return View(clientUser);
       }
     }
