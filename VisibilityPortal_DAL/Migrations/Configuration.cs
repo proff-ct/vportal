@@ -34,7 +34,7 @@ namespace VisibilityPortal_DAL.Migrations
         new PortalModule
         {
           ModuleName = PortalModule.modules.CallCenter.ToString(),
-          CoreTecProductName = "N/A",
+          CoreTecProductName = PortalModule.PlaceholderIfNotCoretecProduct,
           RoutePrefix = PortalModule.CallCenterModule.routePrefix
         });
 

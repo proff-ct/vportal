@@ -26,12 +26,12 @@ namespace VisibilityPortal_DAL.EF6_related
         new PortalModule
         {
           ModuleName = PortalModule.modules.CallCenter.ToString(),
-          CoreTecProductName = "N/A",
+          CoreTecProductName = PortalModule.PlaceholderIfNotCoretecProduct,
           RoutePrefix = PortalModule.CallCenterModule.routePrefix
         }
       };
       List<PortalModule> coretecPortalModules = portalModules
-        .FindAll(m => m.CoreTecProductName == "N/A");
+        .FindAll(m => m.CoreTecProductName == PortalModule.PlaceholderIfNotCoretecProduct);
       List<PortalModuleForClient> coretecStaffOnlyModules = new List<PortalModuleForClient>();
       coretecPortalModules.ForEach(m => {
         coretecStaffOnlyModules.Add(new PortalModuleForClient
