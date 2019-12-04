@@ -1,6 +1,7 @@
 namespace VisibilityPortal_DAL.Migrations
 {
   using System;
+  using System.Collections.Generic;
   using System.Data.Entity.Migrations;
 
   internal sealed class Configuration : DbMigrationsConfiguration<PortalDBContext>
@@ -17,8 +18,8 @@ namespace VisibilityPortal_DAL.Migrations
       //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
       //  to avoid creating duplicate seed data.
       // register the portal modules
-      context.PortalModules.AddOrUpdate(
-        m => m.ModuleName,
+      List<PortalModule> portalModules = new List<PortalModule>
+      {
         new PortalModule
         {
           ModuleName = PortalModule.modules.AgencyBanking.ToString(),
@@ -36,17 +37,25 @@ namespace VisibilityPortal_DAL.Migrations
           ModuleName = PortalModule.modules.CallCenter.ToString(),
           CoreTecProductName = PortalModule.PlaceholderIfNotCoretecProduct,
           RoutePrefix = PortalModule.CallCenterModule.routePrefix
-        });
+        }
+    };
+      context.PortalModules.AddOrUpdate(m => m.ModuleName, portalModules.ToArray());
 
-      // register the Coretec client modules
-      context.PortalModuleForClients.AddOrUpdate(new PortalModuleForClient
-      {
-        ClientModuleId = Guid.NewGuid().ToString(),
-        ClientCorporateNo = "CORETEC",
-        PortalModuleName = PortalModule.modules.CallCenter.ToString(),
-        CreatedBy = "PORTAL SETUP",
-        IsEnabled = true
-      });
+      // register the Coretec staff facing modules
+      List<PortalModuleForClient> coretecStaffOnlyModules = new List<PortalModuleForClient>();
+      portalModules
+        .FindAll(m => m.CoreTecProductName == PortalModule.PlaceholderIfNotCoretecProduct)
+        .ForEach(m => {
+          coretecStaffOnlyModules.Add(new PortalModuleForClient
+          {
+            ClientModuleId = Guid.NewGuid().ToString(),
+            ClientCorporateNo = "CORETEC",
+            PortalModuleName = m.ModuleName,
+            CreatedBy = "PORTAL SETUP",
+            IsEnabled = true
+          });
+        });
+      context.PortalModuleForClients.AddOrUpdate(m => m.PortalModuleName, coretecStaffOnlyModules.ToArray());
     }
   }
 }
