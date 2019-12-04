@@ -1,5 +1,6 @@
 namespace VisibilityPortal_DAL.Migrations
 {
+  using System;
   using System.Data.Entity.Migrations;
 
   internal sealed class Configuration : DbMigrationsConfiguration<PortalDBContext>
@@ -15,6 +16,7 @@ namespace VisibilityPortal_DAL.Migrations
 
       //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
       //  to avoid creating duplicate seed data.
+      // register the portal modules
       context.PortalModules.AddOrUpdate(
         m => m.ModuleName,
         new PortalModule
@@ -32,10 +34,19 @@ namespace VisibilityPortal_DAL.Migrations
         new PortalModule
         {
           ModuleName = PortalModule.modules.CallCenter.ToString(),
-          CoreTecProductName = "N/A",
+          CoreTecProductName = PortalModule.PlaceholderIfNotCoretecProduct,
           RoutePrefix = PortalModule.CallCenterModule.routePrefix
         });
 
+      // register the Coretec client modules
+      context.PortalModuleForClients.AddOrUpdate(new PortalModuleForClient
+      {
+        ClientModuleId = Guid.NewGuid().ToString(),
+        ClientCorporateNo = "CORETEC",
+        PortalModuleName = PortalModule.modules.CallCenter.ToString(),
+        CreatedBy = "PORTAL SETUP",
+        IsEnabled = true
+      });
     }
   }
 }

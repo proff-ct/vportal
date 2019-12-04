@@ -4,6 +4,8 @@
   {
     public static string DBName => "VisibilityPortal";
     public static string DBTableName => "PortalModule";
+
+    public static string PlaceholderIfNotCoretecProduct = "N/A";
     public string databaseName => DBName;
 
     public string tableName => DBTableName;

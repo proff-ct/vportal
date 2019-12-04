@@ -979,6 +979,13 @@
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_CN.min.js" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_TW.js" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_TW.min.js" />
+    <Content Include="plugins\ion.tabs-1.0.2\css\ion.tabs.css" />
+    <Content Include="plugins\ion.tabs-1.0.2\css\ion.tabs.skinBordered.css" />
+    <Content Include="plugins\ion.tabs-1.0.2\css\ion.tabs.skinFlat.css" />
+    <Content Include="plugins\ion.tabs-1.0.2\img\preloader-flat.gif" />
+    <Content Include="plugins\ion.tabs-1.0.2\js\ion-tabs\ion.tabs.js" />
+    <Content Include="plugins\ion.tabs-1.0.2\js\ion-tabs\ion.tabs.min.js" />
+    <Content Include="plugins\ion.tabs-1.0.2\js\vendor\jquery-1.10.2.min.js" />
     <Content Include="plugins\ionicon\index.js" />
     <Content Include="plugins\ionicon\ios-add-circle-outline.svg" />
     <Content Include="plugins\ionicon\ios-add-circle.svg" />
@@ -1681,6 +1688,17 @@
     <Content Include="plugins\multiselect\css\multi-select.dist.css" />
     <Content Include="plugins\multiselect\img\switch.png" />
     <Content Include="plugins\multiselect\js\jquery.multi-select.js" />
+    <Content Include="plugins\Responsive-Tabs\AUTHOR.txt" />
+    <Content Include="plugins\Responsive-Tabs\css\responsive-tabs.css" />
+    <Content Include="plugins\Responsive-Tabs\css\style.css" />
+    <Content Include="plugins\Responsive-Tabs\demo.html" />
+    <Content Include="plugins\Responsive-Tabs\gulpfile.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery-1.11.0.min.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery-2.1.0.min.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery.responsiveTabs.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery.responsiveTabs.min.js" />
+    <Content Include="plugins\Responsive-Tabs\test\fixture.html" />
+    <Content Include="plugins\Responsive-Tabs\test\jquery.responsiveTabs-test.js" />
     <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard.css" />
     <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard.min.css" />
     <Content Include="plugins\SmartWizard-master\dist\css\smart_wizard_theme_arrows.css" />
@@ -1911,6 +1929,11 @@
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-vi_VN.js.map" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_CN.js.map" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_TW.js.map" />
+    <Content Include="plugins\Responsive-Tabs\.gitignore" />
+    <Content Include="plugins\Responsive-Tabs\bower.json" />
+    <Content Include="plugins\Responsive-Tabs\LICENCE" />
+    <Content Include="plugins\Responsive-Tabs\package.json" />
+    <Content Include="plugins\Responsive-Tabs\README.md" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -2018,6 +2041,7 @@
     <Content Include="Views\Home\_SelectModulePartial.cshtml" />
     <Content Include="Views\Shared\UserModuleError.cshtml" />
     <Content Include="Views\Shared\_SelectModuleHeaderPartial.cshtml" />
+    <Content Include="Views\Account\ResetPasswordFail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

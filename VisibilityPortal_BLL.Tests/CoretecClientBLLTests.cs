@@ -67,7 +67,7 @@ namespace VisibilityPortal_BLL.Tests
       }
 
     }
-
+    
     [TestFixture]
     public class GetListOfClientModules
     {
@@ -97,17 +97,17 @@ namespace VisibilityPortal_BLL.Tests
       #endregion
 
       [Test]
-      public void Returns_enumerable_of_CoretecClientModule_when_called_without_pagination()
+      public void Returns_enumerable_of_CoretecClientModuleViewModel_when_called_without_pagination()
       {
         string corporateNo = 525201.ToString();
 
         _output = _coretecClientBLL.GetListOfClientModules(out int lastPage);
 
         Assert.IsInstanceOf<IEnumerable<CoretecClientModuleViewModel>>(
-          _output, "IEnumerable of CoretecClientModule NOT RETURNED!!!");
+          _output, "IEnumerable of CoretecClientModuleViewModel NOT RETURNED!!!");
       }
       [Test]
-      public void Returns_enumerable_of_CoretecClientModule_when_called_with_pagination()
+      public void Returns_enumerable_of_CoretecClientModuleViewModel_when_called_with_pagination()
       {
         string corporateNo = 525201.ToString();
         int page = 1;
@@ -117,7 +117,7 @@ namespace VisibilityPortal_BLL.Tests
         _output = _coretecClientBLL.GetListOfClientModules(out int lastPage, true, pagingParams);
 
         Assert.IsInstanceOf<IEnumerable<CoretecClientModuleViewModel>>(
-          _output, "IEnumerable of CoretecClientModule NOT RETURNED!!!");
+          _output, "IEnumerable of CoretecClientModuleViewModel NOT RETURNED!!!");
         Assert.LessOrEqual(_output.Count, pageSize, "Records returned > Expected!");
         //Assert.Greater(lastPage, 0, "last_page parameter value NOT greater than zero!");
       }
@@ -162,6 +162,50 @@ namespace VisibilityPortal_BLL.Tests
          * + Write a better test for this to allow verification of the db result set
         **/
         _output = _coretecClientBLL.GetUnregisteredClients();
+
+        Assert.IsInstanceOf<IEnumerable<CoreTecClient>>(
+          _output, "IEnumerbale of CoreTecClient NOT RETURNED!!");
+
+      }
+    }
+    [TestFixture]
+    public class GetRegisteredClients
+    {
+      private CoretecClientBLL _coretecClientBLL = new CoretecClientBLL();
+      private dynamic _output;
+
+
+      #region TestPreparation
+
+      [OneTimeSetUp]
+      public void ClassInit()
+      {
+        // Executes once for the test class. (Optional) 
+        Mapper.Initialize(
+        config =>
+        {
+          config.CreateMap<Sacco, CoreTecClient>().ReverseMap();
+        });
+      }
+      [OneTimeTearDown]
+      public void ClassCleanup()
+      {
+        // Runs once after all tests in this class are executed. (Optional)
+        // Not guaranteed that it executes instantly after all tests from the class.
+        Mapper.Reset();
+      }
+
+      #endregion
+
+
+      [Test]
+      public void Returns_enumerable_of_CoreTecClient_for_saccos_that_ARE_REGISTERED_on_portal()
+      {
+        /**
+         * TO-DO:
+         * + Write a better test for this to allow verification of the db result set
+        **/
+        _output = _coretecClientBLL.GetRegisteredClients();
 
         Assert.IsInstanceOf<IEnumerable<CoreTecClient>>(
           _output, "IEnumerbale of CoreTecClient NOT RETURNED!!");

@@ -66,15 +66,28 @@ namespace VisibilityPortal_BLL
         listPortalModuleForClient = new DapperORM()
           .QueryGetList<PortalModuleForClient>(_query).ToList();
       }
-                           
-      listPortalModuleForClient.Select(r=>r.ClientCorporateNo).Distinct().ToList().ForEach(cNo => {
-        listSacco.Add(_saccoBLL.GetSaccoByUniqueParam(cNo));
-      });
+
+      listPortalModuleForClient.Select(r => r.ClientCorporateNo).Distinct().ToList().ForEach(
+        cNo =>
+        {
+          if (cNo == CoreTecOrganisation.CorporateNo)
+          {
+            // Morph Coretec only module to sacco type
+            listSacco.Add(new Sacco
+            {
+              corporateNo = cNo,
+              corporateNo_2 = cNo,
+              saccoName_1 = CoreTecOrganisation.CorporateName
+            });
+            return;
+          }
+          listSacco.Add(_saccoBLL.GetSaccoByUniqueParam(cNo));
+        });
 
       listCoretecClient = Mapper.Map<IEnumerable<CoreTecClient>>(listSacco).ToList();
       listCoretecClientWithModule = Mapper.Map<List<CoretecClientWithModule>>(listCoretecClient);
-
-      listCoretecClientWithModule.ForEach(c => {
+      listCoretecClientWithModule.ForEach(c =>
+      {
         c.Modules = listPortalModuleForClient.Where(m => m.ClientCorporateNo == c.corporateNo);
       });
 
@@ -128,14 +141,19 @@ namespace VisibilityPortal_BLL
           .QueryGetList<PortalModuleForClient>(_query).ToList();
       }
       listCoretecClientModule = Mapper.Map<List<CoretecClientModuleViewModel>>(listPortalModuleForClient);
-      if (listCoretecClientModule.Count == 0) return listCoretecClientModule.AsEnumerable();
-      
+      if (listCoretecClientModule.Count == 0)
+      {
+        return listCoretecClientModule.AsEnumerable();
+      }
+
       // get names of saccos for each distinct CorporateNo from the returned data
-      listPortalModuleForClient.Select(r => r.ClientCorporateNo).Distinct().ToList().ForEach(cNo => {
+      listPortalModuleForClient.Select(r => r.ClientCorporateNo).Distinct().ToList().ForEach(cNo =>
+      {
         listSacco.Add(_saccoBLL.GetSaccoByUniqueParam(cNo));
       });
 
-      listCoretecClientModule.ForEach(m => {
+      listCoretecClientModule.ForEach(m =>
+      {
         m.SaccoName = listSacco.First(s => s.corporateNo == m.ClientCorporateNo).saccoName_1;
       });
 
@@ -158,16 +176,36 @@ namespace VisibilityPortal_BLL
       return listCurrentClients
         .Where(c => listRegisteredClientsCorporateNos.All(cNo => cNo != c.corporateNo));
     }
+    public IEnumerable<CoreTecClient> GetRegisteredClients()
+    {
+      List<CoreTecClient> listCurrentClients = new List<CoreTecClient>();
+      List<CoreTecClient> listRegisteredClients = new List<CoreTecClient>();
+      List<string> listRegisteredClientsCorporateNos = new List<string>();
+
+      _query = $@"SELECT * FROM {_tblClientModule}";
+      listRegisteredClientsCorporateNos = new DapperORM()
+        .QueryGetList<PortalModuleForClient>(_query)
+        .ToList()
+        .Select(r => r.ClientCorporateNo).Distinct().ToList();
+
+      listCurrentClients = Mapper.Map<List<CoreTecClient>>(_saccoBLL.GetSaccoList().ToList());
+      return listCurrentClients
+        .Where(c => listRegisteredClientsCorporateNos.Contains(c.corporateNo));
+    }
 
     public PortalModuleForClient GetPortalModuleForClient(string clientModuleId)
     {
-      _query= $@"SELECT * FROM {_tblClientModule} WHERE ClientModuleId='{clientModuleId}'";
+      _query = $@"SELECT * FROM {_tblClientModule} WHERE ClientModuleId='{clientModuleId}'";
 
       return new DapperORM().QueryGetSingle<PortalModuleForClient>(_query);
     }
     public bool Save(PortalModuleForClient clientModule, ModelOperation modelOp)
     {
-      if (!ValidatePortalModuleForClient(clientModule)) return false;
+      if (!ValidatePortalModuleForClient(clientModule))
+      {
+        return false;
+      }
+
       switch (modelOp)
       {
         case ModelOperation.AddNew:
@@ -199,7 +237,7 @@ namespace VisibilityPortal_BLL
         new DapperORM().ExecuteQuery(_query);
         return true;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         // should log the exception
         return false;
@@ -213,7 +251,7 @@ namespace VisibilityPortal_BLL
         new DapperORM().ExecuteQuery(_query);
         return true;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         // log the exception
         return false;

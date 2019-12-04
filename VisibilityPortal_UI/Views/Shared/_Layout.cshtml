@@ -1,6 +1,15 @@
-﻿@using Microsoft.AspNet.Identity
-@using VisibilityPortal_BLL.Models;
-
+﻿@using VisibilityPortal_BLL.Models;
+@*@@using Microsoft.AspNet.Identity;
+@using System.Security.Claims;
+@{ 
+  string[] PortalModules = new string[3] { "AgencyBanking", "CallCenter", "MSacco" };
+  string[] AccountAdminRoles = new string[2] {
+    PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
+    PortalUserRoles.SystemRoles.SystemAdmin.ToString()
+  };
+  var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
+  IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
+}*@
 <!DOCTYPE html>
 <html>
 <head>

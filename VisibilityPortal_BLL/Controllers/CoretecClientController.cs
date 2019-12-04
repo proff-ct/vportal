@@ -29,7 +29,7 @@ namespace Visibility_Portal.Controllers
         ViewBag.PortalModuleViewModelList = Mapper
           .Map<List<PortalModuleViewModel>>(_portalModuleBLL
             .GetModulesList()
-            .Where(m => m.ModuleName != "CallCenter") // filter out CallCenter for now
+            .Where(m => m.CoreTecProductName != PortalModule.PlaceholderIfNotCoretecProduct) // filter out Coretec only modules since these are registered alternatively
             .ToList());
         ViewBag.ActionMode = "New";
         return View();
