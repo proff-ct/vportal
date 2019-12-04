@@ -647,19 +647,11 @@ namespace VisibilityPortal_BLL.Controllers
     // GET: /Account/AddOrUpdate
     [Authorize]
     [RequireSuperOrSystemAdmin]
-    public ActionResult AddOrUpdate(string id = null)
+    public ActionResult AddNew()
     {
-      if (id == null)
-      {
-        SetApplicationRoleList();
-        SetClientPortalModuleParamsForUser();
-        return View();
-      }
-      else
-      {
-        return null;
-      }
-
+      SetApplicationRoleList();
+      SetClientPortalModuleParamsForUser();
+      return View();
     }
     //
     // POST: /Account/AddOrUpdate
@@ -690,7 +682,7 @@ namespace VisibilityPortal_BLL.Controllers
     //  // If we got this far, something failed, redisplay form
     //  return View(model);
     //}
-    public async Task<ActionResult> AddOrUpdate(ClientUserViewModel clientUser)
+    public async Task<ActionResult> AddNew(ClientUserViewModel clientUser)
     {
       if (!ModelState.IsValid)
       {
@@ -802,6 +794,23 @@ namespace VisibilityPortal_BLL.Controllers
         return View(clientUser);
       }
     }
+    [HttpGet]
+    [Authorize]
+    [RequireSuperOrSystemAdmin]
+    public ActionResult Edit(string id)
+    {
+
+      return null;
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public ActionResult Edit(EditPortalUserViewModel editUserVM)
+    {
+
+      return null;
+    }
+
     [HttpGet]
     [Authorize]
     public ActionResult GetPortalUsers(

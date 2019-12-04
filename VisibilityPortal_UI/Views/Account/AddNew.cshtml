@@ -35,7 +35,6 @@ $"~/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css"
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
       @if (Request.IsAuthenticated)
       {
-
         if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
         {
           Html.RenderPartial("_SelectClientPartial", Model);

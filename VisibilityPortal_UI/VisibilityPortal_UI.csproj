@@ -2032,7 +2032,7 @@
     <Content Include="Views\User\_SelectClientModulePartial.cshtml" />
     <Content Include="Views\Account\_SelectClientModulePartial.cshtml" />
     <Content Include="Views\Account\_SelectClientPartial.cshtml" />
-    <Content Include="Views\Account\AddOrUpdate.cshtml" />
+    <Content Include="Views\Account\AddNew.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Shared\Unauthorized.cshtml" />
     <Content Include="Views\User\ViewCreateClientUser.cshtml" />
