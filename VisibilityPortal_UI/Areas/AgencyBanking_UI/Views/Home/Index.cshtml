@@ -29,11 +29,25 @@
                 width: 200px;
                 margin: 0 auto;
             }
-
+            .card:hover{
+                box-shadow: -1px 10px 29px 0px rgba(0,0,0,0.8);
+            }
             .zoom:hover {
                 transform: scale(1.1);
             }
+            .zoom-md {
+                -ms-transition: transform .2s;
+                -o-transition: transform .2s;
+                -webkit-transition: transform .2s;
+                transition: transform .2s; /* Animation */
+                width: 200px;
+                margin: 0 auto;
+            }
 
+            .zoom-md:hover {
+                z-index: 4;
+                transform: scale(1.0);
+            }
         }
         @@media only screen and (max-width: 600px) {
             .zoom {
@@ -78,7 +92,7 @@
     <section class="container">
         <div class="row">
             <!-- Line -->
-            <div class="card box-success col-sm-12 col-md-6 ">
+            <div class="card box-success col-sm-12 col-md-6 zoom-md ">
                 <div class="box-header with-border">
                     <h3 class="box-title">Member Registration </h3>
                 </div>
@@ -91,7 +105,7 @@
             </div>
             <!-- /.box -->
             <!-- BAR CHART -->
-            <div class=" col-sm-12 col-md-6 card">
+            <div class=" col-sm-12 col-md-6 card zoom-md">
                 <div class=" box-header with-border">
                     <h3 class="box-title">Deposit vs Shares Deposit</h3>
                 </div>
@@ -104,7 +118,7 @@
             </div>
             <!-- /.box -->
             <!-- Line -->
-            <div class="card box-success col-sm-12 col-md-6 ">
+            <div class="card box-success col-sm-12 col-md-6 zoom-md">
                 <div class="box-header with-border">
                     <h3 class="box-title">Loan Application </h3>
                 </div>
@@ -115,7 +129,7 @@
                 </div>
                 <!-- /.box-body -->
             </div>
-            <!-- /.box --> <div class="card box-success col-sm-12 col-md-6 ">
+            <!-- /.box --> <div class="card box-success col-sm-12 col-md-6 zoom-md">
                 <div class="box-header with-border">
                     <h3 class="box-title">Loan Repayment </h3>
                 </div>
