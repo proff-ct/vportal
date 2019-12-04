@@ -853,9 +853,7 @@ namespace VisibilityPortal_BLL.Controllers
           .Where(c => c.corporateNo == clientCorporateNo).SingleOrDefault();
         if (client != null)
         {
-          if (client.Users.Count() > 0)
-          {
-            client.Users = Mapper.Map<IEnumerable<ApplicationUserViewModel>>(
+          client.Users = Mapper.Map<IEnumerable<ApplicationUserViewModel>>(
               UserManager.Users.Where(u => u.ClientCorporateNo == client.corporateNo))
               .Select(user =>
               {
@@ -864,6 +862,8 @@ namespace VisibilityPortal_BLL.Controllers
 
                 return user;
               });
+          if (client.Users.Count() > 0)
+          {
             return Json(new
             {
               last_page = client.Users.ToPagedList(page, size).PageCount, // last page in recordset

@@ -2042,6 +2042,8 @@
     <Content Include="Views\Shared\UserModuleError.cshtml" />
     <Content Include="Views\Shared\_SelectModuleHeaderPartial.cshtml" />
     <Content Include="Views\Account\ResetPasswordFail.cshtml" />
+    <Content Include="Views\Account\_ListUsersForSuperAdminPartial.cshtml" />
+    <Content Include="Views\Account\_ListUsersForSystemAdminPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

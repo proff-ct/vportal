@@ -1,0 +1,79 @@
+﻿@{ 
+  var saccoTabId = "Sacco";
+  var coretecTabId = "Coretec";
+}
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <div id="tabs_portalUsers">
+      <ul>
+        <li><a href="#@saccoTabId">Sacco</a></li>
+        <li><a href="#@coretecTabId">Coretec</a></li>
+      </ul>
+
+      <div id="@saccoTabId">
+        <div class="panel">
+          <div class="panel-heading">
+            <div class="pull-left">
+              <h5 class="panel-info">
+                <strong>Registered Users</strong>
+              </h5>
+              <p>
+                <a href="@Url.Action("AddOrUpdate", "Account")">
+                  <span>Add New</span>
+                </a>
+              </p>
+            </div>
+            <div class="pull-right">
+              <button type="button"
+                      class="btn btn-labeled btn-primary btn-sm"
+                      onclick="ReloadData('SaccoUsers')">
+                <span class="btn-label"><i class="fa fa-refresh"></i></span>
+                Reload
+              </button>
+              <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters('SaccoUsers')">
+                <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+                Clear filters
+              </button>
+            </div>
+
+          </div>
+          <div class="panel-body">
+            <div id="saccoUsersListTable"></div>
+          </div>
+        </div>
+      </div>
+      <div id="@coretecTabId">
+        <div class="panel">
+          <div class="panel-heading">
+            <div class="pull-left">
+              <h5 class="panel-info">
+                <strong>Registered Users</strong>
+              </h5>
+              <p>
+                <a href="@Url.Action("AddOrUpdate", "Account")">
+                  <span>Add New</span>
+                </a>
+              </p>
+            </div>
+            <div class="pull-right">
+              <button type="button"
+                      class="btn btn-labeled btn-primary btn-sm"
+                      onclick="ReloadData('CoretecUsers')">
+                <span class="btn-label"><i class="fa fa-refresh"></i></span>
+                Reload
+              </button>
+              <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters('CoretecUsers')">
+                <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+                Clear filters
+              </button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="coretecUsersListTable"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
