@@ -149,6 +149,17 @@ namespace VisibilityPortal_BLL
       // get names of saccos for each distinct CorporateNo from the returned data
       listPortalModuleForClient.Select(r => r.ClientCorporateNo).Distinct().ToList().ForEach(cNo =>
       {
+        if (cNo == CoreTecOrganisation.CorporateNo)
+        {
+          // Morph Coretec only module to sacco type
+          listSacco.Add(new Sacco
+          {
+            corporateNo = cNo,
+            corporateNo_2 = cNo,
+            saccoName_1 = CoreTecOrganisation.CorporateName
+          });
+          return;
+        }
         listSacco.Add(_saccoBLL.GetSaccoByUniqueParam(cNo));
       });
 
@@ -157,7 +168,10 @@ namespace VisibilityPortal_BLL
         m.SaccoName = listSacco.First(s => s.corporateNo == m.ClientCorporateNo).saccoName_1;
       });
 
-      return listCoretecClientModule.AsEnumerable();
+      // filter out Coretec Only modules as this function is currently to be used only for Sacco data
+      return listCoretecClientModule
+        .Where(cM => !cM.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo))
+        .AsEnumerable();
     }
 
     public IEnumerable<CoreTecClient> GetUnregisteredClients()
