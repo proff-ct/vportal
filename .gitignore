@@ -263,3 +263,7 @@ __pycache__/
 # Custom file for specifying db connection strings
 /**/AppDBConnectionStrings*.config
 /**/TestingAppDBConnectionStrings*.config
+/VisibilityPortal_BLL.Tests/SampleAppDBConnectionStrings.Release.config
+/VisibilityPortal_BLL.Tests/SampleAppDBConnectionStrings.Debug.config
+/CallCenter_BLL.Tests/SampleAppDBConnectionStrings.Release.config
+/CallCenter_BLL.Tests/SampleAppDBConnectionStrings.Debug.config
