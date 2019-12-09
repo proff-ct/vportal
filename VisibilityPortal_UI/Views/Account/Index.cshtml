@@ -66,15 +66,15 @@ $"~/Scripts/portal/view/account.js"
         <text>
           //initIonTabs("#tabs_ViewUsers");
           initResponsiveTabs("#tabs_portalUsers");
-          initSaccoTabulator("#saccoUsersListTable", "@Url.Action("AddNew","Account")");
-          initCoretecTabulator("#coretecUsersListTable", "@Url.Action("AddNew","Account")");
+          initSaccoTabulator("#saccoUsersListTable", "@Url.Action("Edit","Account")");
+          initCoretecTabulator("#coretecUsersListTable", "@Url.Action("Edit","Account")");
           LoadSaccoData("@Url.Action("GetPortalUsers", "Account")");
           LoadCoretecData("@Url.Action("GetPortalUsers", "Account")");
        </text>
       }
       else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString())) {
         <text>
-          initSaccoTabulator("#saccoUsersListTable", "@Url.Action("AddNew","Account")");
+          initSaccoTabulator("#saccoUsersListTable", "@Url.Action("Edit", "Account")");
           LoadSaccoData("@Url.Action("GetPortalUsers", "Account")", @activeUserParams.ClientCorporateNo);
         </text>
       }

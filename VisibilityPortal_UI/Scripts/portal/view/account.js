@@ -37,6 +37,12 @@ function initSaccoTabulator(tableContainerID, editUrl) {
         formatter: "responsiveCollapse", width: 30, minWidth: 30,
         align: "center", resizable: false, headerSort: false
       },
+      {
+        formatter: editRecord,
+        formatterParams: { editUrl: editUrl },
+        align: "center",
+        headerSort: false
+      },
       { title: "Client", field: "ClientName", headerFilter: true },
       { title: "First Name", field: "FirstName", headerFilter: true },
       { title: "Last Name", field: "LastName", headerFilter: true },
@@ -110,6 +116,12 @@ function initCoretecTabulator(tableContainerID, editUrl) {
         formatter: "responsiveCollapse", width: 30, minWidth: 30,
         align: "center", resizable: false, headerSort: false
       },
+      {
+        formatter: editRecord,
+        formatterParams: { editUrl: editUrl },
+        align: "center",
+        headerSort: false
+      },
       { title: "First Name", field: "FirstName", headerFilter: true },
       { title: "Last Name", field: "LastName", headerFilter: true },
       { title: "Email", field: "Email", headerFilter: true },
@@ -137,7 +149,7 @@ function initCoretecTabulator(tableContainerID, editUrl) {
           return GetFormattedDate(cell.getValue());
         }
       },
-      { title: "Created By", field: "CreatedBy", headerFilter: true }
+      { title: "Created By", field: "CreatedBy", headerFilter: true }      
     ],
     movableColumns: true,
     index: "Email",
@@ -150,6 +162,15 @@ function initCoretecTabulator(tableContainerID, editUrl) {
   $(tblCoretecTabulator.element).addClass("table table-striped table-condensed table-hover");
 }
 
+//custom formatter definition
+var editRecord = function (cell, formatterParams, onRendered) { //plain text value
+
+  return "<a href='" +
+    formatterParams.editUrl +
+    "?email=" +
+    cell.getRow().getData().Email +
+    "'><i class='fa fa-edit' style='color: red'></i></a>";
+};
 
 function GetFormattedDate(objDate) {
   return (objDate == null) ?

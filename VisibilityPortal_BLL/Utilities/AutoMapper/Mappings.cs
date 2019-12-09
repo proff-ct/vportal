@@ -24,6 +24,7 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
           config.CreateMap<PortalModuleForClient, CoretecClientModuleViewModel>().ReverseMap();
           config.CreateMap<PortalModule, PortalModuleViewModel>().ReverseMap();
           config.CreateMap<PortalUserRole, PortalRole>().ReverseMap();
+          config.CreateMap<PortalUserRole, PortalUserRoleViewModel>().ReverseMap();
           config.CreateMap<ApplicationUser, ApplicationUserViewModel>();
         });
     }
@@ -36,6 +37,7 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
         config.CreateMap<PortalModuleForClient, CoretecClientModuleViewModel>().ReverseMap();
         config.CreateMap<PortalModule, PortalModuleViewModel>().ReverseMap();
         config.CreateMap<PortalUserRole, PortalRole>().ReverseMap();
+        config.CreateMap<PortalUserRole, PortalUserRoleViewModel>().ReverseMap();
         config.CreateMap<ApplicationUser, ApplicationUserViewModel>();
       });
     }
@@ -48,6 +50,7 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
         config.CreateMap<PortalModuleForClient, CoretecClientModuleViewModel>().ReverseMap();
         config.CreateMap<PortalModule, PortalModuleViewModel>().ReverseMap();
         config.CreateMap<PortalUserRole, PortalRole>().ReverseMap();
+        config.CreateMap<PortalUserRole, PortalUserRoleViewModel>().ReverseMap();
         config.CreateMap<ApplicationRole, PortalApplicationRoleViewModel>()
         .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Id))
         .ReverseMap();

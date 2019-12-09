@@ -1840,6 +1840,7 @@
     <Content Include="AppDBConnectionStrings.config">
       <TransformOnBuild>true</TransformOnBuild>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="SampleAppDBConnectionStrings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1955,7 +1956,8 @@
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\portal\view\account.js" />
-    <Content Include="Scripts\portal\view\accountAddOrUpdate.js" />
+    <Content Include="Scripts\portal\view\accountAddNew.js" />
+    <Content Include="Scripts\portal\view\accountEdit.js" />
     <Content Include="Scripts\portal\view\coretecClient.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\submitform.js" />
@@ -2044,6 +2046,8 @@
     <Content Include="Views\Account\ResetPasswordFail.cshtml" />
     <Content Include="Views\Account\_ListUsersForSuperAdminPartial.cshtml" />
     <Content Include="Views\Account\_ListUsersForSystemAdminPartial.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\_EditClientUserInfoPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
