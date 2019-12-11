@@ -41,7 +41,7 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
     public DateTime CreatedOn { get; private set; }
     public string ModifiedBy { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTime ModifiedOn { get; private set; }
+    public DateTime ModifiedOn { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime DateEmailConfirmed { get; set; }
     public string FirstName { get; set; }

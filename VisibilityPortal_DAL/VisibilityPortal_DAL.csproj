@@ -81,6 +81,10 @@
     <Compile Include="Migrations\201911270859496_Add_AspRoleName_to_PortalUserRole.Designer.cs">
       <DependentUpon>201911270859496_Add_AspRoleName_to_PortalUserRole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912041349579_Add_IsEnabled_boolean_property_to_PortalUserRole.cs" />
+    <Compile Include="Migrations\201912041349579_Add_IsEnabled_boolean_property_to_PortalUserRole.Designer.cs">
+      <DependentUpon>201912041349579_Add_IsEnabled_boolean_property_to_PortalUserRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PortalDBContext.cs" />
     <Compile Include="PortalUserRole.cs" />
@@ -109,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911270859496_Add_AspRoleName_to_PortalUserRole.resx">
       <DependentUpon>201911270859496_Add_AspRoleName_to_PortalUserRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912041349579_Add_IsEnabled_boolean_property_to_PortalUserRole.resx">
+      <DependentUpon>201912041349579_Add_IsEnabled_boolean_property_to_PortalUserRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

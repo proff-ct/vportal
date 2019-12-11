@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Utilities.Validators.ValidationAttributes;
+using VisibilityPortal_BLL.Models.ViewModels;
+using VisibilityPortal_DAL;
 
 namespace VisibilityPortal_BLL.Models.ASP_Identity
 {
@@ -129,6 +131,20 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity
     public string ClientModuleId { get; set; }
     [Required]
     public string RoleId { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+    [Required]
+    public string FirstName { get; set; }
+    [Required]
+    public string LastName { get; set; }
+  }
+  public class EditPortalUserViewModel
+  {
+    [Required]
+    public string ClientCorporateNo { get; set; }
+    [Required]
+    public IList<PortalUserRoleViewModel> PortalRoles { get; set; }
     [Required]
     [EmailAddress]
     public string Email { get; set; }

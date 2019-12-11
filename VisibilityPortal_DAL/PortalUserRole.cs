@@ -27,5 +27,6 @@ namespace VisibilityPortal_DAL
     public string ModifiedBy { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime ModifiedOn { get; private set; }
+    public bool IsEnabled { get; set; }
   }
 }

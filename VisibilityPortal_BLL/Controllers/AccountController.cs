@@ -31,6 +31,7 @@ namespace VisibilityPortal_BLL.Controllers
     private PortalModuleBLL _portalModuleBLL = new PortalModuleBLL();
     private PortalUserRoleBLL _portalUserRoleBLL = new PortalUserRoleBLL();
     private CoretecClientBLL _coretecClientBLL = new CoretecClientBLL();
+    private SaccoBLL _saccoBLL = new SaccoBLL();
 
     public AccountController()
     {
@@ -797,19 +798,103 @@ namespace VisibilityPortal_BLL.Controllers
     [HttpGet]
     [Authorize]
     [RequireSuperOrSystemAdmin]
-    public ActionResult Edit(string id)
+    public ActionResult Edit(string email)
     {
+      // locate user based on passed in email
+      // if user not found display a 404
+      // else display the edit page
+      if (string.IsNullOrEmpty(email))
+      {
+        return View();
+      }
 
-      return null;
+      ApplicationUser user = UserManager.FindByEmail(email);
+      if (user == null)
+      {
+        ViewBag.UnknownEmail = email;
+        return View();
+      }
+
+      EditPortalUserViewModel editUserVM = new EditPortalUserViewModel
+      {
+        ClientCorporateNo = user.ClientCorporateNo,
+        Email = user.Email,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        PortalRoles = Mapper.Map<IList<PortalUserRoleViewModel>>(
+          _portalUserRoleBLL.GetPortalUserRoleListForUser(user.Id))
+          .Select(r =>
+          {
+            r.Module = _coretecClientBLL.GetPortalModuleForClient(r.ClientModuleId).PortalModuleName;
+            return r;
+          })
+          .ToList()
+      };
+
+      if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+      {
+        ViewBag.UserClientName = user.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo) ?
+          CoreTecOrganisation.CorporateName : _saccoBLL.GetSaccoByUniqueParam(user.ClientCorporateNo).saccoName_1;
+      }
+      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      {
+        SetClientPortalModuleParamsForUser();
+      }
+
+      return View(editUserVM);
     }
-   /* [HttpPost]
+    [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditPortalUserViewModel editUserVM)
     {
+      if (!ModelState.IsValid)
+      {
+        return View(editUserVM);
+      }
+      ApplicationUser userToEdit = UserManager.FindByEmail(editUserVM.Email);
+      if(userToEdit == null)
+      {
+        ViewBag.UnknownEmail = editUserVM.Email;
+        return View();
+      }
+      // save the user's particulars
+      userToEdit.FirstName = editUserVM.FirstName;
+      userToEdit.LastName = editUserVM.LastName;
+      userToEdit.ModifiedBy = User.Identity.GetUserName();
+      userToEdit.ModifiedOn = DateTime.Now.ToUniversalTime();
+      UserManager.Update(userToEdit);
 
-      return null;
-    }*/
+      // save the roles
+      // the only thing expected to change at the moment is th IsEnabled property
+      if(editUserVM.PortalRoles.Count > 0)
+      {
+        PortalUserRole roleToUpdate = null;
+        editUserVM.PortalRoles.ToList().ForEach(r => {
+          roleToUpdate = _portalUserRoleBLL.GetPortalUserRoleListForUser(userToEdit.Id)
+          .SingleOrDefault(userRoles => userRoles.AspRoleId.Equals(r.AspRoleId));
+
+          if (roleToUpdate == null) return;
+
+          roleToUpdate.IsEnabled = r.IsEnabled;
+          roleToUpdate.ModifiedBy = User.Identity.GetUserName();
+
+          if (!_portalUserRoleBLL.Save(roleToUpdate, ModelOperation.Update))
+          {
+            ModelState.AddModelError("", $"Unable to save User's Role({r.AspRoleName}) in db");
+          };
+        });
+      }
+      if (!ModelState.IsValid)
+      {
+        return View(editUserVM);
+      }
+      else
+      {
+        return RedirectToAction("Edit", new { email = userToEdit.Email });
+      }
+      // return to edit 
+    }
 
     [HttpGet]
     [Authorize]
