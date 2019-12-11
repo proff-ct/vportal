@@ -231,6 +231,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CallCenter_BLL\CallCenter_BLL.csproj">
+      <Project>{01299762-99f8-4932-bd58-829b8e0f1606}</Project>
+      <Name>CallCenter_BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{6A5EC0E2-A633-420E-A14D-4C9EFAF2A9CD}</Project>
       <Name>Utilities</Name>

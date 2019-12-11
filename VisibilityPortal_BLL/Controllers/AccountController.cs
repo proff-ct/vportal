@@ -802,14 +802,14 @@ namespace VisibilityPortal_BLL.Controllers
 
       return null;
     }
-    [HttpPost]
+   /* [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditPortalUserViewModel editUserVM)
     {
 
       return null;
-    }
+    }*/
 
     [HttpGet]
     [Authorize]

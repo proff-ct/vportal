@@ -229,6 +229,7 @@
     <Content Include="Views\Device\create.cshtml" />
     <Content Include="Views\Device\Edit.cshtml" />
     <Content Include="Views\Device\Assign.cshtml" />
+    <Content Include="Views\Repair\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -250,7 +251,7 @@
       <Name>AgencyBanking_DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\VisibilityPortal_BLL\VisibilityPortal_BLL.csproj">
-      <Project>{B6AA0DA3-35E2-4767-9902-DD6FFDF92171}</Project>
+      <Project>{b6aa0da3-35e2-4767-9902-dd6ffdf92171}</Project>
       <Name>VisibilityPortal_BLL</Name>
     </ProjectReference>
   </ItemGroup>
