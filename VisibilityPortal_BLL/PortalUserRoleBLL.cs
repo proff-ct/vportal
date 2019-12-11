@@ -54,7 +54,9 @@ namespace VisibilityPortal_BLL
         case ModelOperation.Update:
           _query = $@"UPDATE {_tblPortalUserRole} 
           SET
-            ModifiedBy='{portalUserRole.ModifiedBy}'
+            IsEnabled='{portalUserRole.IsEnabled}',
+            ModifiedBy='{portalUserRole.ModifiedBy}',
+            ModifiedOn='{DateTime.Now.ToUniversalTime()}'
           WHERE Id='{portalUserRole.Id}'";
           break;
       };

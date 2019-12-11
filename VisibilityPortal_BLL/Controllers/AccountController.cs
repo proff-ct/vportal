@@ -821,18 +821,24 @@ namespace VisibilityPortal_BLL.Controllers
         Email = user.Email,
         FirstName = user.FirstName,
         LastName = user.LastName,
-        PortalRoles = Mapper.Map<IList<PortalUserRoleViewModel>>(_portalUserRoleBLL.GetPortalUserRoleListForUser(user.Id)).Select(r =>
-        {
-          r.Module = _coretecClientBLL.GetPortalModuleForClient(r.ClientModuleId).PortalModuleName;
-          return r;
-        })
-        .ToList()
+        PortalRoles = Mapper.Map<IList<PortalUserRoleViewModel>>(
+          _portalUserRoleBLL.GetPortalUserRoleListForUser(user.Id))
+          .Select(r =>
+          {
+            r.Module = _coretecClientBLL.GetPortalModuleForClient(r.ClientModuleId).PortalModuleName;
+            return r;
+          })
+          .ToList()
       };
 
       if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
       {
         ViewBag.UserClientName = user.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo) ?
           CoreTecOrganisation.CorporateName : _saccoBLL.GetSaccoByUniqueParam(user.ClientCorporateNo).saccoName_1;
+      }
+      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      {
+        SetClientPortalModuleParamsForUser();
       }
 
       return View(editUserVM);
@@ -842,8 +848,52 @@ namespace VisibilityPortal_BLL.Controllers
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditPortalUserViewModel editUserVM)
     {
+      if (!ModelState.IsValid)
+      {
+        return View(editUserVM);
+      }
+      ApplicationUser userToEdit = UserManager.FindByEmail(editUserVM.Email);
+      if(userToEdit == null)
+      {
+        ViewBag.UnknownEmail = editUserVM.Email;
+        return View();
+      }
+      // save the user's particulars
+      userToEdit.FirstName = editUserVM.FirstName;
+      userToEdit.LastName = editUserVM.LastName;
+      userToEdit.ModifiedBy = User.Identity.GetUserName();
+      userToEdit.ModifiedOn = DateTime.Now.ToUniversalTime();
+      UserManager.Update(userToEdit);
 
-      return null;
+      // save the roles
+      // the only thing expected to change at the moment is th IsEnabled property
+      if(editUserVM.PortalRoles.Count > 0)
+      {
+        PortalUserRole roleToUpdate = null;
+        editUserVM.PortalRoles.ToList().ForEach(r => {
+          roleToUpdate = _portalUserRoleBLL.GetPortalUserRoleListForUser(userToEdit.Id)
+          .SingleOrDefault(userRoles => userRoles.AspRoleId.Equals(r.AspRoleId));
+
+          if (roleToUpdate == null) return;
+
+          roleToUpdate.IsEnabled = r.IsEnabled;
+          roleToUpdate.ModifiedBy = User.Identity.GetUserName();
+
+          if (!_portalUserRoleBLL.Save(roleToUpdate, ModelOperation.Update))
+          {
+            ModelState.AddModelError("", $"Unable to save User's Role({r.AspRoleName}) in db");
+          };
+        });
+      }
+      if (!ModelState.IsValid)
+      {
+        return View(editUserVM);
+      }
+      else
+      {
+        return RedirectToAction("Edit", new { email = userToEdit.Email });
+      }
+      // return to edit 
     }
 
     [HttpGet]

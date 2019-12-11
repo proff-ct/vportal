@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.Configuration;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
 using VisibilityPortal_BLL.Models.ViewModels;
@@ -17,7 +12,8 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
     public static void RegisterMappings()
     {
       Mapper.Initialize(
-        config => {
+        config =>
+        {
           config.CreateMap<Sacco, CoreTecClient>().ReverseMap();
           config.CreateMap<CoreTecClient, CoretecClientWithModule>().ReverseMap();
           config.CreateMap<CoreTecClient, CoretecClientWithUsers>().ReverseMap();
@@ -30,7 +26,8 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
     }
     public static MapperConfiguration GetMapConfig()
     {
-      return new MapperConfiguration(config => {
+      return new MapperConfiguration(config =>
+      {
         config.CreateMap<Sacco, CoreTecClient>().ReverseMap();
         config.CreateMap<CoreTecClient, CoretecClientWithModule>().ReverseMap();
         config.CreateMap<CoreTecClient, CoretecClientWithUsers>().ReverseMap();
@@ -56,5 +53,5 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
         .ReverseMap();
         config.CreateMap<ApplicationUser, ApplicationUserViewModel>();
       });
-    }
   }
+}
