@@ -24,7 +24,8 @@ namespace VisibilityPortal_BLL.Models
     public string AspRoleId { get; set; }
     public string AspRoleName { get; set; }
     public string ClientModuleId { get; set; }
-
+    public bool IsEnabled { get; set; }
+    
     public PortalRole()
     {
 

@@ -64,12 +64,16 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels
         _portalUserRoleBLL.GetPortalUserRoleListForUser(Id));
       PortalRoles.ToList().ForEach(pr =>
       {
-        PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
-          pr.ClientModuleId);
-        if (appRoles.Contains(pr.AspRoleName))
-        {
-          userIdentity.AddClaim(new Claim(clientModule.PortalModuleName, pr.AspRoleName));
-        }
+      PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
+        pr.ClientModuleId);
+      if (appRoles.Contains(pr.AspRoleName))
+      {
+        userIdentity.AddClaim(new Claim(clientModule.PortalModuleName, pr.AspRoleName));
+
+        string moduleRoleClaimType = $"{clientModule.PortalModuleName}.{pr.AspRoleName}";
+        string moduleRoleEnabled = Mapper.Map<PortalUserRole>(pr).IsEnabled.ToString();
+        userIdentity.AddClaim(new Claim(moduleRoleClaimType, moduleRoleEnabled));
+      }
       });
 
       return userIdentity;

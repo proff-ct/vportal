@@ -22,6 +22,7 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
           config.CreateMap<PortalModule, PortalModuleViewModel>().ReverseMap();
           config.CreateMap<PortalModuleForClient, PortalModuleForClientViewModel>();
           config.CreateMap<PortalUserRole, PortalRole>().ReverseMap();
+          config.CreateMap<PortalUserRole, ActiveUserParams.UserRoles>();
           config.CreateMap<PortalUserRole, PortalUserRoleViewModel>().ReverseMap();
           config.CreateMap<ApplicationUser, ApplicationUserViewModel>();
           config.CreateMap<EditPortalUserViewModel, AddUserRoleViewModel>();
@@ -38,6 +39,7 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
         config.CreateMap<PortalModule, PortalModuleViewModel>().ReverseMap();
         config.CreateMap<PortalModuleForClient, PortalModuleForClientViewModel>();
         config.CreateMap<PortalUserRole, PortalRole>().ReverseMap();
+        config.CreateMap<PortalUserRole, ActiveUserParams.UserRoles>();
         config.CreateMap<PortalUserRole, PortalUserRoleViewModel>().ReverseMap();
         config.CreateMap<ApplicationUser, ApplicationUserViewModel>();
         config.CreateMap<EditPortalUserViewModel, AddUserRoleViewModel>();
@@ -53,6 +55,7 @@ namespace VisibilityPortal_BLL.Utilities.AutoMapper
         config.CreateMap<PortalModule, PortalModuleViewModel>().ReverseMap();
         config.CreateMap<PortalModuleForClient, PortalModuleForClientViewModel>();
         config.CreateMap<PortalUserRole, PortalRole>().ReverseMap();
+        config.CreateMap<PortalUserRole, ActiveUserParams.UserRoles>();
         config.CreateMap<PortalUserRole, PortalUserRoleViewModel>().ReverseMap();
         config.CreateMap<ApplicationRole, PortalApplicationRoleViewModel>()
         .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Id))

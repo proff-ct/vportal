@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -115,20 +116,30 @@ namespace VisibilityPortal_BLL.Controllers
           ActiveUserParams activeUserParams = new ActiveUserParams
           {
             ClientCorporateNo = user.ClientCorporateNo,
-            ClientModuleId = string.Empty // will get set when the user selects a module on login
+            ClientModuleId = string.Empty, // will get set when the user selects a module on login
+            Roles = new List<ActiveUserParams.UserRoles>()
           };
           Session["ActiveUserParams"] = activeUserParams;
+          List<ActiveUserParams.UserRoles> userRoles = new List<ActiveUserParams.UserRoles>();
+
           // redirect the user to appropriate module
           if (user.PortalRoles.Count() == 1)
           {
             PortalRole pr = user.PortalRoles.Single();
             PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
              pr.ClientModuleId);
-
+            
+            //
+            if (!Mapper.Map<PortalUserRole>(pr).IsEnabled)
+            {
+              return RedirectToAction("NoRolesEnabled");
+            }
+            
             // Set the ClientModuleId for the ActiveUserParams object
             activeUserParams.ClientModuleId = pr.ClientModuleId;
             Session["ActiveUserParams"] = activeUserParams;
 
+            // Role is enabled. Therefore, proceed normally
             if (clientModule.PortalModuleName == PortalModule.AgencyBankingModule.moduleName)
             {
 
@@ -161,7 +172,10 @@ namespace VisibilityPortal_BLL.Controllers
             try
             {
               List<ModuleUrl> moduleUrls = new List<ModuleUrl>();
-              user.PortalRoles.ToList().ForEach(pr =>
+              user.PortalRoles
+                .Where(pr => Mapper.Map<PortalUserRole>(pr).IsEnabled)
+                .ToList()
+                .ForEach(pr =>
               {
                 PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
                   pr.ClientModuleId);
@@ -171,6 +185,7 @@ namespace VisibilityPortal_BLL.Controllers
                   DefaultRoute = _portalModuleBLL.GetDefaultRouteForModule(clientModule.PortalModuleName)
                 });
               });
+              if (moduleUrls.Count == 0) return RedirectToAction("NoRolesEnabled");
               Session["ClientModuleUrls"] = moduleUrls.AsEnumerable();
               return RedirectToAction("Index", "Home");
             }
@@ -642,6 +657,13 @@ namespace VisibilityPortal_BLL.Controllers
     [Authorize]
     [RequireSuperOrSystemAdmin]
     public ActionResult Index()
+    {
+      return View();
+    }
+    //
+    // GET: /Account/Index
+    [Authorize]
+    public ActionResult NoRolesEnabled()
     {
       return View();
     }

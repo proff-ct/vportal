@@ -2050,6 +2050,7 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\_EditClientUserInfoPartial.cshtml" />
     <Content Include="Views\Account\AddRoleToUser.cshtml" />
+    <Content Include="Views\Account\NoRolesEnabled.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

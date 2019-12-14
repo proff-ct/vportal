@@ -10,5 +10,11 @@ namespace VisibilityPortal_BLL.Models
   {
     public string ClientCorporateNo { get; set; }
     public string ClientModuleId { get; set; }
+    public List<UserRoles> Roles { get; set; }
+    public class UserRoles
+    {
+      public string AspRoleId { get; set; }
+      public bool IsEnabled { get; set; }
+    }
   }
 }
