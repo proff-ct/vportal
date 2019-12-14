@@ -153,5 +153,17 @@ namespace VisibilityPortal_BLL.Models.ASP_Identity
     [Required]
     public string LastName { get; set; }
   }
+  public class AddUserRoleViewModel
+  {
+    [Required]
+    public string ClientCorporateNo { get; set; }
+    [Required]
+    public string ClientModuleId { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+    [Required]
+    public string RoleId { get; set; }
+  }
   #endregion
 }

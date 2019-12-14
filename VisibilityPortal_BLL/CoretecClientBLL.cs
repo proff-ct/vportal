@@ -213,6 +213,12 @@ namespace VisibilityPortal_BLL
 
       return new DapperORM().QueryGetSingle<PortalModuleForClient>(_query);
     }
+    public IEnumerable<PortalModuleForClient> GetAllPortalModulesForClient(string clientCorporateNo)
+    {
+      _query = $@"SELECT * FROM {_tblClientModule} WHERE ClientCorporateNo='{clientCorporateNo}'";
+
+      return new DapperORM().QueryGetList<PortalModuleForClient>(_query);
+    }
     public bool Save(PortalModuleForClient clientModule, ModelOperation modelOp)
     {
       if (!ValidatePortalModuleForClient(clientModule))

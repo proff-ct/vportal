@@ -7,7 +7,7 @@ using VisibilityPortal_DAL;
 
 namespace VisibilityPortal_BLL.Models.ViewModels
 {
-  public class CoretecClientModuleViewModel : PortalModuleForClient
+  public class CoretecClientModuleViewModel : PortalModuleForClientViewModel
   {
     public string SaccoName { get; set; }
   }

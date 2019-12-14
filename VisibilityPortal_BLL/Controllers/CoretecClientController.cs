@@ -77,7 +77,7 @@ namespace Visibility_Portal.Controllers
         // Not checking the model state because the only thing to be modified is the IsEnabled boolean
 
         // Proceed with saving to db
-        _coretecClientBLL.Save(updateClientModule, ModelOperation.Update);
+        _coretecClientBLL.Save(Mapper.Map<PortalModuleForClient>(updateClientModule), ModelOperation.Update);
       }
       return RedirectToAction("Index");
     }

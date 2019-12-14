@@ -895,6 +895,90 @@ namespace VisibilityPortal_BLL.Controllers
       }
       // return to edit 
     }
+    [HttpGet]
+    [Authorize]
+    [RequireSuperOrSystemAdmin]
+    public ActionResult AddRoleToUser(string email)
+    {
+      // locate user based on passed in email
+      // if user not found display a 404
+      // else display the edit page
+      if (string.IsNullOrEmpty(email))
+      {
+        return View();
+      }
+
+      ApplicationUser user = UserManager.FindByEmail(email);
+      if (user == null)
+      {
+        ViewBag.UnknownEmail = email;
+        return View();
+      }
+            
+      if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+      {
+        ViewBag.UserClientName = user.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo) ?
+          CoreTecOrganisation.CorporateName : _saccoBLL.GetSaccoByUniqueParam(user.ClientCorporateNo).saccoName_1;
+      }
+      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      {
+        SetClientPortalModuleParamsForUser();
+      }
+
+      AddUserRoleViewModel addUserRoleVM = new AddUserRoleViewModel
+      {
+        ClientModuleId = string.Empty,
+        ClientCorporateNo = user.ClientCorporateNo,
+        Email = user.Email,
+      };
+
+      ViewBag.ClientModuleList = Mapper.Map<List<CoretecClientModuleViewModel>>(
+        _coretecClientBLL.GetAllPortalModulesForClient(addUserRoleVM.ClientCorporateNo).ToList());
+
+      return View(addUserRoleVM);
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public ActionResult AddRoleToUser(AddUserRoleViewModel addUserRoleVM)
+    {
+      if (!ModelState.IsValid)
+      {
+        return View(addUserRoleVM);
+      }
+      ApplicationUser userToEdit = UserManager.FindByEmail(addUserRoleVM.Email);
+      if (userToEdit == null)
+      {
+        ViewBag.UnknownEmail = addUserRoleVM.Email;
+        return View();
+      }
+      // validate that we have a valid role
+      ApplicationRole roleToAssign = RoleManager.FindById(addUserRoleVM.RoleId);
+      if (roleToAssign == null)
+      {
+        ModelState.AddModelError("role", "Role DOES NOT EXIST!");
+        ViewBag.ClientModuleList = Mapper.Map<List<CoretecClientModuleViewModel>>(
+        _coretecClientBLL.GetAllPortalModulesForClient(addUserRoleVM.ClientCorporateNo).ToList());
+        SetClientPortalModuleParamsForUser();
+
+        return View(addUserRoleVM);
+      }
+      // save the roles
+      UserManager.AddToRole(userToEdit.Id, roleToAssign.Name);
+      UserManager.Update(userToEdit);
+
+      PortalRole portalRole = new PortalRole(
+        addUserRoleVM.ClientModuleId, roleToAssign.Id, roleToAssign.Name);
+      PortalUserRole portalUserRole = Mapper.Map<PortalUserRole>(portalRole);
+      portalUserRole.UserId = userToEdit.Id;
+      portalUserRole.CreatedBy = User.Identity.GetUserName();
+      
+      _portalUserRoleBLL.Save(portalUserRole, ModelOperation.AddNew);
+
+      // return to edit 
+      return RedirectToAction("Edit", new { email = userToEdit.Email });
+      
+    }
 
     [HttpGet]
     [Authorize]
@@ -984,6 +1068,34 @@ namespace VisibilityPortal_BLL.Controllers
 
 
       }
+    }
+    [HttpGet]
+    [Authorize]
+    public ActionResult GetAvailableRolesForClientUser(string email, string clientModuleId)
+    {
+      if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(clientModuleId)) return null;
+      ApplicationUser user = UserManager.FindByEmail(email);
+      if (user == null) return null;
+
+      List<PortalUserRole> listRolesForUser = new List<PortalUserRole>();
+      listRolesForUser = _portalUserRoleBLL.GetPortalUserRoleListForUser(user.Id).ToList();
+
+      PortalUserRole roleForModule = listRolesForUser.SingleOrDefault(r => r.ClientModuleId == clientModuleId);
+
+      if(roleForModule == null || !roleForModule.IsEnabled)
+      {
+        return Json(
+          Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager.Roles.ToList())
+          .Where(r=> !r.Name.Equals(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+          .OrderBy(r => r.Name)
+          .Select(r => new { r.Name, r.RoleId })
+          .ToList(), JsonRequestBehavior.AllowGet);
+      }
+      else
+      {
+        return null;
+      }
+
     }
     #endregion
 
