@@ -109,8 +109,10 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RepairController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="RepairBLL.cs" />
     <Compile Include="SummaryBLL.cs" />
     <Compile Include="util\StatusMessage.cs" />
     <Compile Include="util\TableHeader.cs" />

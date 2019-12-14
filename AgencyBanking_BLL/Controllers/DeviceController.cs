@@ -11,7 +11,7 @@ using Dapper;
 namespace AgencyBanking_BLL.Controllers
 {
     [Authorize]
- public   class DeviceController : Controller
+ public class DeviceController : Controller
     {
         public ActionResult Index()
         {
