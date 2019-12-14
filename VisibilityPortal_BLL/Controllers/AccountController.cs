@@ -865,7 +865,7 @@ namespace VisibilityPortal_BLL.Controllers
         PortalUserRole roleToUpdate = null;
         editUserVM.PortalRoles.ToList().ForEach(r => {
           roleToUpdate = _portalUserRoleBLL.GetPortalUserRoleListForUser(userToEdit.Id)
-          .SingleOrDefault(userRoles => userRoles.AspRoleId.Equals(r.AspRoleId));
+          .SingleOrDefault(userRoles => (userRoles.AspRoleId.Equals(r.AspRoleId) && userRoles.ClientModuleId.Equals(r.ClientModuleId)));
 
           if (roleToUpdate == null) return;
 
