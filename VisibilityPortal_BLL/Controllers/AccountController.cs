@@ -831,32 +831,25 @@ namespace VisibilityPortal_BLL.Controllers
           .ToList()
       };
 
-      if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
-      {
-        ViewBag.UserClientName = user.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo) ?
-          CoreTecOrganisation.CorporateName : _saccoBLL.GetSaccoByUniqueParam(user.ClientCorporateNo).saccoName_1;
-      }
-      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
-      {
-        SetClientPortalModuleParamsForUser();
-      }
-
+      SetViewParamsForEditingUser(user);
       return View(editUserVM);
     }
     [HttpPost]
     [Authorize]
+    [RequireSuperOrSystemAdmin]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditPortalUserViewModel editUserVM)
     {
-      if (!ModelState.IsValid)
-      {
-        return View(editUserVM);
-      }
       ApplicationUser userToEdit = UserManager.FindByEmail(editUserVM.Email);
       if(userToEdit == null)
       {
         ViewBag.UnknownEmail = editUserVM.Email;
         return View();
+      }
+      if (!ModelState.IsValid)
+      {
+        SetViewParamsForEditingUser(userToEdit);
+        return View(editUserVM);
       }
       // save the user's particulars
       userToEdit.FirstName = editUserVM.FirstName;
@@ -939,18 +932,24 @@ namespace VisibilityPortal_BLL.Controllers
     }
     [HttpPost]
     [Authorize]
+    [RequireSuperOrSystemAdmin]
     [ValidateAntiForgeryToken]
     public ActionResult AddRoleToUser(AddUserRoleViewModel addUserRoleVM)
     {
-      if (!ModelState.IsValid)
-      {
-        return View(addUserRoleVM);
-      }
+      
       ApplicationUser userToEdit = UserManager.FindByEmail(addUserRoleVM.Email);
       if (userToEdit == null)
       {
         ViewBag.UnknownEmail = addUserRoleVM.Email;
         return View();
+      }
+
+      if (!ModelState.IsValid)
+      {
+        SetViewParamsForEditingUser(userToEdit);
+        ViewBag.ClientModuleList = Mapper.Map<List<CoretecClientModuleViewModel>>(
+        _coretecClientBLL.GetAllPortalModulesForClient(addUserRoleVM.ClientCorporateNo).ToList());
+        return View(addUserRoleVM);
       }
       // validate that we have a valid role
       ApplicationRole roleToAssign = RoleManager.FindById(addUserRoleVM.RoleId);
@@ -1215,6 +1214,18 @@ namespace VisibilityPortal_BLL.Controllers
       else
       {
         RedirectToAction("Login");
+      }
+    }
+    private void SetViewParamsForEditingUser(ApplicationUser userToEdit)
+    {
+      if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+      {
+        ViewBag.UserClientName = userToEdit.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo) ?
+          CoreTecOrganisation.CorporateName : _saccoBLL.GetSaccoByUniqueParam(userToEdit.ClientCorporateNo).saccoName_1;
+      }
+      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      {
+        SetClientPortalModuleParamsForUser();
       }
     }
     #endregion
