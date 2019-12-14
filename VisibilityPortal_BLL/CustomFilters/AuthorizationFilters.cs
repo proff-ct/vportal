@@ -38,6 +38,18 @@ namespace VisibilityPortal_BLL.CustomFilters
         filterContext.Result = new RedirectResult("~/Error/Forbidden");
       }
 
+      // check that we have the ActiveUser session variable if user is SystemAdmin
+      if (ctx.User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      {
+        if (ctx.Session["ActiveUserParams"] == null)
+        {
+          ctx.Session.Clear();
+          ctx.Session.Abandon();
+          ctx.GetOwinContext().Authentication.SignOut();
+          filterContext.Result = new RedirectResult("~/Home/Index");
+        }
+      }
+
       base.OnActionExecuting(filterContext);
     }
   }
