@@ -58,5 +58,10 @@ namespace AgencyBanking_BLL.Controllers
             DeviceInfo device = DapperOrm.QueryGetSingle<DeviceInfo>("select * from deviceinfo where imei = @imei", par);
             return device != null && !string.IsNullOrEmpty(device.IMEI);
         }
+
+        public ActionResult Track(string imei)
+        {
+            return View();
+        }
     }
 }
