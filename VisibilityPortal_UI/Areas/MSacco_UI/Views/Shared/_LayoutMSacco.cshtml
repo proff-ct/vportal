@@ -24,75 +24,93 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
       <span>Dashboard</span>
     </a>
   </li>
-  <li>
-    <a href="@Url.Action("Index", "MobileWithdrawals")">
-      <i class="fa fa-money"></i>
-      <span>Withdrawals</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Deposits</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "Loans")">
-      <i class="fa fa-dashboard"></i>
-      <span>Loans</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Loan repayments</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "UtilityPayments")">
-      <i class="fa fa-dashboard"></i>
-      <span>Utility payments</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "AirtimeTopups")">
-      <i class="fa fa-dashboard"></i>
-      <span>Airtime topup</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Bulk sms</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Trx. Clearing</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Pin reset</span>
-    </a>
-  </li>
   <li class="treeview">
     <a href="#">
-      <i class="fa fa-bank"></i> <span>Member Logs</span>
+      <i class="fa fa-wrench"></i> <span>Self Service</span>
       <span class="pull-right-container">
         <i class="fa fa-angle-left pull-right"></i>
       </span>
     </a>
     <ul class="treeview-menu">
       <li>
-        <a href="@Url.Action("Index", "Sacco")"><i class="fa fa-money"></i>Msacco+ AppActivity</a>
+        <a href="@Url.Action("Index", "Home")">
+          <i class="fa fa-comments"></i>
+          <span>Bulk sms</span>
+        </a>
       </li>
-      <li><a href="@Url.Action("Index", "Sacco")"><i class="fa fa-money"></i>Loan history</a></li>
+      <li>
+        <a href="@Url.Action("Index", "Home")">
+          <i class="fa fa-cogs"></i>
+          <span>Trx. Clearing</span>
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "Home")">
+          <i class="fa fa-key"></i>
+          <span>Pin reset</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-database"></i> <span>Transactions</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li>
+        <a href="@Url.Action("Index", "Loans")">
+          <i class="fa fa-credit-card"></i>Loans
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "MobileWithdrawals")">
+          <i class="fa fa-money"></i>Withdrawals
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
+      <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
     </ul>
   </li>
 
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-file"></i> <span>Member Logs</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li>
+        <a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Msacco+ AppActivity</a>
+      </li>
+      <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Loan history</a></li>
+    </ul>
+  </li>
+  @*<li>
+      <a href="@Url.Action("Index", "Home")">
+        <i class="fa fa-dashboard"></i>
+        <span>Deposits</span>
+      </a>
+    </li>*@
+  @*<li>
+      <a href="@Url.Action("Index", "Home")">
+        <i class="fa fa-dashboard"></i>
+        <span>Loan repayments</span>
+      </a>
+    </li>*@
 }
 @RenderBody()
 @section Scripts{
