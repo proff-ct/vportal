@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace MSacco_DAL
 {
-    public class Class1
-    {
-    }
+  public interface IDBModel
+  {
+    string databaseName { get; }
+    string tableName { get; }
+
+  }
 }

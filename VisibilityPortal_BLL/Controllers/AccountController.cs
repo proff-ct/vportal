@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PagedList;
+using Utilities.PortalApplicationParams;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity;

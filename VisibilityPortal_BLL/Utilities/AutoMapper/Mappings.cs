@@ -5,6 +5,7 @@ using VisibilityPortal_BLL.Models.ASP_Identity;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
 using VisibilityPortal_BLL.Models.ViewModels;
 using VisibilityPortal_DAL;
+using Utilities.PortalApplicationParams;
 
 namespace VisibilityPortal_BLL.Utilities.AutoMapper
 {

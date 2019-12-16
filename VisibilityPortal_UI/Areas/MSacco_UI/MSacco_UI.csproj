@@ -392,16 +392,23 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -425,6 +432,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_LayoutMSacco.cshtml" />
     <Content Include="Views\Shared\_LayoutMSaccoDashboard.cshtml" />
+    <Content Include="Views\MobileWithdrawals\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -440,6 +448,10 @@
     <ProjectReference Include="..\..\..\MSacco_BLL\MSacco_BLL.csproj">
       <Project>{982c95bb-97eb-437a-b56b-7a7bcae729a0}</Project>
       <Name>MSacco_BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Utilities\Utilities.csproj">
+      <Project>{6a5ec0e2-a633-420e-a14d-4c9efaf2a9cd}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
