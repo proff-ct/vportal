@@ -93,6 +93,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MobileWithdrawalsController.cs" />
+    <Compile Include="Controllers\UtilityPaymentsController.cs" />
     <Compile Include="CustomFilters\AuthorizationFilters.cs" />
     <Compile Include="DapperORM.cs" />
     <Compile Include="GuarantorsBLL.cs" />
