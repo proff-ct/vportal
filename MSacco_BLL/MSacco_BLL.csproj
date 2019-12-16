@@ -93,6 +93,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="Controllers\AirtimeTopupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoansController.cs" />
     <Compile Include="Controllers\MobileWithdrawalsController.cs" />
     <Compile Include="Controllers\UtilityPaymentsController.cs" />
     <Compile Include="CustomFilters\AuthorizationFilters.cs" />
