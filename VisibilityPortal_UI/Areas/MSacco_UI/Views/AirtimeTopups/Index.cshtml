@@ -1,0 +1,50 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@using Utilities.PortalApplicationParams
+@{
+  ViewBag.Title = "Airtime Topups";
+
+  Layout = $"{MSaccoAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutMSacco.cshtml";
+  ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
+}
+<h2>@ViewBag.Title</h2>
+<div class="col-md-20">
+  <div class="panel">
+    <div class="panel-heading">
+      <div class="pull-left">
+        <h5 class="panel-info"><strong></strong></h5>
+      </div>
+      <div class="pull-right">
+        <button type="button"
+                class="btn btn-labeled btn-primary btn-sm"
+                onclick="ReloadData()">
+          <span class="btn-label"><i class="fa fa-refresh"></i></span>
+          Reload
+        </button>
+        <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters()">
+          <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+          Clear filters
+        </button>
+      </div>
+
+    </div>
+    <div class="panel-body">
+      <div id="airtimeTopupListTable"></div>
+    </div>
+
+  </div>
+</div>
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/airtimeTopups.js")
+  <!-- Define local scripts-->
+  <script>
+    $(document).ready(function () {
+      initTabulator("#airtimeTopupListTable");
+      LoadData(
+        "@Url.Action("GetAirtimeTopupRecords", "AirtimeTopups")",
+         @activeUserParams.ClientCorporateNo);
+    });
+  </script>
+}

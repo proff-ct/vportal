@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace MSacco_BLL.Tests
 {
-  namespace MSaccoUtilityPaymentBLL_Functions
+  namespace MSaccoAirtimeTopupBLL_Functions
   {
     [TestFixture]
     public class GetMSaccoAirtimeTopupTrxListForClient

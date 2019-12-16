@@ -400,6 +400,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\portal\view\airtimeTopups.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\portal\view\utilityPayments.js" />
@@ -435,6 +436,7 @@
     <Content Include="Views\Shared\_LayoutMSaccoDashboard.cshtml" />
     <Content Include="Views\MobileWithdrawals\Index.cshtml" />
     <Content Include="Views\UtilityPayments\Index.cshtml" />
+    <Content Include="Views\AirtimeTopups\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
