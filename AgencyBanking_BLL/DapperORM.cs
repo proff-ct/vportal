@@ -25,6 +25,8 @@ namespace AgencyBanking_BLL
                 );
             }
         }
+
+
         public static void ExecuteWithoutReturn(string procedureName, DynamicParameters param)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
@@ -43,12 +45,12 @@ namespace AgencyBanking_BLL
             }
         }
 
-        public static IEnumerable<T> QueryGetList<T>(string query)
+        public static IEnumerable<T> QueryGetList<T>(string query, DynamicParameters param = null)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
             {
                 sqlCon.Open();
-                return sqlCon.Query<T>(query, commandType: CommandType.Text);
+                return sqlCon.Query<T>(query,param, commandType: CommandType.Text);
             }
         }
         public static T QueryGetSingle<T>(string query,DynamicParameters parameters =null)
@@ -61,7 +63,19 @@ namespace AgencyBanking_BLL
             }
 
 
+        } 
+        public static T QueryGetSingle<T>(string conn,string query,DynamicParameters parameters =null)
+        {
+
+            using (SqlConnection sqlCon = new SqlConnection(conn))
+            {
+                sqlCon.Open();
+                return sqlCon.QuerySingleOrDefault<T>(query, parameters,commandType: CommandType.Text);
+            }
+
+
         }
+
         public static void ExecuteQuery(string query)
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))

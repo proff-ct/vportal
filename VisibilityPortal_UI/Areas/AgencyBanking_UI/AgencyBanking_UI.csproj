@@ -230,6 +230,7 @@
     <Content Include="Views\Device\Edit.cshtml" />
     <Content Include="Views\Device\Assign.cshtml" />
     <Content Include="Views\Repair\Index.cshtml" />
+    <Content Include="Views\Repair\Track.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

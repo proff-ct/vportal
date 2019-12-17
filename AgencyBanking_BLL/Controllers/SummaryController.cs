@@ -6,17 +6,20 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AgencyBanking_BLL.util;
 using AgencyBanking_DAL;
 
 namespace AgencyBanking_BLL.Controllers
 {
+    [Authorize]
+    [CorporateNumberFilter]
    public class SummaryController: Controller
     {
         [HttpGet]
         public ActionResult Index(string type)
         {
             SummaryBLL summary  = new SummaryBLL();
-            IEnumerable<TransactionModel> data = summary.GetSummaryByName(type);
+            IEnumerable<TransactionModel> data = summary.GetSummaryByName(type, CurrentSacco.CorporateNo);
             ViewBag.caption = $"Summary of {type}";
             ViewBag.link = "";
             ViewBag.columns = SetHeaders(new TransactionModel());
@@ -29,7 +32,7 @@ namespace AgencyBanking_BLL.Controllers
         public ActionResult Agents(string BankNo)
         {
             AgentsBLL agents = new AgentsBLL();
-            ViewBag.caption = "Agents Belonging to";
+            ViewBag.caption = "Agents Belonging to "+CurrentSacco.SaccoName;
             ViewBag.link = "Agents";
             ViewBag.Title = "Agents";
             ViewBag.columns = SetHeaders(new AgentModel());
@@ -41,7 +44,7 @@ namespace AgencyBanking_BLL.Controllers
         {
             DeviceInfoBLL deviceinfo = new DeviceInfoBLL();
            
-            ViewBag.caption = "Registered Devices Belonging to";
+            ViewBag.caption = "Registered Devices Belonging to "+CurrentSacco.SaccoName;
             ViewBag.link = "devices";
             ViewBag.Title = "Registered Devices Belonging to";
             ViewBag.columns = DeviceinfoHeader();

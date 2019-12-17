@@ -894,6 +894,7 @@
     <Content Include="Content\ionicon\md-wifi.svg" />
     <Content Include="Content\ionicon\md-wine.svg" />
     <Content Include="Content\ionicon\md-woman.svg" />
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\skin-blue.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -1819,6 +1820,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chartjs\Chart.bundle.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />

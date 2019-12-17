@@ -11,6 +11,7 @@ using Dapper;
 namespace AgencyBanking_BLL.Controllers
 {
     [Authorize]
+    [CorporateNumberFilter]
  public class DeviceController : Controller
     {
         public ActionResult Index()
@@ -25,6 +26,7 @@ namespace AgencyBanking_BLL.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(DeviceModel model)
         {
+            model.Organization = CurrentSacco.CorporateNo;
             if (!ModelState.IsValid)
             {
                 return Content(new StatusMessage()

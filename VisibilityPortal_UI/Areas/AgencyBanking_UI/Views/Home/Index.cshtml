@@ -14,7 +14,7 @@
 
 @section HtmlHead{
     <link href="~/Content/ionicons.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="~/Scripts/Chartjs/Chart.bundle.min.js"></script>
     <style>
         @@media only screen and (min-width:  768px) {
             .box-shadow {
@@ -96,19 +96,6 @@
 </section>
 <section class="container">
     <div class="row">
-        <!-- Line -->
-        <div class="card box-success col-sm-12 col-md-6 zoom-md ">
-            <div class="box-header with-border">
-                <h3 class="box-title">Member Registration </h3>
-            </div>
-            <div class="box-body">
-                <div class="chart">
-                    <canvas id="memberregistrationgraph" style="height:230px"></canvas>
-                </div>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
         <!-- BAR CHART -->
         <div class=" col-sm-12 col-md-6 card zoom-md">
             <div class=" box-header with-border">
@@ -121,6 +108,19 @@
             </div>
             <!-- /.box-body -->
         </div>
+        <!-- Line -->
+        <div class="card box-success col-sm-12 col-md-6 zoom-md ">
+            <div class="box-header with-border">
+                <h3 class="box-title">Member Registration </h3>
+            </div>
+            <div class="box-body">
+                <div class="chart">
+                    <canvas id="memberregistrationgraph" style="height: 230px"></canvas>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
         <!-- /.box -->
         <!-- Line -->
         <div class="card box-success col-sm-12 col-md-6 zoom-md">
@@ -134,7 +134,8 @@
             </div>
             <!-- /.box-body -->
         </div>
-        <!-- /.box --> <div class="card box-success col-sm-12 col-md-6 zoom-md">
+        <!-- /.box -->
+        <div class="card box-success col-sm-12 col-md-6 zoom-md">
             <div class="box-header with-border">
                 <h3 class="box-title">Loan Repayment </h3>
             </div>

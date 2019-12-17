@@ -21,6 +21,9 @@ namespace Utilities.PortalApplicationParams
     /// The Named Session Variable for this class
     /// Can be called from anywhere in the code.
     /// </summary>
-    public static string SessionVaribleName => "ActiveUserParams";
+    public static string SessionVaribleName()
+    {
+     return "ActiveUserParams";
+    } 
   }
 }
