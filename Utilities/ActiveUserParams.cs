@@ -16,5 +16,11 @@ namespace Utilities.PortalApplicationParams
       public string AspRoleId { get; set; }
       public bool IsEnabled { get; set; }
     }
+
+    /// <summary>
+    /// The Named Session Variable for this class
+    /// Can be called from anywhere in the code.
+    /// </summary>
+    public static string SessionVaribleName => "ActiveUserParams";
   }
 }
