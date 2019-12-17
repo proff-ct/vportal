@@ -1,0 +1,134 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css"
+};
+
+  }
+  @Styles.Render(cssFiles)
+
+  @RenderSection("HtmlHead", false)
+}
+@section MenuLinks {
+  <li class="header">MSACCO |> NAVIGATION</li>
+  <li>
+    <a href="@Url.Action("Index", "Home")">
+      <i class="fa fa-dashboard"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-wrench"></i> <span>Self Service</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li>
+        <a href="@Url.Action("Index", "Home")">
+          <i class="fa fa-comments"></i>
+          <span>Bulk sms</span>
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "Home")">
+          <i class="fa fa-cogs"></i>
+          <span>Trx. Clearing</span>
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "Home")">
+          <i class="fa fa-key"></i>
+          <span>Pin reset</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-database"></i> <span>Transactions</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li>
+        <a href="@Url.Action("Index", "Loans")">
+          <i class="fa fa-credit-card"></i>Loans
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "MobileWithdrawals")">
+          <i class="fa fa-money"></i>Withdrawals
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
+      <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
+    </ul>
+  </li>
+
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-file"></i> <span>Member Logs</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li>
+        <a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Msacco+ AppActivity</a>
+      </li>
+      <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Loan history</a></li>
+    </ul>
+  </li>
+  @*<li>
+      <a href="@Url.Action("Index", "Home")">
+        <i class="fa fa-dashboard"></i>
+        <span>Deposits</span>
+      </a>
+    </li>*@
+  @*<li>
+      <a href="@Url.Action("Index", "Home")">
+        <i class="fa fa-dashboard"></i>
+        <span>Loan repayments</span>
+      </a>
+    </li>*@
+}
+@RenderBody()
+@section Scripts{
+  @{
+    string[] scriptFiles = {
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/moment.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
+};
+  }
+  @Scripts.Render(scriptFiles)
+  <!-- Define custom scripts-->
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+  </script>
+
+  @RenderSection("Scripts", required: false)
+}

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveUserParams.cs" />
     <Compile Include="PortalSecurity.cs" />
     <Compile Include="ValidateCoreTecEmailDomain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
