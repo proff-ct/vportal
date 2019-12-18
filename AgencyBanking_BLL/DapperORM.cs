@@ -53,6 +53,14 @@ namespace AgencyBanking_BLL
                 return sqlCon.Query<T>(query,param, commandType: CommandType.Text);
             }
         }
+        public static IEnumerable<T> QueryGetList<T>(string conn,string query, DynamicParameters param = null)
+        {
+            using (SqlConnection sqlCon = new SqlConnection(conn))
+            {
+                sqlCon.Open();
+                return sqlCon.Query<T>(query,param, commandType: CommandType.Text);
+            }
+        }
         public static T QueryGetSingle<T>(string query,DynamicParameters parameters =null)
         {
 
