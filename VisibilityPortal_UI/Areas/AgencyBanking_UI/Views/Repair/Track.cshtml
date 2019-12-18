@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "Track";
+    Layout = "~/Areas/AgencyBanking_UI/Views/Shared/_LayoutAgencyBankingUI.cshtml";
+}
+
+@section HtmlHead{
+    <style>
+        .timeline{
+  --uiTimelineMainColor: var(--timelineMainColor, #222);
+  --uiTimelineSecondaryColor: var(--timelineSecondaryColor, #fff);
+
+  position: relative;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.timeline:before{
+  content: "";
+  width: 4px;
+  height: 100%;
+  background-color: var(--uiTimelineMainColor);
+
+  position: absolute;
+  top: 0;
+}
+
+.timeline__group{
+  position: relative;
+}
+
+.timeline__group:not(:first-of-type){
+  margin-top: 4rem;
+}
+
+.timeline__year{
+  padding: .5rem 1.5rem;
+  color: var(--uiTimelineSecondaryColor);
+  background-color: var(--uiTimelineMainColor);
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.timeline__box{
+  position: relative;
+}
+
+.timeline__box:not(:last-of-type){
+  margin-bottom: 30px;
+}
+
+.timeline__box:before{
+  content: "";
+  width: 100%;
+  height: 2px;
+  background-color: var(--uiTimelineMainColor);
+
+  position: absolute;
+  left: 0;
+  z-index: -1;
+}
+
+.timeline__date{
+  min-width: 65px;
+  position: absolute;
+  left: 0;
+
+  box-sizing: border-box;
+  padding: .5rem 1.5rem;
+  text-align: center;
+
+  background-color: var(--uiTimelineMainColor);
+  color: var(--uiTimelineSecondaryColor);
+}
+
+.timeline__day{
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+}
+
+.timeline__month{
+  display: block;
+  font-size: .8em;
+  text-transform: uppercase;
+}
+
+.timeline__post{
+  padding: 1.5rem 2rem;
+  border-radius: 2px;
+  border-left: 3px solid var(--uiTimelineMainColor);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+  background-color: var(--uiTimelineSecondaryColor);
+}
+
+@@media screen and (min-width: 641px){
+
+  .timeline:before{
+    left: 30px;
+  }
+
+  .timeline__group{
+    padding-top: 55px;
+  }
+
+  .timeline__box{
+    padding-left: 80px;
+  }
+
+  .timeline__box:before{
+    top: 50%;
+    transform: translateY(-50%);  
+  }  
+
+  .timeline__date{
+    top: 50%;
+    margin-top: -27px;
+  }
+}
+
+@@media screen and (max-width: 640px){
+
+  .timeline:before{
+    left: 0;
+  }
+
+  .timeline__group{
+    padding-top: 40px;
+  }
+
+  .timeline__box{
+    padding-left: 20px;
+    padding-top: 70px;
+  }
+
+  .timeline__box:before{
+    top: 90px;
+  }    
+
+  .timeline__date{
+    top: 0;
+  }
+}
+
+.timeline{
+  --timelineMainColor: #4557bb;
+  font-size: 16px;
+}
+
+
+p{
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+p:last-child{
+  margin-bottom: 0;
+}
+
+.page{
+  max-width: 800px;
+  padding: 10rem 2rem 3rem;
+  margin-left: auto;
+  margin-right: auto;
+  order: 1;
+}
+    </style>
+}
+
+<div class="container mx-auto">
+    <div class="card">
+        <div class="card-body">
+            <h4>Track</h4>
+            <form id="form" class="card-body" method="post" action="@Url.Action("Track")" >
+                <div class="form-group row">
+                    <select class="custom-select col-md-8 col-12" name="imei" required>
+                        @foreach (var imei in ViewBag.data)
+                        {
+                            <option value="@Html.Raw(imei)">@Html.Raw(imei)</option>
+                        }
+                        
+                    </select>
+                    <input type="submit" value="search" class="btn btn-info col-md-2 mx-auto" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="timeline">
+        <div class="timeline__group">
+            <span class="timeline__year">2008</span>
+            <div class="timeline__box">
+                <div class="timeline__date">
+                    <span class="timeline__day">2</span>
+                    <span class="timeline__month">Feb</span>
+                </div>
+                <div class="timeline__post">
+                    <div class="timeline__content">
+                        <p>Attends the Philadelphia Museum School of Industrial Art. Studies design with Alexey Brodovitch, art director at Harper's Bazaar, and works as his assistant.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $("#form").submit(function (e) {
+
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+
+            var form = $(this);
+            var url = form.attr('action');
+            showLoader();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // serializes the form's elements.
+                success: function (data) {
+                    console.log(data);
+                    stopLoader();
+                },
+                error: function (data) {
+                    stopLoader();
+                    console.log(data);
+                }
+            });
+
+        });
+        function showLoader() {
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function stopLoader() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
+    </script>
+
+}

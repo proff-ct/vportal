@@ -52,7 +52,9 @@
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="DeviceModel.cs" />
     <Compile Include="DeviceRepairModel.cs" />
+    <Compile Include="DeviceStatusModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaccoModel.cs" />
     <Compile Include="SummaryModel.cs" />
     <Compile Include="TransactionModel.cs" />
   </ItemGroup>
