@@ -1,24 +1,18 @@
-﻿@using VisibilityPortal_BLL.Models
+﻿@using AgencyBanking_BLL.util
+@using VisibilityPortal_BLL.Models
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section MenuLinks{
-
+    
+   
     <li>
         <a href="@Url.Action("Index", "Home")">
             <i class="fa fa-list-ol" style="color:brown"></i>
             <span>
                 DashBoard
-            </span>
-        </a>
-    </li>
-    <li>
-        <a href="@Url.Action("Agents", "Summary")">
-            <i class="fa fa-list-ol" style="color:brown"></i>
-            <span>
-                Reports
             </span>
         </a>
     </li>
@@ -148,9 +142,26 @@
     </style>
     @RenderSection("HtmlHead", false)
 }
+@{
+    if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+    {
+        <div class="py-2">
+
+       
+        <p class="pull-right">
+            Current Sacco:<strong> @Html.Raw(CurrentSacco.SaccoName)</strong>
+            <a href="@Url.Action("Index", "SelectSacco")" class="btn btn-danger">
+                Change Sacco
+            </a>
+        </p>
+        </div>
+    }
+}
+
 <div id="overlay"><div class= "lds-hourglass" ></div></div >
 @RenderBody()
 <div class="container modal fade" id="alert"><div class= "modal-dialog"><div class="modal-content bg-success" id="modal-bg"><div class="modal-header"><h4 class="modal-title" id="modal-title"></h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><p id="modal-message"></p></div><div class="modal-footer justify-content-between"><button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button></div></div></div ></div>
+
 
 
 @section scripts{

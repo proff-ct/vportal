@@ -1,0 +1,37 @@
+﻿@{
+    Layout = null;
+}
+<html>
+<head>
+    <title> Select a Sacco </title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .center-screen {
+            top: 20vh;
+            margin-left: 50vh;
+        }
+    </style>
+</head>
+<body>
+<div class="card col-md-6 center-screen">
+    <div class="card-body">
+        <p class="card-title">Select a Sacco to Proceed</p>
+        <hr/>
+        <form method="post" action="">
+            
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <select name="corporateno" class="form-control">
+                    @foreach (var sacco in ViewBag.saccolist)
+                    {
+                        <option value="@Html.Raw(sacco.CorporateNo)">@Html.Raw(sacco.SaccoName)</option>
+                    }
+
+                </select>
+            </div>
+            <input type="submit" value="Proceed" class="btn btn-success"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

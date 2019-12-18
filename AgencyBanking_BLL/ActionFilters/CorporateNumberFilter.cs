@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using System.Web.Security;
+using AgencyBanking_BLL.Controllers;
 using AgencyBanking_BLL.util;
 
 namespace AgencyBanking_BLL
@@ -35,7 +37,12 @@ namespace AgencyBanking_BLL
             }
             else
             {
-                HttpContext.Current.Response.Redirect("/");
+                
+                if (string.IsNullOrEmpty(CurrentSacco.CorporateNo) || CurrentSacco.CorporateNo.Equals("CORETEC"))
+                {
+                    HttpContext.Current.Response.RedirectToRoute("AgencyBanking_default",
+                        new {Controller = "SelectSacco", action = "Index"});
+                }
             }
         }
     }
