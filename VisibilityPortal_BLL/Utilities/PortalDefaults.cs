@@ -11,17 +11,10 @@ namespace VisibilityPortal_BLL.Utilities
   {
     public static class ApplicationUserDefaults
     {
-        public static string PASSWORD_DEFAULT
-        {
-            get
-            {
-                //Generate Random Password
-                string password = Membership.GeneratePassword(12, 1);
-                return password;
-            }
-        
-
-        }
+        /// <summary>
+        /// TODO: Generate Random Password
+        /// </summary>
+        public static string PASSWORD_DEFAULT => "User.123";
     }
 
   }
