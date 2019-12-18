@@ -36,7 +36,7 @@ namespace AgencyBanking_BLL.Controllers
             ViewBag.link = "Agents";
             ViewBag.Title = "Agents";
             ViewBag.columns = SetHeaders(new AgentModel());
-            IEnumerable<AgentModel> devices = agents.GetAgentsByOrganization();
+            IEnumerable<AgentModel> devices = agents.GetAgentsByOrganization(CurrentSacco.CorporateNo);
             ViewBag.data = JsonConvert.SerializeObject(devices);
             return View("List");
         }
