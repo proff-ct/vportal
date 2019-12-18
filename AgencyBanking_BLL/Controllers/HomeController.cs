@@ -58,6 +58,6 @@ namespace AgencyBanking_BLL.Controllers
             SummaryBLL Summarybll = new SummaryBLL();
             return Content(Summarybll.Loan_Repayment_Stats(CurrentSacco.CorporateNo), "application/json");
         }
-
+        
     }
 }

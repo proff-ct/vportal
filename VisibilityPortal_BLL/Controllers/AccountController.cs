@@ -126,6 +126,7 @@ namespace VisibilityPortal_BLL.Controllers
           // redirect the user to appropriate module
           if (user.PortalRoles.Count() == 1)
           {
+
             PortalRole pr = user.PortalRoles.Single();
             PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
              pr.ClientModuleId);
