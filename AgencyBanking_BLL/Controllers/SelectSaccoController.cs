@@ -38,8 +38,8 @@ namespace AgencyBanking_BLL.Controllers
 connectionstring = @ConfigurationManager.ConnectionStrings["saccoDB_prod"].ConnectionString;
 #endif
             var sql =
-                "select [corporate No] as 'CorporateNo',[Sacco Name 1] as 'SaccoName'  from [source information];";
-            return DapperOrm.QueryGetList<SaccoModel>(connectionstring, sql);
+                "select [saccoid] as 'CorporateNo',[Name] as 'SaccoName'  from [saccosetup];";
+            return DapperOrm.QueryGetList<SaccoModel>( sql);
         
     }
 }
