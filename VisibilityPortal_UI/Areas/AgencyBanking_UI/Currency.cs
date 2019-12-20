@@ -9,10 +9,10 @@ namespace AgencyBanking_UI
         /// </summary>
         /// <param name="money"></param>
         /// <returns></returns>
-        public static String ToMoney(string money)
+        public static String ToFormatNumber(string money)
         {
            double temp = Double.Parse(money);
-           return temp.ToString("N");
+           return temp.ToString("C0").Remove(0,1);
         }
     }
 }

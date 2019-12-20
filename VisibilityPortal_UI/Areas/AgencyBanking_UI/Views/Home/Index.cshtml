@@ -6,7 +6,7 @@
     ViewBag.Title = "Agency Banking Home Page";
     List<SummaryMenuItem> itemlist = new List<SummaryMenuItem>();
     //Prepare menu items
-    itemlist.Add(new SummaryMenuItem("Totoal Withdrawals Today", "/Content/image/withdraw.png", "WIthdrawal", ViewBag.Data));
+    itemlist.Add(new SummaryMenuItem("Total Withdrawals Today", "/Content/image/withdraw.png", "WIthdrawal", ViewBag.Data));
     itemlist.Add(new SummaryMenuItem("Total Deposits Today", "/Content/image/deposit.png", "Deposit", ViewBag.Data));
     itemlist.Add(new SummaryMenuItem("Loan Repayment", "/Content/image/report.png", "Loan Replayment", ViewBag.Data));
     itemlist.Add(new SummaryMenuItem("New Registered Agents", "/Content/image/bankteller.png", "#", ViewBag.Data));
@@ -77,15 +77,15 @@
                 <a href=@Url.Action("Index", link, new {type = menuItem.FieldName})>
 
                     <div class="small-box bg-red-gradient">
-                        <div class="inner">
-                            <h3 class="counter"> @Html.Raw(menuItem.Amount)</h3>
+                        <div class="inner" style="text-align: center">
+                            <h3>@Html.Raw(menuItem.Amount)</h3>
 
                             <p>@Html.Raw(menuItem.Title)</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-star"></i>
                         </div>
-                        <div href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></div>
+                        <div href="#" class="small-box-footer">View More <i class="fa fa-arrow-circle-right"></i></div>
                     </div>
 
                 </a>

@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentsBLL.cs" />
+    <Compile Include="Caching\CacheData.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

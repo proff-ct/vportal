@@ -26,7 +26,7 @@ namespace AgencyBanking_UI.Model
             FieldName = fieldname;
             try
             {
-                Amount = Currency.ToMoney(data[fieldname]);
+                Amount = Currency.ToFormatNumber(data[fieldname]);
             }
             catch
             {
