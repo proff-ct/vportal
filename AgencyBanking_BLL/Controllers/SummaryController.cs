@@ -20,10 +20,10 @@ namespace AgencyBanking_BLL.Controllers
         {
             SummaryBLL summary  = new SummaryBLL();
             IEnumerable<TransactionModel> data = summary.GetSummaryByName(type, CurrentSacco.CorporateNo);
-            ViewBag.caption = $"Summary of {type}";
+            ViewBag.caption = $"Summary of {type.ToUpper()}";
             ViewBag.link = "";
             ViewBag.columns = SetHeaders(new TransactionModel());
-           ViewBag.Title = ViewBag.caption;
+            ViewBag.Title = ViewBag.caption;
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View("list");
 
