@@ -16,15 +16,20 @@ namespace AgencyBanking_DAL
 #if DEBUG
  _connstring = @ConfigurationManager.ConnectionStrings["testagency"].ConnectionString;
 #else
-
+/**
+ * MatAdo edit:
+ * Added this content to address the error: 
+ * 'The ConnectionString property has not been initialized.'
+**/
+_connstring = @ConfigurationManager.ConnectionStrings["testagency"].ConnectionString;
 #endif
-        }
+}
 
-        public string ConnectionString
-        {
-            get { return _connstring; }
-        }
+public string ConnectionString
+  {
+      get { return _connstring; }
+  }
 
-    }
-   
+}
+
 }
