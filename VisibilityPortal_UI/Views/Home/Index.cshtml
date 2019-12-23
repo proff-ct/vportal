@@ -16,12 +16,16 @@
     }
     if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
     {
-    <p>
-      <a href=@Url.Action("Index", "Home", new { Area = "CallCenter_UI" })
-         class="btn btn-primary btn-lg">
-        Call Center &raquo;
-      </a>
-    </p>
+      <p>
+        <a href=@Url.Action("Index", "Home", new { Area = "AgencyBanking_UI" })
+           class="btn btn-primary btn-lg">
+          Agency Banking &raquo;
+        </a>
+        <a href=@Url.Action("Index", "Home", new { Area = "CallCenter_UI" })
+           class="btn btn-primary btn-lg">
+          Call Center &raquo;
+        </a>
+      </p>
     }
   }
   else
