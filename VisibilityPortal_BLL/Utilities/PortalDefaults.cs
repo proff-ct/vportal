@@ -14,7 +14,7 @@ namespace VisibilityPortal_BLL.Utilities
         /// <summary>
         /// TODO: Generate Random Password
         /// </summary>
-        public static string PASSWORD_DEFAULT => "User.123";
+        public static string PASSWORD_DEFAULT => "Default.123";
     }
 
   }
