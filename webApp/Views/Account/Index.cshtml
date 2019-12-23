@@ -1,0 +1,84 @@
+﻿@using VisibilityPortal_BLL.Models;
+@using Utilities.PortalApplicationParams;
+@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+
+  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"~/plugins/tabulator_4.4/css/tabulator_simple.css",
+//$"~/plugins/ion.tabs-1.0.2/css/ion.tabs.css",
+//$"~/plugins/ion.tabs-1.0.2/css/ion.tabs.skinBordered.css"
+$"~/plugins/Responsive-Tabs/css/responsive-tabs.css", // for tab-accordion switching
+$"~/plugins/Responsive-Tabs/css/style.css" //basic tab accordion theme
+};
+  }
+  @Styles.Render(cssFiles)
+}
+<section class="content-header">
+  <h1>
+    User Accounts
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<section class="content">
+  @if (Request.IsAuthenticated)
+  {
+    if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+    {
+      Html.RenderPartial("_ListUsersForSuperAdminPartial");
+    }
+    else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+    {
+      Html.RenderPartial("_ListUsersForSystemAdminPartial");
+    }
+  }
+  else
+  {
+    <p><a href=@Url.Action("Login", "Account") class="btn btn-primary btn-lg">Login &raquo;</a></p>
+  }
+
+
+</section>
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @{
+    string[] scriptFiles = {
+$"~/Scripts/moment.js",
+$"~/plugins/tabulator_4.4/js/tabulator.js",
+//$"~/plugins/ion.tabs-1.0.2/js/ion-tabs/ion.tabs.js",
+$"~/plugins/Responsive-Tabs/js/jquery.responsiveTabs.js",
+$"~/Scripts/portal/view/account.js"
+};
+  }
+  @Scripts.Render(scriptFiles)
+  <!-- Define local scripts-->
+<script>
+    $(document).ready(function () {
+      @if(User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())) {
+        <text>
+          //initIonTabs("#tabs_ViewUsers");
+          initResponsiveTabs("#tabs_portalUsers");
+          initSaccoTabulator("#saccoUsersListTable", "@Url.Action("Edit","Account")");
+          initCoretecTabulator("#coretecUsersListTable", "@Url.Action("Edit","Account")");
+          LoadSaccoData("@Url.Action("GetPortalUsers", "Account")");
+          LoadCoretecData("@Url.Action("GetPortalUsers", "Account")");
+       </text>
+      }
+      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString())) {
+        <text>
+          initSaccoTabulator("#saccoUsersListTable", "@Url.Action("Edit", "Account")");
+          LoadSaccoData("@Url.Action("GetPortalUsers", "Account")", @activeUserParams.ClientCorporateNo);
+        </text>
+      }
+    });
+</script>
+}

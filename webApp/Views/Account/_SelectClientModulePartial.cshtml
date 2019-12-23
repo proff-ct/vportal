@@ -1,0 +1,44 @@
+﻿@model VisibilityPortal_BLL.Models.ASP_Identity.ClientUserViewModel
+<div class="form-group">
+  @Html.LabelFor(model => model.ClientModuleId, "Module", htmlAttributes: new { @class = "control-label col-md-2" })
+  <div class="col input-group">
+    @Html.DropDownListFor(model=>model.ClientModuleId,
+    Enumerable.Empty<SelectListItem>(),
+    "Select Module",
+    htmlAttributes: new
+    {
+      @class = "form-control portal-selectpicker show-tick",
+      @id = "selectClientModule"
+    }
+  )
+  </div>
+</div>
+@*<div class="row">
+    <div class="col">
+      <h4>
+        Selected module:
+        <small>
+          <span id="currentSelectedModule">
+            <strong>
+              <i id="selectedModulePlaceholder">
+                [not set]
+              </i>
+            </strong>
+          </span>
+        </small>
+      </h4>
+      @Html.ValidationMessageFor(model => model.ClientModuleId, "", new { @class = "text-danger" })
+    </div>
+    <div class="col input-group">
+      @Html.DropDownListFor(model=>model.ClientModuleId,
+      Enumerable.Empty<SelectListItem>(),
+      "Select Module",
+      htmlAttributes: new
+      {
+        @class = "form-control portal-selectpicker show-tick",
+        @id = "selectClientModule"
+      }
+    )
+    </div>
+  </div>*@
+

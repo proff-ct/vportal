@@ -1,6 +1,15 @@
-﻿@using Microsoft.AspNet.Identity
-@using VisibilityPortal_BLL.Models;
-
+﻿@using VisibilityPortal_BLL.Models;
+@*@@using Microsoft.AspNet.Identity;
+@using System.Security.Claims;
+@{ 
+  string[] PortalModules = new string[3] { "AgencyBanking", "CallCenter", "MSacco" };
+  string[] AccountAdminRoles = new string[2] {
+    PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
+    PortalUserRoles.SystemRoles.SystemAdmin.ToString()
+  };
+  var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
+  IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
+}*@
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,15 +30,15 @@
   }
   @Styles.Render(cssFiles)
   @RenderSection("HtmlHead", false)
+<link href="~/Content/normalize.css" rel="stylesheet" />
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
     <!-- Main Header -->
     <header class="main-header">
-
-      <!-- Logo -->
-      <a href="@Url.Action("Index", "Home")" class="logo">
+        <!-- Logo -->
+      <a href="@Url.Action("Index", "Home")" class="logo" style="position: fixed">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>V</b>P</span>
         <!-- logo for regular state and mobile devices -->
@@ -42,33 +51,34 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
+        @Html.Partial("_SelectModuleHeaderPartial")
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
             @Html.Partial("_LoginPartial")
             @*@if (Request.IsAuthenticated)
-              {
-                <!-- User Account Menu -->
-                <li class="dropdown user user-menu">
-                  <!-- Menu Toggle Button -->
-                  <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
-                    <i class="fa fa-user-circle fa-2x pull-left"></i>
-                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                    <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
-                  </a>
-                  <ul class="dropdown-menu">
-                    <!-- Menu Footer-->
-                    <li class="user-footer">
-                      <div class="list-group-item mt-2">
-                        <a href="#" class="">Profile</a>
-                      </div>
-                      <div class="list-group-item mt-2">
-                        <a href="#" class="">Sign out</a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              }*@
+        {
+          <!-- User Account Menu -->
+          <li class="dropdown user user-menu">
+            <!-- Menu Toggle Button -->
+            <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
+              <i class="fa fa-user-circle fa-2x pull-left"></i>
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
+            </a>
+            <ul class="dropdown-menu">
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="list-group-item mt-2">
+                  <a href="#" class="">Profile</a>
+                </div>
+                <div class="list-group-item mt-2">
+                  <a href="#" class="">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        }*@
 
 
           </ul>
@@ -76,7 +86,7 @@
       </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
+    <aside class="main-sidebar" style="position: fixed">
 
       <!-- sidebar: style can be found in sidebar.less -->
       <section class="sidebar">
@@ -85,11 +95,27 @@
         <ul class="sidebar-menu" data-widget="tree">
           @RenderSection("MenuLinks", false)
           <!-- Optionally, you can add icons to the links -->
-          @*  Temporarily commented the below for purposes of showcasing MVP*@
-          @if(Request.IsAuthenticated && (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
+          @if (Request.IsAuthenticated && (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
           {
-          <li class="header"><span>USER MANAGEMENT</span></li>
-          <li><a href="#"><i class="fa fa-users"></i><span>Create User</span></a></li>
+            if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+            {
+              <li class="header"><span>CLIENT SETUP</span></li>
+              <li>
+                <a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
+                  <i class="fa fa-wrench"></i><span>Register Client</span>
+                </a>
+              </li>
+            }
+            else
+            {
+              <li class="header"><span>USER MANAGEMENT</span></li>
+            }
+            <li>
+              <a href="@Url.Action("Index","Account", new { Area = "" })">
+                <i class="fa fa-users"></i><span>Users</span>
+              </a>
+            </li>
+
           }
 
         </ul>
@@ -192,10 +218,10 @@
   @{
     string[] scriptsToLoad =
     {
-      "~/Scripts/jquery-3.3.1.min.js",
-      "~/bundles/bootstrap",
-      "~/Scripts/adminlte.min.js"
-    };
+  "~/Scripts/jquery-3.3.1.min.js",
+  "~/bundles/bootstrap",
+  "~/Scripts/adminlte.min.js"
+};
   }
   @Scripts.Render(scriptsToLoad)
   <!-- Optionally, you can add Slimscroll and FastClick plugins.

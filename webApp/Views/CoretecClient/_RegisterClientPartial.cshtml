@@ -1,0 +1,100 @@
+﻿@model VisibilityPortal_BLL.Models.ViewModels.AddPortalModuleForClientViewModel
+@using VisibilityPortal_BLL.Models.ViewModels
+@{
+  List<PortalModuleViewModel> portalModuleList = ViewBag.PortalModuleViewModelList;
+}
+<div class="form-horizontal">
+  <h5>
+    Register Client Module
+  </h5>
+  <span> @Html.ActionLink("Back to List", "Index")</span>
+  <hr />
+
+  @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+  <div class="form-group">
+    <div class="row">
+      <div class="col">
+        <h4>
+          Selected client:
+          <small>
+            <span id="currentActiveSacco">
+              <strong>
+                <i id="activeSaccoPlaceholder">
+                  [not set]
+                </i>
+              </strong>
+            </span>
+          </small>
+        </h4>
+        @Html.ValidationMessageFor(model => model.CorporateNo, "", new { @class = "text-danger" })
+      </div>
+      <div class="col input-group">
+        @*@Html.DropDownList("selectClient",
+            Enumerable.Empty<SelectListItem>(),
+            "Select Client",
+            htmlAttributes: new
+            {
+              @class = "show-tick",
+              @id = "selectClient"
+            }
+          )*@
+        @Html.DropDownListFor(model=>model.CorporateNo,
+        Enumerable.Empty<SelectListItem>(),
+        "Select Client",
+        htmlAttributes: new
+        {
+          @class = "show-tick",
+          @id = "selectClient"
+        }
+      )
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-info btn-flat"
+                  id="refreshClientSelectbox"
+                  onclick="LoadClientList('@Url.Action("GetUnregisteredClients","CoretecClient")', '#selectClient')">
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    @Html.Label(
+ "lblSelectModule", "Select Portal Module",
+ htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @*@Html.DropDownList(
+          "selectModule[]",
+          portalModuleList.Select(m=>m.ModuleName).Select(m => new SelectListItem {
+            Value = m,
+            Text = m
+          }),
+          null,
+          htmlAttributes: new
+          {
+            @multiple = "multiple",
+            @id = "selectModule"
+          }
+        )*@
+      @Html.DropDownListFor(model=>model.PortalModules,
+        portalModuleList.Select(m=>m.ModuleName).Select(m => new SelectListItem {
+          Value = m,
+          Text = m
+        }),
+        null,
+        htmlAttributes: new
+        {
+          @multiple = "multiple",
+          @id = "selectModule"
+        }
+      )
+      @*@Html.ValidationMessageFor(model => model.CorporateNo, "", new { @class = "text-danger" })*@
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+  </div>
+</div>

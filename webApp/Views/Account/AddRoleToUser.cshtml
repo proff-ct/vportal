@@ -1,0 +1,183 @@
+﻿@model VisibilityPortal_BLL.Models.ASP_Identity.AddUserRoleViewModel
+@using VisibilityPortal_BLL.Models;
+@using VisibilityPortal_BLL.Models.ViewModels;
+@using VisibilityPortal_DAL;
+@using Utilities.PortalApplicationParams;
+@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+
+  List<CoretecClientModuleViewModel> clientModuleList = ViewBag.ClientModuleList;
+  ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"~/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css"
+};
+  }
+  @Styles.Render(cssFiles)
+}
+<section class="content-header">
+  <h1>
+    User Account<small>Add Role</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<section class="content">
+  <span>@Html.ActionLink("Back", "Edit", new { email = Model.Email })</span>
+  @if (Model == null)
+  {
+    if (ViewBag.UnknownEmail == null)
+    {
+      ViewBag.Title = "Error";
+
+      <h1 class="text-danger">@ViewBag.Title</h1>
+      <h2 class="text-danger">User not specified</h2>
+      @*<a href="@Url.Action("Index","Home", new { Area = "" })"><i class="fa fa-home"></i><span> Home</span></a>*@
+    }
+    else
+    {
+      ViewBag.Title = "404 - Not Found";
+
+      <h1 class="text-danger">@ViewBag.Title</h1>
+      <h2 class="text-danger">No user found with email: @ViewBag.UnknownEmail</h2>
+      @*<a href="@Url.Action("Index","Home", new { Area = "" })"><i class="fa fa-home"></i><span> Home</span></a>*@
+    }
+  }
+  else
+  {
+    using (Html.BeginForm())
+    {
+      @Html.AntiForgeryToken()
+      <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @if (Request.IsAuthenticated)
+        {
+
+          if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+          {
+            <div class="form-group">
+              @Html.LabelFor(model => model.ClientCorporateNo, "Client", htmlAttributes: new { @class = "control-label col-md-2" })
+              <div class="col-md-10">
+                @Html.DropDownListFor(
+                 model => model.ClientCorporateNo,
+                 new List<SelectListItem>
+                 {
+              new SelectListItem
+              {
+                Value = Model.ClientCorporateNo,
+                Text = ViewBag.UserClientName,
+                Selected = true
+              }},
+                 "Select Client",
+                 htmlAttributes: new {
+                   @class = "form-control",
+                   @readonly = "readonly" })
+              </div>
+            </div>
+          }
+          else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+          {
+            // set hiddens for ClientCorporateNo
+            @Html.HiddenFor(model => model.ClientCorporateNo, new { Value = activeUserParams.ClientCorporateNo });
+          }
+          <div class="form-group">
+            @Html.LabelFor(model => model.Email, "User Email", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+              @Html.TextBoxFor(model => model.Email, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            </div>
+          </div>
+          <div class="form-group">
+            @Html.LabelFor(
+                   model => model.ClientModuleId, "Module",
+                   htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+              @Html.DropDownListFor(
+                   model => model.ClientModuleId,
+                   clientModuleList.Select(m => new SelectListItem
+                   {
+                     Value = m.ClientModuleId,
+                     Text = m.PortalModuleName
+                   }),
+                   "Select Module",
+                   htmlAttributes: new {
+                     @class = "form-control portal-selectpicker show-tick",
+                     @id = "selectClientModule" })
+
+              @Html.ValidationMessageFor(model => model.ClientModuleId, "", new { @class = "text-danger" })
+            </div>
+          </div>
+
+          <div class="form-group">
+            @Html.LabelFor(
+                   model => model.RoleId, "Role",
+                   htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+              @Html.DropDownListFor(
+                   model => model.RoleId,
+                    Enumerable.Empty<SelectListItem>(),
+                   "Select Role",
+                   htmlAttributes: new {
+                     @class = "form-control portal-selectpicker show-tick",
+                     @id = "selectRole" })
+
+              @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+              <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+          </div>
+        }
+
+      </div>
+    }
+  }
+</section>
+
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @{
+    string[] scriptFiles = {
+$"~/Scripts/moment.js",
+$"~/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
+$"~/Scripts/portal/view/shared.js",
+$"~/Scripts/portal/view/accountAddRoleToUser.js"
+};
+  }
+  @Scripts.Render(scriptFiles)
+  <script type="text/javascript">
+  $(document).ready(function () {
+      var selectPickerRef = '.portal-selectpicker';
+      var selectClientModuleId = '#selectClientModule';
+      var selectRoleId = '#selectRole';
+
+    var ajaxParams = {
+      Email : "",
+      ClientModuleId : "",
+    };
+      // 1. Initialize the select picker
+      InitSelectPicker(selectPickerRef);
+
+      // 2. Set up an event change listener
+      // this sets the available roles
+      $(selectClientModuleId).change(function () {
+        ResetRoleSelect(selectRoleId);
+        if (!this.value) return;
+        ajaxParams.ClientModuleId = this.value;
+        ajaxParams.Email = "@Model.Email";
+
+        LoadRolesList("@Url.Action("GetAvailableRolesForClientUser", "Account")", selectRoleId, ajaxParams);
+      });
+
+    });
+  </script>
+}

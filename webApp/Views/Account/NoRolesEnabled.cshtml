@@ -1,0 +1,18 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+  ViewBag.Title = "Access Error";
+}
+
+<h1 class="text-danger">@ViewBag.Title</h1>
+<h2 class="text-danger">Wololo!</h2>
+<p>
+  Your user role(s) is/are not enabled!
+  Kindly contact your System Administrator to resolve the issue to enable you have access
+</p>
+<p>
+  <a href="@Url.Action("Index","Home", new { Area = "" })">
+    <i class="fa fa-home"></i><span> Home</span>
+  </a>
+</p>
+

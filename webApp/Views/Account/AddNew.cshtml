@@ -1,0 +1,127 @@
+﻿@model VisibilityPortal_BLL.Models.ASP_Identity.ClientUserViewModel
+@using VisibilityPortal_BLL.Models;
+@using VisibilityPortal_BLL.Models.ViewModels;
+@using Utilities.PortalApplicationParams;
+@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+
+  List<PortalApplicationRoleViewModel> portalRoleList = ViewBag.ApplicationRoleViewModelList;
+  ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"~/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css"
+};
+  }
+  @Styles.Render(cssFiles)
+}
+<section class="content-header">
+  <h1>
+    User Account<small>Add New</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<section class="content">
+  <span> @Html.ActionLink("Back to List", "Index")</span>
+  @using (Html.BeginForm())
+  {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      @if (Request.IsAuthenticated)
+      {
+        if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+        {
+          Html.RenderPartial("_SelectClientPartial", Model);
+          Html.RenderPartial("_SelectClientModulePartial", Model);
+        }
+        else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+        {
+          // set hiddens for ClientCorporateNo, ClientModuleId
+          @Html.HiddenFor(model => model.ClientCorporateNo,
+            new { Value=activeUserParams.ClientCorporateNo});
+          @Html.HiddenFor(model => model.ClientModuleId, new { Value = activeUserParams.ClientModuleId });
+        }
+        <div class="form-group">
+          @Html.LabelFor(
+            model => model.RoleId, "Role",
+            htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+            @Html.DropDownListFor(
+              model => model.RoleId,
+              portalRoleList.Select(r => new SelectListItem
+              {
+                Value = r.RoleId,
+                Text = r.Name,
+                Selected = (@Model != null) ? r.RoleId == @Model.RoleId : false
+              }),
+              "Select Role",
+              htmlAttributes: new {
+                @class = "form-control portal-selectpicker show-tick",
+                @id ="selectRole" })
+
+            @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+          </div>
+        </div>
+        Html.RenderPartial("_EnterClientUserInfoPartial", Model);
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+
+</section>
+
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @{
+    string[] scriptFiles = {
+$"~/Scripts/moment.js",
+$"~/plugins/tabulator_4.4/js/tabulator.js",
+$"~/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
+$"~/Scripts/portal/view/shared.js",
+$"~/Scripts/portal/view/accountAddNew.js"
+};
+  }
+  @Scripts.Render(scriptFiles)
+  <script type="text/javascript">
+  $(document).ready(function () {
+      var selectPickerRef = '.portal-selectpicker';
+      var selectClientId = '#selectClient';
+      var selectClientModuleId = '#selectClientModule';
+      var selectRoleId = '#selectRole';
+      // 1. Initialize the select picker
+      InitSelectPicker(selectPickerRef);
+
+      // 2. Load data for the select
+      LoadClientList("@Url.Action("GetRegisteredClients", "CoretecClient")", selectClientId);
+      // 3. Set up an event change listener
+      // this sets the selected client name
+      $(selectClientId).change(function () {
+        if (!this.value) { ResetModuleAndRole(selectClientModuleId, selectRoleId); return; }
+        SetPlaceholderText('#selectedClientPlaceholder', $(this).find(":selected").text());
+        // Load the modules select with the selected client's modules
+        SetClientModules(this.value, selectClientModuleId);
+
+        // Reset the Role select box
+        $(selectRoleId).prop('selectedIndex', null);
+      });
+      // this sets the selected module name
+      $(selectClientModuleId).change(function () {
+        if (!this.value) return;
+        SetPlaceholderText('#selectedModulePlaceholder', $(this).find(":selected").text());
+      });
+    });
+  </script>
+}

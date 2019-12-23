@@ -1,0 +1,10 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Unauthorized";
+}
+
+<h1 class="text-danger">Unauthorized</h1>
+<h2 class="text-danger">You are not authorized to access the requested resource</h2>
+<a href="@Url.Action("Index","Home", new { Area = "" })"><i class="fa fa-home"></i><span> Home</span></a>
+

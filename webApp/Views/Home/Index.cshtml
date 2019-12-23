@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<VisibilityPortal_BLL.Models.ModuleUrl>
+@using VisibilityPortal_BLL.Models;
+@{
   ViewBag.Title = "Home Page";
 }
 
@@ -8,13 +10,23 @@
   <p><small>currently in development</small></p>
   @if (Request.IsAuthenticated)
   {
-    <p>
-      <a href=@Url.Action("Index", "Home", new { Area = "CallCenter_UI"}) 
-         class="btn btn-primary btn-lg">
-      Call Center &raquo;
-      </a>
-    </p>
-
+    if (Model != null)
+    {
+      @Html.Partial("_SelectModulePartial", Model);
+    }
+    if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+    {
+      <p>
+        <a href=@Url.Action("Index", "Home", new { Area = "AgencyBanking_UI" })
+           class="btn btn-primary btn-lg">
+          Agency Banking &raquo;
+        </a>
+        <a href=@Url.Action("Index", "Home", new { Area = "CallCenter_UI" })
+           class="btn btn-primary btn-lg">
+          Call Center &raquo;
+        </a>
+      </p>
+    }
   }
   else
   {
