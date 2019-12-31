@@ -12,7 +12,7 @@ namespace VisibilityPortal_BLL.Tests
     {
       private readonly List<PortalModule> moduleList = new List<PortalModule>();
       private PortalModuleBLL portalModuleBLL = new PortalModuleBLL();
-      
+
       [Test]
       public void Returns_IEnumerable_of_portal_modules_containing_moduleName_and_routeprefix()
       {
@@ -27,7 +27,10 @@ namespace VisibilityPortal_BLL.Tests
           Assert.IsTrue(!string.IsNullOrEmpty(s.RoutePrefix), "NULL Route Prefix");
         });
       }
-
+    }
+    public class GetModuleByName
+    {
+      private PortalModuleBLL portalModuleBLL = new PortalModuleBLL();
       [Test]
       public void Returns_a_portal_module_record_of_specified_name()
       {
