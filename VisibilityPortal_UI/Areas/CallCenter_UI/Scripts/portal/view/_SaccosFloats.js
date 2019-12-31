@@ -3,6 +3,36 @@ var tabulatorSaccoFloatsAjaxUrlForReload;
 var tabulatorSaccoFloatsAjaxParamsForReload;
 
 function initTabulatorFloat(tableContainerID) {
+  // define my custom formatters here first
+  Tabulator.prototype.extendModule("format", "formatters", {
+    mpesa: function (cell, formatterParams) {
+      var moneyFormatter = Tabulator.prototype.moduleBindings.format.prototype.formatters.money;
+      var mpesaFloat = SetCellValueToNullIfNoData(cell.getValue());
+
+      var parsedFloatValue = parseFloat(mpesaFloat);
+      if (isNaN(parsedFloatValue)) {
+        return mpesaFloat;
+      }
+
+      //update the cell value before passing it on to the inbuilt money formatter
+      cell._cell.value = parsedFloatValue;
+      return moneyFormatter(cell, formatterParams)
+    },
+    bulkSMS: function (cell, formatterParams) {
+      var moneyFormatter = Tabulator.prototype.moduleBindings.format.prototype.formatters.money;
+      var bulkSMSFloat = SetCellValueToNullIfNoData(cell.getValue());
+
+      var parsedFloatValue = parseFloat(bulkSMSFloat);
+      if (isNaN(parsedFloatValue)) {
+        return bulkSMSFloat;
+      }
+
+      //update the cell value before passing it on to the inbuilt money formatter
+      cell._cell.value = parsedFloatValue;
+      return moneyFormatter(cell, formatterParams)
+    },
+  });
+
   //create Tabulator on DOM element with id == tableContainerID
   tblTabulatorSaccoFloats = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -38,14 +68,22 @@ function initTabulatorFloat(tableContainerID) {
       { title: "Sacco", field: "SaccoName", headerFilter: true },
       {
         title: "M-Pesa Float", field: "MPesaFloat", headerFilter: true,
-        formatter: function (cell) {
-          return SetCellValueToNullIfNoData(cell.getValue())
+        //formatter: function (cell, formatterParams) {
+        //  return SetCellValueToNullIfNoData(cell.getValue())
+        //},
+        formatter: "mpesa",
+        formatterParams: {
+          symbol: "KES"
         }
       },
       {
         title: "BULK SMS Float", field: "BulkSMSFloat", headerFilter: true,
-        formatter: function (cell) {
-          return SetCellValueToNullIfNoData(cell.getValue())
+        //formatter: function (cell) {
+        //  return SetCellValueToNullIfNoData(cell.getValue())
+        //}
+        formatter: "bulkSMS",
+        formatterParams: {
+          precision: 0
         }
       },
       {
