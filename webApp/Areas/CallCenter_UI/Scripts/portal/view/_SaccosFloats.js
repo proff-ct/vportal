@@ -45,7 +45,7 @@ function initTabulatorFloat(tableContainerID) {
       {
         title: "BULK SMS Float", field: "BulkSMSFloat", headerFilter: true,
         formatter: function (cell) {
-          return SetCellValueToNullIfNoData(cell.getValue(), "Not Calculated")
+          return SetCellValueToNullIfNoData(cell.getValue())
         }
       },
       {
@@ -79,8 +79,7 @@ function SaccoFloatsGetFormattedDate(objDate) {
 }
 
 function SetCellValueToNullIfNoData(cellValue, valueToSet = null) {
-  if (valueToSet != null) return valueToSet;
-  return (cellValue==null) ? "No Data" : cellValue
+  return (cellValue == null) ? (valueToSet != null) ? valueToSet : "No Data" : cellValue
 }
 
 function SaccoFloatsClearFilters() {
