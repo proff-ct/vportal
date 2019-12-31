@@ -1,0 +1,71 @@
+﻿@model CallCenter_BLL.ViewModels.SaccoFloatAlertViewModel
+@using CallCenter_BLL.ViewModels;
+@{
+  List<SaccoViewModel> saccoList = ViewBag.SaccoList;
+  List<AlertTypeViewModel> alertTypeList = ViewBag.AlertTypeList;
+  List<FloatResourceViewModel> floatResourceList = ViewBag.FloatResourceList;
+}
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.ClientCorporateNo)
+@Html.HiddenFor(model => model.FloatResourceId)
+@Html.HiddenFor(model => model.AlertTypeId)
+<div class="form-group">
+  @Html.LabelFor(model => model.ClientCorporateNo, "Sacco", htmlAttributes: new { @class = "control-label col-md-2" })
+  <div class="col-md-10">
+    @Html.DropDownList(
+        "CNo",
+        saccoList.Select(m => new SelectListItem {
+          Value = m.corporateNo,
+          Text = m.saccoName_1,
+          Selected = (@Model != null) ? m.corporateNo == @Model.ClientCorporateNo : false
+        }),
+        htmlAttributes: new
+        {
+          @class = "form-control portal-selectpicker show-tick",
+          @disabled="disabled"
+        }
+      )
+    @Html.ValidationMessageFor(model => model.ClientCorporateNo, "", new { @class = "text-danger" })
+  </div>
+</div>
+
+<div class="form-group">
+  @Html.LabelFor(model => model.FloatResourceId, "Float Resource", htmlAttributes: new { @class = "control-label col-md-2" })
+  <div class="col-md-10">
+    @Html.DropDownList(
+        "FR",
+        floatResourceList.Select(m => new SelectListItem {
+          Value = m.Id,
+          Text = m.ResourceName,
+          Selected = (@Model != null) ? m.Id == @Model.FloatResourceId : false
+        }),
+        htmlAttributes: new
+        {
+          @class = "form-control portal-selectpicker show-tick",
+          @disabled="disabled"
+        }
+      )
+    @Html.ValidationMessageFor(model => model.FloatResourceId, "", new { @class = "text-danger" })
+  </div>
+</div>
+
+<div class="form-group">
+  @Html.LabelFor(model => model.AlertTypeId, "Alert level", htmlAttributes: new { @class = "control-label col-md-2" })
+  <div class="col-md-10">
+    @Html.DropDownList(
+         "AT",
+         alertTypeList.Select(m => new SelectListItem {
+           Value = m.Id.ToString(),
+           Text = m.AlertName,
+           Selected = (@Model != null) ? m.Id.ToString() == @Model.AlertTypeId : false
+         }),
+         htmlAttributes: new
+         {
+           @class = "form-control portal-selectpicker show-tick",
+           @disabled="disabled"
+
+         }
+       )
+    @Html.ValidationMessageFor(model => model.AlertTypeId, "", new { @class = "text-danger" })
+  </div>
+</div>

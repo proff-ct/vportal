@@ -77,7 +77,6 @@
     <Compile Include="CallCenterDBContext.cs" />
     <Compile Include="FloatResource.cs" />
     <Compile Include="FloatResourceAlertForClient.cs" />
-    <Compile Include="USSDRequests.cs" />
     <Compile Include="MSaccoUtilityPayment.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
