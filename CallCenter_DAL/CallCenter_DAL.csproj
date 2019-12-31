@@ -33,7 +33,14 @@
     <LangVersion>7</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,14 +52,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBConnection.cs" />
+    <Compile Include="EF6 related\CallCenterDatabaseInitializer_DAL.cs" />
+    <Compile Include="EF6 related\AlertType.cs" />
+    <Compile Include="EF6 related\FloatResource.cs" />
+    <Compile Include="EF6 related\FloatResourceAlertForClient.cs" />
+    <Compile Include="AlertType.cs" />
     <Compile Include="GFLLoan.cs" />
     <Compile Include="Guarantors.cs" />
     <Compile Include="IDBModel.cs" />
     <Compile Include="LinkDowntime.cs" />
     <Compile Include="LinkMonitoring.cs" />
+    <Compile Include="Migrations\201912190750370_Add_FloatResource_AlertType_FloatResourceAlertForClient.cs" />
+    <Compile Include="Migrations\201912190750370_Add_FloatResource_AlertType_FloatResourceAlertForClient.Designer.cs">
+      <DependentUpon>201912190750370_Add_FloatResource_AlertType_FloatResourceAlertForClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912310913098_FloatResourceAlertForClient_Change_CreatedOn_and_ModifiedOn_dates_to_UTC.cs" />
+    <Compile Include="Migrations\201912310913098_FloatResourceAlertForClient_Change_CreatedOn_and_ModifiedOn_dates_to_UTC.Designer.cs">
+      <DependentUpon>201912310913098_FloatResourceAlertForClient_Change_CreatedOn_and_ModifiedOn_dates_to_UTC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MobileWithdrawals.cs" />
     <Compile Include="MSaccoAirtimeTopup.cs" />
     <Compile Include="MSaccoSalaryAdvance.cs" />
+    <Compile Include="CallCenterDBContext.cs" />
+    <Compile Include="FloatResource.cs" />
+    <Compile Include="FloatResourceAlertForClient.cs" />
+    <Compile Include="USSDRequests.cs" />
     <Compile Include="MSaccoUtilityPayment.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +85,17 @@
     <Compile Include="SMSFloat\Debit\Archived\ArchivedBulkSMSDebit.cs" />
     <Compile Include="SMSFloat\Debit\Unarchived\UnarchivedBulkSMSDebit.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201912190750370_Add_FloatResource_AlertType_FloatResourceAlertForClient.resx">
+      <DependentUpon>201912190750370_Add_FloatResource_AlertType_FloatResourceAlertForClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912310913098_FloatResourceAlertForClient_Change_CreatedOn_and_ModifiedOn_dates_to_UTC.resx">
+      <DependentUpon>201912310913098_FloatResourceAlertForClient_Change_CreatedOn_and_ModifiedOn_dates_to_UTC.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,62 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@{
+  ViewBag.Title = "Float Alerts";
+
+  Layout = $"{CallCenterAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutCallCenter.cshtml";
+}
+<h2>Float Alerts</h2>
+<div class="col-md-20">
+  <div class="panel">
+    <div class="panel-heading">
+      <div class="pull-left">
+        <p>
+          <a href="@Url.Action("AddOrUpdate", "FloatAlerts")">
+            <span>Add New</span>
+          </a>
+        </p>
+      </div>
+      <div class="pull-right">
+        <button type="button"
+                class="btn btn-labeled btn-primary btn-sm"
+                onclick="ReloadData()">
+          <span class="btn-label"><i class="fa fa-refresh"></i></span>
+          Reload
+        </button>
+        <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters()">
+          <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+          Clear filters
+        </button>
+      </div>
+
+    </div>
+    <div class="panel-body">
+      <div id="floatAlertsListTable"></div>
+    </div>
+
+  </div>
+</div>
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @Scripts.Render($"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/floatAlerts.js")
+  <!-- Define local scripts-->
+  <script>
+    $(document).ready(function () {
+      var ajaxParams = {
+        clientCorporateNo: ""
+      };
+      initTabulator("#floatAlertsListTable", "@Url.Action("AddOrUpdate", "FloatAlerts")");
+      LoadData("@Url.Action("GetAllFloatResourceAlerts", "FloatAlerts")");
+
+      var selectPickerId = "#selectSacco";
+      initSelectPicker(selectPickerId);
+      $(selectPickerId).change(function () {
+        var selectedSaccoCorporateNo = $(this).val();
+        ajaxParams.clientCorporateNo = (!selectedSaccoCorporateNo) ? "" : selectedSaccoCorporateNo;
+        LoadData(
+          "@Url.Action("GetAllFloatResourceAlerts", "FloatAlerts")", ajaxParams);
+      });
+    });
+  </script>
+}

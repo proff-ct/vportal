@@ -1,0 +1,141 @@
+﻿@model CallCenter_BLL.ViewModels.SaccoFloatAlertViewModel
+@using System.Web.Optimization
+@using Visibility_Portal
+@using CallCenter_DAL;
+@{
+  ViewBag.Title = "Configure Float Alert";
+
+  Layout = $"{CallCenterAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutCallCenterDashboard.cshtml";
+
+}
+@section HtmlHead {
+  @{
+
+    string[] cssFiles = {
+$"~/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css"
+};
+  }
+  @Styles.Render(cssFiles)
+}
+<section class="content-header">
+  <h1>
+    @ViewBag.Title
+  </h1>
+  <span>@Html.ActionLink("Back to list", "Index")</span>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  </ol>
+</section>
+<section class="content">
+
+  @using (Html.BeginForm())
+  {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+      @if (Model == null)
+      {
+        Html.RenderPartial("_AddNewPartial");
+      }
+      else
+      {
+        Html.RenderPartial("_EditPartial", Model);
+      }
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.Threshold, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.Threshold, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Threshold, "", new { @class = "text-danger" })
+        </div>
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.TriggerCondition, "Trigger Condition", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.DropDownListFor(
+         model => model.TriggerCondition,
+         Enum
+         .GetValues(typeof(AlertType.TriggerConditions))
+         .Cast<AlertType.TriggerConditions>()
+         .Select(x => new SelectListItem {
+           Value = x.ToString(),
+           Text = x.ToString(),
+           Selected = (@Model != null) ? x.ToString() == @Model.TriggerCondition : false
+         }),
+         "Select Trigger Condition",
+         htmlAttributes: new
+         {
+           @class = "form-control portal-selectpicker show-tick"
+         }
+       )
+          @Html.ValidationMessageFor(model => model.TriggerCondition, "", new { @class = "text-danger" })
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+      </div>
+    </div>
+  }
+
+  @*<div>
+      @Html.ActionLink("Back to List", "Index")
+    </div>*@
+</section>
+@section Scripts {
+  <!-- Include external scripts-->
+  @{
+    string[] scriptFiles = {
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/floatAlerts.js"
+};
+  }
+  @Scripts.Render(scriptFiles);
+
+  <!-- Define custom scripts-->
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // 1. Initialize the select picker
+      var selectPickerId = ".portal-selectpicker";
+      initSelectPicker(selectPickerId);
+
+      // 2. Register change handler for the alert level select
+      var ajaxParamsToLoadAlertLevel = {
+        clientCorporateNo: "",
+        floatResourceId: ""
+      };
+      var selectSaccoId = "#ClientCorporateNo";
+      var selectFloatResourceId = "#FloatResourceId";
+      var selectAlertLevelId = "#AlertTypeId";
+
+      $(selectSaccoId).change(function () {
+        $(selectFloatResourceId).val("").change();
+        ResetSelectPickerElement(selectAlertLevelId);
+      });
+
+      $(selectFloatResourceId).change(function () {
+        ResetSelectPickerElement(selectAlertLevelId);
+        var selectedFloatResourceId = $(this).val();
+        if (!selectedFloatResourceId) return;
+
+        var selectedSaccoCorporateNo = $(selectSaccoId).val();
+        if (!selectedSaccoCorporateNo) {
+          $(selectSaccoId).focus();
+          return;
+        }
+
+        ajaxParamsToLoadAlertLevel.clientCorporateNo = selectedSaccoCorporateNo;
+        ajaxParamsToLoadAlertLevel.floatResourceId = selectedFloatResourceId;
+
+        LoadConfigurableAlerts(
+          "@Url.Action("GetConfigurableAlertsForClientResource", "FloatAlerts")",
+          ajaxParamsToLoadAlertLevel,
+          selectAlertLevelId);
+
+      });
+    });
+  </script>
+}

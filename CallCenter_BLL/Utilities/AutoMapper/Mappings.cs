@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CallCenter_BLL.Models;
+using CallCenter_BLL.Models.ViewModels;
 using CallCenter_BLL.ViewModels;
 using CallCenter_DAL;
 
@@ -20,6 +21,11 @@ namespace CallCenter_BLL.Utilities.AutoMapper
           config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
           config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
           config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+          config.CreateMap<AlertType, AlertTypeViewModel>().ReverseMap();
+          config.CreateMap<FloatResource, FloatResourceViewModel>().ReverseMap();
+          config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertViewModel>().ReverseMap();
+          config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertListViewModel>().ReverseMap();
+          config.CreateMap<Sacco, SaccoViewModel>().ReverseMap();
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -30,6 +36,11 @@ namespace CallCenter_BLL.Utilities.AutoMapper
         config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
         config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
         config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+        config.CreateMap<AlertType, AlertTypeViewModel>().ReverseMap();
+        config.CreateMap<FloatResource, FloatResourceViewModel>().ReverseMap();
+        config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertViewModel>().ReverseMap();
+        config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertListViewModel>().ReverseMap();
+        config.CreateMap<Sacco, SaccoViewModel>().ReverseMap();
       });
     }
 
@@ -40,6 +51,11 @@ namespace CallCenter_BLL.Utilities.AutoMapper
       config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
       config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
       config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+      config.CreateMap<AlertType, AlertTypeViewModel>().ReverseMap();
+      config.CreateMap<FloatResource, FloatResourceViewModel>().ReverseMap();
+      config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertViewModel>().ReverseMap();
+      config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertListViewModel>().ReverseMap();
+      config.CreateMap<Sacco, SaccoViewModel>().ReverseMap();
     });
   }
 }
