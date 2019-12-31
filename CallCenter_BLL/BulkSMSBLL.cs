@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CallCenter_DAL;
 using CallCenter_DAL.SMSFloat.Credit;
 using CallCenter_DAL.SMSFloat.Debit.Archived;
 using CallCenter_DAL.SMSFloat.Debit.Unarchived;
@@ -16,6 +17,7 @@ namespace CallCenter_BLL
     string _conString;
     string _query;
     string _tblBulkSMSCreditTrx = BulkSMSCredit.DBTableName;
+    string _tblBulkSMSBalances = BulkSMSBalance.DBTableName;
     string _tblUnarchivedBulkSMSDebitTrx = UnarchivedBulkSMSDebit.DBTableName;
     string _tblArchivedBulkSMSDebitTrx = ArchivedBulkSMSDebit.DBTableName;
     //#if DEBUG
@@ -67,6 +69,15 @@ namespace CallCenter_BLL
                 ORDER BY [Datetime] DESC";
 
       return new DapperORM(_conString).QueryGetList<ArchivedBulkSMSDebit>(_query);
+    }
+
+    public BulkSMSBalance GetBulkSMSBalanceForClient(string corporateNo)
+    {
+      _query = $@"SELECT * 
+                FROM {_tblBulkSMSBalances} 
+                WHERE [Corporate No] = '{corporateNo}'";
+
+      return new DapperORM().QueryGetSingle<BulkSMSBalance>(_query);
     }
   }
 }

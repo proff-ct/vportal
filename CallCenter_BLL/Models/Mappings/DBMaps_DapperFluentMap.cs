@@ -243,6 +243,16 @@ namespace CallCenter_BLL.Models.Mappings
       Map(m => m.Last_Check).ToColumn("Last Check");
     }
   }
+  internal class BulkSMSBalanceMap : EntityMap<BulkSMSBalance>
+  {
+    internal BulkSMSBalanceMap()
+    {
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Last_Updated).ToColumn("Last Updated");
+      
+    }
+  }
 
 }
      

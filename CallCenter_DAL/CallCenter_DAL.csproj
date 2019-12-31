@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkSMSBalance.cs" />
     <Compile Include="DBConnection.cs" />
     <Compile Include="EF6 related\CallCenterDatabaseInitializer_DAL.cs" />
     <Compile Include="EF6 related\AlertType.cs" />
