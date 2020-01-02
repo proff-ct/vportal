@@ -1,6 +1,7 @@
 ﻿var tblTabulatorLinkMonitoring;
 var tabulatorLinkMonitoringAjaxUrlForReload;
 var tabulatorLinkMonitoringAjaxParamsForReload;
+var LinkMonitoringReloadData;
 
 function initTabulatorLinkMonitoring(tableContainerID) {
   //create Tabulator on DOM element with id == tableContainerID
@@ -26,7 +27,9 @@ function initTabulatorLinkMonitoring(tableContainerID) {
     // collapse columns that no longer fit on the table into a list under the row
     responsiveLayout: "collapse",
     responsiveLayoutCollapseStartOpen: false,
-    layout: "fitDataFill", //fit columns to width of table (optional),
+    //layout: "fitDataFill", //fit columns to width of table (optional),
+    layout: "fitColumns", 
+    layoutColumnsOnNewData: true,
     headerFilterPlaceholder: "filter ...",
     tooltipsHeader: true,
     columns: [ //Define Table Columns
@@ -36,7 +39,7 @@ function initTabulatorLinkMonitoring(tableContainerID) {
       },
       //{ title: "Corporate No", field: "Corporate_No", visible: "false" },
       { title: "Sacco", field: "Corporate_Name", headerFilter: true },
-      { title: "Http Link Status", field: "Http_Status", headerFilter: true },
+      { title: "Http Link Status", field: "Http_Status", formatter: "textarea", headerFilter: true },
       {
         title: "Time Last Checked", field: "Last_Check",
         align: "center", headerFilter: true,
@@ -54,10 +57,6 @@ function initTabulatorLinkMonitoring(tableContainerID) {
     ],
     movableColumns: true,
     index: "Corporate_No",
-    initialSort: [
-      { column: "Http_Status", dir: "desc" },
-      { column: "Corporate_Name", dir: "asc" },
-    ],
     headerSortTristate: true,
     rowClick: function (e, row) {
       // toggle visibility of the guarantor info
@@ -104,16 +103,21 @@ function initTabulatorLinkMonitoring(tableContainerID) {
     },
     renderComplete: function () {
       // make guarantor subtables invisible by default
-      HideDowntimeSubTables();
+      HideDowntimeSubTables(this);
     },
     pageLoaded: function (pageno) {
       //pageno - the number of the loaded page
       //alert(pageno)
-      HideDowntimeSubTables();
+      SortLinkMonitoringData(this);
+      HideDowntimeSubTables(this);
     }
 
   });
   $(tblTabulatorLinkMonitoring.element).addClass("table table-striped table-condensed table-hover");
+
+  // added this here in preparation to do some refactoring to using bound functions(possibly)
+  LinkMonitoringReloadData = ReloadDataTabulator.bind(tblTabulatorLinkMonitoring);
+
 }
 function initDowntimeSubTable(tableElement, tableData) {
   var subTable = new Tabulator(tableElement, {
@@ -167,14 +171,14 @@ function initDowntimeSubTable(tableElement, tableData) {
   })
 }
 
-function HideDowntimeSubTables() {
+function HideDowntimeSubTables(tabulatorTableRef) {
   // how do I toggle visibility?
   // - get the visibile rows
   // - get the row id's
   // - for each id, hide the subtable
   // when do I toggle visibility?
   // - when the page finishes rendering
-  var pageRows = tblTabulatorLinkMonitoring.getRows();
+  var pageRows = tabulatorTableRef.getRows();
   pageRows.forEach(function (pageRow) {
     // get reference to child table element and hide
     $(pageRow.getElement()).children("div.subTable" + pageRow.getIndex()).toggle(false);
@@ -205,6 +209,30 @@ function LoadTabulatorLinkMonitoringData(restUrl, corporateNo, getAll = false) {
   tblTabulatorLinkMonitoring.setData(restUrl, ajaxParams);
 }
 
-function LinkMonitoringReloadData() {
-  tblTabulatorLinkMonitoring.setData(tabulatorLinkMonitoringAjaxUrlForReload, tabulatorLinkMonitoringAjaxParamsForReload);
+//function LinkMonitoringReloadData() {
+
+//  tblTabulatorLinkMonitoring.setData(tabulatorLinkMonitoringAjaxUrlForReload, tabulatorLinkMonitoringAjaxParamsForReload);
+//}
+function ReloadDataTabulator() {
+  this.setData(tabulatorLinkMonitoringAjaxUrlForReload, tabulatorLinkMonitoringAjaxParamsForReload);
 }
+
+function SortLinkMonitoringData(tabulatorTableRef) {
+  tabulatorTableRef.setSort([
+    { column: "Corporate_Name", dir: "asc" }, //sort by this first
+    { column: "Http_Status", dir: "desc" }, //then sort by this second
+  ]);
+}
+
+/**
+ * MatAdo 02-Jan-2020: Code note:
+ * Added some different styles for invoking functions e.g.
+ * 1. SortLinkMonitoringData(tabulatorTableRef) 
+ *      -> called and passed 'this'
+ * 2. LinkMonitoringReloadData = ReloadDataTabulator.bind(tblTabulatorLinkMonitoring);
+ *      -> is bound to the tblTabulatorLinkMonitoring object so I don't have to use the variable name
+ * These are in readiness for sprucing up the js code now that we're nearing full on deployment to
+ * production. 
+ * The point of them therefore is to help refresh the memory when next I revisit this code
+ * 
+ **/ 

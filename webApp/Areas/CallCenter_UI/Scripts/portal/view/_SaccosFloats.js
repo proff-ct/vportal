@@ -107,6 +107,11 @@ function initTabulatorFloat(tableContainerID) {
       { column: "SaccoName", dir: "asc" }
     ],
     headerSortTristate: true,
+    // Commented this out for the time being as it's proving rather cumbersome getting the
+    // data display right on sort
+    //pageLoaded: function (pageno) {
+    //  SortFloatData(this);
+    //}
   });
   $(tblTabulatorSaccoFloats.element).addClass("table table-striped table-condensed table-hover");
 }
@@ -140,4 +145,12 @@ function LoadSaccoFloatsData(restUrl, corporateNo, getAll = false) {
 
 function SaccoFloatsReloadData() {
   tblTabulatorSaccoFloats.setData(tabulatorSaccoFloatsAjaxUrlForReload, tabulatorSaccoFloatsAjaxParamsForReload);
+}
+
+function SortFloatData(tabulatorTableRef) {
+  tabulatorTableRef.setSort([
+    { column: "SaccoName", dir: "asc" }, //sort by this first
+    { column: "MPesaFloat", dir: "asc" }, //then sort by this second
+    //{ column: "BulkSMSFloat", dir: "asc" }, //then sort by this last
+  ]);
 }
