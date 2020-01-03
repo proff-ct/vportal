@@ -4,9 +4,109 @@
   ViewBag.Title = "MSacco Home Page";
 }
 
-<div class="jumbotron">
-  <h2>M-Sacco</h2>
-  <p>
-    This is the M-Sacco landing page!
-  </p>
-</div>
+<section class="content-header">
+  <h1>
+    Dashboard
+    <small>M-Sacco</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<section class="content">
+  <!-- Info boxes -->
+  <div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
+
+        <div class="info-box-content" id="loansContainer">
+          <span class="info-box-text">Loans</span>
+          <small class="phDate" id="dateLoans">02-Jan-2020</small>
+          <span class="info-box-number phQty" id="qtyPHLoans"><small>KES </small>90</span>
+          <a href="@Url.Action("Index", "Loans")">
+            <small>
+              More info <i class="fa fa-arrow-circle-right"></i>
+            </small>
+          </a>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-red"><i class="fa fa-money"></i></span>
+
+        <div class="info-box-content" id="withdrawalsContainer">
+          <span class="info-box-text">Withdrawals</span>
+          <small class="phDate" id="dateWithdrawals">02-Jan-2020</small>
+          <span class="info-box-number phQty" id="qtyPHWithdrawals"><small>KES </small>41,410</span>
+          <a href="@Url.Action("Index", "MobileWithdrawals")" class="small-box-footer">
+            <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+          </a>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="fa fa-plug"></i></span>
+
+        <div class="info-box-content" id="utilityPaymentsContainer">
+          <span class="info-box-text">Utility Payments</span>
+          <small class="phDate" id="dateUtilityPayments">02-Jan-2020</small>
+          <span class="info-box-number phQty" id="qtyPHUtilityPayments"><small>KES </small>760</span>
+          <a href="@Url.Action("Index", "UtilityPayments")" class="small-box-footer">
+            <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+          </a>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-yellow"><i class="fa fa-mobile"></i></span>
+
+        <div class="info-box-content" id="airtimeContainer">
+          <span class="info-box-text">Airtime Purchases</span>
+          <small class="phDate" id="dateAirtimePurchases">02-Jan-2020</small>
+          <span class="info-box-number phQty" id="qtyPHAirtime"><small>KES </small>2,000</span>
+          <a href="@Url.Action("Index", "AirtimeTopups")" class="small-box-footer">
+            <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+          </a>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+</section>
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js")
+  <!-- Define local scripts-->
+  <script>
+    $(document).ready(function () {
+      var datePlaceHolderRef = ".phDate";
+      var quantityPlaceHolderRef = ".phQty";
+
+      $(datePlaceHolderRef).html(DisplayDateNow());
+      $(quantityPlaceHolderRef).html(DisplayDefaultQuantity());
+    });
+  </script>
+}
