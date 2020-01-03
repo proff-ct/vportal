@@ -1217,17 +1217,21 @@ namespace VisibilityPortal_BLL.Controllers
 
     private void SetApplicationRoleList()
     {
-      if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
-      {
-        ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager.Roles.ToList());
-      }
-      else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
-      {
-        ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager
+      //if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+      //{
+      //  ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager.Roles.ToList());
+      //}
+      //else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+      //{
+      //  ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager
+      //    .Roles
+      //    .Where(r => r.Name != PortalUserRoles.SystemRoles.SuperAdmin.ToString())
+      //    .ToList());
+      //}
+      ViewBag.ApplicationRoleViewModelList = Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager
           .Roles
           .Where(r => r.Name != PortalUserRoles.SystemRoles.SuperAdmin.ToString())
           .ToList());
-      }
     }
     private void SetClientPortalModuleParamsForUser()
     {
