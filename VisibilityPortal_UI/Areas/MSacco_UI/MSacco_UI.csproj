@@ -404,6 +404,7 @@
     <Content Include="Scripts\portal\view\airtimeTopups.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
+    <Content Include="Scripts\portal\view\home.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\portal\view\utilityPayments.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
