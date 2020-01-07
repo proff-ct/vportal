@@ -1,15 +1,31 @@
 ﻿@{
     Layout = "../Shared/_LayoutAgencyBankingUI.cshtml";
 }
+@using AgencyBanking_BLL.util
 @using AgencyBanking_UI.Model
 @{
     ViewBag.Title = "Agency Banking Home Page";
     List<SummaryMenuItem> itemlist = new List<SummaryMenuItem>();
-    //Prepare menu items
-    itemlist.Add(new SummaryMenuItem("Total Withdrawals Today", "/Content/image/withdraw.png", "WIthdrawal", ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Total Deposits Today", "/Content/image/deposit.png", "Deposit", ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("Loan Repayment", "/Content/image/report.png", "Loan Replayment", ViewBag.Data));
-    itemlist.Add(new SummaryMenuItem("New Registered Agents", "/Content/image/bankteller.png", "#", ViewBag.Data));
+    if (CurrentSacco.CorporateNo != "CAP016")
+    {
+        //Prepare menu items
+        itemlist.Add(new SummaryMenuItem("Total Withdrawals Today", "/Content/image/withdraw.png", "WIthdrawal", ViewBag.Data));
+        itemlist.Add(new SummaryMenuItem("Total Deposits Today", "/Content/image/deposit.png", "Deposit", ViewBag.Data));
+        itemlist.Add(new SummaryMenuItem("Loan Repayment", "/Content/image/report.png", "Loan Replayment", ViewBag.Data));
+        itemlist.Add(new SummaryMenuItem("New Registered Agents", "/Content/image/bankteller.png", "#", ViewBag.Data));
+    }
+    else
+    {
+        //we are Dealing with a special Sacco called GFL.
+        Dictionary<string, string> lstData = ViewBag.Data;
+
+        foreach (var data in lstData)
+        {
+            itemlist.Add(new SummaryMenuItem(data.Key, "/Content/image/withdraw.png", data.Key, ViewBag.Data));
+        }
+        
+    }
+
 }
 
 @section HtmlHead{

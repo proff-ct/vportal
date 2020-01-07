@@ -23,8 +23,14 @@ namespace AgencyBanking_BLL
 
         public Dictionary<String, String> GetSummary(string orgNo)
         {
+            
             string query =
                 "select [Transaction Type] as \"TransactionType\", count(*) as \"Amount\" from [Agency Transactions]  where [bank code] = @code group by  [Transaction Type]";
+            if (orgNo== "CAP016")
+            {
+                query =
+                    "select [Transaction Type] as TransactionType, count(*) as Amount from[PUTransactions]   group by  [Transaction Type];";
+            }
             DynamicParameters par = new DynamicParameters();
             par.Add("code",orgNo);
             return DapperOrm.QueryGetList<SummaryModel>(query,par)

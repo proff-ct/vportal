@@ -18,6 +18,19 @@ namespace AgencyBanking_BLL.Controllers
         [HttpGet]
         public ActionResult Index(string type)
         {
+
+            if (CurrentSacco.CorporateNo == "CAP016")
+            {
+                GFL_PUTransactionsBLL gflTrxBLL = new GFL_PUTransactionsBLL();
+                ViewBag.caption = CurrentSacco.SaccoName + " PU Transactions ";
+                ViewBag.link = "";
+                ViewBag.Title = "";
+                ViewBag.columns = SetHeaders(new PUTransactionModel());
+                IEnumerable<PUTransactionModel> trxList = gflTrxBLL.GetPUTransactions();
+                ViewBag.data = JsonConvert.SerializeObject(trxList);
+                return View("list");
+            }
+
             SummaryBLL summary  = new SummaryBLL();
             IEnumerable<TransactionModel> data = summary.GetSummaryByName(type, CurrentSacco.CorporateNo);
             ViewBag.caption = $"Summary of {type.ToUpper()}";

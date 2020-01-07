@@ -18,25 +18,12 @@ namespace AgencyBanking_BLL.Controllers
 
         public ActionResult Index()
         {
+
             SummaryBLL Summarybll = new SummaryBLL();
             Dictionary<string, string> data = Summarybll.GetSummary(CurrentSacco.CorporateNo);
-            
-      if(CurrentSacco.CorporateNo == "CAP016")
-      {
-        GFL_PUTransactionsBLL gflTrxBLL = new GFL_PUTransactionsBLL();
-        ViewBag.caption = CurrentSacco.SaccoName + " PU Transactions ";
-        ViewBag.link = "";
-        ViewBag.Title = "";
-        ViewBag.columns = SetHeaders(new PUTransactionModel());
-        IEnumerable<PUTransactionModel> trxList = gflTrxBLL.GetPUTransactions();
-        ViewBag.data = JsonConvert.SerializeObject(trxList);
-        return View("list");
-      }
-      else
-      {
+            data.Remove("Transaction Type");
             ViewBag.Data = data;
             return View();
-      }
         }
 
         public ActionResult About()
@@ -77,11 +64,11 @@ namespace AgencyBanking_BLL.Controllers
             return Content(Summarybll.Loan_Repayment_Stats(CurrentSacco.CorporateNo), "application/json");
         }
 
-    #region ForTestPurposes
-    private string SetHeaders<T>(T t)
-    {
-      PropertyInfo[] Properties = GetProperties(t);
-      List<string> gflColumnHeaders = new List<string>
+        #region ForTestPurposes
+        private string SetHeaders<T>(T t)
+        {
+            PropertyInfo[] Properties = GetProperties(t);
+            List<string> gflColumnHeaders = new List<string>
       {
         "Entry_No",
         "Account_No",
@@ -92,30 +79,30 @@ namespace AgencyBanking_BLL.Controllers
         "Comments",
         "DeviceID"
       };
-      List<TableHeader> list = new List<TableHeader>();
-      foreach (PropertyInfo pro in Properties)
-      {
-        if (!gflColumnHeaders.Contains(pro.Name)) continue;
-        list.Add(new TableHeader()
-        {
-          field = pro.Name,
-          title = pro.Name,
-          sorter = "string",
-          headerFilter = "input"
-        });
-      }
+            List<TableHeader> list = new List<TableHeader>();
+            foreach (PropertyInfo pro in Properties)
+            {
+                if (!gflColumnHeaders.Contains(pro.Name)) continue;
+                list.Add(new TableHeader()
+                {
+                    field = pro.Name,
+                    title = pro.Name,
+                    sorter = "string",
+                    headerFilter = "input"
+                });
+            }
 
-      return JsonConvert.SerializeObject(list);
+            return JsonConvert.SerializeObject(list);
+        }
+        /// <summary>
+        /// Using Reflection to Get Properties
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private static PropertyInfo[] GetProperties(object obj)
+        {
+            return obj.GetType().GetProperties();
+        }
+        #endregion
     }
-    /// <summary>
-    /// Using Reflection to Get Properties
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    private static PropertyInfo[] GetProperties(object obj)
-    {
-      return obj.GetType().GetProperties();
-    }
-    #endregion
-  }
 }
