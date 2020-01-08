@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using AgencyBanking_BLL.util;
 using AgencyBanking_DAL;
@@ -43,24 +44,47 @@ namespace AgencyBanking_BLL.Controllers
         public ContentResult GetDeposits()
         {
             SummaryBLL Summarybll = new SummaryBLL();
+
             return Content(Summarybll.GetDeposit_vs_sharesDeposit(CurrentSacco.CorporateNo), "application/json");
         }
         [Authorize]
         public ContentResult GetLoanStats()
         {
+
             SummaryBLL Summarybll = new SummaryBLL();
+
+            //Are we dealing with GFL Sacco?
+            if (CurrentSacco.CorporateNo == "CAP016")
+            {
+                string query =
+                    "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',CONCAT (DATeName(mm,[transaction date])+' ',DATEPART(year,[transaction date])) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].PUTransactions where ([Transaction Type] = 'Loan Application') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,current_timestamp)), 0)  group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto;\r\n";
+                return Content(Summarybll.RunQuery(query), "application/json");
+            }
             return Content(Summarybll.Loan_Application_Count(CurrentSacco.CorporateNo), "application/json");
         }
         [Authorize]
         public ContentResult GetMemberRegistrationStats()
         {
             SummaryBLL Summarybll = new SummaryBLL();
+            if (CurrentSacco.CorporateNo == "CAP016")
+            {
+                string query =
+                    "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',CONCAT (DATeName(mm,[transaction date])+' ',DATEPART(year,[transaction date])) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].PUTransactions where ([Transaction Type] = 'Member Registration') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,current_timestamp)), 0)  group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date])\r\n for json auto";
+                return Content(Summarybll.RunQuery(query), "application/json");
+            }
             return Content(Summarybll.Member_Registration_Count(CurrentSacco.CorporateNo), "application/json");
         }
         [Authorize]
         public ContentResult GetLoanRepaymentStats()
         {
             SummaryBLL Summarybll = new SummaryBLL();
+            //Returns The Mpesa paybill counts
+            if (CurrentSacco.CorporateNo == "CAP016")
+            {
+                string query =
+                    "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',CONCAT (DATeName(mm,[transaction date])+' ',DATEPART(year,[transaction date])) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].PUTransactions where ([Transaction Type] = 'Mpesa paybill') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,current_timestamp)), 0)  group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto\r\n";                return Content(Summarybll.RunQuery(query), "application/json");
+            }
+
             return Content(Summarybll.Loan_Repayment_Stats(CurrentSacco.CorporateNo), "application/json");
         }
 

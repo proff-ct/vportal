@@ -112,18 +112,24 @@
 </section>
 <section class="container ">
     <div class="row p-4">
-        <!-- BAR CHART -->
-        <div class=" col-sm-12 col-md-6 card zoom-md">
-            <div class=" box-header with-border">
-                <h3 class="box-title">Deposit vs Shares Deposit</h3>
-            </div>
-            <div class="box-body">
-                <div class="chart">
-                    <canvas id="barChart" style="height: 230px"></canvas>
+
+        @if (CurrentSacco.CorporateNo != "CAP016")
+        {
+
+
+            <!-- BAR CHART -->
+            <div class=" col-sm-12 col-md-6 card zoom-md">
+                <div class=" box-header with-border">
+                    <h3 class="box-title">Deposit vs Shares Deposit</h3>
                 </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="barChart" style="height: 230px"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
             </div>
-            <!-- /.box-body -->
-        </div>
+        }
         <!-- Line -->
         <div class="card box-success col-sm-12 col-md-6 zoom-md ">
             <div class="box-header with-border">
@@ -139,7 +145,7 @@
         <!-- /.box -->
         <!-- /.box -->
         <!-- Line -->
-        <div class="card box-success col-sm-12 col-md-6 zoom-md">
+        <div class="card box-success col-sm-12 col-md-6 col-6 zoom-md">
             <div class="box-header with-border">
                 <h3 class="box-title">Loan Application </h3>
             </div>
@@ -153,7 +159,16 @@
         <!-- /.box -->
         <div class="card box-success col-sm-12 col-md-6 zoom-md">
             <div class="box-header with-border">
-                <h3 class="box-title">Loan Repayment </h3>
+                <h3 class="box-title">
+                    @if (CurrentSacco.CorporateNo == "CAP016")
+                    {
+                        @Html.Raw("M-Pesa PayBill")
+                    }
+                    else
+                    {
+                        @Html.Raw("Loan Repayment ")
+                    }
+                </h3>
             </div>
             <div class="box-body">
                 <div class="chart">
@@ -241,7 +256,7 @@
             $.get(link,
                 function(data) {
                     for (var i in data) {
-                        console.log(data);
+                       
                         labels.push(data[i].month);
                         dat.push(data[i].total);
                     }
@@ -258,7 +273,7 @@
                                 fill:false,
                                 data: dat
                             }]
-                    }
+                    };
                     var chart = new Chart(ctx,
                         {
                             type: 'line',
@@ -273,11 +288,13 @@
 
     </script>
     <script>
-
-        bargraph();
-        linegraph('@Url.Action("GetLoanRepaymentStats","Home")',"#loanreplaymentgraph","Loan Repayment")
-        linegraph('@Url.Action("GetLoanStats", "Home")', '#lineChart', "Loan Application");
-        linegraph('@Url.Action("GetMemberRegistrationStats", "Home")','#memberregistrationgraph','Total Number of Loan ApplicationsTotal Number of Loan Applications')
+    @if (CurrentSacco.CorporateNo != "CAP016")
+    {
+     @Html.Raw("bargraph();");
+    }
+        linegraph('@Url.Action("GetLoanRepaymentStats","Home")',"#loanreplaymentgraph","Loan Repayment");
+    linegraph('@Url.Action("GetLoanStats", "Home")', '#lineChart', "Loan Application");
+        linegraph('@Url.Action("GetMemberRegistrationStats", "Home")','#memberregistrationgraph','Total Number of Loan ApplicationsTotal Number of Loan Applications');
     </script>
 
 }

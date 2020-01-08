@@ -61,7 +61,7 @@ namespace AgencyBanking_BLL
             DynamicParameters par = new DynamicParameters();
             par.Add("code", OrgNo);
             return DapperOrm.QueryGetSingle<string>(
-                "SELECT \r\nisnull(sum(Amount),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'\r\nFROM [AGENCY BANKING].[dbo].[Agency Transactions] \r\nwhere ([Transaction Type] = 'deposit' or [Transaction Type] = 'share deposit') and DATEPART(year,[transaction date]) = DATEPART(year, GETDATE()) and [bank code]= @code group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date])\r\n for json auto",par);
+                "SELECT \r\nisnull(sum(Amount),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'\r\nFROM [AGENCY BANKING].[dbo].[Agency Transactions] \r\nwhere ([Transaction Type] = 'deposit' or [Transaction Type] = 'share deposit') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,\r\ncurrent_timestamp)), 0) and [bank code]= @code group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date])\r\n for json auto",par);
         }
         /// <summary>
         /// Returns the number of loans applications over a period of time
@@ -73,7 +73,7 @@ namespace AgencyBanking_BLL
             par.Add("code", OrgNo);
 
             return DapperOrm.QueryGetSingle<string>(
-                "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Loan Application') and DATEPART(year,[transaction date]) = DATEPART(year, GETDATE())\r\n and [bank code] = @code group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto",par);
+                "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Loan Application') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,\r\ncurrent_timestamp)), 0) and [bank code] = @code group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto", par);
         }
         /// <summary>
         /// Returns membership count over a period of time
@@ -84,7 +84,7 @@ namespace AgencyBanking_BLL
             DynamicParameters par = new DynamicParameters();
             par.Add("code", OrgNo);
             return DapperOrm.QueryGetSingle<string>(
-                "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Member Registration') and DATEPART(year,[transaction date]) = DATEPART(year, GETDATE())\r\n and [bank code] = @code group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto",par);
+                "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Member Registration') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,\r\ncurrent_timestamp)), 0)\r\n and [bank code] = @code group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto",par);
 
         }
         /// <summary>
@@ -95,8 +95,28 @@ namespace AgencyBanking_BLL
         {
             DynamicParameters par = new DynamicParameters();
             par.Add("code", OrgNo);
-            return DapperOrm.QueryGetSingle<string>("SELECT isnull(sum(amount),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Loan RePayment') and DATEPART(year,[transaction date]) = DATEPART(year, GETDATE()) and  [bank code] = @code \r\n group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto",par);
+            return DapperOrm.QueryGetSingle<string>("SELECT isnull(sum(amount),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Loan RePayment') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,\r\ncurrent_timestamp)), 0) and  [bank code] = @code \r\n group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) for json auto",par);
         }
+
+        #region  GFL Summary
+       /// <summary>
+       /// Queries the DB and returns a the 
+       /// </summary>
+       /// <param name="query"></param>
+       /// <returns></returns>
+        public string RunQuery(string query)
+        {
+            return DapperOrm.QueryGetSingle<string>(query);
+        }
+
+        public String GFL_Get_MemberRegistration_Count()
+        {
+            string query =
+                "SELECT isnull(count(*),0) as 'total' ,DATEPART(year,[transaction date]) as 'year',DATeName(mm,[transaction date]) as 'month',[transaction type] as 'type'FROM [AGENCY BANKING].[dbo].[Agency Transactions] where ([Transaction Type] = 'Member Registration') and [Transaction Date] >=  Dateadd(Month, Datediff(Month, 0, DATEADD(m, -12,\r\ncurrent_timestamp)), 0)  group by DATEPART(year,[transaction date]),DATEPART(Month, [Transaction Date]),DATEname(mm,[transaction date]),[Transaction Type]  order by year,DATEPART(Month, [Transaction Date]) \r\n for json auto";
+            return DapperOrm.QueryGetSingle<string>(query);
+        }
+
+        #endregion
     }
 }
 
