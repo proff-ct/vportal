@@ -441,6 +441,10 @@
     <Content Include="Views\UtilityPayments\Index.cshtml" />
     <Content Include="Views\AirtimeTopups\Index.cshtml" />
     <Content Include="Views\Loans\Index.cshtml" />
+    <Content Include="Views\Home\_LoansPartial.cshtml" />
+    <Content Include="Views\Home\_WithdrawalsPartial.cshtml" />
+    <Content Include="Views\Home\_AirtimeTopUpsPartial.cshtml" />
+    <Content Include="Views\Home\_UtilityPaymentsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,7 +1,9 @@
 ﻿@using Visibility_Portal
+@using Utilities.PortalApplicationParams
 @{
   Layout = $"{MSaccoAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutMSaccoDashboard.cshtml";
   ViewBag.Title = "MSacco Home Page";
+  ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
 }
 
 <section class="content-header">
@@ -93,7 +95,157 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
+  <!-- Floating windows-->
+  <div class="row">
+    <!-- Left col -->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            Loans
+            <i class="fa fa-signal" aria-hidden="true"></i>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_LoansPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.Left col -->
+    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            Withdrawals
+            <i class="fa fa-money" aria-hidden="true"></i>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_WithdrawalsPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.right col -->
+  </div>
+  <div class="row">
+    <!-- Left col -->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            Utility Payments
+            <i class="fa fa-signal" aria-hidden="true"></i>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_UtilityPaymentsPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.Left col -->
+    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            Airtime Topups
+            <i class="fa fa-money" aria-hidden="true"></i>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_AirtimeTopUpsPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.right col -->
+  </div>
 
+  <!-- /. floating windows -->
 </section>
 
 @section Scripts {
@@ -107,6 +259,51 @@
 
       $(datePlaceHolderRef).html(DisplayDateNow());
       $(quantityPlaceHolderRef).html(DisplayDefaultQuantity());
+
+      var tabulatorData = {
+        datasetName: null,
+        containerRef: null
+      }
+      var datasets = ['Loans', 'Withdrawals', 'UtilityPayments', 'AirtimeTopups'];
+      datasets.forEach((dataset, index) => {
+        switch (dataset){
+          case 'Loans':
+            tabulatorData.containerRef = "#loanListTable";
+            break;
+          case 'Withdrawals':
+            tabulatorData.containerRef = '#mobileWithdrawalsListTable';
+            break;
+          case 'UtilityPayments':
+            tabulatorData.containerRef = '#utilityPaymentListTable';
+            break;
+          case 'AirtimeTopups':
+            tabulatorData.containerRef = '#airtimeTopupListTable';
+            break;
+        }
+        tabulatorData.datasetName = dataset;
+        initTabulator(tabulatorData);
+      });
+
+      // Load the data for the widgets
+      arrayOfDatasetTables.forEach((table) => {
+        var restUrl = '';
+        var dsName = Object.keys(table).reduce((acc, key) => { key }); //MatAdo - this needs to be watched 
+        switch (dsName) {
+          case 'Loans':
+            restUrl = "@Url.Action("GetLoanRecords", "Loans")";
+            break;
+          case 'Withdrawals':
+            restUrl = "@Url.Action("GetMobileWithdrawalRecords", "MobileWithdrawals")";
+            break;
+          case 'UtilityPayments':
+            restUrl = "@Url.Action("GetUtilityPaymentRecords", "UtilityPayments")";
+            break;
+          case 'AirtimeTopups':
+            restUrl = "@Url.Action("GetAirtimeTopupRecords", "AirtimeTopups")";
+            break;
+        }
+        table[dsName].LoadData(restUrl, "@activeUserParams.ClientCorporateNo")
+      });
     });
   </script>
 }
