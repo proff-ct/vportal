@@ -37,7 +37,7 @@ function initTabulator(tableContainerID) {
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
-      { title: "Telephone No", field: "TelephoneNo", headerFilter: true },
+      { title: "Telephone No", field: "Telephone_No", headerFilter: true },
       {
         title: "Comments", field: "Comments",
         headerFilter: "select", headerFilterFunc: "=",
