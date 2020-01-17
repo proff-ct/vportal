@@ -57,7 +57,9 @@ class LoansTable {
   tabulatorAjaxParamsForReload = null;
 
   constructor(htmlContainerRef) {
+    var boundInitGuarantorSubTable = this.initGuarantorSubTable.bind(this);
     var boundHideGuarantorSubTables = this.HideGuarantorSubTables.bind(this);
+    var boundGetFormattedDate = this.GetFormattedDate.bind(this);
     this.tblTabulator = new Tabulator(htmlContainerRef, {
       height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
       //data: tabledata, //assign data to table
@@ -114,7 +116,7 @@ class LoansTable {
           title: "Trx Date", field: "Transaction_Date",
           align: "center", headerFilter: true,
           formatter: function (cell, formatterParams) {
-            return GetFormattedDate(cell.getValue());
+            return boundGetFormattedDate(cell.getValue());
           }
         },
         { title: "Disbursed ?", field: "Disbursed" },
@@ -166,18 +168,16 @@ class LoansTable {
 
         row.getElement().appendChild(holderEl);
 
-        initGuarantorSubTable(tableEl, row.getData().Guarantors);
+        boundInitGuarantorSubTable(tableEl, row.getData().Guarantors);
       },
       renderComplete: function () {
         // make guarantor subtables invisible by default
-        //HideGuarantorSubTables();
-        boundHideGuarantorSubTables
+        boundHideGuarantorSubTables();
       },
       pageLoaded: function (pageno) {
         //pageno - the number of the loaded page
         //alert(pageno)
-        //HideGuarantorSubTables();
-        boundHideGuarantorSubTables
+        boundHideGuarantorSubTables();
       }
     });
     this.ClearFilters = tabulatorClearFilters.bind(this.tblTabulator);
@@ -185,6 +185,7 @@ class LoansTable {
   }
 
   initGuarantorSubTable(tableElement, tableData) {
+    var boundGetFormattedDate = this.GetFormattedDate.bind(this);
     var subTable = new Tabulator(tableElement, {
       layout: "fitDataFill",
       data: tableData,
@@ -215,7 +216,7 @@ class LoansTable {
         field: "Datetime",
         //sorter: "date",
         formatter: function (cell, formatterParams) {
-          return GetFormattedDate(cell.getValue());
+          return boundGetFormattedDate(cell.getValue());
         }
       },
       {
@@ -228,6 +229,11 @@ class LoansTable {
       }
       ]
     })
+  }
+
+  GetFormattedDate(objDate) {
+    return (objDate == null) ?
+      'No Date' : moment(objDate).format("DD-MMM-YYYY hh:mm:ss A")
   }
 
   HideGuarantorSubTables() {
