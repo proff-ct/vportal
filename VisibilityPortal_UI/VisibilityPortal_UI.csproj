@@ -2072,6 +2072,10 @@
       <Project>{01299762-99F8-4932-BD58-829B8E0F1606}</Project>
       <Name>CallCenter_BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MSacco_BLL\MSacco_BLL.csproj">
+      <Project>{982c95bb-97eb-437a-b56b-7a7bcae729a0}</Project>
+      <Name>MSacco_BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisibilityPortal_BLL\VisibilityPortal_BLL.csproj">
       <Project>{B6AA0DA3-35E2-4767-9902-DD6FFDF92171}</Project>
       <Name>VisibilityPortal_BLL</Name>
