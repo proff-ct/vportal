@@ -4,3 +4,7 @@
     showTick: true
   });
 }
+
+function tabulatorClearFilters() {
+  this.clearFilter(true);
+}

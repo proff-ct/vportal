@@ -1,7 +1,9 @@
 ﻿@using Visibility_Portal
+@using Utilities.PortalApplicationParams
 @{
   Layout = $"{MSaccoAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutMSaccoDashboard.cshtml";
   ViewBag.Title = "MSacco Home Page";
+  ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
 }
 
 <section class="content-header">
@@ -18,87 +20,251 @@
 <section class="content">
   <!-- Info boxes -->
   <div class="row">
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
 
-        <div class="info-box-content" id="loansContainer">
-          <span class="info-box-text">Loans</span>
-          <small class="phDate" id="dateLoans">02-Jan-2020</small>
-          <span class="info-box-number phQty" id="qtyPHLoans"><small>KES </small>90</span>
-          <a href="@Url.Action("Index", "Loans")">
-            <small>
-              More info <i class="fa fa-arrow-circle-right"></i>
-            </small>
-          </a>
+          <div class="info-box-content" id="loansContainer">
+            <span class="info-box-text">Loans</span>
+            <small class="phDate" id="dateLoans">02-Jan-2020</small>
+            <span class="info-box-number phQty" id="qtyPHLoans"><small>KES </small>90</span>
+            <a href="@Url.Action("Index", "Loans")">
+              <small>
+                More info <i class="fa fa-arrow-circle-right"></i>
+              </small>
+            </a>
+          </div>
+          <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
       </div>
-      <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-red"><i class="fa fa-money"></i></span>
+      <!-- /.col -->
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-red"><i class="fa fa-money"></i></span>
 
-        <div class="info-box-content" id="withdrawalsContainer">
-          <span class="info-box-text">Withdrawals</span>
-          <small class="phDate" id="dateWithdrawals">02-Jan-2020</small>
-          <span class="info-box-number phQty" id="qtyPHWithdrawals"><small>KES </small>41,410</span>
-          <a href="@Url.Action("Index", "MobileWithdrawals")" class="small-box-footer">
-            <small>More info <i class="fa fa-arrow-circle-right"></i></small>
-          </a>
+          <div class="info-box-content" id="withdrawalsContainer">
+            <span class="info-box-text">Withdrawals</span>
+            <small class="phDate" id="dateWithdrawals">02-Jan-2020</small>
+            <span class="info-box-number phQty" id="qtyPHWithdrawals"><small>KES </small>41,410</span>
+            <a href="@Url.Action("Index", "MobileWithdrawals")" class="small-box-footer">
+              <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+            </a>
+          </div>
+          <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
       </div>
-      <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-    <!-- fix for small devices only -->
-    <div class="clearfix visible-sm-block"></div>
+      <!-- /.col -->
+      <!-- fix for small devices only -->
+      <div class="clearfix visible-sm-block"></div>
 
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-aqua"><i class="fa fa-plug"></i></span>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-aqua"><i class="fa fa-plug"></i></span>
 
-        <div class="info-box-content" id="utilityPaymentsContainer">
-          <span class="info-box-text">Utility Payments</span>
-          <small class="phDate" id="dateUtilityPayments">02-Jan-2020</small>
-          <span class="info-box-number phQty" id="qtyPHUtilityPayments"><small>KES </small>760</span>
-          <a href="@Url.Action("Index", "UtilityPayments")" class="small-box-footer">
-            <small>More info <i class="fa fa-arrow-circle-right"></i></small>
-          </a>
+          <div class="info-box-content" id="utilityPaymentsContainer">
+            <span class="info-box-text">Utility Payments</span>
+            <small class="phDate" id="dateUtilityPayments">02-Jan-2020</small>
+            <span class="info-box-number phQty" id="qtyPHUtilityPayments"><small>KES </small>760</span>
+            <a href="@Url.Action("Index", "UtilityPayments")" class="small-box-footer">
+              <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+            </a>
+          </div>
+          <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
       </div>
-      <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <span class="info-box-icon bg-yellow"><i class="fa fa-mobile"></i></span>
+      <!-- /.col -->
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-yellow"><i class="fa fa-mobile"></i></span>
 
-        <div class="info-box-content" id="airtimeContainer">
-          <span class="info-box-text">Airtime Purchases</span>
-          <small class="phDate" id="dateAirtimePurchases">02-Jan-2020</small>
-          <span class="info-box-number phQty" id="qtyPHAirtime"><small>KES </small>2,000</span>
-          <a href="@Url.Action("Index", "AirtimeTopups")" class="small-box-footer">
-            <small>More info <i class="fa fa-arrow-circle-right"></i></small>
-          </a>
+          <div class="info-box-content" id="airtimeContainer">
+            <span class="info-box-text">Airtime Purchases</span>
+            <small class="phDate" id="dateAirtimePurchases">02-Jan-2020</small>
+            <span class="info-box-number phQty" id="qtyPHAirtime"><small>KES </small>2,000</span>
+            <a href="@Url.Action("Index", "AirtimeTopups")" class="small-box-footer">
+              <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+            </a>
+          </div>
+          <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box-content -->
+        <!-- /.info-box -->
       </div>
-      <!-- /.info-box -->
+      <!-- /.col -->
     </div>
-    <!-- /.col -->
-  </div>
   <!-- /.row -->
+  <!-- Floating windows-->
+  <div class="row">
+    <!-- Left col -->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info collapsed-box">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <a href="@Url.Action("Index", "Loans")">
+              Loans
+              <i class="fa fa-money" aria-hidden="true"></i>
+            </a>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_LoansPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.Left col -->
+    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info collapsed-box">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <a href="@Url.Action("Index", "MobileWithdrawals")">
+              Withdrawals
+              <i class="fa fa-money" aria-hidden="true"></i>
+            </a>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_WithdrawalsPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.right col -->
+  </div>
+  <div class="row">
+    <!-- Left col -->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info collapsed-box ui-sortable-handle">
+        <div class="box-header with-border ">
+          <h3 class="box-title">
+            <a href="@Url.Action("Index", "UtilityPayments")">
+              Utility Payments
+              <i class="fa fa-plug" aria-hidden="true"></i>
+            </a>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_UtilityPaymentsPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.Left col -->
+    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-info collapsed-box">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <a href="@Url.Action("Index", "AirtimeTopups")">
+              Airtime Topups
+              <i class="fa fa-mobile" aria-hidden="true"></i>
+            </a>
+          </h3>
+          <!----div class="icon">
+            <ion-icon src="~/plugins/ionicon/ios-cellular.svg"></ion-icon>
+          </div-->
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            @Html.Partial("_AirtimeTopUpsPartial")
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+              Refresh Data
+            </a>*@
+        </div>
+        <!-- /.box-footer -->
+      </div>
+    </section>
+    <!-- /.right col -->
+  </div>
 
+  <!-- /. floating windows -->
 </section>
 
 @section Scripts {
   <!-- Include external scripts-->
-  @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js")
+  @{
+    string[] scriptFiles = {
+      $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/jquery-ui-1.12.1.js",
+      $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
+};
+  }
+  @Scripts.Render(scriptFiles)
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {
@@ -107,6 +273,54 @@
 
       $(datePlaceHolderRef).html(DisplayDateNow());
       $(quantityPlaceHolderRef).html(DisplayDefaultQuantity());
+
+      var tabulatorData = {
+        datasetName: null,
+        containerRef: null
+      }
+      var datasets = ['Loans', 'Withdrawals', 'UtilityPayments', 'AirtimeTopups'];
+      datasets.forEach((dataset, index) => {
+        switch (dataset){
+          case 'Loans':
+            tabulatorData.containerRef = "#loanListTable";
+            break;
+          case 'Withdrawals':
+            tabulatorData.containerRef = '#mobileWithdrawalsListTable';
+            break;
+          case 'UtilityPayments':
+            tabulatorData.containerRef = '#utilityPaymentListTable';
+            break;
+          case 'AirtimeTopups':
+            tabulatorData.containerRef = '#airtimeTopupListTable';
+            break;
+        }
+        tabulatorData.datasetName = dataset;
+        initTabulator(tabulatorData);
+      });
+
+      // Load the data for the widgets
+      arrayOfDatasetTables.forEach((table) => {
+        var restUrl = '';
+        var dsName = Object.keys(table).reduce((acc, key) => { key }); //MatAdo - this needs to be watched
+        switch (dsName) {
+          case 'Loans':
+            restUrl = "@Url.Action("GetLoanRecords", "Loans")";
+            break;
+          case 'Withdrawals':
+            restUrl = "@Url.Action("GetMobileWithdrawalRecords", "MobileWithdrawals")";
+            break;
+          case 'UtilityPayments':
+            restUrl = "@Url.Action("GetUtilityPaymentRecords", "UtilityPayments")";
+            break;
+          case 'AirtimeTopups':
+            restUrl = "@Url.Action("GetAirtimeTopupRecords", "AirtimeTopups")";
+            break;
+        }
+        table[dsName].LoadData(restUrl, "@activeUserParams.ClientCorporateNo");
+        var boundReloadData = {};
+        boundReloadData[dsName] = table[dsName].ReloadData.bind(table[dsName]);
+        setInterval(boundReloadData[dsName], (1000*300));
+      });
     });
   </script>
 }

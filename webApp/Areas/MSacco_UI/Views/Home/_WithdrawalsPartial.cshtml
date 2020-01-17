@@ -1,0 +1,27 @@
+﻿<div class="col-md-12 col-lg-12 col-sm-12">
+  <div class="panel">
+    <div class="panel-heading">
+      @*<div class="pull-left">
+        <h5 class="panel-info"><strong>Unsuccessful Withdrawals</strong></h5>
+      </div>*@
+      <div class="pull-right">
+        <button type="button"
+                class="btn btn-labeled btn-primary btn-sm"
+                onclick="ReloadData('Withdrawals')">
+          <span class="btn-label"><i class="fa fa-refresh"></i></span>
+          Reload
+        </button>
+        <button type="button" class="btn btn-labeled btn-warning btn-sm"
+                onclick="ClearFilters('Withdrawals')">
+          <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+          Clear filters
+        </button>
+      </div>
+
+    </div>
+    <div class="panel-body">
+      <div id="mobileWithdrawalsListTable"></div>
+    </div>
+
+  </div>
+</div>
