@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
+using MSacco_DAL;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -38,14 +40,35 @@ namespace MSacco_BLL.Controllers
       //  int.Parse(page), int.Parse(size), null);
       PaginationParameters pagingParams = new PaginationParameters(page, size, null);
 
-      dynamic utilityPaymentRecords = _mSaccoAirtimeTopupBLL
+      dynamic airtimeTopupRecords = _mSaccoAirtimeTopupBLL
         .GetMSaccoAirtimeTopupTrxListForClient(clientCorporateNo, out int lastPage, true, pagingParams)
         .ToArray();
 
       return Json(new
       {
         last_page = lastPage, // last page from the fetched recordset
-        data = utilityPaymentRecords
+        data = airtimeTopupRecords
+      }, JsonRequestBehavior.AllowGet);
+
+    }[HttpGet]
+    [Authorize]
+    public ActionResult GetAirtimeTopupsFinancialSummaryForToday(string clientCorporateNo)
+    {
+      if (string.IsNullOrEmpty(clientCorporateNo))
+      {
+        return null;
+      }
+
+      IEnumerable<MSaccoAirtimeTopup> airtimeTopupRecords = _mSaccoAirtimeTopupBLL
+        .GetClientMSaccoAirtimeTopupTrxListForToday(clientCorporateNo, out int lastPage)
+        .Where(l => l.Status.Equals("Completed"))
+        .OrderByDescending(l => l.Transaction_Date)
+        .ToArray();
+
+      return Json(new
+      {
+        last_transaction_timestamp = airtimeTopupRecords.FirstOrDefault()?.Transaction_Date,
+        sum = airtimeTopupRecords?.Sum(w => w.Amount)
       }, JsonRequestBehavior.AllowGet);
 
     }

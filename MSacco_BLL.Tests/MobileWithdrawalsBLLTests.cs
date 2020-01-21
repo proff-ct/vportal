@@ -51,7 +51,7 @@ namespace MSacco_BLL.Tests
       {
         string corporateNo = 525201.ToString();
 
-        _enMobileWithdrawals = _mobileWithdrawalsBLL.GetMobileWithdrawalsFinancialSummaryForToday(
+        _enMobileWithdrawals = _mobileWithdrawalsBLL.GetClientMobileWithdrawalsFinancialSummaryForToday(
           corporateNo, out int lastPage);
 
         Assert.IsInstanceOf<IEnumerable<MobileWithdrawals>>(_enMobileWithdrawals);
@@ -75,7 +75,7 @@ namespace MSacco_BLL.Tests
         int pageSize = 20;
         PaginationParameters pagingParams = new PaginationParameters(page, pageSize, null);
 
-        _enMobileWithdrawals = _mobileWithdrawalsBLL.GetMobileWithdrawalsFinancialSummaryForToday(
+        _enMobileWithdrawals = _mobileWithdrawalsBLL.GetClientMobileWithdrawalsFinancialSummaryForToday(
           corporateNo, out int lastPage, true, pagingParams);
 
         Assert.IsInstanceOf<IEnumerable<MobileWithdrawals>>(_enMobileWithdrawals);
