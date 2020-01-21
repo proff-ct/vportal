@@ -25,33 +25,39 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
     </a>
   </li>
   @*<li class="treeview">
-    <a href="#">
-      <i class="fa fa-wrench"></i> <span>Self Service</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <a href="#">
+        <i class="fa fa-wrench"></i> <span>Self Service</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li>
+          <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-comments"></i>
+            <span>Bulk sms</span>
+          </a>
+        </li>
+        <li>
+          <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-cogs"></i>
+            <span>Trx. Clearing</span>
+          </a>
+        </li>
+        <li>
+          <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-key"></i>
+            <span>Pin reset</span>
+          </a>
+        </li>
+      </ul>
+    </li>*@
+  <li>
+    <a href="@Url.Action("Index", "LinkMonitoring")">
+      <i class="fa fa-signal"></i>
+      <span>Link Monitoring</span>
     </a>
-    <ul class="treeview-menu">
-      <li>
-        <a href="@Url.Action("Index", "Home")">
-          <i class="fa fa-comments"></i>
-          <span>Bulk sms</span>
-        </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "Home")">
-          <i class="fa fa-cogs"></i>
-          <span>Trx. Clearing</span>
-        </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "Home")">
-          <i class="fa fa-key"></i>
-          <span>Pin reset</span>
-        </a>
-      </li>
-    </ul>
-  </li>*@
+  </li>
   <li class="treeview">
     <a href="#">
       <i class="fa fa-database"></i> <span>Transactions</span>
@@ -86,19 +92,19 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
   </li>
 
   @*<li class="treeview">
-    <a href="#">
-      <i class="fa fa-file"></i> <span>Member Logs</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li>
-        <a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Msacco+ AppActivity</a>
-      </li>
-      <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Loan history</a></li>
-    </ul>
-  </li>*@
+      <a href="#">
+        <i class="fa fa-file"></i> <span>Member Logs</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li>
+          <a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Msacco+ AppActivity</a>
+        </li>
+        <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Loan history</a></li>
+      </ul>
+    </li>*@
   @*<li>
       <a href="@Url.Action("Index", "Home")">
         <i class="fa fa-dashboard"></i>
