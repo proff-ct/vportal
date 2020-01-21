@@ -450,6 +450,7 @@
     <Content Include="Scripts\portal\view\home.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\portal\view\utilityPayments.js" />
+    <Content Include="Scripts\portal\view\linkMonitoring.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -488,6 +489,7 @@
     <Content Include="Views\Home\_WithdrawalsPartial.cshtml" />
     <Content Include="Views\Home\_AirtimeTopUpsPartial.cshtml" />
     <Content Include="Views\Home\_UtilityPaymentsPartial.cshtml" />
+    <Content Include="Views\LinkMonitoring\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
