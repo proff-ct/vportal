@@ -19,7 +19,9 @@ namespace MSacco_BLL.Utilities.AutoMapper
           config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
           config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
           config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
+          config.CreateMap<LinkDowntime, LinkDowntimeViewModel>();
           config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+          config.CreateMap<LinkStatusPlusDowntime, LinkStatusPlusDowntimeViewModel>();
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -29,7 +31,9 @@ namespace MSacco_BLL.Utilities.AutoMapper
         config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
         config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
         config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
+        config.CreateMap<LinkDowntime, LinkDowntimeViewModel>();
         config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+        config.CreateMap<LinkStatusPlusDowntime, LinkStatusPlusDowntimeViewModel>();
       });
     }
 
@@ -39,7 +43,9 @@ namespace MSacco_BLL.Utilities.AutoMapper
       config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
       config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
       config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
+      config.CreateMap<LinkDowntime, LinkDowntimeViewModel>();
       config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
+      config.CreateMap<LinkStatusPlusDowntime, LinkStatusPlusDowntimeViewModel>();
     });
   }
 }

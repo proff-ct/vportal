@@ -78,8 +78,10 @@ namespace MSacco_BLL.Controllers
 
       if (!loadAll)
       {
-        List<LinkStatusPlusDowntime> linkStatus = new List<LinkStatusPlusDowntime>();
-        linkStatus.Add(_linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForClient(clientCorporateNo));
+        List<LinkStatusPlusDowntimeViewModel> linkStatus = new List<LinkStatusPlusDowntimeViewModel>
+        {
+          Mapper.Map<LinkStatusPlusDowntimeViewModel>(_linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForClient(clientCorporateNo))
+        };
         linkInfo = linkStatus.ToArray();
 
         return Json(new
@@ -99,7 +101,7 @@ namespace MSacco_BLL.Controllers
         //PaginationParameters pagingParams = new PaginationParameters(
         //  int.Parse(page), int.Parse(size), null);
         PaginationParameters pagingParams = new PaginationParameters(page, size, null);
-        linkInfo = _linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForAllClients(out int lastPage, true, pagingParams).ToArray();
+        linkInfo = Mapper.Map<IEnumerable<LinkStatusPlusDowntimeViewModel>>(_linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForAllClients(out int lastPage, true, pagingParams)).ToArray();
 
         return Json(new
         {

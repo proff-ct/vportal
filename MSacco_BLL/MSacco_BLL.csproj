@@ -107,6 +107,8 @@
     <Compile Include="Models\LinkStatusPlusDowntime.cs" />
     <Compile Include="Models\LoansPlusGuarantors.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
+    <Compile Include="Models\ViewModels\LinkDowntimeViewModel.cs" />
+    <Compile Include="Models\ViewModels\LinkStatusPlusDowntimeViewModel.cs" />
     <Compile Include="Models\ViewModels\LinkMonitoringViewModel.cs" />
     <Compile Include="Models\ViewModels\LoanListViewModel.cs" />
     <Compile Include="Models\ViewModels\SaccoFloatsViewModel.cs" />
