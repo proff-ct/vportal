@@ -59,6 +59,54 @@ namespace MSacco_BLL
       }
 
     }
+     public IEnumerable<MobileWithdrawals> GetClientMobileWithdrawalsFinancialSummaryForToday(
+      string corporateNo,
+      out int lastPage,
+      bool paginate = false,
+      PaginationParameters pagingParams = null)
+    {
+      lastPage = 0;
+
+      if (paginate)
+      {
+        _query = $@"SELECT * FROM {_tblMobileWithdrawals} 
+          WHERE [Corporate No]='{corporateNo}'
+          AND datediff(dd, [Transaction Date], getdate()) = 0
+          ORDER BY [Entry No] DESC
+          OFFSET @PageSize * (@PageNumber - 1) ROWS
+          FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
+
+          Select count([Entry No]) as TotalRecords  
+          FROM {_tblMobileWithdrawals}
+          WHERE [Corporate No]='{corporateNo}'
+          ";
+
+        DynamicParameters dp = new DynamicParameters();
+        dp.Add("PageSize", pagingParams.PageSize);
+        dp.Add("PageNumber", pagingParams.PageToLoad);
+
+        using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
+        {
+          sqlCon.Open();
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          {
+            IEnumerable<MobileWithdrawals> records = results.Read<MobileWithdrawals>();
+            int totalLoanRecords = results.Read<int>().First();
+
+            lastPage = (int)Math.Ceiling(
+              totalLoanRecords / (decimal)pagingParams.PageSize);
+            return records;
+          }
+        }
+      }
+      else
+      {
+        _query = $@"SELECT * FROM {_tblMobileWithdrawals} 
+                  WHERE [Corporate No]='{corporateNo}' AND datediff(dd, [Transaction Date], getdate()) = 0";
+        return new DapperORM().QueryGetList<MobileWithdrawals>(_query);
+      }
+
+    }
 
     public MobileWithdrawals GetLatestWithdrawalForClient(string corporateNo)
     {

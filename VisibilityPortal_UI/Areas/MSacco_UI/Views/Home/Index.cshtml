@@ -28,9 +28,9 @@
             <span class="info-box-text">Loans</span>
             <small class="phDate" id="dateLoans">02-Jan-2020</small>
             <span class="info-box-number phQty" id="qtyPHLoans"><small>KES </small>90</span>
-            <a href="@Url.Action("Index", "Loans")">
+            <a href="#" onclick="RefreshFiscalSummary('Loans')">
               <small>
-                More info <i class="fa fa-arrow-circle-right"></i>
+                Refresh <i class="fa fa-refresh"></i>
               </small>
             </a>
           </div>
@@ -47,8 +47,8 @@
             <span class="info-box-text">Withdrawals</span>
             <small class="phDate" id="dateWithdrawals">02-Jan-2020</small>
             <span class="info-box-number phQty" id="qtyPHWithdrawals"><small>KES </small>41,410</span>
-            <a href="@Url.Action("Index", "MobileWithdrawals")" class="small-box-footer">
-              <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+            <a href="#" onclick="RefreshFiscalSummary('Withdrawals')" class="small-box-footer">
+              <small>Refresh <i class="fa fa-refresh"></i></small>
             </a>
           </div>
           <!-- /.info-box-content -->
@@ -67,8 +67,8 @@
             <span class="info-box-text">Utility Payments</span>
             <small class="phDate" id="dateUtilityPayments">02-Jan-2020</small>
             <span class="info-box-number phQty" id="qtyPHUtilityPayments"><small>KES </small>760</span>
-            <a href="@Url.Action("Index", "UtilityPayments")" class="small-box-footer">
-              <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+            <a href="#" onclick="RefreshFiscalSummary('UtilityPayments')" class="small-box-footer">
+              <small>Refresh <i class="fa fa-refresh"></i></small>
             </a>
           </div>
           <!-- /.info-box-content -->
@@ -84,8 +84,8 @@
             <span class="info-box-text">Airtime Purchases</span>
             <small class="phDate" id="dateAirtimePurchases">02-Jan-2020</small>
             <span class="info-box-number phQty" id="qtyPHAirtime"><small>KES </small>2,000</span>
-            <a href="@Url.Action("Index", "AirtimeTopups")" class="small-box-footer">
-              <small>More info <i class="fa fa-arrow-circle-right"></i></small>
+            <a href="#" onclick="RefreshFiscalSummary('AirtimeTopups')" class="small-box-footer">
+              <small>Refresh <i class="fa fa-refresh"></i></small>
             </a>
           </div>
           <!-- /.info-box-content -->
@@ -278,6 +278,15 @@
         datasetName: null,
         containerRef: null
       }
+
+      var fiscalSummaryParams = {
+        corporateNo: null,
+        datasetName: null,
+        restUrlForFiscalSummary: null,
+        datePlaceholderRef: null,
+        quantityPlaceholderRef: null
+      }
+
       var datasets = ['Loans', 'Withdrawals', 'UtilityPayments', 'AirtimeTopups'];
       datasets.forEach((dataset, index) => {
         switch (dataset){
@@ -301,21 +310,51 @@
       // Load the data for the widgets
       arrayOfDatasetTables.forEach((table) => {
         var restUrl = '';
+        var fiscalSummaryParams = {};
+
         var dsName = Object.keys(table).reduce((acc, key) => { key }); //MatAdo - this needs to be watched
         switch (dsName) {
           case 'Loans':
             restUrl = "@Url.Action("GetLoanRecords", "Loans")";
+
+            // Day's summary
+            fiscalSummaryParams.datasetName = dsName;
+            fiscalSummaryParams.datePlaceholderRef = "#dateLoans"
+            fiscalSummaryParams.quantityPlaceholderRef = "#qtyPHLoans";
+            fiscalSummaryParams.restUrlForFiscalSummary = "@Url.Action("GetLoanFinancialSummaryForToday", "Loans")";
             break;
           case 'Withdrawals':
             restUrl = "@Url.Action("GetMobileWithdrawalRecords", "MobileWithdrawals")";
+
+            // Day's summary
+            fiscalSummaryParams.datasetName = dsName;
+            fiscalSummaryParams.datePlaceholderRef = "#dateWithdrawals"
+            fiscalSummaryParams.quantityPlaceholderRef = "#qtyPHWithdrawals";
+            fiscalSummaryParams.restUrlForFiscalSummary = "@Url.Action("GetMobileWithdrawalsFinancialSummaryForToday", "MobileWithdrawals")";
             break;
           case 'UtilityPayments':
             restUrl = "@Url.Action("GetUtilityPaymentRecords", "UtilityPayments")";
+
+            // Day's summary
+            fiscalSummaryParams.datasetName = dsName;
+            fiscalSummaryParams.datePlaceholderRef = "#dateUtilityPayments"
+            fiscalSummaryParams.quantityPlaceholderRef = "#qtyPHUtilityPayments";
+            fiscalSummaryParams.restUrlForFiscalSummary = "@Url.Action("GetUtilityPaymentsFinancialSummaryForToday", "UtilityPayments")";
             break;
           case 'AirtimeTopups':
             restUrl = "@Url.Action("GetAirtimeTopupRecords", "AirtimeTopups")";
+
+            // Day's summary
+            fiscalSummaryParams.datasetName = dsName;
+            fiscalSummaryParams.datePlaceholderRef = "#dateAirtimePurchases"
+            fiscalSummaryParams.quantityPlaceholderRef = "#qtyPHAirtime";
+            fiscalSummaryParams.restUrlForFiscalSummary = "@Url.Action("GetAirtimeTopupsFinancialSummaryForToday", "AirtimeTopups")";
             break;
         }
+        fiscalSummaryParams.corporateNo = "@activeUserParams.ClientCorporateNo";
+        arrayOfDataSetFiscalSummary[dsName] = fiscalSummaryParams;
+        DisplayFinancialSummaryForTheDay(fiscalSummaryParams);
+
         table[dsName].LoadData(restUrl, "@activeUserParams.ClientCorporateNo");
         var boundReloadData = {};
         boundReloadData[dsName] = table[dsName].ReloadData.bind(table[dsName]);

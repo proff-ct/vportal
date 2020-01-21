@@ -7,14 +7,44 @@ var datasets = {
 }
 
 var arrayOfDatasetTables = [];
+var arrayOfDataSetFiscalSummary = [];
 
-function DisplayDateNow(dateFormat = null) {
-  return moment().format((dateFormat == null) ? "DD-MMM-YYYY HH:mm:ss" : dateFormat)
+function DisplayDateNow(date =null, dateFormat = null) {
+  return moment(date).format((dateFormat == null) ? "DD-MMM-YYYY HH:mm:ss" : dateFormat)
 }
 
 function DisplayDefaultQuantity(defaultQty = null) {
   return defaultQty || "---"
 }
+
+function DisplayFinancialSummaryForTheDay(datasetParams)
+{
+  $.ajax({
+    type: "GET",
+    url: datasetParams.restUrlForFiscalSummary,
+    data: { clientCorporateNo: datasetParams.corporateNo},
+    success: function (data) {
+      //call is successfully completed and we got result in data
+      if (data == '') return;
+      last_transaction_timestamp = data.last_transaction_timestamp;
+      totalSum = data.sum;
+
+      $(datasetParams.datePlaceholderRef).html(DisplayDateNow(data.last_transaction_timestamp));
+      $(datasetParams.quantityPlaceholderRef).html("KES "+data.sum);
+    },
+
+    error: function (xhr, ajaxOptions, thrownError) {
+      //some errror, some show err msg to user and log the error
+      alert("Server Error Occurred. Unable to load summary");
+      //Log(xhr.responseText);
+    }
+  });
+}
+
+function RefreshFiscalSummary(ds) {
+  DisplayFinancialSummaryForTheDay(arrayOfDataSetFiscalSummary[ds]);
+}
+
 
 function initTabulator(datasetConfig) {
   var datasetTable = {};
@@ -50,6 +80,8 @@ function ClearFilters(datasetName) {
   dsTable[datasetName].ClearFilters();
   dsTable[datasetName].ReloadData();
 }
+
+
 
 class LoansTable {
   tblTabulator = null;

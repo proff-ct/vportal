@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
+using MSacco_DAL;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -48,6 +50,28 @@ namespace MSacco_BLL.Controllers
       {
         last_page = lastPage, // last page from the fetched recordset
         data = utilityPaymentRecords
+      }, JsonRequestBehavior.AllowGet);
+
+    }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult GetUtilityPaymentsFinancialSummaryForToday(string clientCorporateNo)
+    {
+      if (string.IsNullOrEmpty(clientCorporateNo))
+      {
+        return null;
+      }
+
+      IEnumerable<MSaccoUtilityPayment> withdrawals = _mSaccoUtilityPaymentBLL
+        .GetClientMSaccoUtilityPaymentTrxListForToday(clientCorporateNo, out int lastPage)
+        .Where(l => l.Status.Equals("Completed"))
+        .OrderByDescending(l => l.Transaction_Date);
+
+      return Json(new
+      {
+        last_transaction_timestamp = withdrawals.FirstOrDefault()?.Transaction_Date,
+        sum = withdrawals?.Sum(w => w.Amount)
       }, JsonRequestBehavior.AllowGet);
 
     }

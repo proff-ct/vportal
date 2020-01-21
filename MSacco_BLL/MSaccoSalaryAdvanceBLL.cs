@@ -97,6 +97,58 @@ namespace MSacco_BLL
       }
       return loansPlusGuarantors.AsEnumerable();
     }
+
+    public IEnumerable<MSaccoSalaryAdvance> GetClientMSaccoSalaryAdvanceListForToday(
+      string corporateNo,
+      out int lastPage,
+      bool paginate = false,
+      PaginationParameters pagingParams = null)
+    {
+      lastPage = 0;
+
+      if (paginate)
+      {
+        _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} 
+          WHERE [Corporate No]='{corporateNo}'
+          AND datediff(dd, [Transaction Date], getdate()) = 0
+          ORDER BY [Entry No]
+          OFFSET @PageSize * (@PageNumber - 1) ROWS
+          FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
+
+          Select count([Entry No]) as TotalRecords  
+          FROM {_tblMSaccoSalaryAdvance}
+          WHERE [Corporate No]='{corporateNo}'
+          ";
+
+        DynamicParameters dp = new DynamicParameters();
+        dp.Add("PageSize", pagingParams.PageSize);
+        dp.Add("PageNumber", pagingParams.PageToLoad);
+
+        using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
+        {
+          sqlCon.Open();
+          using (var results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          {
+            IEnumerable<MSaccoSalaryAdvance> loans = results.Read<MSaccoSalaryAdvance>();
+            int totalLoanRecords = results.Read<int>().First();
+
+            lastPage = (int)Math.Ceiling(
+              (decimal)totalLoanRecords / (decimal)pagingParams.PageSize);
+            return loans;
+          }
+        }
+      }
+      else
+      {
+        _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} 
+                  WHERE [Corporate No]='{corporateNo}'
+                  AND datediff(dd, [Transaction Date], getdate()) = 0
+                  ";
+        return new DapperORM().QueryGetList<MSaccoSalaryAdvance>(_query);
+      }
+
+    }
+
   }
 
 }

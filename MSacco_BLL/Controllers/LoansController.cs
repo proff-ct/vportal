@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
+using MSacco_DAL;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -48,6 +50,27 @@ namespace MSacco_BLL.Controllers
       {
         last_page = lastPage, // last page from the fetched recordset
         data = loans
+      }, JsonRequestBehavior.AllowGet);
+
+    }
+   [HttpGet]
+    [Authorize]
+    public ActionResult GetLoanFinancialSummaryForToday(string clientCorporateNo)
+    {
+      if (string.IsNullOrEmpty(clientCorporateNo))
+      {
+        return null;
+      }
+
+      IEnumerable<MSaccoSalaryAdvance> loans = _mSaccoSalaryAdvanceBLL
+        .GetClientMSaccoSalaryAdvanceListForToday(clientCorporateNo, out int lastPage)
+        .Where(l => l.Status.Equals("Completed"))
+        .OrderByDescending(l => l.Transaction_Date);
+
+      return Json(new
+      {
+        last_transaction_timestamp = loans.FirstOrDefault().Transaction_Date,
+        sum = loans.Sum(l => l.Amount)
       }, JsonRequestBehavior.AllowGet);
 
     }
