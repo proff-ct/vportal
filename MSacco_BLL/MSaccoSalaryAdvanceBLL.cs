@@ -29,7 +29,7 @@ namespace MSacco_BLL
       {
         _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} 
           WHERE [Corporate No]='{corporateNo}'
-          ORDER BY [Entry No]
+          ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
@@ -58,7 +58,7 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} WHERE [Corporate No]='{corporateNo}'";
+        _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
         return new DapperORM().QueryGetList<MSaccoSalaryAdvance>(_query);
       }
 
@@ -111,7 +111,6 @@ namespace MSacco_BLL
         _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} 
           WHERE [Corporate No]='{corporateNo}'
           AND datediff(dd, [Transaction Date], getdate()) = 0
-          ORDER BY [Entry No]
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
@@ -142,8 +141,7 @@ namespace MSacco_BLL
       {
         _query = $@"SELECT * FROM {_tblMSaccoSalaryAdvance} 
                   WHERE [Corporate No]='{corporateNo}'
-                  AND datediff(dd, [Transaction Date], getdate()) = 0
-                  ";
+                  AND datediff(dd, [Transaction Date], getdate()) = 0";
         return new DapperORM().QueryGetList<MSaccoSalaryAdvance>(_query);
       }
 

@@ -54,7 +54,7 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]='{corporateNo}'";
+        _query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
         return new DapperORM().QueryGetList<MobileWithdrawals>(_query);
       }
 

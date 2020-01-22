@@ -54,7 +54,7 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} WHERE [Corporate No]='{corporateNo}'";
+        _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
         return new DapperORM().QueryGetList<MSaccoAirtimeTopup>(_query);
       }
 
