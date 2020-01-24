@@ -10,7 +10,7 @@ var arrayOfDatasetTables = [];
 var arrayOfDataSetFiscalSummary = [];
 
 function DisplayDateNow(date =null, dateFormat = null) {
-  return moment(date).format((dateFormat == null) ? "DD-MMM-YYYY HH:mm:ss" : dateFormat)
+  return (!date) ? "No date" : moment(date).format((dateFormat == null) ? "DD-MMM-YYYY HH:mm:ss" : dateFormat);
 }
 
 function DisplayDefaultQuantity(defaultQty = null) {
