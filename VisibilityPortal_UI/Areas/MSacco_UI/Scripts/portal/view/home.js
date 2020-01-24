@@ -30,7 +30,8 @@ function DisplayFinancialSummaryForTheDay(datasetParams)
       totalSum = data.sum;
 
       $(datasetParams.datePlaceholderRef).html(DisplayDateNow(data.last_transaction_timestamp));
-      $(datasetParams.quantityPlaceholderRef).html("KES "+data.sum);
+      //$(datasetParams.quantityPlaceholderRef).html("KES "+data.sum);
+      $(datasetParams.quantityPlaceholderRef).html(FormatAsCurrency(data.sum));
     },
 
     error: function (xhr, ajaxOptions, thrownError) {
@@ -81,6 +82,14 @@ function ClearFilters(datasetName) {
   dsTable[datasetName].ReloadData();
 }
 
+function FormatAsCurrency(numToFormat = null) {
+  var defaultCurrencySymbol = "KES";
+  var defaultCurrencyFormat = defaultCurrencySymbol + ' 0,0[.]00';
+
+
+  numeral.nullFormat('0');
+  return defaultCurrencySymbol + ' '+ numeral(numToFormat).format(defaultCurrencyFormat);
+}
 
 
 class LoansTable {
