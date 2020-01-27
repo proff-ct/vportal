@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MSacco_DAL;
 using MSacco_DAL.SMSFloat.Credit;
 using MSacco_DAL.SMSFloat.Debit.Archived;
 using MSacco_DAL.SMSFloat.Debit.Unarchived;
@@ -76,6 +77,22 @@ namespace MSacco_BLL.Tests
       }
     }
 
+    [TestFixture]
+    public class GetBulkSMSBalanceForClient
+    {
+      private BulkSMSBLL _bulkSMSBLL = new BulkSMSBLL();
+      private readonly string corporateNo = 525201.ToString();
+
+      [Test]
+      public void Returns_bulksmsbalance_record_from_the_bulksmsbalances_table()
+      {
+
+        BulkSMSBalance output = _bulkSMSBLL.GetBulkSMSBalanceForClient(corporateNo);
+
+        Assert.IsInstanceOf<BulkSMSBalance>(output, "BulkSMSBalance not returned!");
+      }
+
+    }
   }
 
 }

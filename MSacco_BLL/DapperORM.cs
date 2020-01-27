@@ -45,6 +45,7 @@ namespace MSacco_BLL
         config.AddMap(new LinkDowntimeMap());
         config.AddMap(new ArchivedBulkSMSDebitMap());
         config.AddMap(new UnarchivedBulkSMSDebitMap());
+        config.AddMap(new BulkSMSBalanceMap());
       });
     }
     public string ConnectionString { get => _connectionString; }

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MSacco_DAL;
 using MSacco_DAL.SMSFloat.Credit;
 using MSacco_DAL.SMSFloat.Debit.Archived;
 using MSacco_DAL.SMSFloat.Debit.Unarchived;
@@ -15,6 +16,7 @@ namespace MSacco_BLL
   {
     string _conString;
     string _query;
+    string _tblBulkSMSBalances = BulkSMSBalance.DBTableName;
     string _tblBulkSMSCreditTrx = BulkSMSCredit.DBTableName;
     string _tblUnarchivedBulkSMSDebitTrx = UnarchivedBulkSMSDebit.DBTableName;
     string _tblArchivedBulkSMSDebitTrx = ArchivedBulkSMSDebit.DBTableName;
@@ -67,6 +69,15 @@ namespace MSacco_BLL
                 ORDER BY [Datetime] DESC";
 
       return new DapperORM(_conString).QueryGetList<ArchivedBulkSMSDebit>(_query);
+    }
+
+    public BulkSMSBalance GetBulkSMSBalanceForClient(string corporateNo)
+    {
+      _query = $@"SELECT * 
+                FROM {_tblBulkSMSBalances} 
+                WHERE [Corporate No] = '{corporateNo}'";
+
+      return new DapperORM().QueryGetSingle<BulkSMSBalance>(_query);
     }
   }
 }
