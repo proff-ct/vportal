@@ -75,9 +75,10 @@ function LoadSaccoVitals(saccoVitals, callBack, vitalToLoad = null) {
         case "LinkStatus":
           vitalLabel = SACCO_VITALS.LinkStatus;
           vitalRestUrl = saccoVitals.linkStatus.restUrl;
+
+          GetSaccoVitalsData(vitalRestUrl, saccoVitals.corporateNo, vitalLabel, callBack);
           break;
       }
-      GetSaccoVitalsData(vitalRestUrl, saccoVitals.corporateNo, vitalLabel, callBack);
     };
   }
 }
@@ -88,8 +89,7 @@ function GetSaccoVitalsData(restUrl, corporateNo, vitalToGet, callBack) {
     //dataType: 'json',
     url: restUrl,
     data: {
-      clientCorporateNo: corporateNo,
-      vitalToLoad: vitalToGet
+      clientCorporateNo: corporateNo
     },
     success: function (responseData) {
       var response = {};

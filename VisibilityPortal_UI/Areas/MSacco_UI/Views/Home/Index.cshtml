@@ -11,7 +11,23 @@
     Dashboard
     <small>
       M-Sacco
-      MPESA Float:<span id="MPesaFloat"></span><b>||</b>SMS Float:<span id="BulkSMSFloat"></span>
+      <a href="#"
+         onclick="LoadSaccoVitals(saccoVitals, LoadVitalsCallback, SACCO_VITALS.Floats.MPESA)">
+        <small>
+          <i class="fa fa-refresh"></i>
+        </small>
+        MPESA Float:
+      </a>
+      <span id="MPesaFloat"></span>
+      <b>||</b>
+      <a href="#"
+         onclick="LoadSaccoVitals(saccoVitals, LoadVitalsCallback, SACCO_VITALS.Floats.BULK_SMS)">
+        <small>
+          <i class="fa fa-refresh"></i>
+        </small>
+        SMS Float:
+      </a>
+      <span id="BulkSMSFloat"></span>
     </small>
   </h1>
   <ol class="breadcrumb">
@@ -400,25 +416,27 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
         boundReloadData[dsName] = table[dsName].ReloadData.bind(table[dsName]);
         setInterval(boundReloadData[dsName], (1000 * 300));
 
-        //load sacco vitals i.e. linkStatus, Mpesa, BulkSMS float
-        saccoVitals = {
-          corporateNo: "@activeUserParams.ClientCorporateNo",
-          mpesaFloat: {
-            contentContainer: "#MPesaFloat",
-            restUrl: "@Url.Action("GetMPesaFloat","Home")"
-          },
-          bulkSMSFloat: {
-            contentContainer: "#BulkSMSFloat",
-            restUrl: "@Url.Action("GetBulkSMSFloat", "Home")"
-          },
-          linkStatus: {
-            contentContainer: "#LinkStatus",
-            restUrl: "@Url.Action("GetLinkInfoForClient", "LinkMonitoring")"
-          }
-        };
-
-        LoadSaccoVitals(saccoVitals, LoadVitalsCallback);
       });
+
+      //load sacco vitals i.e. linkStatus, Mpesa, BulkSMS float
+      saccoVitals = {
+        corporateNo: "@activeUserParams.ClientCorporateNo",
+        mpesaFloat: {
+          contentContainer: "#MPesaFloat",
+          restUrl: "@Url.Action("GetMPesaFloat","Home")"
+        },
+        bulkSMSFloat: {
+          contentContainer: "#BulkSMSFloat",
+          restUrl: "@Url.Action("GetBulkSMSFloat", "Home")"
+        },
+        linkStatus: {
+          contentContainer: "#LinkStatus",
+          restUrl: "@Url.Action("GetLinkInfoForClient", "LinkMonitoring")"
+        }
+      };
+
+      LoadSaccoVitals(saccoVitals, LoadVitalsCallback);
+      setInterval(function () { LoadSaccoVitals(saccoVitals, LoadVitalsCallback); }, (1000 * 300))
     });
   </script>
 }
