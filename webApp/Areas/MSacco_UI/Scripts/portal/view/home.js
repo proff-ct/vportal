@@ -1,4 +1,18 @@
-﻿// the values of the datasets must match the array members of the var datasets in index.cshtml
+﻿const SACCO_VITALS = {
+  Floats: {
+    MPESA: "MPESA",
+    BULK_SMS: "BULK_SMS"
+  },
+  LinkStatus: "LinkStatus"
+};
+const CALLBACK_RESPONSE = {
+  STATUS: {
+    OK: "OK",
+    ERROR: "ERR"
+  }
+};
+
+// the values of the datasets must match the array members of the var datasets in index.cshtml
 var datasets = {
   loan: 'Loans',
   withdrawal: 'Withdrawals',
@@ -10,11 +24,100 @@ var arrayOfDatasetTables = [];
 var arrayOfDataSetFiscalSummary = [];
 
 function DisplayDateNow(date =null, dateFormat = null) {
-  return moment(date).format((dateFormat == null) ? "DD-MMM-YYYY HH:mm:ss" : dateFormat)
+  return (!date) ? "No date" : moment(date).format((dateFormat == null) ? "DD-MMM-YYYY HH:mm:ss" : dateFormat);
 }
 
 function DisplayDefaultQuantity(defaultQty = null) {
   return defaultQty || "---"
+}
+
+
+function LoadSaccoVitals(saccoVitals, callBack, vitalToLoad = null) {
+  if (saccoVitals.corporateNo == "" || saccoVitals.corporateNo == null) return;
+  var vitalRestUrl = null;
+  var vitalLabel = null;
+
+  if (vitalToLoad) {
+    switch (vitalToLoad) {
+      case SACCO_VITALS.Floats.MPESA:
+        vitalLabel = vitalToLoad;
+        vitalRestUrl = saccoVitals.mpesaFloat.restUrl;
+        break;
+      case SACCO_VITALS.Floats.BULK_SMS:
+        vitalLabel = vitalToLoad;
+        vitalRestUrl = saccoVitals.bulkSMSFloat.restUrl;
+        break;
+      case SACCO_VITALS.LinkStatus:
+        vitalLabel = vitalToLoad;
+        vitalRestUrl = saccoVitals.linkStatus.restUrl;
+        break;
+    }
+    GetSaccoVitalsData(vitalRestUrl, saccoVitals.corporateNo, vitalLabel, callBack);
+  } else {
+    // no specific vital passed in from front end so load everything
+    for (key in SACCO_VITALS) {
+      switch (key) {
+        case "Floats":
+          for (float in SACCO_VITALS.Floats) {
+            switch (float) {
+              case SACCO_VITALS.Floats.MPESA:
+                vitalLabel = float;
+                vitalRestUrl = saccoVitals.mpesaFloat.restUrl;
+                break;
+              case SACCO_VITALS.Floats.BULK_SMS:
+                vitalLabel = float;
+                vitalRestUrl = saccoVitals.bulkSMSFloat.restUrl;
+                break;
+            };
+            GetSaccoVitalsData(vitalRestUrl, saccoVitals.corporateNo, vitalLabel, callBack);
+          };
+          break;
+        case "LinkStatus":
+          vitalLabel = SACCO_VITALS.LinkStatus;
+          vitalRestUrl = saccoVitals.linkStatus.restUrl;
+
+          GetSaccoVitalsData(vitalRestUrl, saccoVitals.corporateNo, vitalLabel, callBack);
+          break;
+      }
+    };
+  }
+}
+
+function GetSaccoVitalsData(restUrl, corporateNo, vitalToGet, callBack) {
+  $.ajax({
+    method: "GET",
+    //dataType: 'json',
+    url: restUrl,
+    data: {
+      clientCorporateNo: corporateNo
+    },
+    success: function (responseData) {
+      var response = {};
+      if (responseData === "" || responseData === null) {
+        response = {
+          status: CALLBACK_RESPONSE.STATUS.ERROR,
+          error: "No data"
+        };
+      }
+      else {
+        response = {
+          status: CALLBACK_RESPONSE.STATUS.OK,
+          data: {
+            amount: responseData.amount,
+            last_transaction_timestamp: responseData.last_transaction_timestamp,
+          }
+        };
+      }
+      callBack(vitalToGet, response);
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      var response = {
+        status: CALLBACK_RESPONSE.STATUS.ERROR,
+        error: thrownError
+      };
+      callBack(vitalToGet, response);
+    }
+  });
 }
 
 function DisplayFinancialSummaryForTheDay(datasetParams)
@@ -30,7 +133,8 @@ function DisplayFinancialSummaryForTheDay(datasetParams)
       totalSum = data.sum;
 
       $(datasetParams.datePlaceholderRef).html(DisplayDateNow(data.last_transaction_timestamp));
-      $(datasetParams.quantityPlaceholderRef).html("KES "+data.sum);
+      //$(datasetParams.quantityPlaceholderRef).html("KES "+data.sum);
+      $(datasetParams.quantityPlaceholderRef).html(FormatAsCurrency(data.sum));
     },
 
     error: function (xhr, ajaxOptions, thrownError) {
@@ -81,7 +185,21 @@ function ClearFilters(datasetName) {
   dsTable[datasetName].ReloadData();
 }
 
+function FormatAsCurrency(numToFormat = null) {
+  var defaultCurrencySymbol = "KES";
+  var defaultCurrencyFormat = defaultCurrencySymbol + ' 0,0[.]00';
 
+
+  numeral.nullFormat('0');
+  return defaultCurrencySymbol + ' '+ numeral(numToFormat).format(defaultCurrencyFormat);
+}
+
+function FormatSMSFloat(smsFloat) {
+  var floatFormat = '(0,0)';
+
+  numeral.nullFormat('---');
+  return numeral(smsFloat).format(floatFormat);
+}
 
 class LoansTable {
   tblTabulator = null;
