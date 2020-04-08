@@ -79,5 +79,17 @@ namespace CallCenter_BLL
 
       return new DapperORM().QueryGetSingle<BulkSMSBalance>(_query);
     }
+    public BulkSMSBalance GetEarliestBulkSMSBalanceRecordForClient(string corporateNo)
+    {
+      List<BulkSMSBalance> records = new List<BulkSMSBalance>();
+      _query = $@"SELECT * 
+                FROM {_tblBulkSMSBalances} 
+                WHERE [Corporate No] = '{corporateNo}'";
+
+      records = new DapperORM().QueryGetList<BulkSMSBalance>(_query).ToList();
+
+      // TO-DO: Execute an async delete of the other records, 08Apr2020_2001
+      return records.OrderBy(r => r.Entry_No).First();
+    }
   }
 }

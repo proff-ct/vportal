@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -135,16 +136,24 @@ namespace CallCenter_BLL.Controllers
         {
           MobileWithdrawals withdrawalRecord = saccoMobileWithdrawals
               .FirstOrDefault(w => w.Corporate_No == s.corporateNo);
-          BulkSMSBalance saccoBulkSMSBalance = _bulkSMSBLL.GetBulkSMSBalanceForClient(s.corporateNo);
 
+          BulkSMSBalance saccoBulkSMSBalance = new BulkSMSBalance();
+          try
+          {
+            saccoBulkSMSBalance = _bulkSMSBLL.GetBulkSMSBalanceForClient(s.corporateNo);
+          }
+          catch (InvalidOperationException)
+          {
+            saccoBulkSMSBalance = _bulkSMSBLL.GetEarliestBulkSMSBalanceRecordForClient(s.corporateNo);
+          }
 
           saccoFloatsVM.Add(
             new SaccoFloatsViewModel
             {
               CorporateNo = s.corporateNo,
               SaccoName = s.saccoName_1,
-              MPesaFloat = withdrawalRecord == null ? null : withdrawalRecord.MPESA_Float_Amount,
-              MpesaFloatDate = withdrawalRecord == null ? null : withdrawalRecord.MPESA_DateTime,
+              MPesaFloat = withdrawalRecord?.MPESA_Float_Amount,
+              MpesaFloatDate = withdrawalRecord?.MPESA_DateTime,
               BulkSMSFloat = saccoBulkSMSBalance?.Balance,
               BulkSMSFloatDate = saccoBulkSMSBalance?.Last_Updated
             }
