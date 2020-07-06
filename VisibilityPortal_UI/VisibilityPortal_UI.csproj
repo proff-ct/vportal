@@ -1846,6 +1846,7 @@
     </Content>
     <Content Include="SampleAppDBConnectionStrings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="SampleAppDBConnectionStrings.Debug.config">
       <DependentUpon>SampleAppDBConnectionStrings.config</DependentUpon>
