@@ -253,6 +253,17 @@ namespace MSacco_BLL.Models.Mappings
       Map(m => m.Last_Updated).ToColumn("Last Updated");
     }
   }
+  internal class WauminiVirtualRegistrationIPRSMap : EntityMap<WauminiVirtualRegistrationIPRS>
+  {
+    internal WauminiVirtualRegistrationIPRSMap()
+    {
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Date_Of_Birth).ToColumn("Date Of Birth");
+      Map(m => m.Sent_To_IPRS).ToColumn("Sent To IPRS");
+      Map(m => m.Serial_Number).ToColumn("Serial Number");
+    }
+  }
   internal class VirtualRegistrationNewIPRSMap : EntityMap<VirtualRegistrationNewIPRS>
   {
     internal VirtualRegistrationNewIPRSMap()
@@ -260,8 +271,10 @@ namespace MSacco_BLL.Models.Mappings
       Map(m => m.Entry_No).ToColumn("Entry No");
       Map(m => m.Corporate_No).ToColumn("Corporate No");
       Map(m => m.Date_Of_Birth).ToColumn("Date Of Birth");
+      Map(m => m.Mpesa_Names).ToColumn("Mpesa Names");
       Map(m => m.Sent_To_IPRS).ToColumn("Sent To IPRS");
       Map(m => m.Serial_Number).ToColumn("Serial Number");
+      Map(m => m.Registration_Date).ToColumn("Registration Date");
     }
   }
 }

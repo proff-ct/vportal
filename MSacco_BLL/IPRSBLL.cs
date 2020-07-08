@@ -13,14 +13,14 @@ namespace MSacco_BLL
   public class IPRSBLL : IBL_IPRS
   {
     private string _query;
-    private readonly string _tblIPRSRecords = VirtualRegistrationNewIPRS.DBTableName;
+    private readonly string _tblIPRSRecords = WauminiVirtualRegistrationIPRS.DBTableName;
     public List<IIPRS_Record> GetIPRSRecords(string corporateNo, int entryNo = 0)
     {
       _query = entryNo > 0
         ? $@"SELECT * FROM {_tblIPRSRecords} WHERE [Entry No]='{entryNo}'"
         : $@"SELECT * FROM {_tblIPRSRecords} WHERE [Corporate No]='{corporateNo}'";
 
-      return new DapperORM().QueryGetList<VirtualRegistrationNewIPRS>(_query).OfType<IIPRS_Record>().ToList();
+      return new DapperORM().QueryGetList<WauminiVirtualRegistrationIPRS>(_query).OfType<IIPRS_Record>().ToList();
     }
 
     public IIPRS_Record PerformIPRSLookup(string corporateNo, string idNumber, string phoneNumber)
@@ -57,7 +57,7 @@ namespace MSacco_BLL
         SELECT * FROM {_tblIPRSRecords} WHERE [Entry No]=(SELECT ID FROM @IDs)
         ";
 
-      regRecord = new DapperORM().QueryGetSingle<VirtualRegistrationNewIPRS>(_query);
+      regRecord = new DapperORM().QueryGetSingle<WauminiVirtualRegistrationIPRS>(_query);
       Thread.Sleep(waitMiliseconds);
 
       return GetIPRSRecords(corporateNo, regRecord.Entry_No).FirstOrDefault();

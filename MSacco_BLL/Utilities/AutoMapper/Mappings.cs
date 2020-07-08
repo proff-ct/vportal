@@ -23,6 +23,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
           config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
           config.CreateMap<LinkStatusPlusDowntime, LinkStatusPlusDowntimeViewModel>();
           config.CreateMap<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>();
+          config.CreateMap<VirtualRegistrationNewIPRS, VirtualRegistrationViewModel>();
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -36,6 +37,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
         config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
         config.CreateMap<LinkStatusPlusDowntime, LinkStatusPlusDowntimeViewModel>();
         config.CreateMap<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>();
+        config.CreateMap<VirtualRegistrationNewIPRS, VirtualRegistrationViewModel>();
       });
     }
 
@@ -49,6 +51,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
       config.CreateMap<LinkMonitoring, LinkStatusPlusDowntime>();
       config.CreateMap<LinkStatusPlusDowntime, LinkStatusPlusDowntimeViewModel>();
       config.CreateMap<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>();
+      config.CreateMap<VirtualRegistrationNewIPRS, VirtualRegistrationViewModel>();
     });
   }
 }

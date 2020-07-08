@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MSacco_Dataspecs.MSSQLOperators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace MSacco_BLL
 {
   namespace MSSQLOperators
   {
-    public class PaginationParameters
+    public class PaginationParameters : IPaginationParameters
     {
       public PaginationParameters(int pageToLoad, int pageSize, string orderByColumn)
       {

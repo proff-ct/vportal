@@ -1,5 +1,4 @@
 ﻿using MSacco_Dataspecs.Feature.IPRS;
-using MSacco_Dataspecs.Feature.VirtualRegistration.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MSacco_DAL
 {
-  public class VirtualRegistrationNewIPRS : IVirtualRegistrationIPRS, IDBModel
+  public class WauminiVirtualRegistrationIPRS : IIPRS_Record, IDBModel
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "VirtualRegistrationsNewIPRS";
@@ -31,7 +30,5 @@ namespace MSacco_DAL
     public string Comment { get; set; }
     public string Status { get; set; }
     public DateTime UssdDateOfBirth { get; set; }
-    public string Mpesa_Names { get; set; }
-    public DateTime Registration_Date { get; set; }
   }
 }
