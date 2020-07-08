@@ -52,7 +52,7 @@ namespace MSacco_BLL.Controllers
       List<dynamic> returnData = new List<dynamic>();
 
       IIPRS_Record iprsRecord = _iprsBLL.PerformIPRSLookup(clientCorporateNo, nationalIDNo, phoneNo);
-      dynamic rec = Mapper.Map<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>((VirtualRegistrationNewIPRS)iprsRecord);
+      dynamic rec = Mapper.Map<WauminiVirtualRegistrationIPRS, WauminiIPRSLookupViewModel>((WauminiVirtualRegistrationIPRS)iprsRecord);
       returnData.Add(rec);
 
       return Json(returnData.ToArray(), JsonRequestBehavior.AllowGet);
