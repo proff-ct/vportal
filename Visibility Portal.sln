@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisibilityPortal_UI", "VisibilityPortal_UI\VisibilityPortal_UI.csproj", "{4083E8E8-C597-4EDA-990B-06363CF275DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{6A5EC0E2-A633-420E-A14D-4C9EFAF2A9CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgencyBanking_BLLTests", "AgencyBanking_BLLTests\AgencyBanking_BLLTests.csproj", "{1C71AE16-BD6C-4E48-A82B-D507B1C0846C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSacco_Dataspecs", "MSacco_Dataspecs\MSacco_Dataspecs.csproj", "{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +118,10 @@ Global
 		{1C71AE16-BD6C-4E48-A82B-D507B1C0846C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C71AE16-BD6C-4E48-A82B-D507B1C0846C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C71AE16-BD6C-4E48-A82B-D507B1C0846C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
