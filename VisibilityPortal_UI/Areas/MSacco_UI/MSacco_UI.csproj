@@ -482,6 +482,7 @@
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\portal\view\airtimeTopups.js" />
+    <Content Include="Scripts\portal\view\iprs.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\home.js" />
@@ -527,6 +528,7 @@
     <Content Include="Views\Home\_AirtimeTopUpsPartial.cshtml" />
     <Content Include="Views\Home\_UtilityPaymentsPartial.cshtml" />
     <Content Include="Views\LinkMonitoring\Index.cshtml" />
+    <Content Include="Views\IPRS\WauminiMsaccoRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
