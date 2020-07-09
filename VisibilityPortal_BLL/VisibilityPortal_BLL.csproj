@@ -153,6 +153,8 @@
     <Compile Include="CustomFilters\AuthorizationFilters.cs" />
     <Compile Include="DapperORM.cs" />
     <Compile Include="GmailConfig.cs" />
+    <Compile Include="IBL_CoretecClient.cs" />
+    <Compile Include="IBL_PortalModule.cs" />
     <Compile Include="InitialSetupBLL.cs" />
     <Compile Include="Migrations\201910240749557_InitialCreate.cs" />
     <Compile Include="Migrations\201910240749557_InitialCreate.Designer.cs">
@@ -244,6 +246,10 @@
     <ProjectReference Include="..\VisibilityPortal_DAL\VisibilityPortal_DAL.csproj">
       <Project>{C03388C5-675B-4EEC-BCC3-67C3033C7B52}</Project>
       <Name>VisibilityPortal_DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
+      <Project>{e72ce19f-d33e-4236-a85c-e584d0c8fcf0}</Project>
+      <Name>VisibilityPortal_Dataspecs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,7 @@ namespace VisibilityPortal_BLL.Controllers
     private ApplicationSignInManager _signInManager;
     private ApplicationUserManager _userManager;
     private ApplicationRoleManager _roleManager;
-    private PortalModuleBLL _portalModuleBLL = new PortalModuleBLL();
+    private IBL_PortalModule _portalModuleBLL = new PortalModuleBLL();
     private PortalUserRoleBLL _portalUserRoleBLL = new PortalUserRoleBLL();
     private CoretecClientBLL _coretecClientBLL = new CoretecClientBLL();
     private SaccoBLL _saccoBLL = new SaccoBLL();
@@ -620,6 +620,16 @@ namespace VisibilityPortal_BLL.Controllers
 
       ViewBag.ReturnUrl = returnUrl;
       return View(model);
+    }
+
+    //
+    // GET: /Account/SignOut
+    public ActionResult SignOut()
+    {
+      Session.Clear();
+      Session.Abandon();
+      AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+      return RedirectToAction("Index", "Home");
     }
 
     //

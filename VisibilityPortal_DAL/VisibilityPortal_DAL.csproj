@@ -118,5 +118,11 @@
       <DependentUpon>201912041349579_Add_IsEnabled_boolean_property_to_PortalUserRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
+      <Project>{e72ce19f-d33e-4236-a85c-e584d0c8fcf0}</Project>
+      <Name>VisibilityPortal_Dataspecs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

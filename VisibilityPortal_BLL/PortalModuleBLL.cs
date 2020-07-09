@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VisibilityPortal_DAL;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL
 {
-  public class PortalModuleBLL
+  public class PortalModuleBLL : IBL_PortalModule
   {
 #if DEBUG
     string _connString = @ConfigurationManager.ConnectionStrings["visibilityPortalDBConnectionString_testing"].ConnectionString;
@@ -18,13 +19,13 @@ namespace VisibilityPortal_BLL
     
     string _query;
     string _tblPortalModule = PortalModule.DBTableName;
-    public IEnumerable<PortalModule> GetModulesList()
+    public IEnumerable<IPortalModule> GetModulesList()
     {
       _query = $@"SELECT * FROM {_tblPortalModule}";
       return new DapperORM(_connString).QueryGetList<PortalModule>(_query);
     }
 
-    public PortalModule GetModuleByName(string moduleName)
+    public IPortalModule GetModuleByName(string moduleName)
     {
       _query = $@"SELECT * FROM {_tblPortalModule} WHERE ModuleName='{moduleName}'";
       return new DapperORM(_connString).QueryGetSingle<PortalModule>(_query);
