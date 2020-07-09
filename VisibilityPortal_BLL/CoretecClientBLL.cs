@@ -13,7 +13,7 @@ using VisibilityPortal_DAL;
 
 namespace VisibilityPortal_BLL
 {
-  public class CoretecClientBLL
+  public class CoretecClientBLL : IBL_CoretecClient
   {
     private string _query;
     private readonly string _tblClientModule = PortalModuleForClient.DBTableName;

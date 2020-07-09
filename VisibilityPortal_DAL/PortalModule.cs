@@ -2,9 +2,10 @@ namespace VisibilityPortal_DAL
 {
   using System.ComponentModel.DataAnnotations;
   using System.ComponentModel.DataAnnotations.Schema;
+  using VisibilityPortal_Dataspecs.Models;
 
   [Table("PortalModule")]
-  public partial class PortalModule
+  public partial class PortalModule : IPortalModule
   {
     [Key]
     [StringLength(256)]

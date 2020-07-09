@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Utilities.PortalApplicationParams
 {
-  public class ActiveUserParams
+  public class ActiveUserParams : IActiveUserParams
   {
     public string ClientCorporateNo { get; set; }
     public string ClientModuleId { get; set; }
     public List<UserRoles> Roles { get; set; }
-    public class UserRoles
+    public class UserRoles : IUserRoles
     {
       public string AspRoleId { get; set; }
       public bool IsEnabled { get; set; }
