@@ -459,6 +459,7 @@
     <Content Include="plugins\tabulator_4.4\css\tabulator_modern.min.css.map" />
     <Content Include="plugins\tabulator_4.4\css\tabulator_simple.min.css.map" />
     <Content Include="plugins\tabulator_4.4\css\tabulator_site.min.css.map" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LocalWebApp.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
