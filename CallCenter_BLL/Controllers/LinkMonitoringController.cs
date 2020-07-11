@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using CallCenter_BLL.MSSQLOperators;
 using CallCenter_BLL.ViewModels;
 using CallCenter_DAL;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace CallCenter_BLL.Controllers
 {
@@ -21,7 +22,7 @@ namespace CallCenter_BLL.Controllers
     [HttpGet]
     [Authorize]
     public ActionResult GetLinkInfoForClient(
-      string clientCorporateNo, bool loadAll=false, int page=0, int size=0)
+      string clientCorporateNo, bool loadAll = false, int page = 0, int size = 0)
     {
       if (string.IsNullOrEmpty(clientCorporateNo) && !loadAll)
       {
@@ -31,7 +32,7 @@ namespace CallCenter_BLL.Controllers
 
       if (!loadAll)
       {
-        linkInfo = Mapper.Map<LinkMonitoring,LinkMonitoringViewModel>(
+        linkInfo = Mapper.Map<LinkMonitoring, LinkMonitoringViewModel>(
           _linkMonitoringBLL.GetLinkInfoForClient(clientCorporateNo));
 
         return Json(new
@@ -63,7 +64,7 @@ namespace CallCenter_BLL.Controllers
     [HttpGet]
     [Authorize]
     public ActionResult GetLinkInfoWithDowntimesForClient(
-      string clientCorporateNo, bool loadAll=false, int page=0, int size=0)
+      string clientCorporateNo, bool loadAll = false, int page = 0, int size = 0)
     {
       if (string.IsNullOrEmpty(clientCorporateNo) && !loadAll)
       {
@@ -93,11 +94,27 @@ namespace CallCenter_BLL.Controllers
         PaginationParameters pagingParams = new PaginationParameters(page, size, null);
         linkInfo = _linkMonitoringBLL.GetLinkInfoWithLinkDowntimeForAllClients(out int lastPage, true, pagingParams).ToArray();
 
-        return Json(new
+        
+        return new JsonResult()
         {
-          last_page = lastPage, // last page from the fetched recordset
-          data = linkInfo
-        }, JsonRequestBehavior.AllowGet);
+          Data = new {
+            last_page = lastPage,
+            data = linkInfo
+          },
+          ContentType = "application/json",
+          ContentEncoding = System.Text.Encoding.UTF8,
+          JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+          MaxJsonLength = int.MaxValue
+        };
+        // The above change is in response to the following error:
+        //[InvalidOperationException: Error during serialization or deserialization using the JSON JavaScriptSerializer.The length of the string exceeds the value set on the maxJsonLength property.]
+        // which occurs primarily due to an increased number of downtime records Better solution is to limit the number of downtime
+        // records returned.
+        //return Json(new
+        //{
+        //  last_page = lastPage, // last page from the fetched recordset
+        //  data = linkInfo
+        //}, JsonRequestBehavior.AllowGet);
       }
     }
     #endregion
