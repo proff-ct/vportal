@@ -97,5 +97,11 @@
       <DependentUpon>201912310913098_FloatResourceAlertForClient_Change_CreatedOn_and_ModifiedOn_dates_to_UTC.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CallCenter_Dataspecs\CallCenter_Dataspecs.csproj">
+      <Project>{9989B683-2A10-4814-88F5-0A7EFF0234AC}</Project>
+      <Name>CallCenter_Dataspecs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -168,6 +168,46 @@ namespace CallCenter_BLL.Models.Mappings
       Map(m => m.Transaction_Date).ToColumn("Transaction Date");
     }
   }
+  internal class MobileWithdrawals_DarajaMap : EntityMap<MobileWithdrawals_Daraja>
+  {
+    internal MobileWithdrawals_DarajaMap()
+    {
+      Map(m => m.Account_Balance).ToColumn("Account Balance");
+      Map(m => m.Account_Name).ToColumn("Account Name");
+      Map(m => m.Account_No).ToColumn("Account No");
+      Map(m => m.Broker_Conv_ID).ToColumn("Broker Conv ID");
+      Map(m => m.Broker_Orig_Conv_ID).ToColumn("Broker Orig Conv ID");
+      Map(m => m.Broker_Resp_Code).ToColumn("Broker Resp Code");
+      Map(m => m.Broker_Resp_Desc).ToColumn("Broker Resp Desc");
+      Map(m => m.Broker_Service_Status).ToColumn("Broker Service Status");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Date_Created).ToColumn("Date Created");
+      Map(m => m.Date_Sent_To_Journal).ToColumn("Date Sent To Journal");
+      Map(m => m.Date_SMS_Sent).ToColumn("Date SMS Sent");
+      Map(m => m.Document_No).ToColumn("Document No");
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Money_Received).ToColumn("Money Received");
+      Map(m => m.MPESA_Conv_ID).ToColumn("MPESA Conv ID");
+      Map(m => m.MPESA_DateTime).ToColumn("MPESA DateTime");
+      Map(m => m.MPESA_Float_Amount).ToColumn("MPESA Float Amount");
+      Map(m => m.MPesa_Name).ToColumn("MPesa Name");
+      Map(m => m.MPESA_Receipt_No).ToColumn("MPESA Receipt No");
+      Map(m => m.MPESA_Result_Code).ToColumn("MPESA Result Code");
+      Map(m => m.MPESA_Result_Desc).ToColumn("MPESA Result Desc");
+      Map(m => m.MPESA_Result_Type).ToColumn("MPESA Result Type");
+      Map(m => m.Request_Confirmed).ToColumn("Request Confirmed");
+      Map(m => m.Response_Status).ToColumn("Response Status");
+      Map(m => m.Response_Value).ToColumn("Response Value");
+      Map(m => m.Sent_To_Journal).ToColumn("Sent To Journal");
+      Map(m => m.SMS_Sent).ToColumn("SMS Sent");
+      Map(m => m.Telephone_No).ToColumn("Telephone No");
+      Map(m => m.Text_File_Created).ToColumn("Text File Created");
+      Map(m => m.Time_Created).ToColumn("Time Created");
+      Map(m => m.Time_Sent_To_Journal).ToColumn("Time Sent To Journal");
+      Map(m => m.Time_SMS_Sent).ToColumn("Time SMS Sent");
+      Map(m => m.Transaction_Date).ToColumn("Transaction Date");
+    }
+  }
   internal class LinkMonitoringMap : EntityMap<LinkMonitoring>
   {
     internal LinkMonitoringMap()

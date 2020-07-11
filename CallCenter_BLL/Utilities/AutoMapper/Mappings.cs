@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CallCenter_BLL.Models;
 using CallCenter_BLL.Models.ViewModels;
 using CallCenter_BLL.ViewModels;
 using CallCenter_DAL;
+using CallCenter_Dataspecs.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CallCenter_BLL.Utilities.AutoMapper
 {
@@ -16,7 +17,8 @@ namespace CallCenter_BLL.Utilities.AutoMapper
     public static void RegisterMappings()
     {
       Mapper.Initialize(
-        config => {
+        config =>
+        {
           config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
           config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
           config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
@@ -26,6 +28,10 @@ namespace CallCenter_BLL.Utilities.AutoMapper
           config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertViewModel>().ReverseMap();
           config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertListViewModel>().ReverseMap();
           config.CreateMap<Sacco, SaccoViewModel>().ReverseMap();
+          config.CreateMap<IMobileWithdrawals_DarajaDB, IMobileWithdrawals_SACCODB>(MemberList.Source)
+          .ForMember(m => m.Exported_To_Saf, opt => opt.Ignore())
+          .ForMember(m => m.Verified, opt => opt.Ignore());
+          //.ReverseMap();
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -41,6 +47,10 @@ namespace CallCenter_BLL.Utilities.AutoMapper
         config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertViewModel>().ReverseMap();
         config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertListViewModel>().ReverseMap();
         config.CreateMap<Sacco, SaccoViewModel>().ReverseMap();
+        config.CreateMap<IMobileWithdrawals_DarajaDB, IMobileWithdrawals_SACCODB>(MemberList.Source)
+          .ForMember(m => m.Exported_To_Saf, opt => opt.Ignore())
+          .ForMember(m => m.Verified, opt => opt.Ignore());
+        //.ReverseMap();
       });
     }
 
@@ -56,6 +66,10 @@ namespace CallCenter_BLL.Utilities.AutoMapper
       config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertViewModel>().ReverseMap();
       config.CreateMap<FloatResourceAlertForClient, SaccoFloatAlertListViewModel>().ReverseMap();
       config.CreateMap<Sacco, SaccoViewModel>().ReverseMap();
+      config.CreateMap<IMobileWithdrawals_DarajaDB, IMobileWithdrawals_SACCODB>(MemberList.Source)
+        .ForMember(m => m.Exported_To_Saf, opt => opt.Ignore())
+        .ForMember(m => m.Verified, opt => opt.Ignore());
+      //.ReverseMap();
     });
   }
 }
