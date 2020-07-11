@@ -5,13 +5,15 @@ using System.Web.Mvc;
 
 using CallCenter_BLL.Models.ViewModels;
 using CallCenter_DAL;
+using CallCenter_Dataspecs.Functions;
+using CallCenter_Dataspecs.Models;
 
 namespace CallCenter_BLL.Controllers
 {
   public class HomeController : Controller
   {
     private SaccoBLL _saccoBLL = new SaccoBLL();
-    private MobileWithdrawalsBLL _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
+    private IBL_MobileWithdrawals _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
     private BulkSMSBLL _bulkSMSBLL = new BulkSMSBLL();
 
     // GET: Home
@@ -116,12 +118,12 @@ namespace CallCenter_BLL.Controllers
       List<SaccoFloatsViewModel> saccoFloatsVM = new List<SaccoFloatsViewModel>();
       List<Sacco> saccosList = new List<Sacco>();
       saccosList = _saccoBLL.GetSaccoList().ToList();
-      List<MobileWithdrawals> saccoMobileWithdrawals = new List<MobileWithdrawals>();
+      List<IMobileWithdrawals_SACCODB> saccoMobileWithdrawals = new List<IMobileWithdrawals_SACCODB>();
 
       // get the float records for each sacco
       saccosList.Select(s => s.corporateNo).ToList().ForEach(s =>
       {
-        MobileWithdrawals withdrawalRecord = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(s);
+        IMobileWithdrawals_SACCODB withdrawalRecord = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(s);
         if (withdrawalRecord == null) return;
         saccoMobileWithdrawals.Add(withdrawalRecord);
         // add the one for bulk sms here too
@@ -134,7 +136,7 @@ namespace CallCenter_BLL.Controllers
         .ToList()
         .ForEach(s =>
         {
-          MobileWithdrawals withdrawalRecord = saccoMobileWithdrawals
+          IMobileWithdrawals_SACCODB withdrawalRecord = saccoMobileWithdrawals
               .FirstOrDefault(w => w.Corporate_No == s.corporateNo);
 
           BulkSMSBalance saccoBulkSMSBalance = new BulkSMSBalance();

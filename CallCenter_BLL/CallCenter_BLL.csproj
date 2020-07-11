@@ -124,6 +124,10 @@
       <Project>{AEA0D243-C2BA-4EFD-9C13-92CC18466B09}</Project>
       <Name>CallCenter_DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CallCenter_Dataspecs\CallCenter_Dataspecs.csproj">
+      <Project>{9989B683-2A10-4814-88F5-0A7EFF0234AC}</Project>
+      <Name>CallCenter_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

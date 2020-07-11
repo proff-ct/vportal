@@ -1,12 +1,15 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using CallCenter_BLL.MSSQLOperators;
+using CallCenter_Dataspecs.Functions;
+using CallCenter_Dataspecs.MSSQLOperators;
 
 namespace CallCenter_BLL.Controllers
 {
   public class MobileWithdrawalsController : Controller
   {
-    private MobileWithdrawalsBLL _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
+    //private MobileWithdrawalsBLL _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
+    private IBL_MobileWithdrawals _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
     // GET: MobileWithdrawals
     public ActionResult Index()
     {
@@ -31,7 +34,7 @@ namespace CallCenter_BLL.Controllers
 
       //PaginationParameters pagingParams = new PaginationParameters(
       //  int.Parse(page), int.Parse(size), null);
-      PaginationParameters pagingParams = new PaginationParameters(page, size, null);
+      IPaginationParameters pagingParams = new PaginationParameters(page, size, null);
 
       dynamic utilityPaymentRecords = _mobileWithdrawalsBLL
         .GetMobileWithdrawalsTrxListForClient(clientCorporateNo, out int lastPage, true, pagingParams)
