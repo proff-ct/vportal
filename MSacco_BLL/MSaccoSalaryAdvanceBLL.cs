@@ -10,6 +10,7 @@ using MSacco_BLL.Models;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
 using Dapper;
+using MSacco_Dataspecs.HardCoded;
 
 namespace MSacco_BLL
 {
@@ -79,7 +80,11 @@ namespace MSacco_BLL
       GuarantorsBLL guarantorsBLL = new GuarantorsBLL();
       string tblGuarantors = Guarantors.DBTableName;
 
-      IEnumerable<string> guaranteedLoanSessions = loans.Where(l => l.No_of_Guarantors > 0)
+      IEnumerable<string> guaranteedLoanSessions = Enumerable.Empty<string>();
+
+      // 13Jul2020_1224 temporary hack for the case of Elimu
+      guaranteedLoanSessions = loans
+        .Where(l => l.No_of_Guarantors > 0 || (l.Corporate_No.Equals(($"{(int)CorporateNumbers.Elimu}")) && Loans.LoanTypesWithGuarantors.Elimu.Contains(l.Loan_type)))
         .Select(l => l.SESSION_ID);
       IEnumerable<Guarantors> loanGuarantors = (guaranteedLoanSessions.Count() > 0) ?
        guarantorsBLL.GetGuarantorsForManyLoans(guaranteedLoanSessions)
@@ -93,6 +98,13 @@ namespace MSacco_BLL
       {
         LoansPlusGuarantors loanPlusGuarantors = Mapper.Map<LoansPlusGuarantors>(loan);
         loanPlusGuarantors.Guarantors = loanGuarantors.Where(g => g.Session == loan.SESSION_ID).ToList();
+
+        // include the count for Elimu
+        if (loan.Corporate_No.Equals($"{(int)CorporateNumbers.Elimu}"))
+        {
+          loanPlusGuarantors.No_of_Guarantors = loanGuarantors.Where(g => g.Session == loan.SESSION_ID).Count();
+        }
+
         loansPlusGuarantors.Add(loanPlusGuarantors);
       }
       return loansPlusGuarantors.AsEnumerable();
