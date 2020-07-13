@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HardCoded.cs" />
     <Compile Include="IPaginationParameters.cs" />
     <Compile Include="IPRS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
