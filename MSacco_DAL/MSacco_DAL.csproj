@@ -54,9 +54,11 @@
     <Compile Include="LinkMonitoring.cs" />
     <Compile Include="MobileWithdrawals.cs" />
     <Compile Include="MSaccoAirtimeTopup.cs" />
+    <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="MSaccoSalaryAdvance.cs" />
     <Compile Include="MSaccoUtilityPayment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutingTable.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="SMSFloat\Credit\BulkSMS\BulkSMSCredit.cs" />
     <Compile Include="SMSFloat\Debit\Archived\ArchivedBulkSMSDebit.cs" />

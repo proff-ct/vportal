@@ -43,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HardCoded.cs" />
+    <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="IPaginationParameters.cs" />
     <Compile Include="IPRS.cs" />
+    <Compile Include="MsaccoRegistrationRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualRegistrationIPRS.cs" />
   </ItemGroup>

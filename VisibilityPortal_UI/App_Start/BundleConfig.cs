@@ -23,6 +23,15 @@ namespace Visibility_Portal
                 "~/Scripts/umd/popper.js",
                 "~/Scripts/bootstrap.js"));
 
+      bundles.Add(new ScriptBundle("~/bundles/globalPlugins").Include(
+                "~/plugins/bootbox/bootbox.min.js",
+                "~/plugins/input-mask/jquery.inputmask.js",
+                "~/plugins/input-mask/jquery.inputmask.extensions.js",
+                "~/plugins/input-mask/jquery.inputmask.date.extensions.js",
+                "~/plugins/input-mask/jquery.inputmask.numeric.extensions.js",
+                "~/plugins/input-mask/jquery.inputmask.phone.extensions.js",
+                "~/plugins/input-mask/jquery.inputmask.regex.extensions.js"));
+
       bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/site.css"));

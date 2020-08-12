@@ -900,6 +900,12 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="plugins\bootbox\bootbox.all.js" />
+    <Content Include="plugins\bootbox\bootbox.all.min.js" />
+    <Content Include="plugins\bootbox\bootbox.js" />
+    <Content Include="plugins\bootbox\bootbox.locales.js" />
+    <Content Include="plugins\bootbox\bootbox.locales.min.js" />
+    <Content Include="plugins\bootbox\bootbox.min.js" />
     <Content Include="plugins\bootstrap-select-1.13.9\css\bootstrap-select.css" />
     <Content Include="plugins\bootstrap-select-1.13.9\css\bootstrap-select.min.css" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\bootstrap-select.js" />
@@ -980,6 +986,13 @@
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_CN.min.js" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_TW.js" />
     <Content Include="plugins\bootstrap-select-1.13.9\js\i18n\defaults-zh_TW.min.js" />
+    <Content Include="plugins\input-mask\jquery.inputmask.date.extensions.js" />
+    <Content Include="plugins\input-mask\jquery.inputmask.extensions.js" />
+    <Content Include="plugins\input-mask\jquery.inputmask.js" />
+    <Content Include="plugins\input-mask\jquery.inputmask.numeric.extensions.js" />
+    <Content Include="plugins\input-mask\jquery.inputmask.phone.extensions.js" />
+    <Content Include="plugins\input-mask\jquery.inputmask.regex.extensions.js" />
+    <Content Include="plugins\input-mask\phone-codes\readme.txt" />
     <Content Include="plugins\ion.tabs-1.0.2\css\ion.tabs.css" />
     <Content Include="plugins\ion.tabs-1.0.2\css\ion.tabs.skinBordered.css" />
     <Content Include="plugins\ion.tabs-1.0.2\css\ion.tabs.skinFlat.css" />
@@ -1938,6 +1951,8 @@
     <Content Include="plugins\Responsive-Tabs\LICENCE" />
     <Content Include="plugins\Responsive-Tabs\package.json" />
     <Content Include="plugins\Responsive-Tabs\README.md" />
+    <Content Include="plugins\input-mask\phone-codes\phone-be.json" />
+    <Content Include="plugins\input-mask\phone-codes\phone-codes.json" />
     <None Include="Properties\PublishProfiles\Beta_Testing.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />

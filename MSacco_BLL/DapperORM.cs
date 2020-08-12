@@ -48,6 +48,7 @@ namespace MSacco_BLL
         config.AddMap(new BulkSMSBalanceMap());
         config.AddMap(new WauminiVirtualRegistrationIPRSMap());
         config.AddMap(new VirtualRegistrationNewIPRSMap());
+        config.AddMap(new Routing_TableMap());
       });
     }
     public string ConnectionString { get => _connectionString; }
