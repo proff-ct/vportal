@@ -126,7 +126,7 @@ namespace MSacco_BLL
       bool isReset = false;
       if (ParsePhoneNo(memberPhoneNo).Length < _minimumPhoneLength)
       {
-        resetMessage = $"Member phone number: {memberPhoneNo} must have minimum {_minimumPhoneLength} digits to be valid.";
+        resetMessage = $"Member phone number: {memberPhoneNo} must have minimum {_minimumPhoneLength} digits.";
         return isReset;
       }
       IRouting_Table regRecord = _msaccoRegistrationsBLL.GetMsaccoRegistrationRecordForClient(
@@ -139,8 +139,8 @@ namespace MSacco_BLL
       }
       string partialPhoneNo = regRecord.Telephone_No.Substring(regRecord.Telephone_No.Length - 9);
       _query = $@"DELETE FROM {_tblMsaccoPlusNumberChecker}
-                WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' OR [Comments] LIKE %{partialPhoneNo}%) 
-                AND ([Comments] IS NOT NULL OR [Comments] <> ''";
+                WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' AND ([Comments] IS NOT NULL OR [Comments] <> ''))
+                OR [Comments] LIKE '%{partialPhoneNo}%' ";
       try
       {
         new DapperORM().ExecuteQuery(_query);
