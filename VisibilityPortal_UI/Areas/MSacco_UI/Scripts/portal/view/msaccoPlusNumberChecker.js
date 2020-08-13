@@ -32,7 +32,7 @@ function initTabulator(tableContainerID) {
         align: "center", resizable: false, headerSort: false
       },
       { title: "Member Phone Number", field: "PhoneNumber" },
-      { title: "Device Status", field: "Comments" },
+      { title: "DeActivation Reason", field: "Comments" },
       {
         title: "Last Activation Date", field: "DateLinked",
         align: "center",
@@ -95,7 +95,7 @@ function ResetMemberDevice(restUrl, corporateNo, phoneNo) {
   $.post(restUrl, ajaxParams, function (response) {
     var serverResponse;
     if (response.success == true) {
-      serverResponse = "<h4>Status: Success</h4> Member can now login via MSACCO+ Mobile App"
+      serverResponse = "<h4>Status: Success</h4>  <p/><p/>Member can now login via MSACCO+ Mobile App"
     } else {
       serverResponse = "<h4>Status: Failed</h4> <p/><p/>" + response.ex;
     }
