@@ -89,6 +89,8 @@ namespace MSacco_Dataspecs.Feature.MSACCOBankTransfer
     {
       IEnumerable<Models.IBankTransfer> GetBankTransferRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null);
 
+      IEnumerable<Models.IBankTransfer> GetClientBankTransferRecordsForToday(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null);
+
       bool IsSaccoRegisteredForBankTransfer(string corporateNo);
     }
   }

@@ -40,11 +40,7 @@ namespace MSacco_BLL.Controllers
       // 3. retrieve the data from the bll function
 
       int lastPage;
-#if DEBUG
-      clientCorporateNo = "892801";
-#endif
-      //PaginationParameters pagingParams = new PaginationParameters(
-      //  int.Parse(page), int.Parse(size), null);
+
       PaginationParameters pagingParams = new PaginationParameters(page, size, null);
 
       dynamic records = Mapper.Map<IEnumerable<IBankTransfer>,IEnumerable<IBankTransferViewModel>>(_bankTransferBLL
@@ -63,22 +59,21 @@ namespace MSacco_BLL.Controllers
     [Authorize]
     public ActionResult GetBankTransferFinancialSummaryForToday(string clientCorporateNo)
     {
-      throw new System.NotImplementedException();
-      //if (string.IsNullOrEmpty(clientCorporateNo))
-      //{
-      //  return null;
-      //}
+      if (string.IsNullOrEmpty(clientCorporateNo))
+      {
+        return null;
+      }
 
-      //IEnumerable<MSaccoUtilityPayment> withdrawals = _mSaccoUtilityPaymentBLL
-      //  .GetClientMSaccoUtilityPaymentTrxListForToday(clientCorporateNo, out int lastPage)
-      //  .Where(l => l.Status.Equals("Completed"))
-      //  .OrderByDescending(l => l.Transaction_Date);
+      IEnumerable<IBankTransfer> records = _bankTransferBLL
+        .GetClientBankTransferRecordsForToday(clientCorporateNo, out int lastPage)
+        .Where(l => l.Status.Equals("Completed"))
+        .OrderByDescending(l => l.TransactionDate);
 
-      //return Json(new
-      //{
-      //  last_transaction_timestamp = withdrawals.FirstOrDefault()?.Transaction_Date,
-      //  sum = withdrawals?.Sum(w => w.Amount)
-      //}, JsonRequestBehavior.AllowGet);
+      return Json(new
+      {
+        last_transaction_timestamp = records.FirstOrDefault()?.TransactionDate,
+        sum = records?.Sum(w => w.Amount)
+      }, JsonRequestBehavior.AllowGet);
 
     }
     #endregion
