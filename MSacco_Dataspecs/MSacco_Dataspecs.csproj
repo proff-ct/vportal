@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HardCoded.cs" />
+    <Compile Include="MsaccoBankTransfer.cs" />
     <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="IPaginationParameters.cs" />
     <Compile Include="IPRS.cs" />

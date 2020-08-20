@@ -54,6 +54,7 @@
     <Compile Include="LinkMonitoring.cs" />
     <Compile Include="MobileWithdrawals.cs" />
     <Compile Include="MSaccoAirtimeTopup.cs" />
+    <Compile Include="MSACCOBankTransfer.cs" />
     <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="MSaccoSalaryAdvance.cs" />
     <Compile Include="MSaccoUtilityPayment.cs" />
