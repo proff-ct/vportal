@@ -31,7 +31,7 @@ namespace MSacco_BLL.Controllers
       {
         return null;
       }
-      clientCorporateNo = "892801";
+      
       // the flow:
       // 1. get the pagination parameters
       // 2. pass the pagination parameters to the bll function
