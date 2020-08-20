@@ -114,6 +114,7 @@
     <Compile Include="IPRSBLL.cs" />
     <Compile Include="LinkDowntimeBLL.cs" />
     <Compile Include="LinkMonitoringBLL.cs" />
+    <Compile Include="Models\ViewModels\MSACCOBankTransferViewModel.cs" />
     <Compile Include="Models\ViewModels\MSACCOPlusRegisteredMemberDeviceViewModel.cs" />
     <Compile Include="Models\ViewModels\VirtualRegistrationViewModel.cs" />
     <Compile Include="MsaccoBankTransferBLL.cs" />

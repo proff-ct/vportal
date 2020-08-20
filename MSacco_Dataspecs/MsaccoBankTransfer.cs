@@ -46,9 +46,41 @@ namespace MSacco_Dataspecs.Feature.MSACCOBankTransfer
       decimal AccountBalance { get; set; }
     }
 
-    public interface IBankTransferViewModel: IBankTransfer
+    public interface IBankTransferViewModel
     {
+      int Entry_No { get; set; }
 
+      string Status { get; set; }
+
+      string Account_No { get; set; }
+
+      string Telephone_No { get; set; }
+
+      string Recipient_Account_No { get; set; }
+
+      string Corporate_No { get; set; }
+
+      string Bank_Name { get; set; }
+
+      //string Bank_Code { get; set; }
+
+      bool Request_Confirmed { get; set; }
+
+      bool Sent_To_Journal { get; set; }
+
+      decimal Amount { get; set; }
+
+      string Narration { get; set; }
+
+      //string Session_Id { get; set; }
+
+      string Comments { get; set; }
+
+      //string Transaction_Reference { get; set; }
+
+      DateTime TransactionDate { get; set; }
+
+      decimal AccountBalance { get; set; }
     }
   }
   namespace Functions

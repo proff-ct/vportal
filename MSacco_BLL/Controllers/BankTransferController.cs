@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
 using MSacco_Dataspecs.Feature.MSACCOBankTransfer.Functions;
+using MSacco_Dataspecs.Feature.MSACCOBankTransfer.Models;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -38,13 +40,15 @@ namespace MSacco_BLL.Controllers
       // 3. retrieve the data from the bll function
 
       int lastPage;
-
+#if DEBUG
+      clientCorporateNo = "892801";
+#endif
       //PaginationParameters pagingParams = new PaginationParameters(
       //  int.Parse(page), int.Parse(size), null);
       PaginationParameters pagingParams = new PaginationParameters(page, size, null);
 
-      dynamic records = _bankTransferBLL
-        .GetBankTransferRecordsForClient(clientCorporateNo, out lastPage, true, pagingParams)
+      dynamic records = Mapper.Map<IEnumerable<IBankTransfer>,IEnumerable<IBankTransferViewModel>>(_bankTransferBLL
+        .GetBankTransferRecordsForClient(clientCorporateNo, out lastPage, true, pagingParams))
         .ToArray();
 
       return Json(new

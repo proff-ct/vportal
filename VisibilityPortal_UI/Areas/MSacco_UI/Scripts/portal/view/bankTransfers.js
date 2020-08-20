@@ -3,6 +3,23 @@ var tabulatorAjaxUrlForReload;
 var tabulatorAjaxParamsForReload;
 
 function initTabulator(tableContainerID) {
+  // init custom formatters
+  Tabulator.prototype.extendModule("format", "formatters", {
+    trxAmount: function (cell, formatterParams) {
+      var moneyFormatter = Tabulator.prototype.moduleBindings.format.prototype.formatters.money;
+      var floatCellValue = TabulatorSetCellValueToNullIfNoData(cell.getValue());
+
+      var parsedFloatValue = parseFloat(floatCellValue);
+      if (isNaN(parsedFloatValue)) {
+        return floatCellValue;
+      }
+
+      //update the cell value before passing it on to the inbuilt money formatter
+      //cell._cell.value = parsedFloatValue;
+      cell.value = parsedFloatValue;
+      return moneyFormatter(cell, formatterParams)
+    }
+  });
   //create Tabulator on DOM element with id == tableContainerID
   tblTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -37,16 +54,14 @@ function initTabulator(tableContainerID) {
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
-      { title: "Telephone No", field: "Telephone_No", headerFilter: true },
-      { title: "Source Account No", field: "Account_No", headerFilter: true },
-      { title: "Recipient Account No", field: "Recipient_Account_No", headerFilter: true },
+      { title: "Telephone #", field: "Telephone_No", headerFilter: true },
+      { title: "Sacco Account #", field: "Account_No", headerFilter: true },
+      { title: "Bank Account #", field: "Recipient_Account_No", headerFilter: true },
       {
         title: "Bank Name", field: "Bank_Name",
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
-      //{ title: "Bank Code", field: "Bank_Code", headerFilter: true },
-      //{ title: "Transaction Reference", field: "Transaction_Reference", headerFilter: true },
       { title: "Narration", field: "Narration", headerFilter: true },
       {
         title: "Trx Date", field: "TransactionDate",
@@ -55,23 +70,28 @@ function initTabulator(tableContainerID) {
           return GetFormattedDate(cell.getValue());
         }
       },
-      { title: "Amount", field: "Amount", headerFilter: true },
-      //{ title: "Account Balance", field: "AccountBalance", headerFilter: true },
-      { title: "Request Confirmed", field: "Request_Confirmed", headerFilter: true },
-      { title: "Comments", field: "Comments", headerFilter: true },
-      //{ title: "Session ID", field: "SESSION_ID", headerFilter: true },
-      
+      {
+        title: "Amount", field: "Amount", headerFilter: true,
+        formatter: "trxAmount",
+        formatterParams: {
+          symbol: "KES "
+        }
+      },
       {
         title: "Sent to Journal?", field: "Sent_To_Journal",
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
+      //{ title: "Account Balance", field: "AccountBalance", headerFilter: true },
+      { title: "Request Confirmed", field: "Request_Confirmed", headerFilter: true },
+      { title: "Comments", field: "Comments", headerFilter: true },
+      //{ title: "Session ID", field: "SESSION_ID", headerFilter: true },
       //{ title: "Corporate No", field: "Corporate_No" },
     ],
     movableColumns: true,
     index: "Entry_No",
     initialSort: [
-      { column: "Entry_No", dir: "desc" }
+      { column: "TransactionDate", dir: "desc" }
     ],
     headerSortTristate: true,
     
