@@ -6,6 +6,7 @@ using NUnit.Framework;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL.Tests
 {

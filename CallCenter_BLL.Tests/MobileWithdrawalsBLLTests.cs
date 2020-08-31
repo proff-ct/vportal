@@ -48,7 +48,7 @@ namespace CallCenter_BLL.Tests
       public void Returns_latest_mobile_withdrawal_record_for_specified_client()
       {
 
-        MobileWithdrawals output = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(corporateNo);
+        MobileWithdrawals output = (MobileWithdrawals)_mobileWithdrawalsBLL.GetLatestWithdrawalForClient(corporateNo);
 
         Assert.IsInstanceOf<MobileWithdrawals>(output, "Mobile Withdrawal instance not returned!");
         Assert.AreEqual(output.Corporate_No, corporateNo, "Corporate No MISMATCH!!");

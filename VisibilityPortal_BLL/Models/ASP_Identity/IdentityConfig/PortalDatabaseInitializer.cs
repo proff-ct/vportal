@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using VisibilityPortal_BLL.InitialSetup.SetupDefaults;
 using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig
 {

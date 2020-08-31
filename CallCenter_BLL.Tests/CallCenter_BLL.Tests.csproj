@@ -108,6 +108,10 @@
       <Project>{AEA0D243-C2BA-4EFD-9C13-92CC18466B09}</Project>
       <Name>CallCenter_DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CallCenter_Dataspecs\CallCenter_Dataspecs.csproj">
+      <Project>{9989b683-2a10-4814-88f5-0a7eff0234ac}</Project>
+      <Name>CallCenter_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

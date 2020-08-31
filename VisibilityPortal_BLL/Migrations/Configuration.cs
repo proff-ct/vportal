@@ -4,6 +4,7 @@ namespace VisibilityPortal_BLL.Migrations
   using VisibilityPortal_BLL.InitialSetup.SetupDefaults;
   using VisibilityPortal_BLL.Models;
   using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
+  using VisibilityPortal_Dataspecs.Models;
 
   internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
   {

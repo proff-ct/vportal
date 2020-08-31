@@ -130,6 +130,10 @@
       <Project>{C03388C5-675B-4EEC-BCC3-67C3033C7B52}</Project>
       <Name>VisibilityPortal_DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
+      <Project>{e72ce19f-d33e-4236-a85c-e584d0c8fcf0}</Project>
+      <Name>VisibilityPortal_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

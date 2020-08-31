@@ -2,6 +2,7 @@
 using System.Linq;
 using VisibilityPortal_DAL;
 using NUnit.Framework;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL.Tests
 {
@@ -16,7 +17,7 @@ namespace VisibilityPortal_BLL.Tests
       [Test]
       public void Returns_IEnumerable_of_portal_modules_containing_moduleName_and_routeprefix()
       {
-        IEnumerable<PortalModule> output = portalModuleBLL.GetModulesList();
+        IEnumerable<IPortalModule> output = portalModuleBLL.GetModulesList();
 
         Assert.IsInstanceOf<IEnumerable<PortalModule>>(output, "PortalModule IEnumerable not returned!");
         Assert.GreaterOrEqual(output.Count(), 1, "PortalModule list count less than 1");

@@ -21,6 +21,7 @@ using VisibilityPortal_BLL.Models.ASP_Identity.IdentityModels;
 using VisibilityPortal_BLL.Models.ViewModels;
 using VisibilityPortal_BLL.Utilities.PortalDefaults;
 using VisibilityPortal_DAL;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL.Controllers
 {

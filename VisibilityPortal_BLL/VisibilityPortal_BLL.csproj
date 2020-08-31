@@ -207,7 +207,7 @@
     <Compile Include="Models\CoreTecOrganisation.cs" />
     <Compile Include="Models\Mappings\DBMaps_DapperFluentMap.cs" />
     <Compile Include="Models\ModuleUrl.cs" />
-    <Compile Include="Models\PortalUserRoles.cs" />
+    <Compile Include="Models\PortalRole.cs" />
     <Compile Include="Models\ViewModels\CoretecClientModuleViewModel.cs" />
     <Compile Include="Models\ViewModels\AddPortalModuleForClientViewModel.cs" />
     <Compile Include="Models\ViewModels\PortalModuleForClientViewModel.cs" />

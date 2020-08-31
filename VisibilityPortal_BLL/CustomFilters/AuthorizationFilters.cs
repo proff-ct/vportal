@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 
 using VisibilityPortal_BLL.Models;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL.CustomFilters
 {
