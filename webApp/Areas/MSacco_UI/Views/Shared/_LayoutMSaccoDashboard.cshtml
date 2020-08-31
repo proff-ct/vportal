@@ -1,7 +1,9 @@
 ﻿@using System.Web.Optimization
 @using Visibility_Portal
+@using Utilities.PortalApplicationParams
 @{
   Layout = "~/Views/Shared/_Layout.cshtml";
+  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
 }
 @section HtmlHead {
   @{
@@ -58,6 +60,12 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
       <span>Link Monitoring</span>
     </a>
   </li>
+  <li>
+    <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
+      <i class="fa fa-mobile fa-lg"></i>
+      <span>MSACCO+ Activation</span>
+    </a>
+  </li>
   <li class="treeview">
     <a href="#">
       <i class="fa fa-database"></i> <span>Transactions</span>
@@ -90,7 +98,32 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
       <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
     </ul>
   </li>
-
+  <!-- Display menu only for Waumini-->
+  @if (activeUserParams.ClientCorporateNo.Equals("700101"))
+  {
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-address-book-o"></i> <span>MSACCO Registration</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li><a href="@Url.Action("WauminiMsaccoRegistration","IPRS")"><i class="fa fa-address-card-o"></i>Verify Member</a></li>
+      </ul>
+    </li>
+  }
+  <li class="treeview">
+    <a href="#">
+      <i class="fa fa-address-book-o"></i> <span>Virtual Registrations</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li><a href="@Url.Action("Index","VirtualRegistrations")"><i class="fa fa-users"></i>Registrations</a></li>
+    </ul>
+  </li>
   @*<li class="treeview">
       <a href="#">
         <i class="fa fa-file"></i> <span>Member Logs</span>

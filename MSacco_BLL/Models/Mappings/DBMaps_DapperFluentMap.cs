@@ -299,5 +299,22 @@ namespace MSacco_BLL.Models.Mappings
       Map(m => m.Last_Login_Date).ToColumn("Last Login Date");
     }
   }
+  internal class MsaccoBankTransferMap : EntityMap<MSACCOBankTransfer>
+  {
+    internal MsaccoBankTransferMap()
+    {
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Telephone_No).ToColumn("Telephone No");
+      Map(m => m.Account_No).ToColumn("Account No");
+      Map(m => m.Recipient_Account_No).ToColumn("Recipient Account No");
+      Map(m => m.Bank_Name).ToColumn("Bank Name");
+      Map(m => m.Bank_Code).ToColumn("Bank Code");
+      Map(m => m.Request_Confirmed).ToColumn("Request Confirmed");
+      Map(m => m.Sent_To_Journal).ToColumn("Sent To Journal");
+      Map(m => m.Session_Id).ToColumn("Session Id");
+      Map(m => m.Transaction_Reference).ToColumn("Transaction Reference");
+  }
+  }
 }
       

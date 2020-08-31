@@ -1,0 +1,95 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@using Utilities.PortalApplicationParams
+@{
+  ViewBag.Title = "MSACCO Registration";
+
+  Layout = $"{MSaccoAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutMSacco.cshtml";
+  ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
+}
+<section class="content-header">
+  <h1>
+    @ViewBag.Title
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  </ol>
+</section>
+
+<section class="content">
+ @* @using (Html.BeginForm())*@
+ @*// {*@
+  <div class="form-horizontal">
+    <h4>Verify ID details</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+      @Html.Label("ID Number", "ID Number", htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.TextBox("txtIDNumber", null, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessage("txtIDNumber", "", new { @class = "text-danger" })
+      </div>
+    </div>
+        <div class="form-group">
+      @Html.Label("lblPhoneNo", "Phone No", htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.TextBox("txtPhoneNo", "", htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessage("txtPhoneNo", "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <button type="button"
+                class="btn btn-default"
+                onclick="LoadData('@Url.Action("SearchIPRSRecord", "IPRS")', @activeUserParams.ClientCorporateNo)">
+          Verify
+        </button>
+      </div>
+    </div>
+  </div>
+    <div class="col-md-20">
+      <div class="panel">
+        <div class="panel-heading">
+          @*<div class="pull-left">
+              <h5 class="panel-info">Link Status</h5>
+            </div>*@
+          <div class="pull-right">
+            <button type="button"
+                    class="btn btn-labeled btn-primary btn-sm"
+                    onclick="ReloadData()">
+              <span class="btn-label"><i class="fa fa-refresh"></i></span>
+              Reload
+            </button>
+            <button type="button" class="btn btn-labeled btn-warning btn-sm"
+                    onclick="ClearFilters()">
+              <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+              Clear filters
+            </button>
+          </div>
+
+        </div>
+        <div class="panel-body">
+          <div id="iprsResultsTable"></div>
+        </div>
+
+      </div>
+    </div>
+  @*//}*@
+</section>
+
+
+
+@section Scripts {
+  <!-- Include external scripts-->
+  @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/iprs.js")
+  <!-- Define local scripts-->
+  <script>
+    $(document).ready(function () {
+      txtSearchIdNumber = "#txtIDNumber";
+      txtSearchPhoneNo = "#txtPhoneNo";
+      initTabulator("#iprsResultsTable");
+    });
+  </script>
+}

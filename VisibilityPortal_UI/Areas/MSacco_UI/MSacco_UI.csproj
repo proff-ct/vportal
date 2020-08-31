@@ -460,6 +460,7 @@
     <Content Include="plugins\tabulator_4.4\css\tabulator_simple.min.css.map" />
     <Content Include="plugins\tabulator_4.4\css\tabulator_site.min.css.map" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\LocalWebApp.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -486,6 +487,7 @@
     <Content Include="Scripts\portal\view\iprs.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\msaccoPlusNumberChecker.js" />
+    <Content Include="Scripts\portal\view\bankTransfers.js" />
     <Content Include="Scripts\portal\view\virtualRegistrations.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\home.js" />
@@ -534,6 +536,7 @@
     <Content Include="Views\IPRS\WauminiMsaccoRegistration.cshtml" />
     <Content Include="Views\VirtualRegistrations\Index.cshtml" />
     <Content Include="Views\MsaccoPlusNumberChecker\Index.cshtml" />
+    <Content Include="Views\BankTransfer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

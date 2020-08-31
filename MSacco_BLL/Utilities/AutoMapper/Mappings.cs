@@ -7,6 +7,7 @@ using AutoMapper;
 using MSacco_BLL.Models;
 using MSacco_BLL.ViewModels;
 using MSacco_DAL;
+using MSacco_Dataspecs.Feature.MSACCOBankTransfer.Models;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
 
 namespace MSacco_BLL.Utilities.AutoMapper
@@ -26,6 +27,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
           config.CreateMap<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>();
           config.CreateMap<VirtualRegistrationNewIPRS, VirtualRegistrationViewModel>();
           config.CreateMap<IMsaccoPlusNumberChecker, IMsaccoPlusNumberCheckerViewModel>();
+          config.CreateMap<IBankTransfer, IBankTransferViewModel>();
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -41,6 +43,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
         config.CreateMap<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>();
         config.CreateMap<VirtualRegistrationNewIPRS, VirtualRegistrationViewModel>();
         config.CreateMap<IMsaccoPlusNumberChecker, IMsaccoPlusNumberCheckerViewModel>();
+        config.CreateMap<IBankTransfer, IBankTransferViewModel>();
       });
     }
 
@@ -56,6 +59,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
       config.CreateMap<VirtualRegistrationNewIPRS, WauminiIPRSLookupViewModel>();
       config.CreateMap<VirtualRegistrationNewIPRS, VirtualRegistrationViewModel>();
       config.CreateMap<IMsaccoPlusNumberChecker, IMsaccoPlusNumberCheckerViewModel>();
+      config.CreateMap<IBankTransfer, IBankTransferViewModel>();
     });
   }
 }

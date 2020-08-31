@@ -49,6 +49,7 @@ namespace MSacco_BLL
         config.AddMap(new WauminiVirtualRegistrationIPRSMap());
         config.AddMap(new VirtualRegistrationNewIPRSMap());
         config.AddMap(new Routing_TableMap());
+        config.AddMap(new MsaccoBankTransferMap());
       });
     }
     public string ConnectionString { get => _connectionString; }
