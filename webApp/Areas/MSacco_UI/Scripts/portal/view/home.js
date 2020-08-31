@@ -139,7 +139,11 @@ function DisplayFinancialSummaryForTheDay(datasetParams)
 
     error: function (xhr, ajaxOptions, thrownError) {
       //some errror, some show err msg to user and log the error
-      alert("Server Error Occurred. Unable to load summary");
+      //alert("Server Error Occurred. Unable to load summary");
+      bootbox.alert({
+        title: "<h3>Daily Financial Total</h3>",
+        message: "Server Error Occurred. Unable to load " + datasetParams.datasetName + " summary." 
+      })
       //Log(xhr.responseText);
     }
   });

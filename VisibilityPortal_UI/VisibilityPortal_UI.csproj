@@ -1874,11 +1874,6 @@
       <IsTransformFile>true</IsTransformFile>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="AppDBConnectionStrings.FolderProfile.config">
-      <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
-      <IsTransformFile>true</IsTransformFile>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="AppDBConnectionStrings.Release.config">
       <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>
