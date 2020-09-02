@@ -4,6 +4,9 @@ using System.Web.Mvc;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
+using MSacco_Dataspecs.Functions;
+using MSacco_Dataspecs.Models;
+using MSacco_Dataspecs.MSSQLOperators;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -11,7 +14,7 @@ namespace MSacco_BLL.Controllers
   [RequireActiveUserSession]
   public class MobileWithdrawalsController : Controller
   {
-    private MobileWithdrawalsBLL _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
+    private IBL_MobileWithdrawals _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
     // GET: MobileWithdrawals
     public ActionResult Index()
     {
@@ -37,10 +40,11 @@ namespace MSacco_BLL.Controllers
 
       //PaginationParameters pagingParams = new PaginationParameters(
       //  int.Parse(page), int.Parse(size), null);
-      PaginationParameters pagingParams = new PaginationParameters(page, size, null);
+      IPaginationParameters pagingParams = new PaginationParameters(page, size, null);
 
       dynamic mobileWithdrawalRecords = _mobileWithdrawalsBLL
         .GetMobileWithdrawalsTrxListForClient(clientCorporateNo, out int lastPage, true, pagingParams)
+        .Select(r=> { if(r.Transaction_Date == null) r.Transaction_Date=r.Datetime; return r; }) // didn't want to use ForEach ext. method
         .ToArray();
 
       return Json(new
@@ -59,14 +63,14 @@ namespace MSacco_BLL.Controllers
         return null;
       }
 
-      IEnumerable<MobileWithdrawals> withdrawals = _mobileWithdrawalsBLL
+      IEnumerable<IMobileWithdrawals_SACCODB> withdrawals = _mobileWithdrawalsBLL
         .GetClientMobileWithdrawalsFinancialSummaryForToday(clientCorporateNo, out int lastPage)
         .Where(l => l.Status.Equals("Completed"))
-        .OrderByDescending(l => l.Transaction_Date);
+        .OrderByDescending(l => l.Transaction_Date ?? l.Datetime);
 
       return Json(new
       {
-        last_transaction_timestamp = withdrawals.FirstOrDefault().Transaction_Date,
+        last_transaction_timestamp = withdrawals.FirstOrDefault().Transaction_Date?? withdrawals.FirstOrDefault().Datetime,
         sum = withdrawals.Sum(w => w.Amount)
       }, JsonRequestBehavior.AllowGet);
 

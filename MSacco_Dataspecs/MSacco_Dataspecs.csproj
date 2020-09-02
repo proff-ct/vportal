@@ -42,7 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBConnectionStrings.cs" />
+    <Compile Include="Functions\IBL_MobileWithdrawals.cs" />
     <Compile Include="HardCoded.cs" />
+    <Compile Include="Models\IMobileWithdrawals_DarajaDB.cs" />
+    <Compile Include="Models\IMobileWithdrawals_SACCODB.cs" />
     <Compile Include="MsaccoBankTransfer.cs" />
     <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="IPaginationParameters.cs" />

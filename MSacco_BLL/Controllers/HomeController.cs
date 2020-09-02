@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MSacco_DAL;
+using MSacco_Dataspecs.Models;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -30,7 +31,7 @@ namespace MSacco_BLL.Controllers
       // return the json data
       if (string.IsNullOrEmpty(clientCorporateNo)) return null;
 
-      MobileWithdrawals withdrawalRecord = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(clientCorporateNo);
+      IMobileWithdrawals_SACCODB withdrawalRecord = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(clientCorporateNo);
 
       return Json(new
       {

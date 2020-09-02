@@ -13,16 +13,16 @@ namespace MSacco_BLL
 
   public class DapperORM
   {
-    //private static string _connectionString = @"Data Source=MATT-HP-PAV-450;Initial Catalog=DCS;Integrated Security=True";
-#if DEBUG
-    private static string _connectionString = Connection.TestingConnectionString;
-#else
-    private static string _connectionString = Connection.ProductionConnectionString;
-#endif
+    private string _connectionString;
 
     public DapperORM(string conString = null)
     {
-      _connectionString = conString ?? _connectionString;
+#if DEBUG
+      _connectionString = conString ?? Connection.TestingConnectionString;
+#else
+      _connectionString = conString ?? Connection.ProductionConnectionString;
+#endif
+
       //InitDapper();
     }
     static DapperORM()
@@ -41,6 +41,7 @@ namespace MSacco_BLL
         config.AddMap(new MSaccoUtilityPaymentMap());
         config.AddMap(new MSaccoAirtimeTopupMap());
         config.AddMap(new MobileWithdrawalsMap());
+        config.AddMap(new MobileWithdrawals_DarajaMap());
         config.AddMap(new LinkMonitoringMap());
         config.AddMap(new LinkDowntimeMap());
         config.AddMap(new ArchivedBulkSMSDebitMap());

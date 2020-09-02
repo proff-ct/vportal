@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
+using MSacco_Dataspecs.Models;
 using NUnit.Framework;
 
 namespace MSacco_BLL.Tests
@@ -104,7 +105,7 @@ namespace MSacco_BLL.Tests
       public void Returns_latest_mobile_withdrawal_record_for_specified_client()
       {
 
-        MobileWithdrawals output = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(corporateNo);
+        IMobileWithdrawals_SACCODB output = _mobileWithdrawalsBLL.GetLatestWithdrawalForClient(corporateNo);
 
         Assert.IsInstanceOf<MobileWithdrawals>(output, "Mobile Withdrawal instance not returned!");
         Assert.AreEqual(output.Corporate_No, corporateNo, "Corporate No MISMATCH!!");

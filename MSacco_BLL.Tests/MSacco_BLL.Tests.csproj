@@ -97,6 +97,10 @@
       <Project>{053943c1-be39-41e2-bbb4-16a268a94b75}</Project>
       <Name>MSacco_DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MSacco_Dataspecs\MSacco_Dataspecs.csproj">
+      <Project>{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}</Project>
+      <Name>MSacco_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
