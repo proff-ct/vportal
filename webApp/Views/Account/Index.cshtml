@@ -1,4 +1,4 @@
-﻿@using VisibilityPortal_BLL.Models;
+﻿@using VisibilityPortal_Dataspecs.Models
 @using Utilities.PortalApplicationParams;
 @{
   Layout = "~/Views/Shared/_Layout.cshtml";
@@ -34,7 +34,7 @@ $"~/plugins/Responsive-Tabs/css/style.css" //basic tab accordion theme
     {
       Html.RenderPartial("_ListUsersForSuperAdminPartial");
     }
-    else if (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()))
+    else if (User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled)
     {
       Html.RenderPartial("_ListUsersForSystemAdminPartial");
     }
@@ -60,7 +60,7 @@ $"~/Scripts/portal/view/account.js"
   }
   @Scripts.Render(scriptFiles)
   <!-- Define local scripts-->
-<script>
+  <script>
     $(document).ready(function () {
       @if(User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())) {
         <text>
@@ -79,5 +79,5 @@ $"~/Scripts/portal/view/account.js"
         </text>
       }
     });
-</script>
+  </script>
 }

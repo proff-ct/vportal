@@ -1,15 +1,19 @@
-﻿@using VisibilityPortal_BLL.Models;
+﻿@using VisibilityPortal_Dataspecs.Models;
+@using Utilities.PortalApplicationParams
 @*@@using Microsoft.AspNet.Identity;
-@using System.Security.Claims;
-@{ 
-  string[] PortalModules = new string[3] { "AgencyBanking", "CallCenter", "MSacco" };
-  string[] AccountAdminRoles = new string[2] {
-    PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
-    PortalUserRoles.SystemRoles.SystemAdmin.ToString()
-  };
-  var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
-  IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
-}*@
+  @using System.Security.Claims;
+  @{
+    string[] PortalModules = new string[3] { "AgencyBanking", "CallCenter", "MSacco" };
+    string[] AccountAdminRoles = new string[2] {
+      PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
+      PortalUserRoles.SystemRoles.SystemAdmin.ToString()
+    };
+    var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
+    IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
+  }*@
+@{
+  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,14 +34,14 @@
   }
   @Styles.Render(cssFiles)
   @RenderSection("HtmlHead", false)
-<link href="~/Content/normalize.css" rel="stylesheet" />
+  <link href="~/Content/normalize.css" rel="stylesheet" />
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
     <!-- Main Header -->
     <header class="main-header">
-        <!-- Logo -->
+      <!-- Logo -->
       <a href="@Url.Action("Index", "Home")" class="logo" style="position: fixed">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>V</b>P</span>
@@ -57,28 +61,28 @@
           <ul class="nav navbar-nav">
             @Html.Partial("_LoginPartial")
             @*@if (Request.IsAuthenticated)
-        {
-          <!-- User Account Menu -->
-          <li class="dropdown user user-menu">
-            <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
-              <i class="fa fa-user-circle fa-2x pull-left"></i>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
-            </a>
-            <ul class="dropdown-menu">
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="list-group-item mt-2">
-                  <a href="#" class="">Profile</a>
-                </div>
-                <div class="list-group-item mt-2">
-                  <a href="#" class="">Sign out</a>
-                </div>
-              </li>
-            </ul>
-          </li>
-        }*@
+              {
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu">
+                  <!-- Menu Toggle Button -->
+                  <a href="#" class="dropdown-toggle full-opacity-hover" data-toggle="dropdown">
+                    <i class="fa fa-user-circle fa-2x pull-left"></i>
+                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                    <!--  <span class="hidden-xs pull-left">Alexander Pierce</span> -->
+                  </a>
+                  <ul class="dropdown-menu">
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                      <div class="list-group-item mt-2">
+                        <a href="#" class="">Profile</a>
+                      </div>
+                      <div class="list-group-item mt-2">
+                        <a href="#" class="">Sign out</a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              }*@
 
 
           </ul>
@@ -95,7 +99,7 @@
         <ul class="sidebar-menu" data-widget="tree">
           @RenderSection("MenuLinks", false)
           <!-- Optionally, you can add icons to the links -->
-          @if (Request.IsAuthenticated && (User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
+          @if (Request.IsAuthenticated && ((User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
           {
             if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
             {
@@ -218,10 +222,10 @@
   @{
     string[] scriptsToLoad =
     {
-  "~/Scripts/jquery-3.3.1.min.js",
-  "~/bundles/bootstrap",
-  "~/bundles/globalPlugins",
-  "~/Scripts/adminlte.min.js"
+"~/Scripts/jquery-3.3.1.min.js",
+"~/bundles/bootstrap",
+"~/bundles/globalPlugins",
+"~/Scripts/adminlte.min.js"
 };
   }
   @Scripts.Render(scriptsToLoad)
