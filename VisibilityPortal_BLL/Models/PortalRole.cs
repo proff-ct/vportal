@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace VisibilityPortal_BLL.Models
 {
-  public class PortalRole
+  public class PortalRole : IUserRole
   {
     public string AspRoleId { get; set; }
     public string AspRoleName { get; set; }

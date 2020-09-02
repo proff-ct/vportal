@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using Visibility_Portal
+@using VisibilityPortal_Dataspecs.Models
 @using Utilities.PortalApplicationParams
 @{
   Layout = "~/Views/Shared/_Layout.cshtml";
@@ -60,12 +61,16 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
       <span>Link Monitoring</span>
     </a>
   </li>
-  <li>
-    <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
-      <i class="fa fa-mobile fa-lg"></i>
-      <span>MSACCO+ Activation</span>
-    </a>
-  </li>
+  @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r=>r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
+  {
+
+    <li>
+      <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
+        <i class="fa fa-mobile fa-lg"></i>
+        <span>MSACCO+ Activation</span>
+      </a>
+    </li>
+  }
   <li class="treeview">
     <a href="#">
       <i class="fa fa-database"></i> <span>Transactions</span>

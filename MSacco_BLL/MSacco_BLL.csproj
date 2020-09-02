@@ -159,6 +159,14 @@
       <Project>{6A5EC0E2-A633-420E-A14D-4C9EFAF2A9CD}</Project>
       <Name>Utilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisibilityPortal_BLL\VisibilityPortal_BLL.csproj">
+      <Project>{B6AA0DA3-35E2-4767-9902-DD6FFDF92171}</Project>
+      <Name>VisibilityPortal_BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
+      <Project>{E72CE19F-D33E-4236-A85C-E584D0C8FCF0}</Project>
+      <Name>VisibilityPortal_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Web;
 using System.Web.Mvc;
+using VisibilityPortal_BLL.Models.ASP_Identity.IdentityConfig;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace MSacco_BLL.CustomFilters
 {
@@ -28,4 +32,5 @@ namespace MSacco_BLL.CustomFilters
       base.OnActionExecuting(filterContext);
     }
   }
+
 }

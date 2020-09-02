@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VisibilityPortal_Dataspecs.Models;
 
 namespace Utilities.PortalApplicationParams
 {
@@ -11,8 +12,10 @@ namespace Utilities.PortalApplicationParams
     public string ClientCorporateNo { get; set; }
     public string ClientModuleId { get; set; }
     public List<UserRoles> Roles { get; set; }
-    public class UserRoles : IUserRoles
+    public class UserRoles : IUserRole
     {
+      public string ClientModuleId { get; set; }
+      public string AspRoleName { get; set; }
       public string AspRoleId { get; set; }
       public bool IsEnabled { get; set; }
     }

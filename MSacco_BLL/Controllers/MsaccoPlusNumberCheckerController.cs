@@ -9,9 +9,11 @@ using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Functions;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
 using MSacco_Dataspecs.MSSQLOperators;
 using Utilities.PortalApplicationParams;
+using VisibilityPortal_BLL.CustomFilters;
 
 namespace MSacco_BLL.Controllers
 {
+  [RequireSACCOAdmin]
   [RequireActiveUserSession]
   public class MsaccoPlusNumberCheckerController : Controller
   {

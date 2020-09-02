@@ -47,6 +47,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\VisibilityPortal_UI\Bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,7 +61,6 @@
     <Compile Include="ActiveUserParams.cs" />
     <Compile Include="AppLogger.cs" />
     <Compile Include="IActiveUserParams.cs" />
-    <Compile Include="IUserRoles.cs" />
     <Compile Include="PortalSecurity.cs" />
     <Compile Include="ValidateCoreTecEmailDomain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +74,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
+      <Project>{E72CE19F-D33E-4236-A85C-E584D0C8FCF0}</Project>
+      <Name>VisibilityPortal_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

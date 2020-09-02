@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace VisibilityPortal_Dataspecs.Models
 {
+  public interface IUserRole
+  {
+    string AspRoleId { get; set; }
+    string AspRoleName { get; set; }
+    string ClientModuleId { get; set; }
+    bool IsEnabled { get; set; }
+  }
   public static class PortalUserRoles
   {
     // stored in db in AspNetRoles table 

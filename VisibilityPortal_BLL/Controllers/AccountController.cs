@@ -115,11 +115,17 @@ namespace VisibilityPortal_BLL.Controllers
             return RedirectToAction("ResetPassword", "Account", new { userId = user.Id, code = code });
           }
           // initialize the activeUserParams session object
-          ActiveUserParams activeUserParams = new ActiveUserParams
+          //ActiveUserParams activeUserParams = new ActiveUserParams
+          //{
+          //  ClientCorporateNo = user.ClientCorporateNo,
+          //  ClientModuleId = string.Empty, // will get set when the user selects a module on login
+          //  Roles = new List<ActiveUserParams.UserRoles>()
+          //};
+          IActiveUserParams activeUserParams = new ActiveUserParams
           {
             ClientCorporateNo = user.ClientCorporateNo,
             ClientModuleId = string.Empty, // will get set when the user selects a module on login
-            Roles = new List<ActiveUserParams.UserRoles>()
+            Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles)
           };
           Session["ActiveUserParams"] = activeUserParams;
           List<ActiveUserParams.UserRoles> userRoles = new List<ActiveUserParams.UserRoles>();
@@ -188,9 +194,26 @@ namespace VisibilityPortal_BLL.Controllers
                   DefaultRoute = _portalModuleBLL.GetDefaultRouteForModule(clientModule.PortalModuleName)
                 });
               });
-              if (moduleUrls.Count == 0) return RedirectToAction("NoRolesEnabled");
-              Session["ClientModuleUrls"] = moduleUrls.AsEnumerable();
-              return RedirectToAction("Index", "Home");
+              switch (moduleUrls.Count > 1 ? "Multiple": moduleUrls.Count == 1 ? "Single" : "None")
+              {
+                case "Single":
+                  activeUserParams.ClientModuleId = user.PortalRoles
+                    .Where(r => _coretecClientBLL.GetPortalModuleForClient(
+                      r.ClientModuleId).PortalModuleName.Equals(moduleUrls.Single().ModuleName))
+                    .First().ClientModuleId;
+                  Session["ActiveUserParams"] = activeUserParams;
+                  return RedirectToRoute(
+                    moduleUrls.Single().DefaultRoute,
+                    (RouteTable.Routes[moduleUrls.Single().DefaultRoute] as Route).Defaults);
+                case "Multiple":
+                  Session["ClientModuleUrls"] = moduleUrls.AsEnumerable();
+                  return RedirectToAction("Index", "Home");
+                case "None":
+                  return RedirectToAction("NoRolesEnabled");
+              }
+              //if (moduleUrls.Count == 0) return RedirectToAction("NoRolesEnabled");
+              //Session["ClientModuleUrls"] = moduleUrls.AsEnumerable();
+              //return RedirectToAction("Index", "Home");
             }
             catch (ArgumentException ex)
             {
@@ -906,6 +929,22 @@ namespace VisibilityPortal_BLL.Controllers
       // the only thing expected to change at the moment is th IsEnabled property
       if(editUserVM.PortalRoles.Count > 0)
       {
+        // Check that there are no two active roles
+        if(editUserVM.PortalRoles.GroupBy(roles => roles.ClientModuleId).Where(g => g.Count() > 1).Any(r => r.All(mr => mr.IsEnabled)))
+        {
+          ModelState.AddModelError("", $"User cannot have two active roles for the same module!");
+          editUserVM.PortalRoles = Mapper.Map<IList<PortalUserRoleViewModel>>(
+          _portalUserRoleBLL.GetPortalUserRoleListForUser(userToEdit.Id))
+          .Select(r =>
+          {
+            r.Module = _coretecClientBLL.GetPortalModuleForClient(r.ClientModuleId).PortalModuleName;
+            return r;
+          })
+          .ToList();
+          SetViewParamsForEditingUser(userToEdit);
+          return View(editUserVM);
+        }
+
         PortalUserRole roleToUpdate = null;
         editUserVM.PortalRoles.ToList().ForEach(r => {
           roleToUpdate = _portalUserRoleBLL.GetPortalUserRoleListForUser(userToEdit.Id)
@@ -1123,13 +1162,14 @@ namespace VisibilityPortal_BLL.Controllers
       List<PortalUserRole> listRolesForUser = new List<PortalUserRole>();
       listRolesForUser = _portalUserRoleBLL.GetPortalUserRoleListForUser(user.Id).ToList();
 
-      PortalUserRole roleForModule = listRolesForUser.SingleOrDefault(r => r.ClientModuleId == clientModuleId);
+      List<PortalUserRole> rolesForModule = listRolesForUser.Where(r => r.ClientModuleId == clientModuleId).ToList();
 
-      if(roleForModule == null || !roleForModule.IsEnabled)
+      if(rolesForModule == null || !rolesForModule.Any(mr=>mr.IsEnabled))
       {
+        
         return Json(
           Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager.Roles.ToList())
-          .Where(r=> !r.Name.Equals(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+          .Where(r=> !r.Name.Equals(PortalUserRoles.SystemRoles.SuperAdmin.ToString()) && !rolesForModule.Any(mr=>mr.AspRoleId.Equals(r.RoleId)))
           .OrderBy(r => r.Name)
           .Select(r => new { r.Name, r.RoleId })
           .ToList(), JsonRequestBehavior.AllowGet);
