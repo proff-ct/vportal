@@ -15,7 +15,7 @@ nameof(PortalUserRoles.SystemRoles.SystemAdmin)
   bool isModuleSysAdmin = false;
   var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
   // IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
-  string isSystemAdmin = claimsIdentity.Claims.FirstOrDefault(c => SACCOAdminRoles.Contains(c.Type))?.Value.ToLower();
+  string isSystemAdmin = claimsIdentity.Claims.FirstOrDefault(c => SACCOAdminRoles.Any(r=>c.Type.Contains(r)))?.Value.ToLower();
   switch(isSystemAdmin)
   {
     case "false":
