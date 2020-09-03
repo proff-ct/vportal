@@ -1,18 +1,30 @@
 ﻿@using VisibilityPortal_Dataspecs.Models;
-@using Utilities.PortalApplicationParams
-@*@@using Microsoft.AspNet.Identity;
-  @using System.Security.Claims;
-  @{
-    string[] PortalModules = new string[3] { "AgencyBanking", "CallCenter", "MSacco" };
-    string[] AccountAdminRoles = new string[2] {
-      PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
-      PortalUserRoles.SystemRoles.SystemAdmin.ToString()
-    };
-    var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
-    IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
-  }*@
+@using Utilities.PortalApplicationParams;
+@*@using Microsoft.AspNet.Identity;*@
+@using System.Security.Claims;
 @{
-  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+  string[] PortalModules = new string[3] { "AgencyBanking", "CallCenter", "MSacco" };
+  string[] AccountAdminRoles = new string[2] {
+  PortalUserRoles.SystemRoles.SuperAdmin.ToString(),
+  PortalUserRoles.SystemRoles.SystemAdmin.ToString()
+};
+  List<string> SACCOAdminRoles = new List<string>
+{
+nameof(PortalUserRoles.SystemRoles.SystemAdmin)
+};
+  bool isModuleSysAdmin = false;
+  var claimsIdentity = HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
+  // IEnumerable<Claim> moduleRoleClaims = (claimsIdentity == null) ? null : claimsIdentity.Claims.Where(c => PortalModules.Contains(c.Type) && AccountAdminRoles.Contains(c.Value));
+  string isSystemAdmin = claimsIdentity.Claims.FirstOrDefault(c => SACCOAdminRoles.Contains(c.Type))?.Value.ToLower();
+  switch(isSystemAdmin)
+  {
+    case "false":
+      isModuleSysAdmin = false;
+      break;
+    case "true":
+      isModuleSysAdmin = true;
+      break;
+  }
 }
 <!DOCTYPE html>
 <html>
@@ -22,7 +34,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <title>@ViewBag.Title - Visibility Portal</title>
   @{
-    string[] cssFiles = {
+                string[] cssFiles = {
 "~/Content/bootstrap.css",
 "~/Content/AdminLTE.min.css",
 "~/Content/ionicons.min.css",
@@ -99,28 +111,28 @@
         <ul class="sidebar-menu" data-widget="tree">
           @RenderSection("MenuLinks", false)
           <!-- Optionally, you can add icons to the links -->
-          @if (Request.IsAuthenticated && ((User.IsInRole(PortalUserRoles.SystemRoles.SystemAdmin.ToString()) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString())))
-          {
-            if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
-            {
-              <li class="header"><span>CLIENT SETUP</span></li>
-              <li>
-                <a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
-                  <i class="fa fa-wrench"></i><span>Register Client</span>
-                </a>
-              </li>
-            }
-            else
-            {
-              <li class="header"><span>USER MANAGEMENT</span></li>
-            }
-            <li>
-              <a href="@Url.Action("Index","Account", new { Area = "" })">
-                <i class="fa fa-users"></i><span>Users</span>
-              </a>
-            </li>
+          @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && isModuleSysAdmin) || User.IsInRole(nameof(PortalUserRoles.SystemRoles.SuperAdmin))))
+                                        {
+                                          if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
+                                          {
+          <li class="header"><span>CLIENT SETUP</span></li>
+          <li>
+            <a href="@Url.Action("Index","CoretecClient", new { Area = "" })">
+              <i class="fa fa-wrench"></i><span>Register Client</span>
+            </a>
+          </li>
+                                          }
+                                          else
+                                          {
+          <li class="header"><span>USER MANAGEMENT</span></li>
+                                          }
+          <li>
+            <a href="@Url.Action("Index","Account", new { Area = "" })">
+              <i class="fa fa-users"></i><span>Users</span>
+            </a>
+          </li>
 
-          }
+                                        }
 
         </ul>
         <!-- /.sidebar-menu -->
@@ -220,8 +232,8 @@
   <!-- ./wrapper -->
   <!-- REQUIRED JS SCRIPTS -->
   @{
-    string[] scriptsToLoad =
-    {
+                string[] scriptsToLoad =
+                {
 "~/Scripts/jquery-3.3.1.min.js",
 "~/bundles/bootstrap",
 "~/bundles/globalPlugins",
