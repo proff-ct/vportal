@@ -78,7 +78,9 @@
     <Compile Include="CallCenterDBContext.cs" />
     <Compile Include="FloatResource.cs" />
     <Compile Include="FloatResourceAlertForClient.cs" />
+    <Compile Include="MsaccoTimsiNumberChecker.cs" />
     <Compile Include="MSaccoUtilityPayment.cs" />
+    <Compile Include="RoutingTable.cs" />
     <Compile Include="Sacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SMSFloat\Credit\BulkSMS\BulkSMSCredit.cs" />

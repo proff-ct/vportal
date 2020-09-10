@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CallCenter_DAL;
+using CallCenter_Dataspecs.Functions;
+using CallCenter_Dataspecs.Models;
 
 namespace CallCenter_BLL
 {
-  public class SaccoBLL
+  public class SaccoBLL : IBL_SACCO
   {
     string query;
     string tblSacco = Sacco.DBTableName;
     string[] _saccoColumnNames = new string[]
     {
-      "[Corporate No]" , "[Corporate No 2]", "[Sacco Name 1]", "[Mpesa Float]"
+      "[Corporate No]" , "[Corporate No 2]", "[Sacco Name 1]", "[Mpesa Float], Active"
     };
-    public IEnumerable<Sacco> GetSaccoList()
+    public IEnumerable<ISACCO> GetSaccoList()
     {
       query = $@"SELECT {string.Join(",",_saccoColumnNames)}
               FROM {tblSacco}
@@ -23,12 +25,12 @@ namespace CallCenter_BLL
       return new DapperORM().QueryGetList<Sacco>(query);
     }
     
-    public Sacco GetSaccoById(int id)
+    public ISACCO GetSaccoById(int id)
     {
       query = $@"SELECT {string.Join(",", _saccoColumnNames)} FROM {tblSacco} WHERE id='{id.ToString()}'";
       return new DapperORM().QueryGetSingle<Sacco>(query);
     }
-    public Sacco GetSaccoByUniqueParam(string corporateNo = null, string saccoName = null)
+    public ISACCO GetSaccoByUniqueParam(string corporateNo = null, string saccoName = null)
     {
       if (!string.IsNullOrEmpty(corporateNo))
       {

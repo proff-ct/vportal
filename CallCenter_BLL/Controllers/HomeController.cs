@@ -117,7 +117,7 @@ namespace CallCenter_BLL.Controllers
 
       List<SaccoFloatsViewModel> saccoFloatsVM = new List<SaccoFloatsViewModel>();
       List<Sacco> saccosList = new List<Sacco>();
-      saccosList = _saccoBLL.GetSaccoList().ToList();
+      saccosList = _saccoBLL.GetSaccoList().ToList().OfType<Sacco>().ToList();
       List<IMobileWithdrawals_SACCODB> saccoMobileWithdrawals = new List<IMobileWithdrawals_SACCODB>();
 
       // get the float records for each sacco

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using CallCenter_DAL;
+using CallCenter_Dataspecs.Models;
 
 namespace CallCenter_BLL.Controllers
 {
@@ -28,7 +29,7 @@ namespace CallCenter_BLL.Controllers
     [HttpPost]
     public string SetActiveSacco(int corporateNo)
     {
-      Sacco activeSacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo.ToString());
+      ISACCO activeSacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo.ToString());
       Session["ActiveSacco"] = activeSacco;
 
       return activeSacco.saccoName_1;
@@ -60,7 +61,7 @@ namespace CallCenter_BLL.Controllers
     public ActionResult GetSaccoList(string mode="forTable")
     {
 
-      IEnumerable<Sacco> saccoList = _saccoBLL.GetSaccoList();
+      IEnumerable<Sacco> saccoList = _saccoBLL.GetSaccoList().OfType<Sacco>();
       switch (mode)
       {
         case "forSelect":

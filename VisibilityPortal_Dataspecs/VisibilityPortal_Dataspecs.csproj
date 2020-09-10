@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Models\IPortalModule.cs" />
     <Compile Include="Models\IPortalModuleForClient.cs" />
+    <Compile Include="Models\MSACCO_TIMSI_RESET_LOG.cs" />
     <Compile Include="Models\PortalUserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
