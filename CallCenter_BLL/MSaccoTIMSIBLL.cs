@@ -121,7 +121,7 @@ namespace CallCenter_BLL
 
     public IMSACCO_TIMSI_NumberChecker GetTIMSIMemberRecordForClient(string corporateNo, string memberPhoneNo)
     {
-      if (memberPhoneNo.Length < _minimumPhoneLength) return null;
+      if (ParsePhoneNo(memberPhoneNo).Length < _minimumPhoneLength) return null;
 
       IRouting_Table regRecord = _msaccoRegistrationsBLL.GetMsaccoRegistrationRecordForClient(corporateNo, ParsePhoneNo(memberPhoneNo));
 
@@ -262,7 +262,7 @@ namespace CallCenter_BLL
       {
         _query = $@"UPDATE {_tblTIMSIRESETLOG}
            SET 
-             [ResetStatus] = '{nameof(resetStatus)}'
+             [ResetStatus] = '{resetStatus}'
             ,[OperationRemarks] = '{remarks}'
             ,[ResetStatusDate] = '{DateTime.Now}'
             ,[DateLastModified] = '{DateTime.Now}'

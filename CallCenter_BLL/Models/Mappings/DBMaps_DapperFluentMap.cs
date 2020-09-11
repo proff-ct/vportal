@@ -295,5 +295,28 @@ namespace CallCenter_BLL.Models.Mappings
     }
   }
 
+  internal class RoutingTableMap : EntityMap<RoutingTable>
+  {
+    internal RoutingTableMap()
+    {
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Telephone_No).ToColumn("Telephone No");
+      Map(m => m.PIN_No_Changed).ToColumn("PIN No Changed");
+      Map(m => m.Withdrawal_Limit_daily).ToColumn("Withdrawal Limit daily");
+      Map(m => m.Withdrawal_Limit_Transaction).ToColumn("Withdrawal Limit Transaction");
+      Map(m => m.Account_No).ToColumn("Account No");
+      Map(m => m.Language_Code).ToColumn("Language Code");
+      Map(m => m.Language_Code_2).ToColumn("Language Code 2");
+      Map(m => m.SMS_Code).ToColumn("SMS Code");
+      Map(m => m.SMS_Code_Verified).ToColumn("SMS Code Verified");
+      Map(m => m.Is_Agent).ToColumn("Is Agent");
+      Map(m => m.No_Pin_Attempt).ToColumn("No Pin Attempt");
+      Map(m => m.Last_Pin_Change_Date).ToColumn("Last Pin Change Date");
+      Map(m => m.Date_Blocked).ToColumn("Date Blocked");
+      Map(m => m.Last_Login_Date).ToColumn("Last Login Date");
+    }
+  }
+
 }
      
