@@ -36,7 +36,7 @@ namespace CallCenter_BLL.Tests
       [Test]
       public void Returns_IEnumerable_of_saccos_containing_saccoName_and_corporate_no()
       {
-        IEnumerable<Sacco> output = saccoBLL.GetSaccoList();
+        IEnumerable<Sacco> output = saccoBLL.GetSaccoList().OfType<Sacco>();
 
         Assert.IsInstanceOf<IEnumerable<Sacco>>(output, "Sacco IEnumerable not returned!");
         Assert.GreaterOrEqual(output.Count(), 1, "Sacco list count less than 1");

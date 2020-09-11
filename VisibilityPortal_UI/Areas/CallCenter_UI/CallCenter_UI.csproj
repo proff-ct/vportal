@@ -716,6 +716,7 @@
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\airtimeTopups.js" />
+    <Content Include="Scripts\portal\view\timsiReset.js" />
     <Content Include="Scripts\portal\view\utilityPayments.js" />
     <Content Include="Scripts\portal\view\_SaccosFloats.js" />
     <Content Include="Scripts\portal\view\_SaccosLinkMonitoring.js" />
@@ -771,6 +772,7 @@
     <Content Include="Views\FloatAlerts\_AddNewPartial.cshtml" />
     <Content Include="Views\FloatAlerts\_EditPartial.cshtml" />
     <Content Include="Views\FloatAlerts\Index.cshtml" />
+    <Content Include="Views\TIMSI\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

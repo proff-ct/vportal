@@ -43,11 +43,21 @@
   <ItemGroup>
     <Compile Include="DBConnectionStrings.cs" />
     <Compile Include="Functions\IBL_MobileWithdrawals.cs" />
+    <Compile Include="Functions\IBL_SACCO.cs" />
     <Compile Include="HardCoded.cs" />
     <Compile Include="Models\IMobileWithdrawals_DarajaDB.cs" />
     <Compile Include="Models\IMobileWithdrawals_SACCODB.cs" />
     <Compile Include="Models\IPaginationParameters.cs" />
+    <Compile Include="Models\ISACCO.cs" />
+    <Compile Include="MSACCORegistrationRecord.cs" />
+    <Compile Include="MSACCO_TIMSI_NumberChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
+      <Project>{E72CE19F-D33E-4236-A85C-E584D0C8FCF0}</Project>
+      <Name>VisibilityPortal_Dataspecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

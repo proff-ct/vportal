@@ -47,6 +47,7 @@ namespace CallCenter_BLL
         config.AddMap(new ArchivedBulkSMSDebitMap());
         config.AddMap(new UnarchivedBulkSMSDebitMap());
         config.AddMap(new BulkSMSBalanceMap());
+        config.AddMap(new RoutingTableMap());
       });
     }
     public string ConnectionString { get => _connectionString; }
