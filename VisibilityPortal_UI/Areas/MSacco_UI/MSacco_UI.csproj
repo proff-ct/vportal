@@ -488,6 +488,7 @@
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\msaccoPlusNumberChecker.js" />
     <Content Include="Scripts\portal\view\bankTransfers.js" />
+    <Content Include="Scripts\portal\view\msaccoTIMSIReset.js" />
     <Content Include="Scripts\portal\view\virtualRegistrations.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\home.js" />
@@ -537,6 +538,7 @@
     <Content Include="Views\VirtualRegistrations\Index.cshtml" />
     <Content Include="Views\MsaccoPlusNumberChecker\Index.cshtml" />
     <Content Include="Views\BankTransfer\Index.cshtml" />
+    <Content Include="Views\TIMSI\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

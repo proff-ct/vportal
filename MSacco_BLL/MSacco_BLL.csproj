@@ -105,6 +105,7 @@
     <Compile Include="Controllers\IPRSController.cs" />
     <Compile Include="Controllers\MsaccoPlusNumberCheckerController.cs" />
     <Compile Include="Controllers\BankTransferController.cs" />
+    <Compile Include="Controllers\TIMSIController.cs" />
     <Compile Include="Controllers\VirtualRegistrationsController.cs" />
     <Compile Include="Controllers\MobileWithdrawalsController.cs" />
     <Compile Include="Controllers\UtilityPaymentsController.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="MsaccoBankTransferBLL.cs" />
     <Compile Include="MsaccoRegistrationsBLL.cs" />
     <Compile Include="MsaccoPlusNumberCheckerBLL.cs" />
+    <Compile Include="MsaccoTIMSIBLL.cs" />
     <Compile Include="VirtualRegistrationBLL.cs" />
     <Compile Include="MobileWithdrawalsBLL.cs" />
     <Compile Include="Models\LinkStatusPlusDowntime.cs" />

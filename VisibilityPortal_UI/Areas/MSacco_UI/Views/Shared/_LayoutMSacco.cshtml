@@ -64,7 +64,12 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
   @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
   {
 
-
+    <li>
+      <a href="@Url.Action("Index", "TIMSI")">
+        <i class="fa fa-address-card-o"></i>
+        <span>IMSI Authentication</span>
+      </a>
+    </li>
     <li>
       <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
         <i class="fa fa-mobile fa-lg"></i>
