@@ -13,6 +13,7 @@ namespace MSacco_BLL.Models.Mappings
       Map(s => s.corporateNo_2).ToColumn("Corporate No 2");
       Map(s => s.saccoName_1).ToColumn("Sacco Name 1");
       Map(s => s.mpesaFloat).ToColumn("Mpesa Float");
+      Map(s => s.isActive).ToColumn("Active");
     }
   }
 
