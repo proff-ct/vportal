@@ -75,7 +75,7 @@
       $("#btnReActivate").on('click', function () {
         if ($("#memberTelNo").val() == '') return;
         bootbox.confirm({
-          title: "Confirm to Authenticate Member's IMSI record",
+          title: "Confirm to Authenticate Member's SIM Card Change",
           message: "Are you sure? This action cannot be reversed ",
           buttons: {
             cancel: {
@@ -90,7 +90,7 @@
           callback: function (result) {
             if (result == true) {
               bootbox.prompt({
-                title: "Please provide a trust reason ",
+                title: "Please provide KYC details ",
                 buttons: {
                   cancel: {
                     label: '<i class="fa fa-times"></i> ABORT',
@@ -109,7 +109,7 @@
                     if (result.length < 5) {
                       bootbox.alert({
                         title: "<h3>MSACCO IMSI Authentication</h3>",
-                        message: "Trust reason is too short! Please provide a substantive reason"
+                        message: "KYC info is too short! Please provide substantive information"
                       });
                       return;
                     }

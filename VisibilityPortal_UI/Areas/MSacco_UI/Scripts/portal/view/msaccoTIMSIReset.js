@@ -31,7 +31,7 @@ function initTabulator(tableContainerID) {
         formatter: "responsiveCollapse", width: 30, minWidth: 30,
         align: "center", resizable: false, headerSort: false
       },
-      { title: "Subscriber ID", field: "TimsiId" },
+      { title: "IMSI ID", field: "TimsiId" },
       { title: "Member Phone Number", field: "PhoneNumber" },
       { title: "Reason Blocked", field: "Comments" },
       {
