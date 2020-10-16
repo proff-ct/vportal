@@ -3,13 +3,17 @@
 @using VisibilityPortal_Dataspecs.Models
 @using Utilities.PortalApplicationParams
 @{
-  Layout = "~/Views/Shared/_Layout.cshtml";
-  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+        /**/
+
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
 }
 @section HtmlHead {
   @{
+            /**/
 
-    string[] cssFiles = {
+
+            string[] cssFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css"
 };
@@ -64,12 +68,31 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
   @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
   {
 
-    <li>
-      <a href="@Url.Action("Index", "TIMSI")">
-        <i class="fa fa-address-card-o"></i>
-        <span>IMSI Authentication</span>
-      </a>
-    </li>
+    if (User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled)
+    {
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-shield"></i> <span>IMSI</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="@Url.Action("Index","TIMSI")"><i class="fa fa-address-card-o"></i>IMSI Authentication</a></li>
+          <li><a href="@Url.Action("IMSIAuthenticatedRecords","TIMSI")"><i class="fa fa-file-text-o"></i>IMSI Logs</a></li>
+        </ul>
+      </li>
+    }
+    else
+    {
+      <li>
+        <a href="@Url.Action("Index", "TIMSI")">
+          <i class="fa fa-address-card-o"></i>
+          <span>IMSI Authentication</span>
+        </a>
+      </li>
+    }
+
     <li>
       <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
         <i class="fa fa-mobile fa-lg"></i>
@@ -170,7 +193,9 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
 @RenderBody()
 @section Scripts{
   @{
-    string[] scriptFiles = {
+            /**/
+
+            string[] scriptFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/moment.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.js",

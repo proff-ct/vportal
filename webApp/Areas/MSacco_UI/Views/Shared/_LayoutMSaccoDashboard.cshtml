@@ -61,15 +61,33 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
       <span>Link Monitoring</span>
     </a>
   </li>
-  @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r=>r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
+  @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
   {
+    if (User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled)
+    {
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-shield"></i> <span>IMSI</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="@Url.Action("Index","TIMSI")"><i class="fa fa-address-card-o"></i>IMSI Authentication</a></li>
+          <li><a href="@Url.Action("IMSIAuthenticatedRecords","TIMSI")"><i class="fa fa-file-text-o"></i>IMSI Logs</a></li>
+        </ul>
+      </li>
+    }
+    else
+    {
+      <li>
+        <a href="@Url.Action("Index", "TIMSI")">
+          <i class="fa fa-address-card-o"></i>
+          <span>IMSI Authentication</span>
+        </a>
+      </li>
+    }
 
-    <li>
-      <a href="@Url.Action("Index", "TIMSI")">
-        <i class="fa fa-address-card-o"></i>
-        <span>IMSI Authentication</span>
-      </a>
-    </li>
     <li>
       <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
         <i class="fa fa-mobile fa-lg"></i>
