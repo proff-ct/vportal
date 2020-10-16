@@ -29,6 +29,7 @@ namespace MSacco_BLL
     private IBL_SACCO _saccoBLL;
     private IBL_MsaccoRegistration _msaccoRegistrationsBLL;
     private IBL_TIMSI_RESET_LOGGER _resetLogger;
+    private IBL_TIMSI_RESET_LOG _timsiResetDBLog;
     private List<IRouting_Table> _listMSACCORegistrationRecords;
     private List<string> _registeredPhoneNumbers;
     #region Private Methods
@@ -64,6 +65,7 @@ namespace MSacco_BLL
       _saccoBLL = new SaccoBLL();
       _msaccoRegistrationsBLL = new MsaccoRegistrationsBLL();
       _resetLogger = new TIMSIResetLogger();
+      _timsiResetDBLog = new TIMSIResetDBLog();
       _listMSACCORegistrationRecords = new List<IRouting_Table>();
       _registeredPhoneNumbers = new List<string>();
     }
@@ -290,6 +292,65 @@ namespace MSacco_BLL
       public string ResetNarration { get; set; }
       public string ActionUser { get; set; }
     }
+
+    public class TIMSIResetDBLog : IBL_TIMSI_RESET_LOG
+    {
+      private string _query;
+      private readonly string _tblMsaccoTimsiResetDBLog = MsaccoTIMSIResetLog.DBTableName;
+      public IEnumerable<IMSACCO_TIMSI_RESET_DB_LOG> GetResetRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
+      {
+        lastPage = 0;
+        
+        if (paginate)
+        {
+          _query = $@"SELECT * FROM {_tblMsaccoTimsiResetDBLog} 
+          WHERE [CorporateNo] = '{corporateNo}'
+          ORDER BY [LogNo] DESC
+          OFFSET @PageSize * (@PageNumber - 1) ROWS
+          FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
+
+          Select count([LogNo]) as TotalRecords  
+          FROM {_tblMsaccoTimsiResetDBLog}
+          WHERE [CorporateNo]='{corporateNo}'
+          ";
+
+          DynamicParameters dp = new DynamicParameters();
+          dp.Add("PageSize", pagingParams.PageSize);
+          dp.Add("PageNumber", pagingParams.PageToLoad);
+
+          using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
+          {
+            sqlCon.Open();
+            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+            {
+              IEnumerable<IMSACCO_TIMSI_RESET_DB_LOG> records = results.Read<MsaccoTIMSIResetLog>();
+              int totalLoanRecords = results.Read<int>().First();
+
+              lastPage = (int)Math.Ceiling(
+                totalLoanRecords / (decimal)pagingParams.PageSize);
+              return records;
+            }
+          }
+        }
+        else
+        {
+          _query = $@"SELECT * FROM {_tblMsaccoTimsiResetDBLog}
+                  WHERE [CorporateNo]='{corporateNo}'
+                  ORDER BY [LogNo] DESC";
+          return new DapperORM().QueryGetList<MsaccoTIMSIResetLog>(_query);
+        }
+      }
+
+      public IEnumerable<IMSACCO_TIMSI_RESET_DB_LOG> GetMemberTIMSIResetRecordsForClient(string corporateNo, string memberPhoneNo)
+      {
+        _query = $@"SELECT * FROM {_tblMsaccoTimsiResetDBLog}
+                  WHERE [CorporateNo]='{corporateNo}' AND [CustomerPhoneNo]='{memberPhoneNo}'
+                  ORDER BY [LogNo] DESC";
+
+        return new DapperORM().QueryGetList<MsaccoTIMSIResetLog>(_query);
+      }
+    }
+
     #endregion
   }
 }

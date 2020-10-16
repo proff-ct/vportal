@@ -1,5 +1,5 @@
-﻿using MSacco_Dataspecs.MSSQLOperators;
-using MSacco_Dataspecs.Models;
+﻿using MSacco_Dataspecs.Models;
+using MSacco_Dataspecs.MSSQLOperators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,48 @@ namespace MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker
       DateTime LastUpdated { get; set; }
       DateTime DateLinked { get; set; }
     }
+    public interface IMSACCO_TIMSI_RESET_DB_LOG
+    {
+      int LogNo { get; set; }
 
+      string CorporateNo { get; set; }
+
+      string CustomerPhoneNo { get; set; }
+
+      int TIMSINumberCheckerID { get; set; }
+
+      string SaccoInfo { get; set; }
+
+      string TIMSIRecord { get; set; }
+
+      string ActionUser { get; set; }
+
+      string ResetNarration { get; set; }
+
+      string ResetStatus { get; set; }
+
+      DateTime ResetStatusDate { get; set; }
+
+      DateTime DateCreated { get; set; }
+
+      DateTime? DateLastModified { get; set; }
+
+      string OperationRemarks { get; set; }
+    }
+    public interface IMSACCO_TIMSI_RESET_ViewModel
+    {
+      int LogNo { get; set; }
+
+      string CorporateNo { get; set; }
+
+      string CustomerPhoneNo { get; set; }
+
+      string ActionUser { get; set; }
+
+      string ResetNarration { get; set; }
+
+      DateTime ResetStatusDate { get; set; }
+    }
     public enum TIMSI_RESET_STATUS
     {
       Pending,
@@ -60,6 +101,12 @@ namespace MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker
       bool LogResetOperationStatus(
         ISACCO sacco, string timsiRecordID, Models.TIMSI_RESET_STATUS resetStatus, string remarks, out string logResult);
       IEnumerable<IMSACCO_TIMSI_RESET_LOG> GetCustomerLogEntries(string memberPhoneNo, Models.TIMSI_RESET_STATUS? resetStatus = null);
+    }
+    public interface IBL_TIMSI_RESET_LOG
+    {
+      IEnumerable<Models.IMSACCO_TIMSI_RESET_DB_LOG> GetResetRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null);
+
+      IEnumerable<Models.IMSACCO_TIMSI_RESET_DB_LOG> GetMemberTIMSIResetRecordsForClient(string corporateNo, string memberPhoneNo);
     }
   }
 }
