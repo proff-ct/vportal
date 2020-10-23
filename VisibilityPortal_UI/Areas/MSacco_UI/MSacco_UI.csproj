@@ -302,6 +302,15 @@
     <Content Include="plugins\bootstrap-select\css\bootstrap-select.min.css" />
     <Content Include="plugins\bootstrap-select\js\bootstrap-select.js" />
     <Content Include="plugins\bootstrap-select\js\bootstrap-select.min.js" />
+    <Content Include="plugins\sheetjs\cpexcel.js" />
+    <Content Include="plugins\sheetjs\jszip.js" />
+    <Content Include="plugins\sheetjs\shim.min.js" />
+    <Content Include="plugins\sheetjs\xlsx.core.min.js" />
+    <Content Include="plugins\sheetjs\xlsx.extendscript.js" />
+    <Content Include="plugins\sheetjs\xlsx.full.min.js" />
+    <Content Include="plugins\sheetjs\xlsx.js" />
+    <Content Include="plugins\sheetjs\xlsx.min.js" />
+    <Content Include="plugins\sheetjs\xlsx.mini.min.js" />
     <Content Include="plugins\tabulator_4.4\css\bootstrap\tabulator_bootstrap.css" />
     <Content Include="plugins\tabulator_4.4\css\bootstrap\tabulator_bootstrap.min.css" />
     <Content Include="plugins\tabulator_4.4\css\bootstrap\tabulator_bootstrap4.css" />
@@ -459,6 +468,11 @@
     <Content Include="plugins\tabulator_4.4\css\tabulator_modern.min.css.map" />
     <Content Include="plugins\tabulator_4.4\css\tabulator_simple.min.css.map" />
     <Content Include="plugins\tabulator_4.4\css\tabulator_site.min.css.map" />
+    <Content Include="plugins\sheetjs\LICENSE" />
+    <Content Include="plugins\sheetjs\xlsx.core.min.map" />
+    <Content Include="plugins\sheetjs\xlsx.full.min.map" />
+    <Content Include="plugins\sheetjs\xlsx.min.map" />
+    <Content Include="plugins\sheetjs\xlsx.mini.min.map" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\LocalWebApp.pubxml" />
