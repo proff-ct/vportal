@@ -3,6 +3,9 @@ var tabulatorAjaxUrlForReload;
 var tabulatorAjaxParamsForReload;
 
 function initTabulator(tableContainerID) {
+  var dateFieldAccessor = function (value, data, type, params, column) {
+    return GetFormattedDate(value);
+  };
   //create Tabulator on DOM element with id == tableContainerID
   tblTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -10,7 +13,7 @@ function initTabulator(tableContainerID) {
     placeholder: "No Logged Authentication Record(s) Found ",
     pagination: "remote", //enable remote pagination
     paginationSize: 100,
-    paginationSizeSelector: true,
+    paginationSizeSelector: [100, 300, 700, 1000],
     //ajaxProgressiveLoad: "scroll",
     //ajaxURL: 'Loans/GetLoanRecords',
     //ajaxResponse: function (url, params, response) {
@@ -40,7 +43,9 @@ function initTabulator(tableContainerID) {
         align: "center",
         formatter: function (cell, formatterParams) {
           return GetFormattedDate(cell.getValue());
-        }
+        },
+        accessorDownload: dateFieldAccessor,
+        accessorDownloadParams: {}
       },
 
     ],
@@ -73,4 +78,11 @@ function LoadData(restUrl, corporateNo) {
 
 function ReloadData() {
   tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
+}
+
+function ExportExcel() {
+  var excelFileName = "IMSI_Authentication_Logs_" + moment().format("DD-MMM-YYYY_HHmmss") + ".xlsx";
+  tblTabulator.download("xlsx", excelFileName, {
+    sheetName: "Authenticated IMSI Records" 
+  });
 }

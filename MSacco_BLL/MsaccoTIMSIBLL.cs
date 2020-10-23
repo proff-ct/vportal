@@ -305,13 +305,15 @@ namespace MSacco_BLL
         {
           _query = $@"SELECT * FROM {_tblMsaccoTimsiResetDBLog} 
           WHERE [CorporateNo] = '{corporateNo}'
+          AND [ResetStatus] = '{nameof(TIMSI_RESET_STATUS.Success)}'
           ORDER BY [LogNo] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
-
+         
           Select count([LogNo]) as TotalRecords  
           FROM {_tblMsaccoTimsiResetDBLog}
-          WHERE [CorporateNo]='{corporateNo}'
+          WHERE [CorporateNo]='{corporateNo}' 
+          AND [ResetStatus] = '{nameof(TIMSI_RESET_STATUS.Success)}'
           ";
 
           DynamicParameters dp = new DynamicParameters();
