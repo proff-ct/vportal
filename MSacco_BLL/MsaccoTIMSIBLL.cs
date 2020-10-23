@@ -144,6 +144,7 @@ namespace MSacco_BLL
       string corporateNo, IMSACCO_TIMSI_RESET_LOG_PARAMS resetParams, out string resetMessage)
     {
       bool isReset = false;
+      string resetLogNo = string.Empty;
       if (!SetActiveSACCO(corporateNo))
       {
         resetMessage = $"Sorry, an error occurred retrieving your SACCO's details. Kindly contact CoreTec Support urgently!";
@@ -181,7 +182,7 @@ namespace MSacco_BLL
           resetParams.CustomerPhoneNo, _activeSACCO.saccoName_1);
         return isReset;
       }
-      else if (!_resetLogger.LogNewRecordToReset(timsiRecord, _activeSACCO, resetParams))
+      else if (!_resetLogger.LogNewRecordToReset(timsiRecord, _activeSACCO, resetParams, out resetLogNo))
       {
         resetMessage = "Unable to log the IMSI record. Kindly wait 5 minutes and try again.";
         return isReset;
@@ -202,12 +203,12 @@ namespace MSacco_BLL
         isReset = true;
 
         _resetLogger.LogResetOperationStatus(
-          _activeSACCO, timsiRecord.Id.ToString(), TIMSI_RESET_STATUS.Success, null, out resetMessage);
+          _activeSACCO, resetLogNo, TIMSI_RESET_STATUS.Success, null, out resetMessage);
       }
       catch (Exception ex)
       {
         _resetLogger.LogResetOperationStatus(
-          _activeSACCO, timsiRecord.Id.ToString(), TIMSI_RESET_STATUS.Failed, ex.Message, out string logResponse);
+          _activeSACCO, resetLogNo, TIMSI_RESET_STATUS.Failed, ex.Message, out string logResponse);
 
         resetMessage = string.Format("Server error: {0}", ex.Message);
       }
@@ -225,7 +226,7 @@ namespace MSacco_BLL
         throw new NotImplementedException();
       }
 
-      public bool LogNewRecordToReset(IMSACCO_TIMSI_NumberChecker timsiRecord, ISACCO sacco, IMSACCO_TIMSI_RESET_LOG_PARAMS resetParams)
+      public bool LogNewRecordToReset(IMSACCO_TIMSI_NumberChecker timsiRecord, ISACCO sacco, IMSACCO_TIMSI_RESET_LOG_PARAMS resetParams, out string logNo)
       {
         _query = $@"INSERT INTO {_tblTIMSIRESETLOG}
            ([CorporateNo]
@@ -248,21 +249,24 @@ namespace MSacco_BLL
            ,'{resetParams.ResetNarration}'
            ,'{nameof(TIMSI_RESET_STATUS.Pending)}'
            ,'{DateTime.Now}'
-           ,'{DateTime.Now}')";
+           ,'{DateTime.Now}');
+
+      SELECT SCOPE_IDENTITY() as ResetLogNo;";
 
         try
         {
-          new DapperORM().ExecuteQuery(_query);
+          logNo = new DapperORM().QueryGetSingle<string>(_query);
           return true;
         }
         catch (Exception ex)
         {
           // TO-DO: log exception
+          logNo = null;
           return false;
         }
       }
 
-      public bool LogResetOperationStatus(ISACCO sacco, string timsiRecordID, TIMSI_RESET_STATUS resetStatus, string remarks, out string logResult)
+      public bool LogResetOperationStatus(ISACCO sacco, string logNo, TIMSI_RESET_STATUS resetStatus, string remarks, out string logResult)
       {
         _query = $@"UPDATE {_tblTIMSIRESETLOG}
            SET 
@@ -270,7 +274,7 @@ namespace MSacco_BLL
             ,[OperationRemarks] = '{remarks}'
             ,[ResetStatusDate] = '{DateTime.Now}'
             ,[DateLastModified] = '{DateTime.Now}'
-          where [TIMSINumberCheckerID] = '{timsiRecordID}'";
+          where [LogNo] = '{logNo}'";
         try
         {
           new DapperORM().ExecuteQuery(_query);

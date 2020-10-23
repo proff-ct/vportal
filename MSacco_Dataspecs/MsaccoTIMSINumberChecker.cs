@@ -97,9 +97,9 @@ namespace MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker
     public interface IBL_TIMSI_RESET_LOGGER
     {
       bool LogNewRecordToReset(
-        Models.IMSACCO_TIMSI_NumberChecker timsiRecord, ISACCO sacco, IMSACCO_TIMSI_RESET_LOG_PARAMS resetParams);
+        Models.IMSACCO_TIMSI_NumberChecker timsiRecord, ISACCO sacco, IMSACCO_TIMSI_RESET_LOG_PARAMS resetParams, out string logNo);
       bool LogResetOperationStatus(
-        ISACCO sacco, string timsiRecordID, Models.TIMSI_RESET_STATUS resetStatus, string remarks, out string logResult);
+        ISACCO sacco, string logNo, Models.TIMSI_RESET_STATUS resetStatus, string remarks, out string logResult);
       IEnumerable<IMSACCO_TIMSI_RESET_LOG> GetCustomerLogEntries(string memberPhoneNo, Models.TIMSI_RESET_STATUS? resetStatus = null);
     }
     public interface IBL_TIMSI_RESET_LOG
