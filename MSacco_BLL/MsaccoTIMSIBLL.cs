@@ -135,8 +135,8 @@ namespace MSacco_BLL
       }
 
       _query = $@"SELECT * FROM {_tblMsaccoTimsiNumberChecker} 
-                WHERE [PhoneNumber] = '{regRecord.Telephone_No}' 
-                AND ([Comments] IS NOT NULL OR [Comments] <> '')";
+                WHERE [PhoneNumber] = '{regRecord.Telephone_No}'"; 
+                //AND ([Comments] IS NOT NULL OR [Comments] <> '')";
       return new DapperORM().QueryGetSingle<MsaccoTimsiNumberChecker>(_query);
     }
 
@@ -194,8 +194,9 @@ namespace MSacco_BLL
 
       string partialPhoneNo = regRecord.Telephone_No.Substring(regRecord.Telephone_No.Length - 9);
       _query = $@"DELETE FROM {_tblMsaccoTimsiNumberChecker}
-                WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' AND ([Comments] IS NOT NULL OR [Comments] <> ''))
-                OR [Comments] LIKE '%{partialPhoneNo}%' ";
+                WHERE [PhoneNumber] = '{regRecord.Telephone_No}' ";
+                //WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' AND ([Comments] IS NOT NULL OR [Comments] <> ''))
+                //OR [Comments] LIKE '%{partialPhoneNo}%' ";
       try
       {
         new DapperORM().ExecuteQuery(_query);
