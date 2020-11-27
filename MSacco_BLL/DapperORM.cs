@@ -51,6 +51,7 @@ namespace MSacco_BLL
         config.AddMap(new VirtualRegistrationNewIPRSMap());
         config.AddMap(new Routing_TableMap());
         config.AddMap(new MsaccoBankTransferMap());
+        config.AddMap(new USSDRequestMap());
       });
     }
     public string ConnectionString { get => _connectionString; }

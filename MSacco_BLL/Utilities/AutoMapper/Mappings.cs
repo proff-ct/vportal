@@ -10,6 +10,7 @@ using MSacco_DAL;
 using MSacco_Dataspecs.Feature.MSACCOBankTransfer.Models;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Models;
+using MSacco_Dataspecs.Feature.USSDRequestLogging.Models;
 using MSacco_Dataspecs.Models;
 
 namespace MSacco_BLL.Utilities.AutoMapper
@@ -19,7 +20,8 @@ namespace MSacco_BLL.Utilities.AutoMapper
     public static void RegisterMappings()
     {
       Mapper.Initialize(
-        config => {
+        config =>
+        {
           config.CreateMap<MSaccoSalaryAdvance, LoanListViewModel>().ReverseMap();
           config.CreateMap<MSaccoSalaryAdvance, LoansPlusGuarantors>();
           config.CreateMap<LinkMonitoring, LinkMonitoringViewModel>();
@@ -34,6 +36,8 @@ namespace MSacco_BLL.Utilities.AutoMapper
           config.CreateMap<IMobileWithdrawals_DarajaDB, IMobileWithdrawals_SACCODB>(MemberList.Source)
           .ForMember(m => m.Exported_To_Saf, opt => opt.Ignore())
           .ForMember(m => m.Verified, opt => opt.Ignore());
+          config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
+            .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -54,6 +58,8 @@ namespace MSacco_BLL.Utilities.AutoMapper
         config.CreateMap<IMobileWithdrawals_DarajaDB, IMobileWithdrawals_SACCODB>(MemberList.Source)
           .ForMember(m => m.Exported_To_Saf, opt => opt.Ignore())
           .ForMember(m => m.Verified, opt => opt.Ignore());
+        config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
+          .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
       });
     }
 
@@ -74,6 +80,8 @@ namespace MSacco_BLL.Utilities.AutoMapper
       config.CreateMap<IMobileWithdrawals_DarajaDB, IMobileWithdrawals_SACCODB>(MemberList.Source)
           .ForMember(m => m.Exported_To_Saf, opt => opt.Ignore())
           .ForMember(m => m.Verified, opt => opt.Ignore());
+      config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
+          .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
     });
   }
 }
