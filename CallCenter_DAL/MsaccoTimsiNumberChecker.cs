@@ -14,6 +14,7 @@ namespace CallCenter_DAL
     public string databaseName => DBName;
     public string tableName => DBTableName;
 
+
     public int Id { get; set; }
     public string TimsiId { get; set; }
     public string PhoneNumber { get; set; }

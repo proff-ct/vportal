@@ -52,6 +52,7 @@
     <Compile Include="MSACCORegistrationRecord.cs" />
     <Compile Include="MSACCO_TIMSI_NumberChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="USSDRequestsLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">

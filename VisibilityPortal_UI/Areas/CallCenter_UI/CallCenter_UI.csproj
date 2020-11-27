@@ -714,6 +714,7 @@
     <Content Include="Scripts\portal\view\floatAlerts.js" />
     <Content Include="Scripts\portal\view\home.js" />
     <Content Include="Scripts\portal\view\loans.js" />
+    <Content Include="Scripts\portal\view\ussdRequests.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
     <Content Include="Scripts\portal\view\airtimeTopups.js" />
     <Content Include="Scripts\portal\view\timsiReset.js" />
@@ -773,6 +774,7 @@
     <Content Include="Views\FloatAlerts\_EditPartial.cshtml" />
     <Content Include="Views\FloatAlerts\Index.cshtml" />
     <Content Include="Views\TIMSI\Index.cshtml" />
+    <Content Include="Views\USSDRequests\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

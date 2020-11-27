@@ -317,6 +317,16 @@ namespace CallCenter_BLL.Models.Mappings
       Map(m => m.Last_Login_Date).ToColumn("Last Login Date");
     }
   }
+  internal class USSDRequestMap : EntityMap<USSDRequest>
+  {
+    internal USSDRequestMap()
+    {
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Telephone_No).ToColumn("Telephone No");
+      Map(m => m.User_Input).ToColumn("User Input");
+    }
+  }
 
 }
      
