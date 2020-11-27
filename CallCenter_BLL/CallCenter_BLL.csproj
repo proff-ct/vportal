@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Controllers\FloatAlertsController.cs" />
     <Compile Include="AlertTypeBLL.cs" />
+    <Compile Include="Controllers\USSDRequestsController.cs" />
     <Compile Include="Controllers\TIMSIController.cs" />
     <Compile Include="LinkDowntimeBLL.cs" />
     <Compile Include="Models\LinkStatusPlusDowntime.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="FloatResourceBLL.cs" />
     <Compile Include="FloatResourceAlertForClientBLL.cs" />
     <Compile Include="MSaccoRegistrationsBLL.cs" />
+    <Compile Include="USSDRequestLogBLL.cs" />
     <Compile Include="MSaccoUtilityPaymentBLL.cs" />
     <Compile Include="MSaccoSalaryAdvanceBLL.cs" />
     <Compile Include="MSSQLOperators.cs" />
