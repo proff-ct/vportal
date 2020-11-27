@@ -66,6 +66,7 @@
     <Compile Include="SMSFloat\Credit\BulkSMS\BulkSMSCredit.cs" />
     <Compile Include="SMSFloat\Debit\Archived\ArchivedBulkSMSDebit.cs" />
     <Compile Include="SMSFloat\Debit\Unarchived\UnarchivedBulkSMSDebit.cs" />
+    <Compile Include="USSDRequest.cs" />
     <Compile Include="WauminiVirtualRegistrationIPRS.cs" />
     <Compile Include="VirtualRegistrationNewIPRS.cs" />
   </ItemGroup>

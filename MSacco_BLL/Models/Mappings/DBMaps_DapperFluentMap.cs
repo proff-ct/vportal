@@ -1,7 +1,7 @@
-﻿using MSacco_DAL;
+﻿using Dapper.FluentMap.Mapping;
+using MSacco_DAL;
 using MSacco_DAL.SMSFloat.Debit.Archived;
 using MSacco_DAL.SMSFloat.Debit.Unarchived;
-using Dapper.FluentMap.Mapping;
 
 namespace MSacco_BLL.Models.Mappings
 {
@@ -355,7 +355,17 @@ namespace MSacco_BLL.Models.Mappings
       Map(m => m.Sent_To_Journal).ToColumn("Sent To Journal");
       Map(m => m.Session_Id).ToColumn("Session Id");
       Map(m => m.Transaction_Reference).ToColumn("Transaction Reference");
+    }
   }
+
+  internal class USSDRequestMap : EntityMap<USSDRequest>
+  {
+    internal USSDRequestMap()
+    {
+      Map(m => m.Entry_No).ToColumn("Entry No");
+      Map(m => m.Corporate_No).ToColumn("Corporate No");
+      Map(m => m.Telephone_No).ToColumn("Telephone No");
+      Map(m => m.User_Input).ToColumn("User Input");
+    }
   }
 }
-      

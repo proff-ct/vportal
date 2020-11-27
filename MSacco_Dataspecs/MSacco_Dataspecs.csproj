@@ -56,6 +56,7 @@
     <Compile Include="MsaccoRegistrationRecord.cs" />
     <Compile Include="MsaccoTIMSINumberChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="USSDRequestsLog.cs" />
     <Compile Include="VirtualRegistrationIPRS.cs" />
   </ItemGroup>
   <ItemGroup>
