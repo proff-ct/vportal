@@ -17,7 +17,6 @@ using VisibilityPortal_Dataspecs.Models;
 namespace MSacco_BLL.Controllers
 {
   [Authorize]
-  [RequireSACCOAdmin]
   public class USSDRequestsController : Controller
   {
     private IBL_USSDRequestLog _ussdRequestsBLL = new USSDRequestLogBLL();
