@@ -3,6 +3,10 @@ var tabulatorAjaxUrlForReload;
 var tabulatorAjaxParamsForReload;
 
 function initTabulator(tableContainerID) {
+  var dateFieldAccessor = function (value, data, type, params, column) {
+    return GetFormattedDate(value);
+  };
+
   //create Tabulator on DOM element with id == tableContainerID
   tblTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -54,16 +58,18 @@ function initTabulator(tableContainerID) {
       },
       {
         title: "Guarantors", field: "No_of_Guarantors",
-        headerFilter: true
+        headerFilter: true, download: false
       },
       {
-        title: "Trx Date", field: "Transaction_Date",
+        title: "Trx Date", field: "Transaction_Date", downloadTitle:"Transaction Date",
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return GetFormattedDate(cell.getValue());
-        }
+        },
+        accessorDownload: dateFieldAccessor,
+        accessorDownloadParams: {}
       },
-      { title: "Disbursed ?", field: "Disbursed" },
+      { title: "Disbursed ?", field: "Disbursed", download:false },
     ],
     movableColumns: true,
     index: "Entry_No",
@@ -209,4 +215,11 @@ function LoadData(restUrl, corporateNo) {
 
 function ReloadData() {
   tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
+}
+
+function ExportExcel() {
+  var excelFileName = "MSACCO_Loans_" + moment().format("DD-MMM-YYYY_HHmmss") + ".xlsx";
+  tblTabulator.download("xlsx", excelFileName, {
+    sheetName: "Loan Records"
+  });
 }
