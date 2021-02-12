@@ -14,7 +14,7 @@ namespace MSacco_BLL.Controllers
   [RequireActiveUserSession]
   public class BankTransferController : Controller
   {
-    private IBL_BankTransfer _bankTransferBLL = new MsaccoBankTransferBLL();
+    private IBL_BankTransfer _bankTransferBLL = new MsaccoBankTransferBLL(new SaccoBLL());
 
     // GET: IBankTransfer
     public ActionResult Index()

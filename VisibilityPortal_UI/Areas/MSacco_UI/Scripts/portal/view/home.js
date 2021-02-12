@@ -1,7 +1,8 @@
 ﻿const SACCO_VITALS = {
   Floats: {
     MPESA: "MPESA",
-    BULK_SMS: "BULK_SMS"
+    BULK_SMS: "BULK_SMS",
+    BANK_TRANSFER: "BANK_TRANSFER"
   },
   LinkStatus: "LinkStatus"
 };
@@ -47,6 +48,10 @@ function LoadSaccoVitals(saccoVitals, callBack, vitalToLoad = null) {
         vitalLabel = vitalToLoad;
         vitalRestUrl = saccoVitals.bulkSMSFloat.restUrl;
         break;
+      case SACCO_VITALS.Floats.BANK_TRANSFER:
+        vitalLabel = vitalToLoad;
+        vitalRestUrl = saccoVitals.bankTransferFloat.restUrl;
+        break;
       case SACCO_VITALS.LinkStatus:
         vitalLabel = vitalToLoad;
         vitalRestUrl = saccoVitals.linkStatus.restUrl;
@@ -59,14 +64,16 @@ function LoadSaccoVitals(saccoVitals, callBack, vitalToLoad = null) {
       switch (key) {
         case "Floats":
           for (float in SACCO_VITALS.Floats) {
+            vitalLabel = float;
             switch (float) {
               case SACCO_VITALS.Floats.MPESA:
-                vitalLabel = float;
                 vitalRestUrl = saccoVitals.mpesaFloat.restUrl;
                 break;
               case SACCO_VITALS.Floats.BULK_SMS:
-                vitalLabel = float;
                 vitalRestUrl = saccoVitals.bulkSMSFloat.restUrl;
+                break;
+              case SACCO_VITALS.Floats.BANK_TRANSFER:
+                vitalRestUrl = saccoVitals.bankTransferFloat.restUrl;
                 break;
             };
             GetSaccoVitalsData(vitalRestUrl, saccoVitals.corporateNo, vitalLabel, callBack);
@@ -113,7 +120,7 @@ function GetSaccoVitalsData(restUrl, corporateNo, vitalToGet, callBack) {
     error: function (xhr, ajaxOptions, thrownError) {
       var response = {
         status: CALLBACK_RESPONSE.STATUS.ERROR,
-        error: thrownError
+        error: $(xhr.responseText).filter('title').get(0).text
       };
       callBack(vitalToGet, response);
     }

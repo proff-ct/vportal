@@ -368,4 +368,11 @@ namespace MSacco_BLL.Models.Mappings
       Map(m => m.User_Input).ToColumn("User Input");
     }
   }
+  internal class PesalinkFloatBalanceMap : EntityMap<PesalinkFloatBalance>
+  {
+    internal PesalinkFloatBalanceMap()
+    {
+      Map(m => m.Last_Updated).ToColumn("Last Updated");
+    }
+  }
 }
