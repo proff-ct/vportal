@@ -82,6 +82,25 @@ namespace MSacco_Dataspecs.Feature.MSACCOBankTransfer
 
       decimal AccountBalance { get; set; }
     }
+
+    public interface IPesalinkFloatBalance
+    {
+      long ID { get; set; }
+      string CorporateNo { get; set; }
+      decimal Amount { get; set; }
+      DateTime Last_Updated { get; set; }
+    }
+
+    public interface IClientBankTransferFloat
+    {
+      decimal CurrentFloat { get; }
+      DateTime FloatTransactionTimeStamp { get; }
+    }
+
+    public interface IBankTransferServiceSpec
+    {
+      bool SubscribedToCoretecFloat { get; }
+    }
   }
   namespace Functions
   {
@@ -91,7 +110,9 @@ namespace MSacco_Dataspecs.Feature.MSACCOBankTransfer
 
       IEnumerable<Models.IBankTransfer> GetClientBankTransferRecordsForToday(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null);
 
-      bool IsSaccoRegisteredForBankTransfer(string corporateNo);
+      bool IsClientRegisteredForBankTransfer(string corporateNo);
+      bool IsClientUsingCoretecFloat(string corporateNo);
+      Models.IClientBankTransferFloat GetClientFloat(string corporateNo);
     }
   }
 }

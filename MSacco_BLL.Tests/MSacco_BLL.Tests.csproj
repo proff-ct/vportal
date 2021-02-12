@@ -76,6 +76,7 @@
     <Compile Include="LinkMonitoringBLLTests.cs" />
     <Compile Include="MobileWithdrawalsBLLTests.cs" />
     <Compile Include="MSaccoAirtimeTopupBLLTests.cs" />
+    <Compile Include="MSaccoBankTransferBLLTests.cs" />
     <Compile Include="MSaccoSalaryAdvanceBLLTests.cs" />
     <Compile Include="MSaccoUtilityPaymentBLLTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

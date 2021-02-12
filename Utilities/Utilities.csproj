@@ -61,6 +61,7 @@
     <Compile Include="ActiveUserParams.cs" />
     <Compile Include="AppLogger.cs" />
     <Compile Include="IActiveUserParams.cs" />
+    <Compile Include="MSACCO_SERVICE_SPEC.cs" />
     <Compile Include="PortalSecurity.cs" />
     <Compile Include="ValidateCoreTecEmailDomain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +77,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MSacco_Dataspecs\MSacco_Dataspecs.csproj">
+      <Project>{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}</Project>
+      <Name>MSacco_Dataspecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisibilityPortal_Dataspecs\VisibilityPortal_Dataspecs.csproj">
       <Project>{E72CE19F-D33E-4236-A85C-E584D0C8FCF0}</Project>
       <Name>VisibilityPortal_Dataspecs</Name>

@@ -10,13 +10,22 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Configuration;
+using MSacco_Dataspecs.Functions;
+using MSacco_Dataspecs.Models;
 
 namespace MSacco_BLL
 {
   public class MsaccoBankTransferBLL : IBL_BankTransfer
   {
     private string _query;
+    private IBL_SACCO _saccoBLL;
     private readonly string _tblMsaccoBankTransfer = MSACCOBankTransfer.DBTableName;
+    private readonly string _pesalinkDBCStr = @ConfigurationManager.ConnectionStrings["pesaLinkDB_prod"].ConnectionString;
+
+    public MsaccoBankTransferBLL(IBL_SACCO saccoBLL)
+    {
+      _saccoBLL = saccoBLL ?? throw new ArgumentNullException("NULL SACCO BLL given to MsaccoBankTransferBLL!");
+    }
     public IEnumerable<IBankTransfer> GetBankTransferRecordsForClient(
       string corporateNo,
       out int lastPage,
@@ -64,9 +73,8 @@ namespace MSacco_BLL
 
     }
 
-    public bool IsSaccoRegisteredForBankTransfer(string corporateNo)
+    public bool IsClientRegisteredForBankTransfer(string corporateNo)
     {
-      string dbConString = @ConfigurationManager.ConnectionStrings["pesaLinkDB_prod"].ConnectionString;
       string tblPesaLinkCharges = "CorporateCharges";
 
       _query = $@"SELECT CASE WHEN EXISTS (
@@ -78,7 +86,7 @@ namespace MSacco_BLL
                   ELSE CAST(0 AS BIT)
                   END";
 
-      return new DapperORM(dbConString).QueryGetSingle<bool>(_query);
+      return new DapperORM(_pesalinkDBCStr).QueryGetSingle<bool>(_query);
     }
 
     public IEnumerable<IBankTransfer> GetClientBankTransferRecordsForToday(
@@ -127,5 +135,56 @@ namespace MSacco_BLL
       }
 
     }
+
+    public bool IsClientUsingCoretecFloat(string corporateNo)
+    {
+      
+      ISACCO sacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo);
+      if (sacco != null)
+      {
+        _query = $@"SELECT [UseCoretecPesalinkFloat]
+              FROM {sacco.tableName}
+              WHERE [Corporate No]='{corporateNo}'";
+        return new DapperORM().QueryGetSingle<bool>(_query);
+      }
+      else throw new ArgumentException($"No SACCO found matching: {corporateNo}");      
+    }
+
+    public IClientBankTransferFloat GetClientFloat(string corporateNo)
+    {
+      ISACCO sacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo);
+      if (sacco != null)
+      {
+        _query = $@"SELECT *
+              FROM {PesalinkFloatBalance.DBTableName}
+              WHERE [CorporateNo]='{corporateNo}'";
+
+        IPesalinkFloatBalance pesaLinkFloat = new DapperORM(_pesalinkDBCStr).QueryGetSingle<PesalinkFloatBalance>(_query);
+
+        try
+        {
+          return new ClientFloat(pesaLinkFloat.Amount, pesaLinkFloat.Last_Updated);
+        }
+        catch(NullReferenceException ex)
+        {
+          throw new ArgumentNullException($"No float balance record(s) found for {corporateNo}");
+        }
+      }
+      else throw new ArgumentException($"No client record found matching: {corporateNo}");
+    }
+
+    public class ClientFloat : IClientBankTransferFloat
+    {
+      public ClientFloat(decimal balance, DateTime lastTransactionTimeStamp)
+      {
+        CurrentFloat = balance;
+        FloatTransactionTimeStamp = lastTransactionTimeStamp;
+      }
+      public decimal CurrentFloat { get; }
+
+      public DateTime FloatTransactionTimeStamp { get; }
+    }
+
+    
   }
 }

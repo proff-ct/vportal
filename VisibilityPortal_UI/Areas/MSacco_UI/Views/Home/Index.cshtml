@@ -1,9 +1,11 @@
 ﻿@using Visibility_Portal
+@using Utilities.MSACCO_SERVICE_SPEC
 @using Utilities.PortalApplicationParams
 @{
   Layout = $"{MSaccoAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutMSaccoDashboard.cshtml";
   ViewBag.Title = "MSacco Home Page";
   ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
+  BankTransferServiceSpec bankTransferSpecs = ViewBag.BankTransferSpecs;
 }
 
 <section class="content-header">
@@ -28,6 +30,18 @@
         SMS Float:
       </a>
       <span id="BulkSMSFloat"></span>
+      @if (bankTransferSpecs.SubscribedToCoretecFloat)
+      {
+        <b>||</b>
+        <a href="#"
+           onclick="LoadSaccoVitals(saccoVitals, LoadVitalsCallback, SACCO_VITALS.Floats.BANK_TRANSFER)">
+          <small>
+            <i class="fa fa-refresh"></i>
+          </small>
+          Bank Transfers Float:
+        </a>
+        <span id="BankTransferFloat"></span>
+      }
     </small>
   </h1>
   <ol class="breadcrumb">
@@ -318,6 +332,33 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
 
           $(saccoVitals.bulkSMSFloat.contentContainer).html(" " + FormatSMSFloat(floatAmount) + " @@ " + moment(floatTransactionTimestamp).format("DD-MMM-YYYY HH:mm:ss A"));
           break;
+        case SACCO_VITALS.Floats.BANK_TRANSFER:
+          switch (response.status) {
+            case CALLBACK_RESPONSE.STATUS.OK:
+              floatAmount = response.data.amount;
+              floatTransactionTimestamp = response.data.last_transaction_timestamp;
+
+              $(saccoVitals.bankTransferFloat.contentContainer).html(" " + FormatAsCurrency(floatAmount) + " @@ " + moment(floatTransactionTimestamp).format("DD-MMM-YYYY HH:mm:ss A"));
+
+              break;
+            case CALLBACK_RESPONSE.STATUS.ERROR:
+              switch (response.error) {
+                case "No data":
+                  $(saccoVitals.bankTransferFloat.contentContainer).html("---");
+                  break;
+                default:
+                  bootbox.alert({
+                    title: "<h3>Bank Transfer Float</h3>",
+                    message: "Failed retrieving float balance. Was told: " + response.error
+                  });
+
+                  $(saccoVitals.bankTransferFloat.contentContainer).html("--- " + response.error + " @@ " + moment().format("DD-MMM-YYYY HH:mm:ss A"));
+                  break;
+              }
+              break;
+          }
+
+          break;
       };
     }
 
@@ -418,7 +459,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
 
       });
 
-      //load sacco vitals i.e. linkStatus, Mpesa, BulkSMS float
+      //load sacco vitals i.e. linkStatus, Mpesa, BulkSMS, BankTransfer float
       saccoVitals = {
         corporateNo: "@activeUserParams.ClientCorporateNo",
         mpesaFloat: {
@@ -428,6 +469,10 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
         bulkSMSFloat: {
           contentContainer: "#BulkSMSFloat",
           restUrl: "@Url.Action("GetBulkSMSFloat", "Home")"
+        },
+        bankTransferFloat: {
+          contentContainer: "#BankTransferFloat",
+          restUrl: "@Url.Action("GetBankTransferFloat", "Home")"
         },
         linkStatus: {
           contentContainer: "#LinkStatus",
