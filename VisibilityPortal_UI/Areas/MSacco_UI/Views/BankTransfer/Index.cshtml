@@ -12,7 +12,15 @@
   <div class="panel">
     <div class="panel-heading">
       <div class="pull-left">
-        <h5 class="panel-info"><i>Sacco-to-Bank transfers</i></h5>
+        <h5 class="panel-info">
+          <i>Sacco-to-Bank transfers</i>
+          <button type="button"
+                  class="btn btn-labeled btn-success btn-sm"
+                  onclick="ExportExcel()">
+            <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>
+            Export To Excel
+          </button>
+        </h5>
       </div>
       <div class="pull-right">
         <button type="button"
@@ -37,7 +45,13 @@
 
 @section Scripts {
   <!-- Include external scripts-->
-  @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/bankTransfers.js")
+  @{
+    string[] scriptFiles = {
+  $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/xlsx.full.min.js",
+  $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/bankTransfers.js",
+};
+  }
+  @Scripts.Render(scriptFiles)
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {

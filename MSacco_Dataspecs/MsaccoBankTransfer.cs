@@ -74,7 +74,7 @@ namespace MSacco_Dataspecs.Feature.MSACCOBankTransfer
 
       //string Session_Id { get; set; }
 
-      string Comments { get; set; }
+      //string Comments { get; set; }
 
       //string Transaction_Reference { get; set; }
 
