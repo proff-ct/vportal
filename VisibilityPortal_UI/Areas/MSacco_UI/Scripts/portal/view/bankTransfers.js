@@ -20,6 +20,9 @@ function initTabulator(tableContainerID) {
       return moneyFormatter(cell, formatterParams)
     }
   });
+  var dateFieldAccessor = function (value, data, type, params, column) {
+    return GetFormattedDate(value);
+  };
   //create Tabulator on DOM element with id == tableContainerID
   tblTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -48,30 +51,34 @@ function initTabulator(tableContainerID) {
         formatter: "responsiveCollapse", width: 30, minWidth: 30,
         align: "center", resizable: false, headerSort: false
       },
-      { title: "Entry No", field: "Entry_No", headerFilter: true },
+      { title: "Entry No", field: "Entry_No", headerFilter: true, download: true },
       {
-        title: "Status", field: "Status",
+        title: "Status", field: "Status", download: true,
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
-      { title: "Telephone #", field: "Telephone_No", headerFilter: true },
-      { title: "Sacco Account #", field: "Account_No", headerFilter: true },
-      { title: "Bank Account #", field: "Recipient_Account_No", headerFilter: true },
+      { title: "Telephone #", field: "Telephone_No", downloadTitle: "Telephone No.", download: true, headerFilter: true },
+      { title: "Sacco Account #", field: "Account_No", downloadTitle: "Sacco Account No.", download: true, headerFilter: true },
+      { title: "Bank Account #", field: "Recipient_Account_No", downloadTitle: "Bank Account No.", download: true, headerFilter: true },
       {
         title: "Bank Name", field: "Bank_Name",
+        downloadTitle: "Bank Name", download: true,
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
-      { title: "Narration", field: "Narration", headerFilter: true },
+      { title: "Narration", field: "Narration", downloadTitle: "Transfer Narration", download: true, headerFilter: true },
       {
         title: "Trx Date", field: "TransactionDate",
+        downloadTitle: "Transaction Date", download: true,
         align: "center", headerFilter: true,
         formatter: function (cell, formatterParams) {
           return GetFormattedDate(cell.getValue());
-        }
+        },
+        accessorDownload: dateFieldAccessor,
+        accessorDownloadParams: {}
       },
       {
-        title: "Amount", field: "Amount", headerFilter: true,
+        title: "Amount", field: "Amount", headerFilter: true, download: true,
         formatter: "trxAmount",
         formatterParams: {
           symbol: "KES "
@@ -79,14 +86,12 @@ function initTabulator(tableContainerID) {
       },
       {
         title: "Sent to Journal?", field: "Sent_To_Journal",
+        downloadTitle: "Sent to Journal?", download: true,
         headerFilter: "select", headerFilterFunc: "=",
         headerFilterParams: { values: true }
       },
       //{ title: "Account Balance", field: "AccountBalance", headerFilter: true },
-      { title: "Request Confirmed", field: "Request_Confirmed", headerFilter: true },
-      { title: "Comments", field: "Comments", headerFilter: true },
-      //{ title: "Session ID", field: "SESSION_ID", headerFilter: true },
-      //{ title: "Corporate No", field: "Corporate_No" },
+      { title: "Request Confirmed", field: "Request_Confirmed", headerFilter: true, download:false },
     ],
     movableColumns: true,
     index: "Entry_No",
@@ -123,4 +128,10 @@ function LoadData(restUrl, corporateNo) {
 function ReloadData() {
   tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
 }
-  
+
+function ExportExcel() {
+  var excelFileName = "MSACCO_BankTransfers_" + moment().format("DD-MMM-YYYY_HHmmss") + ".xlsx";
+  tblTabulator.download("xlsx", excelFileName, {
+    sheetName: "Sacco_To_Bank Transfers"
+  });
+}
