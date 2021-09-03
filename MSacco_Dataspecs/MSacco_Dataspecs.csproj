@@ -55,6 +55,7 @@
     <Compile Include="IPRS.cs" />
     <Compile Include="MsaccoRegistrationRecord.cs" />
     <Compile Include="MsaccoTIMSINumberChecker.cs" />
+    <Compile Include="MsaccoWhitelisting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="USSDRequestsLog.cs" />
     <Compile Include="VirtualRegistrationIPRS.cs" />
