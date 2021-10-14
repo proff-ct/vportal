@@ -61,6 +61,12 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
       <span>Link Monitoring</span>
     </a>
   </li>
+  <li>
+    <a href="@Url.Action("Index", "MSACCOWhitelisting")">
+      <i class="fa fa-user-plus"></i>
+      <span>Whitelisting</span>
+    </a>
+  </li>
   @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
   {
     if (User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled)
