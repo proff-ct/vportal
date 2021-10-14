@@ -53,11 +53,11 @@ function initTabulator(tableContainerID) {
       },
       { title: "Amount", field: "Amount", headerFilter: true },
       { title: "Account Balance", field: "Account_Balance", headerFilter: true },
-      { title: "Request Confirmed", field: "RequestConfirmed", headerFilter: true },
+      //{ title: "Request Confirmed", field: "RequestConfirmed", headerFilter: true },
       { title: "Account No", field: "Account_No", headerFilter: true },
-      
       { title: "MPESA Result Type", field: "MPESA_Result_Type", headerFilter: true },
       { title: "MPESA Result Desc", field: "MPESA_Result_Desc", headerFilter: true },
+      { title: "MPESA Receipt #", field: "MPESA_Receipt_No", headerFilter: true },
       {
         title: "MPESA DateTime", field: "MPESA_DateTime",
         align: "center", headerFilter: true,
@@ -65,6 +65,7 @@ function initTabulator(tableContainerID) {
           return GetFormattedDate(cell.getValue());
         }
       },
+      
       { title: "MPESA Float Amount", field: "MPESA_Float_Amount", headerFilter: true },
       { title: "Document No", field: "Document_No", headerFilter: true },
       { title: "MPesa Name", field: "MPesa_Name", headerFilter: true },

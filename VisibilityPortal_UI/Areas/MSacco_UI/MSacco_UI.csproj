@@ -473,6 +473,7 @@
     <Content Include="plugins\sheetjs\xlsx.full.min.map" />
     <Content Include="plugins\sheetjs\xlsx.min.map" />
     <Content Include="plugins\sheetjs\xlsx.mini.min.map" />
+    <None Include="Properties\PublishProfiles\CodeFactory_WebApp.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\LocalWebApp.pubxml" />
@@ -502,6 +503,7 @@
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\msaccoPlusNumberChecker.js" />
     <Content Include="Scripts\portal\view\bankTransfers.js" />
+    <Content Include="Scripts\portal\view\msaccoWhitelisting.js" />
     <Content Include="Scripts\portal\view\msaccoTIMSIResetRecords.js" />
     <Content Include="Scripts\portal\view\msaccoTIMSIReset.js" />
     <Content Include="Scripts\portal\view\ussdRequests.js" />
@@ -557,6 +559,7 @@
     <Content Include="Views\TIMSI\Index.cshtml" />
     <Content Include="Views\TIMSI\IMSIAuthenticatedRecords.cshtml" />
     <Content Include="Views\USSDRequests\Index.cshtml" />
+    <Content Include="Views\MSACCOWhitelisting\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

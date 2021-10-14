@@ -17,7 +17,8 @@ namespace VisibilityPortal_BLL
 
         static GMAILConfig()
         {
-            username = "coretec.mobility.team@gmail.com";
+            //username = "coretec.mobility.team@gmail.com";
+            username = "coretec.msacco@gmail.com";
             password = "!Team@123";
             host = "smtp.gmail.com";
             port = 587;

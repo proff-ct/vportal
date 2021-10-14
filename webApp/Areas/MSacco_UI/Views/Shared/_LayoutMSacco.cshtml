@@ -3,17 +3,17 @@
 @using VisibilityPortal_Dataspecs.Models
 @using Utilities.PortalApplicationParams
 @{
-        /**/
+  /**/
 
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+  Layout = "~/Views/Shared/_Layout.cshtml";
+  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
 }
 @section HtmlHead {
   @{
-            /**/
+    /**/
 
 
-            string[] cssFiles = {
+    string[] cssFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css"
 };
@@ -63,6 +63,12 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
     <a href="@Url.Action("Index", "LinkMonitoring")">
       <i class="fa fa-signal"></i>
       <span>Link Monitoring</span>
+    </a>
+  </li>
+  <li>
+    <a href="@Url.Action("Index", "MSACCOWhitelisting")">
+      <i class="fa fa-user-plus"></i>
+      <span>Whitelisting</span>
     </a>
   </li>
   @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
@@ -198,9 +204,9 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_
 @RenderBody()
 @section Scripts{
   @{
-            /**/
+    /**/
 
-            string[] scriptFiles = {
+    string[] scriptFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/moment.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.js",

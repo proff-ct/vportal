@@ -9,7 +9,9 @@ using MSacco_BLL.ViewModels;
 using MSacco_DAL;
 using MSacco_Dataspecs.Feature.MSACCOBankTransfer.Models;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
+using MSacco_Dataspecs.Feature.MsaccoRegistration.Models;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Models;
+using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Models;
 using MSacco_Dataspecs.Feature.USSDRequestLogging.Models;
 using MSacco_Dataspecs.Models;
 
@@ -38,6 +40,9 @@ namespace MSacco_BLL.Utilities.AutoMapper
           .ForMember(m => m.Verified, opt => opt.Ignore());
           config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
             .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
+          config.CreateMap<IRouting_Table, IRegistrationRecordToWhitelistViewModel>()
+          .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telephone_No))
+          .ForMember(dest => dest.DateRegistered, opt => opt.MapFrom(src => src.DateRegistered));
         });
     }
     public static MapperConfiguration GetMapConfig()
@@ -60,6 +65,9 @@ namespace MSacco_BLL.Utilities.AutoMapper
           .ForMember(m => m.Verified, opt => opt.Ignore());
         config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
           .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
+        config.CreateMap<IRouting_Table, IRegistrationRecordToWhitelistViewModel>()
+          .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telephone_No))
+          .ForMember(dest => dest.DateRegistered, opt => opt.MapFrom(src => src.DateRegistered));
       });
     }
 
@@ -82,6 +90,9 @@ namespace MSacco_BLL.Utilities.AutoMapper
           .ForMember(m => m.Verified, opt => opt.Ignore());
       config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
           .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
+      config.CreateMap<IRouting_Table, IRegistrationRecordToWhitelistViewModel>()
+          .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telephone_No))
+          .ForMember(dest => dest.DateRegistered, opt => opt.MapFrom(src => src.DateRegistered));
     });
   }
 }
