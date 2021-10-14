@@ -40,6 +40,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
           .ForMember(m => m.Verified, opt => opt.Ignore());
           config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
             .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
+          config.CreateMap<ICustomer, IRouting_Table>(MemberList.Source);
           config.CreateMap<IRouting_Table, IRegistrationRecordToWhitelistViewModel>()
           .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telephone_No))
           .ForMember(dest => dest.DateRegistered, opt => opt.MapFrom(src => src.DateRegistered));
@@ -65,6 +66,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
           .ForMember(m => m.Verified, opt => opt.Ignore());
         config.CreateMap<IUSSDRequest, IUSSD_Request_ViewModel>()
           .ForMember(dest => dest.MSACCOResponse, opt => opt.MapFrom(src => src.Reply));
+        config.CreateMap<ICustomer, IRouting_Table>(MemberList.Source);
         config.CreateMap<IRouting_Table, IRegistrationRecordToWhitelistViewModel>()
           .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telephone_No))
           .ForMember(dest => dest.DateRegistered, opt => opt.MapFrom(src => src.DateRegistered));
@@ -93,6 +95,7 @@ namespace MSacco_BLL.Utilities.AutoMapper
       config.CreateMap<IRouting_Table, IRegistrationRecordToWhitelistViewModel>()
           .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telephone_No))
           .ForMember(dest => dest.DateRegistered, opt => opt.MapFrom(src => src.DateRegistered));
+      config.CreateMap<ICustomer, IRouting_Table>(MemberList.Source);
     });
   }
 }
