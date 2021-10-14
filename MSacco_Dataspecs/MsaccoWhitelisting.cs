@@ -14,6 +14,12 @@ namespace MSacco_Dataspecs.Feature.MsaccoWhitelisting
       string KYCNarration { get; set; }
       string ActionUser { get; set; }
     }
+
+    public interface IRegistrationRecordToWhitelistViewModel
+    {
+      string PhoneNumber { get; set; }
+      DateTime DateRegistered { get; set; }
+    }
   }
 
   namespace Functions

@@ -123,6 +123,7 @@
     <Compile Include="LinkMonitoringBLL.cs" />
     <Compile Include="Models\ViewModels\MSACCOBankTransferViewModel.cs" />
     <Compile Include="Models\ViewModels\MSACCOPlusRegisteredMemberDeviceViewModel.cs" />
+    <Compile Include="Models\ViewModels\MSACCORegistrationToWhitelist.cs" />
     <Compile Include="Models\ViewModels\VirtualRegistrationViewModel.cs" />
     <Compile Include="MsaccoBankTransferBLL.cs" />
     <Compile Include="MsaccoRegistrationsBLL.cs" />

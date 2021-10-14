@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_Dataspecs.Feature.MsaccoRegistration.Functions;
+using MSacco_Dataspecs.Feature.MsaccoRegistration.Models;
 using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Functions;
 using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Models;
 using MSacco_Dataspecs.MSSQLOperators;
@@ -17,7 +19,7 @@ using VisibilityPortal_Dataspecs.Models;
 namespace MSacco_BLL.Controllers
 {
   [Authorize]
-  [RequireSACCOAdmin]
+  [RequireActiveUserSession]
   public class MSACCOWhitelistingController : Controller
   {
     private IBL_MSACCO_Whitelisting _msaccoWhitelistingBLL = new MsaccoWhitelistingBLL();
@@ -47,7 +49,7 @@ namespace MSacco_BLL.Controllers
       // 1. get the member's record from db
       // 2. parse and pass the record to client
       dynamic[] registeredMemberRecords = {
-        _msaccoRegistrationBLL.GetMsaccoRegistrationRecordForClient(clientCorporateNo, memberTelephoneNo.Replace("-",""))
+        Mapper.Map<IRouting_Table, IRegistrationRecordToWhitelistViewModel>(_msaccoRegistrationBLL.GetMsaccoRegistrationRecordForClient(clientCorporateNo, memberTelephoneNo.Replace("-","")))
       };
 
       return Json(registeredMemberRecords, JsonRequestBehavior.AllowGet);

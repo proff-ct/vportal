@@ -473,6 +473,7 @@
     <Content Include="plugins\sheetjs\xlsx.full.min.map" />
     <Content Include="plugins\sheetjs\xlsx.min.map" />
     <Content Include="plugins\sheetjs\xlsx.mini.min.map" />
+    <None Include="Properties\PublishProfiles\CodeFactory_WebApp.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\LocalWebApp.pubxml" />
