@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkSMSBalance.cs" />
+    <Compile Include="Customer.cs" />
     <Compile Include="DBConnection.cs" />
     <Compile Include="GFLLoan.cs" />
     <Compile Include="Guarantors.cs" />
