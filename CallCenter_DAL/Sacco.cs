@@ -13,7 +13,7 @@ namespace CallCenter_DAL
     public double mpesaFloat { get; set; }
     public bool isActive { get; set; }
 
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
   }
 }

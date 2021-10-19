@@ -11,8 +11,8 @@ namespace MSacco_DAL
   {
     public static string DBName => "Pesalink";
     public static string DBTableName => "FLoatBalances";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
    
     public long ID { get; set; }
     public string CorporateNo { get; set; }

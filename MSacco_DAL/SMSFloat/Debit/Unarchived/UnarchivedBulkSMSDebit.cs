@@ -109,9 +109,9 @@ namespace MSacco_DAL.SMSFloat.Debit.Unarchived
     public bool? From_Portal { get; set; }
     public string Batch_No { get; set; }
 
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
 
     public static string DBName = "Messages";
     public static string DBTableName = "MessagesBulk";

@@ -12,7 +12,7 @@ namespace MSacco_DAL
     public string saccoName_1 { get; set; }
     public double mpesaFloat { get; set; }
     public bool isActive { get; set; }
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
   }
 }

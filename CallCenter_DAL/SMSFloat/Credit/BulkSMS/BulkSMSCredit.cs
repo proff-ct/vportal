@@ -18,9 +18,9 @@ namespace CallCenter_DAL.SMSFloat.Credit
 
     public string UserID { get; set; }
 
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
 
     public static string DBName = "SACCO";
     public static string DBTableName = "[Sacco Bulksms Topup]";
