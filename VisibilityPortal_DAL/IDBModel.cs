@@ -2,8 +2,8 @@
 {
   public interface IDBModel
   {
-    string databaseName { get; }
-    string tableName { get; }
+    //string databaseName { get; }
+    //string tableName { get; }
 
   }
 

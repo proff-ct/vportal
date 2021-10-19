@@ -6,9 +6,9 @@
     public static string DBTableName => "PortalModule";
 
     public static string PlaceholderIfNotCoretecProduct = "N/A";
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
 
     public enum modules
     {

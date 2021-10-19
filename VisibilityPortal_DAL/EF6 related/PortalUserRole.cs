@@ -10,8 +10,8 @@ namespace VisibilityPortal_DAL
   {
     public static string DBName => "VisibilityPortal";
     public static string DBTableName => "PortalUserRole";
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
   }
 }

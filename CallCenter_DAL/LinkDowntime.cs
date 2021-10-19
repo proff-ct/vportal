@@ -6,8 +6,8 @@ namespace CallCenter_DAL
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "LinkDowntime";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
     public int Entry_No { get; set; }
     public DateTime? Downtime_Start { get; set; }
     public DateTime? Downtime_Stop { get; set; }

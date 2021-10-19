@@ -12,8 +12,8 @@ namespace MSacco_DAL
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "VirtualRegistrationsNewIPRS";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
     public int Entry_No { get; set; }
     public string Corporate_No { get; set; }
     public string MSISDN { get; set; }

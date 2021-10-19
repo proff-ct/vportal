@@ -10,8 +10,8 @@ namespace MSacco_DAL
   {
     public static string DBName = "SACCO";
     public static string DBTableName = "Guarantors";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
     public long Id { get; set; }
 
     public string Loan_Type { get; set; }

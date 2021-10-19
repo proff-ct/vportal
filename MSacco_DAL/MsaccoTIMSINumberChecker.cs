@@ -11,8 +11,8 @@ namespace MSacco_DAL
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "MsaccoTimsiNumberChecker";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
 
     public int Id { get; set; }
     public string TimsiId { get; set; }
