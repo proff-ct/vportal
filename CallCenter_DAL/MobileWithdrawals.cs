@@ -99,16 +99,16 @@ namespace CallCenter_DAL
 
     public static string DBName => "SACCO";
     public static string DBTableName => "[Mobile Withdrawals]";
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
   }
 
   public class MobileWithdrawals_Daraja : IMobileWithdrawals_DarajaDB, IDBModel
   {
-    public string databaseName => DarajaDB_MobileWithdrawals.DBName;
+    //public string databaseName => DarajaDB_MobileWithdrawals.DBName;
 
-    public string tableName => DarajaDB_MobileWithdrawals.TableName;
+    //public string tableName => DarajaDB_MobileWithdrawals.TableName;
     public int Entry_No { get; set; }
     public string Status { get; set; }
     public string Account_No { get; set; }

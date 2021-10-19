@@ -10,8 +10,8 @@ namespace CallCenter_DAL
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "MSaccoSalaryAdvance";
-    public string tableName => DBName;
-    public string databaseName => DBTableName;
+    //public string tableName => DBName;
+    //public string databaseName => DBTableName;
     public int Entry_No { get; set; }
     public string Status { get; set; }
     public string Account_No { get; set; }

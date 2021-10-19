@@ -10,10 +10,10 @@ namespace CallCenter_Dataspecs.Models
   {
     string corporateNo { get; set; }
     string corporateNo_2 { get; set; }
-    string databaseName { get; }
+    //string databaseName { get; }
     double mpesaFloat { get; set; }
     string saccoName_1 { get; set; }
     bool isActive { get; set; }
-    string tableName { get; }
+    //string tableName { get; }
   }
 }

@@ -143,7 +143,7 @@ namespace MSacco_BLL
       if (sacco != null)
       {
         _query = $@"SELECT [UseCoretecPesalinkFloat]
-              FROM {sacco.tableName}
+              FROM {Sacco.DBTableName}
               WHERE [Corporate No]='{corporateNo}'";
         return new DapperORM().QueryGetSingle<bool>(_query);
       }

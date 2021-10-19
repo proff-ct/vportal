@@ -11,8 +11,8 @@ namespace MSacco_DAL
   {
     public static string DBName => "ClientDB";
     public static string DBTableName => "Customers";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
     public int Entry_No { get; set; }
     public string Telephone_No { get; set; }
     public string Corporate_No { get; set; }

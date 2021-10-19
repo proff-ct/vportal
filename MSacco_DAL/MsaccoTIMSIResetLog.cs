@@ -11,8 +11,8 @@ namespace MSacco_DAL
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "MSACCO_TIMSI_RESET_LOG";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
 
     public int LogNo { get; set; }
 

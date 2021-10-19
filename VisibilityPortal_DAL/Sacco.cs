@@ -9,7 +9,7 @@
     public string corporateNo_2 { get; set; }
     public string saccoName_1 { get; set; }
 
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
   }
 }

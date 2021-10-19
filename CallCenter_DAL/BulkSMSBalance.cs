@@ -6,8 +6,8 @@ namespace CallCenter_DAL
   {
     public static string DBName => "SACCO";
     public static string DBTableName => "BulkSMSBalances";
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
 
     public int Entry_No { get; set; }
 

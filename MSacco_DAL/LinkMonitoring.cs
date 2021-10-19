@@ -22,8 +22,8 @@ namespace MSacco_DAL
 
     public DateTime? Last_Email_Sent { get; set; }
 
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
   }
 }

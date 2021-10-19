@@ -64,9 +64,9 @@ namespace CallCenter_DAL
 
     public string Stream { get; set; }
 
-    public string databaseName => DBName;
+    //public string databaseName => DBName;
 
-    public string tableName => DBTableName;
+    //public string tableName => DBTableName;
 
     public static string DBName = "SACCO";
     public static string DBTableName = "[Msacco Utility Payment]";

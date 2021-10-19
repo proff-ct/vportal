@@ -5,8 +5,8 @@
     public static string DBName => "VisibilityPortal";
     public static string DBTableName => "FloatResource";
 
-    public string databaseName => DBName;
-    public string tableName => DBTableName;
+    //public string databaseName => DBName;
+    //public string tableName => DBTableName;
 
     public enum FloatResources
     {
