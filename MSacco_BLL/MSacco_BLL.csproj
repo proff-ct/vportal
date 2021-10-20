@@ -163,7 +163,7 @@
       <Name>MSacco_DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\MSacco_Dataspecs\MSacco_Dataspecs.csproj">
-      <Project>{A57F714F-DD3D-4BF0-BB6E-D1D79D98F24A}</Project>
+      <Project>{a57f714f-dd3d-4bf0-bb6e-d1d79d98f24a}</Project>
       <Name>MSacco_Dataspecs</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">

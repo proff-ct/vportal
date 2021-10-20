@@ -7,5 +7,7 @@ namespace Utilities.PortalApplicationParams
     string ClientCorporateNo { get; set; }
     string ClientModuleId { get; set; }
     List<ActiveUserParams.UserRoles> Roles { get; set; }
+    string APIAuthID { get; set; }
+    string APIToken { get; }
   }
 }

@@ -55,7 +55,8 @@
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {
-      initTabulator("#loanListTable");
+      initTabulator(
+        "#loanListTable", { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
       LoadData("@Url.Action("GetLoanRecords", "Loans")", @activeUserParams.ClientCorporateNo);
     });
   </script>

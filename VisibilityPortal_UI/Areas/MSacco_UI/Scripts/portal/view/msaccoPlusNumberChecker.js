@@ -2,7 +2,7 @@
 var tabulatorAjaxUrlForReload;
 var tabulatorAjaxParamsForReload;
 
-function initTabulator(tableContainerID) {
+function initTabulator(tableContainerID, apiCommParams) {
   //create Tabulator on DOM element with id == tableContainerID
   tblTabulator = new Tabulator(tableContainerID, {
     height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -13,13 +13,14 @@ function initTabulator(tableContainerID) {
     //paginationSizeSelector: true,
     //ajaxProgressiveLoad: "scroll",
     //ajaxURL: 'Loans/GetLoanRecords',
-    //ajaxResponse: function (url, params, response) {
-    //  //url - the URL of the request
-    //  //params - the parameters passed with the request
-    //  //response - the JSON object returned in the body of the response.
+    ajaxResponse: function (url, params, response) {
+      //url - the URL of the request
+      //params - the parameters passed with the request
+      //response - the JSON object returned in the body of the response.
 
-    //  return response.data; //return the tableData property of a response json object
-    //},
+      response = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response));
+      return response;
+    },
     // collapse columns that no longer fit on the table into a list under the row
     responsiveLayout: "collapse",
     responsiveLayoutCollapseStartOpen: false,
@@ -85,7 +86,7 @@ function ReloadData() {
   tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
 }
 
-function ResetMemberDevice(restUrl, corporateNo, phoneNo) {
+function ResetMemberDevice(restUrl, corporateNo, phoneNo, apiCommParams) {
   if (corporateNo == '' || corporateNo == undefined || phoneNo == '' || phoneNo == undefined) return;
   var ajaxParams = {
     clientCorporateNo: corporateNo,
@@ -94,6 +95,7 @@ function ResetMemberDevice(restUrl, corporateNo, phoneNo) {
 
   $.post(restUrl, ajaxParams, function (response) {
     var serverResponse;
+    response = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response));
     if (response.success == true) {
       serverResponse = "<h4>Status: Success</h4>  <p/><p/>Member can now login via MSACCO+ Mobile App"
     } else {

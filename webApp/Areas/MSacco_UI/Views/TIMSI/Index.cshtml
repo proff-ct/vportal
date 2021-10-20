@@ -62,7 +62,9 @@
     $(document).ready(function () {
       $('[data-mask]').inputmask();
 
-      initTabulator("#blockedTIMSIRecordsListTable");
+      initTabulator(
+        "#blockedTIMSIRecordsListTable",
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
 
       $("#btnSearchMemberDeviceRecord").on('click', function () {
         SearchMemberTIMSIRecord(
@@ -117,7 +119,8 @@
                       "@Url.Action("ResetMSACCOTIMSIRecord", "TIMSI")",
                       @activeUserParams.ClientCorporateNo,
                       $("#memberTelNo").val(),
-                      result
+                      result,
+                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
                     );
                   }
                 }
