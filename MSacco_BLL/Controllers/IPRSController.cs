@@ -8,6 +8,8 @@ using MSacco_BLL.MSSQLOperators;
 using MSacco_BLL.ViewModels;
 using MSacco_DAL;
 using MSacco_Dataspecs.Feature.IPRS;
+using MSacco_Dataspecs.Security;
+using Newtonsoft.Json;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -32,7 +34,8 @@ namespace MSacco_BLL.Controllers
     [Authorize]
     public ActionResult SearchIPRSRecord(string clientCorporateNo, string nationalIDNo, string phoneNo)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(nationalIDNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(nationalIDNo))
       {
         return null;
       }
@@ -55,7 +58,11 @@ namespace MSacco_BLL.Controllers
       dynamic rec = Mapper.Map<WauminiVirtualRegistrationIPRS, WauminiIPRSLookupViewModel>((WauminiVirtualRegistrationIPRS)iprsRecord);
       returnData.Add(rec);
 
-      return Json(returnData.ToArray(), JsonRequestBehavior.AllowGet);
+      return Json(
+        APICommunication.Encrypt(
+            JsonConvert.SerializeObject(returnData.ToArray()),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+        JsonRequestBehavior.AllowGet);
 
     }
     
