@@ -127,7 +127,7 @@ namespace VisibilityPortal_BLL.Controllers
             ClientCorporateNo = user.ClientCorporateNo,
             ClientModuleId = string.Empty, // will get set when the user selects a module on login
             Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles),
-            APIAuthID = user.Id
+            APIAuthID = DateTime.Now.ToString("ddMM-yy-HHmm-sst")
           };
           Session["ActiveUserParams"] = activeUserParams;
           List<ActiveUserParams.UserRoles> userRoles = new List<ActiveUserParams.UserRoles>();
