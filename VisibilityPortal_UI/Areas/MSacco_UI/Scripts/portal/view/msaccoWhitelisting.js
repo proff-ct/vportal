@@ -100,3 +100,9 @@ function WhitelistMember(restUrl, corporateNo, phoneNo, trustReason, apiCommPara
     })
   });
 }
+
+function initResponsiveTabs(tabsContainerRef) {
+  $(tabsContainerRef).responsiveTabs({
+    startCollapsed: 'accordion'
+  });
+}
