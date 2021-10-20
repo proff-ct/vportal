@@ -41,7 +41,10 @@
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {
-      initTabulator("#mobileWithdrawalsListTable");
+      initTabulator(
+        "#mobileWithdrawalsListTable",
+        { encSecret:"@activeUserParams.APIAuthID", encKey:"@activeUserParams.APIToken" });
+
       LoadData(
         "@Url.Action("GetMobileWithdrawalRecords", "MobileWithdrawals")",
         @activeUserParams.ClientCorporateNo);

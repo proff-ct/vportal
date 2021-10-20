@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PagedList;
 using Utilities.PortalApplicationParams;
+using Utilities.PortalSecurity;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity;
@@ -125,7 +126,8 @@ namespace VisibilityPortal_BLL.Controllers
           {
             ClientCorporateNo = user.ClientCorporateNo,
             ClientModuleId = string.Empty, // will get set when the user selects a module on login
-            Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles)
+            Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles),
+            APIAuthID = user.Id
           };
           Session["ActiveUserParams"] = activeUserParams;
           List<ActiveUserParams.UserRoles> userRoles = new List<ActiveUserParams.UserRoles>();

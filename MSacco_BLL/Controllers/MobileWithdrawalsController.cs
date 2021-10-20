@@ -1,18 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
 using MSacco_Dataspecs.Functions;
 using MSacco_Dataspecs.Models;
 using MSacco_Dataspecs.MSSQLOperators;
+
 using Utilities.PortalApplicationParams;
+using MSacco_Dataspecs.Security;
 
 namespace MSacco_BLL.Controllers
 {
   [RequireActiveUserSession]
-  public class MobileWithdrawalsController : Controller
+  public class MobileWithdrawalsController : Controller 
   {
     private IBL_MobileWithdrawals _mobileWithdrawalsBLL = new MobileWithdrawalsBLL();
     // GET: MobileWithdrawals
@@ -44,14 +47,22 @@ namespace MSacco_BLL.Controllers
 
       dynamic mobileWithdrawalRecords = _mobileWithdrawalsBLL
         .GetMobileWithdrawalsTrxListForClient(clientCorporateNo, out int lastPage, true, pagingParams)
-        .Select(r=> { if(r.Transaction_Date == null) r.Transaction_Date=r.Datetime; return r; }) // didn't want to use ForEach ext. method
+        .Select(r => { if (r.Transaction_Date == null) r.Transaction_Date = r.Datetime; return r; }) // didn't want to use ForEach ext. method
         .ToArray();
+
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if(userParams == null)
+      {
+        return Json(new { last_page = lastPage, data = ""}, JsonRequestBehavior.AllowGet);
+      }
 
       return Json(new
       {
         last_page = lastPage, // last page from the fetched recordset
-        data = mobileWithdrawalRecords
-      }, JsonRequestBehavior.AllowGet);
+        data = APICommunication.Encrypt(
+          JsonConvert.SerializeObject(mobileWithdrawalRecords), 
+          new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
+    }, JsonRequestBehavior.AllowGet);
 
     }
     [HttpGet]
