@@ -8,6 +8,8 @@ using MSacco_DAL;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Functions;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
 using MSacco_Dataspecs.MSSQLOperators;
+using MSacco_Dataspecs.Security;
+using Newtonsoft.Json;
 using Utilities.PortalApplicationParams;
 using VisibilityPortal_BLL.CustomFilters;
 
@@ -30,7 +32,8 @@ namespace MSacco_BLL.Controllers
     [Authorize]
     public ActionResult GetMSACCOPlusDeviceRecord(string clientCorporateNo, string memberTelephoneNo)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
       {
         return null;
       }
@@ -43,13 +46,18 @@ namespace MSacco_BLL.Controllers
         _msaccoPlusNumberCheckerBLL.GetMsaccoPlusRegisteredMemberDeviceRecordForClient(clientCorporateNo, memberTelephoneNo.Replace("-","")))
       };
 
-      return Json(registeredMemberDeviceRecord, JsonRequestBehavior.AllowGet);
+      return Json(
+        APICommunication.Encrypt(
+            JsonConvert.SerializeObject(registeredMemberDeviceRecord),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+        JsonRequestBehavior.AllowGet);
     }
     [HttpPost]
     [Authorize]
     public ActionResult ResetMSACCOPlusDeviceRecord(string clientCorporateNo, string memberTelephoneNo)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
       {
         return null;
       }
@@ -57,11 +65,15 @@ namespace MSacco_BLL.Controllers
       bool isReset = _msaccoPlusNumberCheckerBLL.ResetMsaccoPlusMemberDeviceForClient(
         clientCorporateNo, memberTelephoneNo, out string resetMessage);
 
-      return Json(new
-      {
-        success = isReset,
-        ex = resetMessage
-      }, JsonRequestBehavior.AllowGet);
+      return Json(
+        APICommunication.Encrypt(
+            JsonConvert.SerializeObject(new
+            {
+              success = isReset,
+              ex = resetMessage
+            }),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+        JsonRequestBehavior.AllowGet);
     }
 
     #endregion
