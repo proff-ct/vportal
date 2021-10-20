@@ -56,7 +56,9 @@
   <script>
     $(document).ready(function () {
 
-      initTabulator("#timsiResetRecordsListTable");
+      initTabulator(
+        "#timsiResetRecordsListTable",
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
       LoadData(
         "@Url.Action("GetResetDBLogRecords", "TIMSI")",
         @activeUserParams.ClientCorporateNo);

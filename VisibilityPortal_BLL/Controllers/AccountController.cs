@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PagedList;
 using Utilities.PortalApplicationParams;
+using Utilities.PortalSecurity;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_BLL.Models;
 using VisibilityPortal_BLL.Models.ASP_Identity;
@@ -125,7 +126,8 @@ namespace VisibilityPortal_BLL.Controllers
           {
             ClientCorporateNo = user.ClientCorporateNo,
             ClientModuleId = string.Empty, // will get set when the user selects a module on login
-            Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles)
+            Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles),
+            APIAuthID = DateTime.Now.ToString("ddMM-yy-HHmm-sst")
           };
           Session["ActiveUserParams"] = activeUserParams;
           List<ActiveUserParams.UserRoles> userRoles = new List<ActiveUserParams.UserRoles>();
@@ -279,41 +281,41 @@ namespace VisibilityPortal_BLL.Controllers
 
     //
     // GET: /Account/Register
-    [AllowAnonymous]
-    public ActionResult Register()
-    {
-      return View();
-    }
+    //[AllowAnonymous]
+    //public ActionResult Register()
+    //{
+    //  return View();
+    //}
 
     //
     // POST: /Account/Register
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Register(RegisterViewModel model)
-    {
-      if (ModelState.IsValid)
-      {
-        ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-        if (result.Succeeded)
-        {
-          await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+    //[HttpPost]
+    //[AllowAnonymous]
+    //[ValidateAntiForgeryToken]
+    //public async Task<ActionResult> Register(RegisterViewModel model)
+    //{
+    //  if (ModelState.IsValid)
+    //  {
+    //    ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+    //    IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+    //    if (result.Succeeded)
+    //    {
+    //      await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-          // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-          // Send an email with this link
-          // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-          // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-          // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+    //      // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+    //      // Send an email with this link
+    //      // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+    //      // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+    //      // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-          return RedirectToAction("Index", "Home");
-        }
-        AddErrors(result);
-      }
+    //      return RedirectToAction("Index", "Home");
+    //    }
+    //    AddErrors(result);
+    //  }
 
-      // If we got this far, something failed, redisplay form
-      return View(model);
-    }
+    //  // If we got this far, something failed, redisplay form
+    //  return View(model);
+    //}
 
     //
     // GET: /Account/CreateSuperAdmin

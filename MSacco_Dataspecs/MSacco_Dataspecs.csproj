@@ -54,6 +54,7 @@
     <Compile Include="IPaginationParameters.cs" />
     <Compile Include="IPRS.cs" />
     <Compile Include="MsaccoRegistrationRecord.cs" />
+    <Compile Include="MSACCOSecurity.cs" />
     <Compile Include="MsaccoTIMSINumberChecker.cs" />
     <Compile Include="MsaccoWhitelisting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

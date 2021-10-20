@@ -6,6 +6,8 @@ using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
 using MSacco_Dataspecs.Feature.VirtualRegistration.Functions;
 using MSacco_Dataspecs.MSSQLOperators;
+using MSacco_Dataspecs.Security;
+using Newtonsoft.Json;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -26,7 +28,8 @@ namespace MSacco_BLL.Controllers
     [Authorize]
     public ActionResult GetvirtualRegistrationRecords(string clientCorporateNo, int page, int size)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo))
       {
         return null;
       }
@@ -48,7 +51,9 @@ namespace MSacco_BLL.Controllers
       return Json(new
       {
         last_page = lastPage, // last page from the fetched recordset
-        data = virtualRegistrationRecords
+        data = APICommunication.Encrypt(
+          JsonConvert.SerializeObject(virtualRegistrationRecords),
+          new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
       }, JsonRequestBehavior.AllowGet);
 
     }

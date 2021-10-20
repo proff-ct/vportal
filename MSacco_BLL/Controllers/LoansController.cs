@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
+using MSacco_Dataspecs.Security;
+using Newtonsoft.Json;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -46,10 +48,18 @@ namespace MSacco_BLL.Controllers
         .Where(l => l.Status != "Pending_Appraisal")
         .ToArray();
 
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null)
+      {
+        return Json(new { last_page = lastPage, data = "" }, JsonRequestBehavior.AllowGet);
+      }
+
       return Json(new
       {
         last_page = lastPage, // last page from the fetched recordset
-        data = loans
+        data = APICommunication.Encrypt(
+          JsonConvert.SerializeObject(loans),
+          new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
       }, JsonRequestBehavior.AllowGet);
 
     }

@@ -9,9 +9,56 @@ namespace Utilities.PortalApplicationParams
 {
   public class ActiveUserParams : IActiveUserParams
   {
+    private string _clientModuleID { get; set; }
+    private string _apiAuthID { get; set; }
     public string ClientCorporateNo { get; set; }
-    public string ClientModuleId { get; set; }
+    public string ClientModuleId
+    {
+      get => _clientModuleID; set
+      {
+        _clientModuleID = value;
+        // set the api token here
+        string fillers = "";
+        value = value ?? "WARNING:MIM!!";
+        if (value.Length < PortalSecurity.MSACCOAPI.MaxCredentialLength)
+        {
+          int gap = PortalSecurity.MSACCOAPI.MaxCredentialLength - value.Length;
+          for (int i = 0; i < gap; i++)
+          {
+            fillers += PortalSecurity.MSACCOAPI.FILLER_CHAR;
+          }
+          APIToken = fillers + string.Join("", value.Substring(0).Reverse());
+        }
+        else
+        {
+          APIToken = string.Join("", value.Substring(0, PortalSecurity.MSACCOAPI.MaxCredentialLength).Reverse());
+        }
+      }
+    }
     public List<UserRoles> Roles { get; set; }
+    public string APIAuthID
+    {
+      get => _apiAuthID; set
+      {
+        string fillers = "";
+        value = value ?? "WARNING:UIM!!";
+        if(value.Length < PortalSecurity.MSACCOAPI.MaxCredentialLength)
+        {
+          int gap = PortalSecurity.MSACCOAPI.MaxCredentialLength - value.Length;
+          for (int i=0; i<gap; i++)
+          {
+            fillers += PortalSecurity.MSACCOAPI.FILLER_CHAR;
+          }
+          _apiAuthID = fillers + string.Join("", value.Substring(0).Reverse());
+        }
+        else
+        {
+          _apiAuthID = string.Join("", value.Substring(0, PortalSecurity.MSACCOAPI.MaxCredentialLength).Reverse());
+        }
+      }
+    }
+    public string APIToken { get; private set; }
+
     public class UserRoles : IUserRole
     {
       public string ClientModuleId { get; set; }
@@ -26,7 +73,7 @@ namespace Utilities.PortalApplicationParams
     /// </summary>
     public static string SessionVaribleName()
     {
-     return "ActiveUserParams";
-    } 
+      return "ActiveUserParams";
+    }
   }
 }
