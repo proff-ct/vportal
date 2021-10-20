@@ -3,6 +3,8 @@ using MSacco_BLL.MSSQLOperators;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Functions;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Models;
 using MSacco_Dataspecs.MSSQLOperators;
+using MSacco_Dataspecs.Security;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +39,8 @@ namespace MSacco_BLL.Controllers
     [Authorize]
     public ActionResult GetResetDBLogRecords(string clientCorporateNo, int page, int size)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo))
       {
         return null;
       }
@@ -52,14 +55,17 @@ namespace MSacco_BLL.Controllers
       return Json(new
       {
         last_page = lastPage, // last page from the fetched recordset
-        data = dbResetLogRecords
+        data = APICommunication.Encrypt(
+          JsonConvert.SerializeObject(dbResetLogRecords),
+          new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
       }, JsonRequestBehavior.AllowGet);
     }
     [HttpGet]
     [Authorize]
     public ActionResult GetBlockedTIMSIRecord(string clientCorporateNo, string memberTelephoneNo)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
       {
         return null;
       }
@@ -71,13 +77,18 @@ namespace MSacco_BLL.Controllers
         _msaccoTIMSIBLL.GetTIMSIMemberRecordForClient(clientCorporateNo, memberTelephoneNo.Replace("-",""))
       };
 
-      return Json(registeredMemberDeviceRecord, JsonRequestBehavior.AllowGet);
+      return Json(
+        APICommunication.Encrypt(
+            JsonConvert.SerializeObject(registeredMemberDeviceRecord),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+        JsonRequestBehavior.AllowGet);
     }
     [HttpPost]
     [Authorize]
     public ActionResult ResetMSACCOTIMSIRecord(string clientCorporateNo, string memberTelephoneNo, string trustReason)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
       {
         return null;
       }
@@ -90,11 +101,15 @@ namespace MSacco_BLL.Controllers
       };
       bool isReset = _msaccoTIMSIBLL.ResetTIMSIMemberRecordForClient(clientCorporateNo, resetData, out string resetMessage);
 
-      return Json(new
-      {
-        success = isReset,
-        ex = resetMessage
-      }, JsonRequestBehavior.AllowGet);
+      return Json(
+        APICommunication.Encrypt(
+            JsonConvert.SerializeObject(new
+            {
+              success = isReset,
+              ex = resetMessage
+            }),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+        JsonRequestBehavior.AllowGet);
     }
 
     #endregion
