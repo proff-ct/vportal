@@ -62,7 +62,9 @@
     $(document).ready(function () {
       $('[data-mask]').inputmask();
 
-      initTabulator("#memberRecordsListTable");
+      initTabulator(
+        "#memberRecordsListTable",
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
 
       $("#btnSearchMemberRecord").on('click', function () {
         SearchMemberRecord(
@@ -117,7 +119,8 @@
                       "@Url.Action("WhitelistMemberRecord", "MSACCOWhitelisting")",
                       @activeUserParams.ClientCorporateNo,
                       $("#memberTelNo").val(),
-                      result
+                      result,
+                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
                     );
                   }
                 }

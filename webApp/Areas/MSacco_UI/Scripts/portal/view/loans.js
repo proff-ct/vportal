@@ -2,7 +2,7 @@
 var tabulatorAjaxUrlForReload;
 var tabulatorAjaxParamsForReload;
 
-function initTabulator(tableContainerID) {
+function initTabulator(tableContainerID, apiCommParams) {
   var dateFieldAccessor = function (value, data, type, params, column) {
     return GetFormattedDate(value);
   };
@@ -17,13 +17,15 @@ function initTabulator(tableContainerID) {
     paginationSizeSelector: true,
     //ajaxProgressiveLoad: "scroll",
     //ajaxURL: 'Loans/GetLoanRecords',
-    //ajaxResponse: function (url, params, response) {
-    //  //url - the URL of the request
-    //  //params - the parameters passed with the request
-    //  //response - the JSON object returned in the body of the response.
+    ajaxResponse: function (url, params, response) {
+      //url - the URL of the request
+      //params - the parameters passed with the request
+      //response - the JSON object returned in the body of the response.
 
-    //  return response.data; //return the tableData property of a response json object
-    //},
+      //return response.data; //return the tableData property of a response json object
+      response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
+      return response;
+    },
     // collapse columns that no longer fit on the table into a list under the row
     responsiveLayout: "collapse",
     responsiveLayoutCollapseStartOpen: false,

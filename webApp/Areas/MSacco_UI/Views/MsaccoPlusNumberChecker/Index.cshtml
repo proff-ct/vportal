@@ -62,7 +62,9 @@
     $(document).ready(function () {
       $('[data-mask]').inputmask();
 
-      initTabulator("#msaccoPlusMemberDevicesListTable");
+      initTabulator(
+        "#msaccoPlusMemberDevicesListTable",
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
 
       $("#btnSearchMemberDeviceRecord").on('click', function () {
         SearchMemberDeviceRecord(
@@ -92,7 +94,8 @@
               ResetMemberDevice(
                 "@Url.Action("ResetMSACCOPlusDeviceRecord", "MsaccoPlusNumberChecker")",
                 @activeUserParams.ClientCorporateNo,
-                $("#memberTelNo").val());
+                $("#memberTelNo").val(),
+                { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
             }
           }
 

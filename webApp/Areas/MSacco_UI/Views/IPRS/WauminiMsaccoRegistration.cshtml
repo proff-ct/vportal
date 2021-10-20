@@ -89,7 +89,8 @@
     $(document).ready(function () {
       txtSearchIdNumber = "#txtIDNumber";
       txtSearchPhoneNo = "#txtPhoneNo";
-      initTabulator("#iprsResultsTable");
+      initTabulator(
+        "#iprsResultsTable",{ encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
     });
   </script>
 }

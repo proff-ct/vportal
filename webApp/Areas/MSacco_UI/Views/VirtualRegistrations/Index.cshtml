@@ -41,7 +41,9 @@
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {
-      initTabulator("#virtualRegistrationsListTable");
+      initTabulator(
+        "#virtualRegistrationsListTable",
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
       LoadData(
         "@Url.Action("GetVirtualRegistrationRecords", "VirtualRegistrations")",
         @activeUserParams.ClientCorporateNo);
