@@ -1,4 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_Dataspecs.Feature.MsaccoRegistration.Functions;
@@ -6,12 +12,8 @@ using MSacco_Dataspecs.Feature.MsaccoRegistration.Models;
 using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Functions;
 using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Models;
 using MSacco_Dataspecs.MSSQLOperators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+using MSacco_Dataspecs.Security;
+using Newtonsoft.Json;
 using Utilities.PortalApplicationParams;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_Dataspecs.Models;
@@ -52,13 +54,23 @@ namespace MSacco_BLL.Controllers
         Mapper.Map<IRouting_Table, IRegistrationRecordToWhitelistViewModel>(_msaccoRegistrationBLL.GetMsaccoRegistrationRecordForClient(clientCorporateNo, memberTelephoneNo.Replace("-","")))
       };
 
-      return Json(registeredMemberRecords, JsonRequestBehavior.AllowGet);
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+
+      return userParams == null ?
+        Json(null, JsonRequestBehavior.AllowGet) :
+        Json(
+          APICommunication.Encrypt(
+            JsonConvert.SerializeObject(registeredMemberRecords),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+          JsonRequestBehavior.AllowGet);
+
     }
     [HttpPost]
     [Authorize]
     public ActionResult WhitelistMemberRecord(string clientCorporateNo, string memberTelephoneNo, string trustReason)
     {
-      if (string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null || string.IsNullOrEmpty(clientCorporateNo) || string.IsNullOrEmpty(memberTelephoneNo))
       {
         return null;
       }
@@ -72,11 +84,14 @@ namespace MSacco_BLL.Controllers
       bool isWhitelisted = _msaccoWhitelistingBLL.WhitelistMember(
         clientCorporateNo, actionData, out string actionMessage);
 
-      return Json(new
-      {
-        success = isWhitelisted,
-        ex = actionMessage
-      }, JsonRequestBehavior.AllowGet);
+      return Json(APICommunication.Encrypt(
+            JsonConvert.SerializeObject(new
+            {
+              success = isWhitelisted,
+              ex = actionMessage
+            }),
+            new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
+            JsonRequestBehavior.AllowGet);
     }
 
     #endregion
