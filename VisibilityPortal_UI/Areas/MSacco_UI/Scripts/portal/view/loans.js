@@ -2,7 +2,7 @@
 var tabulatorAjaxUrlForReload;
 var tabulatorAjaxParamsForReload;
 
-function initTabulator(tableContainerID) {
+function initTabulator(tableContainerID, apiCommParams) {
   var dateFieldAccessor = function (value, data, type, params, column) {
     return GetFormattedDate(value);
   };
