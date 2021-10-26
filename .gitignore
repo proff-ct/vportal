@@ -267,3 +267,6 @@ __pycache__/
 /VisibilityPortal_BLL.Tests/SampleAppDBConnectionStrings.Debug.config
 /CallCenter_BLL.Tests/SampleAppDBConnectionStrings.Release.config
 /CallCenter_BLL.Tests/SampleAppDBConnectionStrings.Debug.config
+
+# Miscellaneous exemptions
+/VisibilityPortal_UI/logs
