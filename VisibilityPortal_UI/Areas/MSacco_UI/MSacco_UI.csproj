@@ -390,6 +390,18 @@
     <Content Include="plugins\cryptojs_v3.1.2\rollups\sha384.js" />
     <Content Include="plugins\cryptojs_v3.1.2\rollups\sha512.js" />
     <Content Include="plugins\cryptojs_v3.1.2\rollups\tripledes.js" />
+    <Content Include="plugins\Responsive-Tabs\.gitignore" />
+    <Content Include="plugins\Responsive-Tabs\AUTHOR.txt" />
+    <Content Include="plugins\Responsive-Tabs\css\responsive-tabs.css" />
+    <Content Include="plugins\Responsive-Tabs\css\style.css" />
+    <Content Include="plugins\Responsive-Tabs\demo.html" />
+    <Content Include="plugins\Responsive-Tabs\gulpfile.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery-1.11.0.min.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery-2.1.0.min.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery.responsiveTabs.js" />
+    <Content Include="plugins\Responsive-Tabs\js\jquery.responsiveTabs.min.js" />
+    <Content Include="plugins\Responsive-Tabs\test\fixture.html" />
+    <Content Include="plugins\Responsive-Tabs\test\jquery.responsiveTabs-test.js" />
     <Content Include="plugins\sheetjs\cpexcel.js" />
     <Content Include="plugins\sheetjs\jszip.js" />
     <Content Include="plugins\sheetjs\shim.min.js" />
@@ -561,6 +573,10 @@
     <Content Include="plugins\sheetjs\xlsx.full.min.map" />
     <Content Include="plugins\sheetjs\xlsx.min.map" />
     <Content Include="plugins\sheetjs\xlsx.mini.min.map" />
+    <Content Include="plugins\Responsive-Tabs\bower.json" />
+    <Content Include="plugins\Responsive-Tabs\LICENCE" />
+    <Content Include="plugins\Responsive-Tabs\package.json" />
+    <Content Include="plugins\Responsive-Tabs\README.md" />
     <None Include="Properties\PublishProfiles\CodeFactory_WebApp.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
@@ -649,6 +665,9 @@
     <Content Include="Views\TIMSI\IMSIAuthenticatedRecords.cshtml" />
     <Content Include="Views\USSDRequests\Index.cshtml" />
     <Content Include="Views\MSACCOWhitelisting\Index.cshtml" />
+    <Content Include="Views\MSACCOWhitelisting\_SingleMemberWhitelistingPartial.cshtml" />
+    <Content Include="Views\MSACCOWhitelisting\_BatchFileWhitelistingPartial.cshtml" />
+    <Content Include="Views\MSACCOWhitelisting\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
