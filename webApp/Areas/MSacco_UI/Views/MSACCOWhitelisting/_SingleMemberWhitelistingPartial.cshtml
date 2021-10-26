@@ -1,0 +1,42 @@
+﻿<div class="panel">
+  <div class="panel-heading">
+    <h5 class="panel-info"><strong>Individual Member Whitelisting</strong></h5>
+    <div class="pull-left">
+      <!-- phone mask -->
+      <span class="btn-label">Enter Phone No:</span>
+      <div class="input-group">
+        <div class="input-group-btn">
+          <button type="button" id="btnWhitelist" class="btn btn-warning">Whitelist</button>
+        </div>
+        <input type="text" class="form-control" id="memberTelNo" data-inputmask='"mask": "+254-999-999999"' data-mask>
+        <span class="input-group-btn">
+          <button type="button"
+                  class="btn btn-info btn-flat"
+                  id="btnSearchMemberRecord">
+            Search!
+          </button>
+        </span>
+      </div>
+      <!-- /.input group -->
+      <!-- phone mask -->
+    </div>
+    <div class="pull-right">
+      <!--
+     <button type="button"
+             class="btn btn-labeled btn-primary btn-sm"
+             onclick="ReloadData()">
+       <span class="btn-label"><i class="fa fa-refresh"></i></span>
+       Reload
+     </button>
+     <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters()">
+       <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+       Reset
+     </button>
+     -->
+    </div>
+  </div>
+  <div class="panel-body">
+    <div id="memberRecordsListTable"></div>
+  </div>
+
+</div>
