@@ -51,19 +51,30 @@ $"~/plugins/Responsive-Tabs/css/style.css" //basic tab accordion theme
   <!-- Include external scripts-->
   @{
     string[] scriptFiles = {
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisting.js",
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/Responsive-Tabs/js/jquery.responsiveTabs.js"
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/Responsive-Tabs/js/jquery.responsiveTabs.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/shim.min.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/xlsx.full.min.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisting.js"
 };
   }
   @Scripts.Render(scriptFiles)
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {
+      initResponsiveTabs("#tabs_whitelistingMode");
       $('[data-mask]').inputmask();
 
-      initResponsiveTabs("#tabs_whitelistingMode");
       initTabulator(
-        "#memberRecordsListTable",
+        { tlrName: tlrSingle, tblID: "#memberRecordsListTable" },
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
+
+      initTabulator(
+        {
+          tlrName: tlrBatch,
+          tblID: "#batchFileRecordsListTable",
+          restUrl: "@Url.Action("WhitelistMemberRecord", "MSACCOWhitelisting")",
+          client: @activeUserParams.ClientCorporateNo
+        },
         { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
 
       $("#btnSearchMemberRecord").on('click', function () {
@@ -117,9 +128,12 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/Responsive-Tabs/js/jquery.re
                     }
                     WhitelistMember(
                       "@Url.Action("WhitelistMemberRecord", "MSACCOWhitelisting")",
-                      @activeUserParams.ClientCorporateNo,
-                      $("#memberTelNo").val(),
-                      result,
+                      {
+                        client: "@activeUserParams.ClientCorporateNo",
+                        phoneNo: $("#memberTelNo").val(),
+                        trustReason: result,
+                        processingMode: tlrSingle
+                      },
                       { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
                     );
                   }
@@ -132,6 +146,20 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/Responsive-Tabs/js/jquery.re
 
         });
       });
+
+      $("#membersFile").on('change', function (event) {
+        selectedMembersBatchFile = event.target.files[0];
+      });
+
+      $("#btnImportFromFile").on('click', function () {
+        if (selectedMembersBatchFile) {
+          var fileReader = new FileReader();
+          
+          fileReader.onload = ImportMemberRecordFromFile;
+          fileReader.readAsBinaryString(selectedMembersBatchFile);
+        }
+      });
+
     });
   </script>
 }

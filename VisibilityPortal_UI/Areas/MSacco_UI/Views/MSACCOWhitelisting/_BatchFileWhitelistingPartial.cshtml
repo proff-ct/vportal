@@ -1,0 +1,33 @@
+﻿<div class="panel">
+  <div class="panel-heading">
+    <h5 class="panel-info"><strong>Batch Whitelisting</strong></h5>
+    <div class="pull-left">
+      <div class="input-group">
+        <input type="file" class="form-control" id="membersFile" accept=".xls,.xlsx">
+        <span class="input-group-btn">
+          <button type="button"
+                  class="btn btn-info btn-flat"
+                  id="btnImportFromFile">
+            Import
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div class="pull-right">
+      <button type="button" class="btn btn-labeled btn-success btn-sm" onclick="DownloadBatchFileTemplate()">
+        <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>
+        Download Template
+      </button>
+      <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters(tlrBatch)">
+        <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+        Reset
+      </button>
+
+    </div>
+
+  </div>
+  <div class="panel-body">
+    <div id="batchFileRecordsListTable"></div>
+  </div>
+</div>

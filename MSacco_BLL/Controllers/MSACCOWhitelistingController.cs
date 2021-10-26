@@ -14,6 +14,7 @@ using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Models;
 using MSacco_Dataspecs.MSSQLOperators;
 using MSacco_Dataspecs.Security;
 using Newtonsoft.Json;
+using Utilities;
 using Utilities.PortalApplicationParams;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_Dataspecs.Models;
@@ -81,8 +82,22 @@ namespace MSacco_BLL.Controllers
         KYCNarration = trustReason,
         ActionUser = User.Identity.Name,
       };
-      bool isWhitelisted = _msaccoWhitelistingBLL.WhitelistMember(
-        clientCorporateNo, actionData, out string actionMessage);
+      bool isWhitelisted = false;
+      string actionMessage;
+      try
+      {
+        isWhitelisted = _msaccoWhitelistingBLL.WhitelistMember(
+        clientCorporateNo, actionData, out actionMessage);
+      }
+      catch (Exception ex)
+      {
+        actionMessage = "A problem occurred whitelisting the member. Kindly try again.";
+        AppLogger.LogOperationException(
+          "WhitelistMemberRecord", 
+          $"Exception while trying to whitelist: {ex.Message}",
+          new { clientCorporateNo, actionData },
+          ex);
+      }
 
       return Json(APICommunication.Encrypt(
             JsonConvert.SerializeObject(new
