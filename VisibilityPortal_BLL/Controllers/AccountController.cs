@@ -122,6 +122,15 @@ namespace VisibilityPortal_BLL.Controllers
           //  ClientModuleId = string.Empty, // will get set when the user selects a module on login
           //  Roles = new List<ActiveUserParams.UserRoles>()
           //};
+#if DEBUG
+          IActiveUserParams activeUserParams = new ActiveUserParams
+          {
+            ClientCorporateNo = "123456",
+            ClientModuleId = "TCM-ID-U123", // will get set when the user selects a module on login
+            Roles = new List<ActiveUserParams.UserRoles>(),
+            APIAuthID = DateTime.Now.ToString("ddMM-yy-HHmm-sst")
+          };
+#else
           IActiveUserParams activeUserParams = new ActiveUserParams
           {
             ClientCorporateNo = user.ClientCorporateNo,
@@ -129,6 +138,8 @@ namespace VisibilityPortal_BLL.Controllers
             Roles = Mapper.Map<List<ActiveUserParams.UserRoles>>(user.PortalRoles),
             APIAuthID = DateTime.Now.ToString("ddMM-yy-HHmm-sst")
           };
+#endif
+
           Session["ActiveUserParams"] = activeUserParams;
           List<ActiveUserParams.UserRoles> userRoles = new List<ActiveUserParams.UserRoles>();
 
@@ -139,13 +150,13 @@ namespace VisibilityPortal_BLL.Controllers
             PortalRole pr = user.PortalRoles.Single();
             PortalModuleForClient clientModule = _coretecClientBLL.GetPortalModuleForClient(
              pr.ClientModuleId);
-            
+
             //
             if (!Mapper.Map<PortalUserRole>(pr).IsEnabled)
             {
               return RedirectToAction("NoRolesEnabled");
             }
-            
+
             // Set the ClientModuleId for the ActiveUserParams object
             activeUserParams.ClientModuleId = pr.ClientModuleId;
             Session["ActiveUserParams"] = activeUserParams;
@@ -196,7 +207,7 @@ namespace VisibilityPortal_BLL.Controllers
                   DefaultRoute = _portalModuleBLL.GetDefaultRouteForModule(clientModule.PortalModuleName)
                 });
               });
-              switch (moduleUrls.Count > 1 ? "Multiple": moduleUrls.Count == 1 ? "Single" : "None")
+              switch (moduleUrls.Count > 1 ? "Multiple" : moduleUrls.Count == 1 ? "Single" : "None")
               {
                 case "Single":
                   activeUserParams.ClientModuleId = user.PortalRoles
@@ -461,7 +472,7 @@ namespace VisibilityPortal_BLL.Controllers
         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
         // Send an email with this link
         string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-        var callbackUrl = Url.Action(
+        string callbackUrl = Url.Action(
           "ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 
         IdentityMessage emailMessage = new IdentityMessage
@@ -910,7 +921,7 @@ namespace VisibilityPortal_BLL.Controllers
     public ActionResult Edit(EditPortalUserViewModel editUserVM)
     {
       ApplicationUser userToEdit = UserManager.FindByEmail(editUserVM.Email);
-      if(userToEdit == null)
+      if (userToEdit == null)
       {
         ViewBag.UnknownEmail = editUserVM.Email;
         return View();
@@ -929,10 +940,10 @@ namespace VisibilityPortal_BLL.Controllers
 
       // save the roles
       // the only thing expected to change at the moment is th IsEnabled property
-      if(editUserVM.PortalRoles.Count > 0)
+      if (editUserVM.PortalRoles.Count > 0)
       {
         // Check that there are no two active roles
-        if(editUserVM.PortalRoles.GroupBy(roles => roles.ClientModuleId).Where(g => g.Count() > 1).Any(r => r.All(mr => mr.IsEnabled)))
+        if (editUserVM.PortalRoles.GroupBy(roles => roles.ClientModuleId).Where(g => g.Count() > 1).Any(r => r.All(mr => mr.IsEnabled)))
         {
           ModelState.AddModelError("", $"User cannot have two active roles for the same module!");
           editUserVM.PortalRoles = Mapper.Map<IList<PortalUserRoleViewModel>>(
@@ -948,11 +959,15 @@ namespace VisibilityPortal_BLL.Controllers
         }
 
         PortalUserRole roleToUpdate = null;
-        editUserVM.PortalRoles.ToList().ForEach(r => {
+        editUserVM.PortalRoles.ToList().ForEach(r =>
+        {
           roleToUpdate = _portalUserRoleBLL.GetPortalUserRoleListForUser(userToEdit.Id)
           .SingleOrDefault(userRoles => (userRoles.AspRoleId.Equals(r.AspRoleId) && userRoles.ClientModuleId.Equals(r.ClientModuleId)));
 
-          if (roleToUpdate == null) return;
+          if (roleToUpdate == null)
+          {
+            return;
+          }
 
           roleToUpdate.IsEnabled = r.IsEnabled;
           roleToUpdate.ModifiedBy = User.Identity.GetUserName();
@@ -992,7 +1007,7 @@ namespace VisibilityPortal_BLL.Controllers
         ViewBag.UnknownEmail = email;
         return View();
       }
-            
+
       if (User.IsInRole(PortalUserRoles.SystemRoles.SuperAdmin.ToString()))
       {
         ViewBag.UserClientName = user.ClientCorporateNo.Equals(CoreTecOrganisation.CorporateNo) ?
@@ -1021,7 +1036,7 @@ namespace VisibilityPortal_BLL.Controllers
     [ValidateAntiForgeryToken]
     public ActionResult AddRoleToUser(AddUserRoleViewModel addUserRoleVM)
     {
-      
+
       ApplicationUser userToEdit = UserManager.FindByEmail(addUserRoleVM.Email);
       if (userToEdit == null)
       {
@@ -1056,12 +1071,12 @@ namespace VisibilityPortal_BLL.Controllers
       PortalUserRole portalUserRole = Mapper.Map<PortalUserRole>(portalRole);
       portalUserRole.UserId = userToEdit.Id;
       portalUserRole.CreatedBy = User.Identity.GetUserName();
-      
+
       _portalUserRoleBLL.Save(portalUserRole, ModelOperation.AddNew);
 
       // return to edit 
       return RedirectToAction("Edit", new { email = userToEdit.Email });
-      
+
     }
 
     [HttpGet]
@@ -1157,21 +1172,28 @@ namespace VisibilityPortal_BLL.Controllers
     [Authorize]
     public ActionResult GetAvailableRolesForClientUser(string email, string clientModuleId)
     {
-      if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(clientModuleId)) return null;
+      if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(clientModuleId))
+      {
+        return null;
+      }
+
       ApplicationUser user = UserManager.FindByEmail(email);
-      if (user == null) return null;
+      if (user == null)
+      {
+        return null;
+      }
 
       List<PortalUserRole> listRolesForUser = new List<PortalUserRole>();
       listRolesForUser = _portalUserRoleBLL.GetPortalUserRoleListForUser(user.Id).ToList();
 
       List<PortalUserRole> rolesForModule = listRolesForUser.Where(r => r.ClientModuleId == clientModuleId).ToList();
 
-      if(rolesForModule == null || !rolesForModule.Any(mr=>mr.IsEnabled))
+      if (rolesForModule == null || !rolesForModule.Any(mr => mr.IsEnabled))
       {
-        
+
         return Json(
           Mapper.Map<List<PortalApplicationRoleViewModel>>(RoleManager.Roles.ToList())
-          .Where(r=> !r.Name.Equals(PortalUserRoles.SystemRoles.SuperAdmin.ToString()) && !rolesForModule.Any(mr=>mr.AspRoleId.Equals(r.RoleId)))
+          .Where(r => !r.Name.Equals(PortalUserRoles.SystemRoles.SuperAdmin.ToString()) && !rolesForModule.Any(mr => mr.AspRoleId.Equals(r.RoleId)))
           .OrderBy(r => r.Name)
           .Select(r => new { r.Name, r.RoleId })
           .ToList(), JsonRequestBehavior.AllowGet);

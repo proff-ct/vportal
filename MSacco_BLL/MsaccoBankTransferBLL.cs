@@ -75,6 +75,9 @@ namespace MSacco_BLL
 
     public bool IsClientRegisteredForBankTransfer(string corporateNo)
     {
+#if DEBUG
+      return false;
+#endif
       string tblPesaLinkCharges = "CorporateCharges";
 
       _query = $@"SELECT CASE WHEN EXISTS (
@@ -138,7 +141,9 @@ namespace MSacco_BLL
 
     public bool IsClientUsingCoretecFloat(string corporateNo)
     {
-      
+#if DEBUG
+      return false;
+#endif
       ISACCO sacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo);
       if (sacco != null)
       {
