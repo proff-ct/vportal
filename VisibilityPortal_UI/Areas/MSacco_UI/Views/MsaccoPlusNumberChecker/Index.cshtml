@@ -19,7 +19,8 @@
           <div class="input-group-btn">
             <button type="button" id="btnReActivate" class="btn btn-warning">(Re)Activate</button>
           </div>
-          <input type="text" class="form-control" id="memberTelNo" data-inputmask='"mask": "+254-999-999999"' data-mask>
+          @*<input type="text" class="form-control" id="memberTelNo" data-inputmask='"mask": "+254-999-999999"' data-mask>*@
+          <input type="text" class="form-control" id="memberTelNo">
           <span class="input-group-btn">
             <button type="button"
                     class="btn btn-info btn-flat"
@@ -60,22 +61,65 @@
   <!-- Define local scripts-->
   <script>
     $(document).ready(function () {
-      $('[data-mask]').inputmask();
+      @* $('[data-mask]').inputmask();*@
+      var applicationTitle = "@ViewBag.Title";
+      var searchDeviceRecord = function(phoneNumber){
+        SearchMemberDeviceRecord(
+          "@Url.Action("GetMSACCOPlusDeviceRecord", "MsaccoPlusNumberChecker")",
+          @activeUserParams.ClientCorporateNo,
+          phoneNumber
+        );
+      };
+
+      $("#memberTelNo").intlTelInput({
+        geoIpLookup: function (callback) {
+          $.get("http://ipinfo.io", function () { }, "jsonp").always(function (resp) {
+            var countryCode = (resp && resp.country) ? resp.country : "ke";
+            callback(countryCode);
+          });
+        },
+        initialCountry: "ke",
+        separateDialCode: true,
+        //utilsScript: "build/js/utils.js"
+      });
 
       initTabulator(
         "#msaccoPlusMemberDevicesListTable",
         { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
 
+      $("#memberTelNo").on("countrychange", function (e, countryData) {
+        this.value = "";
+      });
+
       $("#btnSearchMemberDeviceRecord").on('click', function () {
-        SearchMemberDeviceRecord(
-          "@Url.Action("GetMSACCOPlusDeviceRecord", "MsaccoPlusNumberChecker")",
-          @activeUserParams.ClientCorporateNo,
-          $("#memberTelNo").val()
-        );
+        try {
+          if (!IsITINumberValid("memberTelNo", applicationTitle, searchDeviceRecord)) return;
+        }
+        catch (error) {
+          bootbox.alert({
+            title: "<h4>" + applicationTitle + " - Phone Number Error</h4>",
+            message: "Fatal error. Contact CoreTec support immediately"
+          });
+          console.log(
+            applicationTitle + ": Error on btnSearchMemberDeviceRecord: " + error.message + "-" + moment().format(PORTAL_DATE_FORMAT));
+          return;
+        }
       });
 
       $("#btnReActivate").on('click', function () {
-        if ($("#memberTelNo").val() == '') return;
+        try {
+          if (!IsITINumberValid("memberTelNo", applicationTitle)) return;
+        }
+        catch (error) {
+          bootbox.alert({
+            title: "<h4>" + applicationTitle + " - Phone Number Error</h4>",
+            message: "Fatal error. Contact CoreTec support immediately"
+          });
+          console.log(
+            applicationTitle + ": Error on btnReActivate: " + error.message + "-" + moment().format(PORTAL_DATE_FORMAT));
+          return;
+        }
+
         bootbox.confirm({
           title: "Confirm to ReActivate Member on MSACCO+ App",
           message: "Are you sure? This action cannot be reversed ",
@@ -94,7 +138,7 @@
               ResetMemberDevice(
                 "@Url.Action("ResetMSACCOPlusDeviceRecord", "MsaccoPlusNumberChecker")",
                 @activeUserParams.ClientCorporateNo,
-                $("#memberTelNo").val(),
+                $("#memberTelNo").intlTelInput("getNumber"),
                 { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
             }
           }

@@ -135,7 +135,7 @@ function initTabulator(tlrModeSpec, apiCommParams) {
 
 function GetFormattedDate(objDate) {
   return (objDate == null) ?
-    'No Date' : moment(objDate).format("DD-MMM-YYYY hh:mm:ss A")
+    'No Date' : moment(objDate).format(PORTAL_DATE_FORMAT)
 }
 
 function ClearFilters(tlrType) {
@@ -186,7 +186,7 @@ function WhitelistMember(restUrl, memberRecord, apiCommParams, batchCallback = n
       }
       catch (err) {
         console.log(
-          "Error on " + ajaxParams.memberTelephoneNo + " Failed interpreting response: " + err.message + " at " + moment().format("DD-MMM-YYYY hh:mm:ss A"));
+          "Error on " + ajaxParams.memberTelephoneNo + " Failed interpreting response: " + err.message + " at " + moment().format(PORTAL_DATE_FORMAT));
         response = { success: false, ex: "An error occurred interpreting the server's response. Kindly try again" };
       }
     }
