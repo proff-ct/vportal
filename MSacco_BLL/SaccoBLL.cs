@@ -11,7 +11,6 @@ namespace MSacco_BLL
 {
   public class SaccoBLL: IBL_SACCO
   {
-    string query;
     string tblSacco = Sacco.DBTableName;
     string[] _saccoColumnNames = new string[]
     {
@@ -19,7 +18,7 @@ namespace MSacco_BLL
     };
     public IEnumerable<ISACCO> GetSaccoList()
     {
-      query = $@"SELECT {string.Join(",",_saccoColumnNames)}
+     string query = $@"SELECT {string.Join(",",_saccoColumnNames)}
               FROM {tblSacco}
               WHERE Active='1'";
       return new DapperORM().QueryGetList<Sacco>(query);
@@ -27,11 +26,12 @@ namespace MSacco_BLL
     
     public ISACCO GetSaccoById(int id)
     {
-      query = $@"SELECT {string.Join(",", _saccoColumnNames)} FROM {tblSacco} WHERE id='{id.ToString()}'";
+     string query = $@"SELECT {string.Join(",", _saccoColumnNames)} FROM {tblSacco} WHERE id='{id.ToString()}'";
       return new DapperORM().QueryGetSingle<Sacco>(query);
     }
     public ISACCO GetSaccoByUniqueParam(string corporateNo = null, string saccoName = null)
     {
+      string query;
       if (!string.IsNullOrEmpty(corporateNo))
       {
         query = $@"SELECT {string.Join(",", _saccoColumnNames)} FROM {tblSacco} WHERE [Corporate No]='{corporateNo}'";

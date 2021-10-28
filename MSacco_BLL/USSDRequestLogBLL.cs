@@ -15,34 +15,35 @@ namespace MSacco_BLL
 {
   public class USSDRequestLogBLL : IBL_USSDRequestLog
   {
-    private string _query;
     private readonly string _tblUSSDRequestsLog = USSDRequest.DBTableName;
 
     public IEnumerable<IUSSD_Request_ViewModel> GetUSSDRequestLogsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblUSSDRequestsLog} 
-          WHERE [Corporate No] = '{corporateNo}'
+        query = $@"SELECT * FROM {_tblUSSDRequestsLog} 
+          WHERE [Corporate No] = @CorporateNo
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblUSSDRequestsLog}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
           {
             IEnumerable<IUSSDRequest> records = results.Read<USSDRequest>();
             int totalRecords = results.Read<int>().First();
@@ -55,22 +56,25 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT TOP 1000 * FROM {_tblUSSDRequestsLog}
-                  WHERE [Corporate No] = '{corporateNo}' 
+        query = $@"SELECT TOP 1000 * FROM {_tblUSSDRequestsLog}
+                  WHERE [Corporate No] = @CorporateNo 
                   ORDER BY [Entry No] DESC";
-        return USSDRequests_BL.ParseUSSDRequests(new DapperORM().QueryGetList<USSDRequest>(_query));
+        return USSDRequests_BL.ParseUSSDRequests(new DapperORM().QueryGetList<USSDRequest>(query, qryParams));
       }
 
     }
 
     public IEnumerable<IUSSD_Request_ViewModel> GetMemberUSSDRequestLogForClient(string corporateNo, string memberPhoneNo)
     {
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      qryParams.Add("PhoneNo", corporateNo);
 
-      _query = $@"SELECT TOP 1000 * FROM {_tblUSSDRequestsLog} 
-                WHERE [Corporate No] = '{corporateNo}' AND [Telephone No] = '{memberPhoneNo}'
+      string query = $@"SELECT TOP 1000 * FROM {_tblUSSDRequestsLog} 
+                WHERE [Corporate No] = @CorporateNo AND [Telephone No] = @PhoneNo
                 ORDER BY [Entry No] DESC";
 
-      return USSDRequests_BL.ParseUSSDRequests(new DapperORM().QueryGetList<USSDRequest>(_query));
+      return USSDRequests_BL.ParseUSSDRequests(new DapperORM().QueryGetList<USSDRequest>(query, qryParams));
     }
 
   }

@@ -48,7 +48,7 @@ namespace MSacco_BLL
     private string ParsePhoneNo(string TelephoneNo)
     {
       int requiredLength = 9;
-      string unwantedChar = Regex.Escape(@"-_()");
+      string unwantedChar = Regex.Escape(@"-_();'");
       string pattern = string.Format("[{0}]", unwantedChar);
 
       TelephoneNo = Regex.Replace(TelephoneNo, pattern, "");

@@ -11,7 +11,6 @@ namespace MSacco_BLL
 {
   public class MSaccoAirtimeTopupBLL
   {
-    private string _query;
     private readonly string _tblMSaccoAirtimeTopup = MSaccoAirtimeTopup.DBTableName;
     public IEnumerable<MSaccoAirtimeTopup> GetMSaccoAirtimeTopupTrxListForClient(
       string corporateNo,
@@ -20,28 +19,30 @@ namespace MSacco_BLL
       PaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} 
-          WHERE [Corporate No]='{corporateNo}'
+        query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} 
+          WHERE [Corporate No]=@CorporateNo
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMSaccoAirtimeTopup}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
           {
             IEnumerable<MSaccoAirtimeTopup> loans = results.Read<MSaccoAirtimeTopup>();
             int totalLoanRecords = results.Read<int>().First();
@@ -54,8 +55,8 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
-        return new DapperORM().QueryGetList<MSaccoAirtimeTopup>(_query);
+        query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} WHERE [Corporate No]=@CorporateNo ORDER BY [Entry No] DESC";
+        return new DapperORM().QueryGetList<MSaccoAirtimeTopup>(query, qryParams);
       }
 
     }
@@ -66,11 +67,14 @@ namespace MSacco_BLL
       PaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} 
-          WHERE [Corporate No]='{corporateNo}'
+        query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} 
+          WHERE [Corporate No]=@CorporateNo
           AND datediff(dd, [Transaction Date], getdate()) = 0
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
@@ -78,17 +82,16 @@ namespace MSacco_BLL
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMSaccoAirtimeTopup}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
           {
             IEnumerable<MSaccoAirtimeTopup> loans = results.Read<MSaccoAirtimeTopup>();
             int totalLoanRecords = results.Read<int>().First();
@@ -101,10 +104,10 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} 
-                  WHERE [Corporate No]='{corporateNo}' 
+        query = $@"SELECT * FROM {_tblMSaccoAirtimeTopup} 
+                  WHERE [Corporate No]=@CorporateNo 
                   AND datediff(dd, [Transaction Date], getdate()) = 0";
-        return new DapperORM().QueryGetList<MSaccoAirtimeTopup>(_query);
+        return new DapperORM().QueryGetList<MSaccoAirtimeTopup>(query, qryParams);
       }
 
     }
