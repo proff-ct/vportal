@@ -23,7 +23,6 @@ $"~/plugins/Responsive-Tabs/css/style.css" //basic tab accordion theme
   var singleTabId = "Individual";
   var batchTabId = "Batch";
 }
-
 <div class="row">
   <div class="col-lg-12 col-md-12 col-sm-12">
     <div id="tabs_whitelistingMode">
@@ -60,9 +59,19 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
   @Scripts.Render(scriptFiles)
   <!-- Define local scripts-->
   <script>
+    @functions{
+        public string XToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
+
     $(document).ready(function () {
       @* $('[data-mask]').inputmask();*@
       var applicationTitle = "@ViewBag.Title";
+      var token = "@XToken()";
 
       initResponsiveTabs("#tabs_whitelistingMode");
 
@@ -90,7 +99,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
           restUrl: "@Url.Action("WhitelistMemberRecord", "MSACCOWhitelisting")",
           client: @activeUserParams.ClientCorporateNo
         },
-        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
 
       var searchMember = function(phoneNumber){
         SearchMemberRecord(
@@ -179,7 +188,11 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
                         trustReason: result,
                         processingMode: tlrSingle
                       },
-                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
+                      {
+                        encSecret: "@activeUserParams.APIAuthID",
+                        encKey: "@activeUserParams.APIToken",
+                        xToken: token
+                      }
                     );
                   }
                 }
