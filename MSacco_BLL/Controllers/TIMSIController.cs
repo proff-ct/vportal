@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Functions;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Models;
@@ -85,6 +86,7 @@ namespace MSacco_BLL.Controllers
     }
     [HttpPost]
     [Authorize]
+    [ValidateXToken]
     public ActionResult ResetMSACCOTIMSIRecord(string clientCorporateNo, string memberTelephoneNo, string trustReason)
     {
       ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];

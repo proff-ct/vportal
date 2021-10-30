@@ -21,7 +21,6 @@ namespace MSacco_BLL
     private readonly string _newEnvironmentDBConn;
     private readonly string _saccoDBConn;
     private string _connString;
-    private string _query;
     private string _tblMsaccoRegsitrationRecords = Routing_Table.DBTableName;
     private enum DBInUse
     {
@@ -43,12 +42,14 @@ namespace MSacco_BLL
       IEnumerable<IRouting_Table> fromSACCODB = null;
       IEnumerable<ICustomer> fromNewEnvironmentDB = null;
 
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       if (paginate)
       {
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         int newEnvironmentRecordCount = 0;
         int saccoDBRecordCount = 0;
@@ -68,21 +69,21 @@ namespace MSacco_BLL
               break;
           }
 
-          _query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}] 
-          WHERE [Corporate No]='{corporateNo}'
+          query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}] 
+          WHERE [Corporate No]= @CorporateNo
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMsaccoRegsitrationRecords}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
           using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
           {
             sqlCon.Open();
-            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
             {
               //IEnumerable<IRouting_Table> records = results.Read<Routing_Table>();
               //  int totalLoanRecords = results.Read<int>().First();
@@ -132,17 +133,17 @@ namespace MSacco_BLL
             case (int)DBInUse.SACCO_DB:
               _tblMsaccoRegsitrationRecords = Routing_Table.DBTableName;
               _connString = _saccoDBConn;
-              _query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}] WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
+              query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}] WHERE [Corporate No]=@CorporateNo ORDER BY [Entry No] DESC";
 
-              fromSACCODB = new DapperORM(_connString).QueryGetList<Routing_Table>(_query);
+              fromSACCODB = new DapperORM(_connString).QueryGetList<Routing_Table>(query, qryParams);
               break;
 
             case (int)DBInUse.NEW_ENVIRONMENT_DB:
               _tblMsaccoRegsitrationRecords = Customers.DBTableName;
               _connString = _newEnvironmentDBConn;
-              _query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}] WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
+              query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}] WHERE [Corporate No]=@CorporateNo ORDER BY [Entry No] DESC";
 
-              fromNewEnvironmentDB = new DapperORM(_connString).QueryGetList<Customers>(_query);
+              fromNewEnvironmentDB = new DapperORM(_connString).QueryGetList<Customers>(query, qryParams);
               break;
           }
         }
@@ -159,6 +160,9 @@ namespace MSacco_BLL
       ICustomer fromNewEnvironmentDB = null;
 
       IRouting_Table returnRecord = null;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       for (int i = 1; i <= 2; i++)
       {
@@ -174,18 +178,20 @@ namespace MSacco_BLL
             _connString = _newEnvironmentDBConn;
             break;
         }
+        qryParams.Add("CorporateNo", corporateNo);
+        qryParams.Add("PhoneNo", MemberPhoneNo);
 
-        _query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}]
-                WHERE [Corporate No]='{corporateNo}' AND [Telephone No]='{MemberPhoneNo}'
+        query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}]
+                WHERE [Corporate No]=@CorporateNo AND [Telephone No]=@PhoneNo
                 ORDER BY [Entry No] DESC";
 
         switch (i)
         {
           case (int)DBInUse.SACCO_DB:
-            fromSACCODB = new DapperORM(_connString).QueryGetSingle<Routing_Table>(_query);
+            fromSACCODB = new DapperORM(_connString).QueryGetSingle<Routing_Table>(query, qryParams);
             break;
           case (int)DBInUse.NEW_ENVIRONMENT_DB:
-            fromNewEnvironmentDB = new DapperORM(_connString).QueryGetSingle<Customers>(_query);
+            fromNewEnvironmentDB = new DapperORM(_connString).QueryGetSingle<Customers>(query, qryParams);
             break;
         }
       }

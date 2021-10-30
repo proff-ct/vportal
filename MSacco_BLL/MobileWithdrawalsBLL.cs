@@ -20,7 +20,6 @@ namespace MSacco_BLL
     private readonly string _darajaDBConn;
     private readonly string _saccoDBConn;
     private string _connString;
-    private string _query;
     private string _tblMobileWithdrawals;
 
     //private IMobileWithdrawals_SACCODB _fromSACCODB;
@@ -51,12 +50,15 @@ namespace MSacco_BLL
 
       IEnumerable<IMobileWithdrawals_SACCODB> fromSACCODB = null;
       IEnumerable<IMobileWithdrawals_DarajaDB> fromDarajaDB = null;
+      string query;
+
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
 
       if (paginate)
       {
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         int darajaDBRecordCount = 0;
         int saccoDBRecordCount = 0;
@@ -76,21 +78,21 @@ namespace MSacco_BLL
               break;
           }
 
-          _query = $@"SELECT * FROM {_tblMobileWithdrawals} 
-          WHERE [Corporate No]='{corporateNo}'
+          query = $@"SELECT * FROM {_tblMobileWithdrawals} 
+          WHERE [Corporate No]=@CorporateNo
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMobileWithdrawals}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
           using (SqlConnection sqlCon = new SqlConnection(_connString))
           {
             sqlCon.Open();
-            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
             {
               //IEnumerable<MobileWithdrawals> records = results.Read<MobileWithdrawals>();
               switch (i)
@@ -135,16 +137,16 @@ namespace MSacco_BLL
               _tblMobileWithdrawals = MobileWithdrawals.DBTableName;
               _connString = _saccoDBConn;
 
-              _query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
-              fromSACCODB = new DapperORM(_connString).QueryGetList<MobileWithdrawals>(_query);
+              query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]=@CorporateNo ORDER BY [Entry No] DESC";
+              fromSACCODB = new DapperORM(_connString).QueryGetList<MobileWithdrawals>(query, qryParams);
               break;
 
             case (int)DBInUse.DARAJA_DB:
               _tblMobileWithdrawals = DarajaDB_MobileWithdrawals.TableName;
               _connString = _darajaDBConn;
 
-              _query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]='{corporateNo}' ORDER BY [Entry No] DESC";
-              fromDarajaDB = new DapperORM(_connString).QueryGetList<MobileWithdrawals_Daraja>(_query);
+              query = $@"SELECT * FROM {_tblMobileWithdrawals} WHERE [Corporate No]=@CorporateNo ORDER BY [Entry No] DESC";
+              fromDarajaDB = new DapperORM(_connString).QueryGetList<MobileWithdrawals_Daraja>(query, qryParams);
               break;
           }
         }
@@ -168,11 +170,15 @@ namespace MSacco_BLL
 
       IEnumerable<IMobileWithdrawals_SACCODB> fromSACCODB = null;
       IEnumerable<IMobileWithdrawals_DarajaDB> fromDarajaDB = null;
+
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
+
       if (paginate)
       {
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         int darajaDBRecordCount = 0;
         int saccoDBRecordCount = 0;
@@ -192,8 +198,8 @@ namespace MSacco_BLL
               break;
           }
 
-          _query = $@"SELECT * FROM {_tblMobileWithdrawals} 
-          WHERE [Corporate No]='{corporateNo}'
+          query = $@"SELECT * FROM {_tblMobileWithdrawals} 
+          WHERE [Corporate No]=@CorporateNo
           AND (
                 select 
                   case 
@@ -207,13 +213,13 @@ namespace MSacco_BLL
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMobileWithdrawals}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
           using (SqlConnection sqlCon = new SqlConnection(_connString))
           {
             sqlCon.Open();
-            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+            using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
             {
               switch (i)
               {
@@ -258,18 +264,18 @@ namespace MSacco_BLL
               _tblMobileWithdrawals = MobileWithdrawals.DBTableName;
               _connString = _saccoDBConn;
 
-              _query = $@"SELECT * FROM {_tblMobileWithdrawals} 
-                          WHERE [Corporate No]='{corporateNo}' AND datediff(dd, [Transaction Date], getdate()) = 0
+              query = $@"SELECT * FROM {_tblMobileWithdrawals} 
+                          WHERE [Corporate No]=@CorporateNo AND datediff(dd, [Transaction Date], getdate()) = 0
                           ORDER BY [Entry No] DESC";
-              fromSACCODB = new DapperORM(_connString).QueryGetList<MobileWithdrawals>(_query);
+              fromSACCODB = new DapperORM(_connString).QueryGetList<MobileWithdrawals>(query, qryParams);
               break;
 
             case (int)DBInUse.DARAJA_DB:
               _tblMobileWithdrawals = DarajaDB_MobileWithdrawals.TableName;
               _connString = _darajaDBConn;
 
-              _query = $@"SELECT * FROM {_tblMobileWithdrawals} 
-                          WHERE [Corporate No]='{corporateNo}' 
+              query = $@"SELECT * FROM {_tblMobileWithdrawals} 
+                          WHERE [Corporate No]=@CorporateNo 
                           AND (
                             select 
                               case 
@@ -278,7 +284,7 @@ namespace MSacco_BLL
                                 else datediff(dd, [Datetime], getdate())
                               end) = 0
                           ORDER BY [Entry No] DESC";
-              fromDarajaDB = new DapperORM(_connString).QueryGetList<MobileWithdrawals_Daraja>(_query);
+              fromDarajaDB = new DapperORM(_connString).QueryGetList<MobileWithdrawals_Daraja>(query, qryParams);
               break;
           }
         }
@@ -296,6 +302,10 @@ namespace MSacco_BLL
       IMobileWithdrawals_SACCODB fromSACCODB = null;
       IMobileWithdrawals_DarajaDB fromDarajaDB = null;
 
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
+
       for (int i = 1; i <= 2; i++)
       {
         switch (i)
@@ -311,9 +321,9 @@ namespace MSacco_BLL
             break;
         }
 
-        _query = $@"SELECT TOP 1 *
+        query = $@"SELECT TOP 1 *
                   FROM {_tblMobileWithdrawals}
-                  WHERE [Corporate No] = '{corporateNo}'
+                  WHERE [Corporate No] = @CorporateNo
                   AND Status='Completed' 
                   AND [MPESA Result Code]='0' 
                   AND [MPESA Result Type]='Completed'
@@ -323,10 +333,10 @@ namespace MSacco_BLL
         switch (i)
         {
           case (int)DBInUse.SACCO_DB:
-            fromSACCODB = new DapperORM(_connString).QueryGetSingle<MobileWithdrawals>(_query);
+            fromSACCODB = new DapperORM(_connString).QueryGetSingle<MobileWithdrawals>(query, qryParams);
             break;
           case (int)DBInUse.DARAJA_DB:
-            fromDarajaDB = new DapperORM(_connString).QueryGetSingle<MobileWithdrawals_Daraja>(_query);
+            fromDarajaDB = new DapperORM(_connString).QueryGetSingle<MobileWithdrawals_Daraja>(query, qryParams);
             break;
         }
       }

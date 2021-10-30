@@ -16,7 +16,6 @@ namespace MSacco_BLL
 {
   public class MsaccoPlusNumberCheckerBLL : IBL_MsaccoPlusNumberChecker
   {
-    private string _query;
     private readonly string _tblMsaccoPlusNumberChecker = MsaccoPlusNumberChecker.DBTableName;
     private readonly int _minimumPhoneLength = 10;
     private IBL_MsaccoRegistration _msaccoRegistrationsBLL;
@@ -30,12 +29,13 @@ namespace MSacco_BLL
     private string ParsePhoneNo(string TelephoneNo)
     {
       int requiredLength = 9;
-      string unwantedChar = Regex.Escape(@"-_");
+      string unwantedChar = Regex.Escape(@"-_()");
       string pattern = string.Format("[{0}]", unwantedChar);
 
       TelephoneNo = Regex.Replace(TelephoneNo, pattern, "");
-      int phoneLength = TelephoneNo.Length;
-      return string.Format("+254{0}", TelephoneNo.Substring(phoneLength - requiredLength));
+      //int phoneLength = TelephoneNo.Length;
+      //return string.Format("+254{0}", TelephoneNo.Substring(phoneLength - requiredLength));
+      return TelephoneNo;
     }
     #endregion
     public MsaccoPlusNumberCheckerBLL()
@@ -52,6 +52,9 @@ namespace MSacco_BLL
       IPaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       _listMSACCORegistrationRecords = _msaccoRegistrationsBLL.GetMsaccoRegistrationListForClient(corporateNo, out lastPage).ToList();
 
@@ -64,7 +67,7 @@ namespace MSacco_BLL
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblMsaccoPlusNumberChecker} 
+        query = $@"SELECT * FROM {_tblMsaccoPlusNumberChecker} 
           WHERE [PhoneNumber] IN ({string.Format("{0}", string.Join(",", _registeredPhoneNumbers))})
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
@@ -72,17 +75,16 @@ namespace MSacco_BLL
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMsaccoPlusNumberChecker}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
           {
             IEnumerable<IMsaccoPlusNumberChecker> records = results.Read<MsaccoPlusNumberChecker>();
             int totalLoanRecords = results.Read<int>().First();
@@ -95,10 +97,10 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMsaccoPlusNumberChecker}
+        query = $@"SELECT * FROM {_tblMsaccoPlusNumberChecker}
                   WHERE [PhoneNumber] IN ({string.Format("{0}", string.Join(",", _registeredPhoneNumbers))})
                   ORDER BY [Entry No] DESC";
-        return new DapperORM().QueryGetList<MsaccoPlusNumberChecker>(_query);
+        return new DapperORM().QueryGetList<MsaccoPlusNumberChecker>(query, qryParams);
       }
 
     }
@@ -114,10 +116,10 @@ namespace MSacco_BLL
         return null;
       }
 
-      _query = $@"SELECT * FROM {_tblMsaccoPlusNumberChecker} 
+      string query = $@"SELECT * FROM {_tblMsaccoPlusNumberChecker} 
                 WHERE [PhoneNumber] = '{regRecord.Telephone_No}' 
                 AND ([Comments] IS NOT NULL OR [Comments] <> '')";
-      return new DapperORM().QueryGetSingle<MsaccoPlusNumberChecker>(_query);
+      return new DapperORM().QueryGetSingle<MsaccoPlusNumberChecker>(query);
     }
 
     public bool ResetMsaccoPlusMemberDeviceForClient(string corporateNo, string memberPhoneNo, out string resetMessage)
@@ -138,12 +140,12 @@ namespace MSacco_BLL
         return isReset;
       }
       string partialPhoneNo = regRecord.Telephone_No.Substring(regRecord.Telephone_No.Length - 9);
-      _query = $@"DELETE FROM {_tblMsaccoPlusNumberChecker}
+      string query = $@"DELETE FROM {_tblMsaccoPlusNumberChecker}
                 WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' AND ([Comments] IS NOT NULL OR [Comments] <> ''))
                 OR [Comments] LIKE '%{partialPhoneNo}%' ";
       try
       {
-        new DapperORM().ExecuteQuery(_query);
+        new DapperORM().ExecuteQuery(query);
         resetMessage = "0";
         isReset = true;
       }

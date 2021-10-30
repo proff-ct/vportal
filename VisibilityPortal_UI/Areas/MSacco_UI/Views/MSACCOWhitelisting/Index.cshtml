@@ -23,7 +23,6 @@ $"~/plugins/Responsive-Tabs/css/style.css" //basic tab accordion theme
   var singleTabId = "Individual";
   var batchTabId = "Batch";
 }
-
 <div class="row">
   <div class="col-lg-12 col-md-12 col-sm-12">
     <div id="tabs_whitelistingMode">
@@ -60,9 +59,34 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
   @Scripts.Render(scriptFiles)
   <!-- Define local scripts-->
   <script>
+    @functions{
+        public string XToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
+
     $(document).ready(function () {
+      @* $('[data-mask]').inputmask();*@
+      var applicationTitle = "@ViewBag.Title";
+      var token = "@XToken()";
+
       initResponsiveTabs("#tabs_whitelistingMode");
-      $('[data-mask]').inputmask();
+
+      $("#memberTelNo").intlTelInput({
+         geoIpLookup: function(callback) {
+           $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+             var countryCode = (resp && resp.country) ? resp.country : "ke";
+             callback(countryCode);
+           });
+         },
+         initialCountry: "ke",
+         separateDialCode: true,
+        //utilsScript: "build/js/utils.js"
+      });
+
 
       initTabulator(
         { tlrName: tlrSingle, tblID: "#memberRecordsListTable" },
@@ -75,18 +99,49 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
           restUrl: "@Url.Action("WhitelistMemberRecord", "MSACCOWhitelisting")",
           client: @activeUserParams.ClientCorporateNo
         },
-        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
 
-      $("#btnSearchMemberRecord").on('click', function () {
+      var searchMember = function(phoneNumber){
         SearchMemberRecord(
           "@Url.Action("GetMemberRecord", "MSACCOWhitelisting")",
           @activeUserParams.ClientCorporateNo,
-          $("#memberTelNo").val()
+          phoneNumber
         );
+      };
+
+      $("#memberTelNo").on("countrychange", function (e, countryData) {
+        this.value = "";
+      });
+
+      $("#btnSearchMemberRecord").on('click', function () {
+        try {
+          if (!IsITINumberValid("memberTelNo", applicationTitle, searchMember)) return;
+        }
+        catch (error) {
+          bootbox.alert({
+            title: "<h3>" + applicationTitle + " - Phone Number Error</h3>",
+            message: "Fatal error. Contact CoreTec support immediately"
+          });
+          console.log(
+            applicationTitle + ": Error on btnSearchMemberRecord: " + error.message + "-" + moment().format(PORTAL_DATE_FORMAT));
+          return;
+        }
       });
 
       $("#btnWhitelist").on('click', function () {
-        if ($("#memberTelNo").val() == '') return;
+        try {
+          if (!IsITINumberValid("memberTelNo", applicationTitle)) return;
+        }
+        catch (error) {
+          bootbox.alert({
+            title: "<h4>" + applicationTitle + " - Phone Number Error</h4>",
+            message: "Fatal error. Contact CoreTec support immediately"
+          });
+          console.log(
+            applicationTitle + ": Error on btnWhitelist: " + error.message + "-" + moment().format(PORTAL_DATE_FORMAT));
+          return;
+        }
+
         bootbox.confirm({
           title: "Confirm to whitelist Member",
           message: "Are you sure you want to whitelist this phone number?",
@@ -117,7 +172,6 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
                 inputType: 'textarea',
                 centerVertical: true,
                 callback: function (result) {
-                   console.log(result);
                   if (result != undefined) {
                     if (result.length < 5) {
                       bootbox.alert({
@@ -130,11 +184,15 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
                       "@Url.Action("WhitelistMemberRecord", "MSACCOWhitelisting")",
                       {
                         client: "@activeUserParams.ClientCorporateNo",
-                        phoneNo: $("#memberTelNo").val(),
+                        phoneNo: $("#memberTelNo").intlTelInput("getNumber"),
                         trustReason: result,
                         processingMode: tlrSingle
                       },
-                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
+                      {
+                        encSecret: "@activeUserParams.APIAuthID",
+                        encKey: "@activeUserParams.APIToken",
+                        xToken: token
+                      }
                     );
                   }
                 }
@@ -154,7 +212,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoWhitelisti
       $("#btnImportFromFile").on('click', function () {
         if (selectedMembersBatchFile) {
           var fileReader = new FileReader();
-          
+
           fileReader.onload = ImportMemberRecordFromFile;
           fileReader.readAsBinaryString(selectedMembersBatchFile);
         }

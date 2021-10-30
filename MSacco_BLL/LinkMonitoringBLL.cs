@@ -13,12 +13,14 @@ namespace MSacco_BLL
 {
   public class LinkMonitoringBLL
   {
-    private string _query;
     private readonly string _tblLinkMonitoring = LinkMonitoring.DBTableName;
     public LinkMonitoring GetLinkInfoForClient(string corporateNo)
     {
-      _query = $@"SELECT * FROM {_tblLinkMonitoring} WHERE [Corporate No]='{corporateNo}'";
-      return new DapperORM().QueryGetSingle<LinkMonitoring>(_query);
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+
+      string query = $@"SELECT * FROM {_tblLinkMonitoring} WHERE [Corporate No]=@CorporateNo";
+      return new DapperORM().QueryGetSingle<LinkMonitoring>(query, qryParams);
     }
 
     public IEnumerable<LinkMonitoring> GetLinkInfoForAllClients(
@@ -27,10 +29,11 @@ namespace MSacco_BLL
       PaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      string query;
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblLinkMonitoring} 
+        query = $@"SELECT * FROM {_tblLinkMonitoring} 
           ORDER BY [Corporate Name] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
@@ -46,7 +49,7 @@ namespace MSacco_BLL
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, dp, commandType: CommandType.Text))
           {
             IEnumerable<LinkMonitoring> records = results.Read<LinkMonitoring>();
             int totalLoanRecords = results.Read<int>().First();
@@ -59,8 +62,8 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblLinkMonitoring}";
-        return new DapperORM().QueryGetList<LinkMonitoring>(_query);
+        query = $@"SELECT * FROM {_tblLinkMonitoring}";
+        return new DapperORM().QueryGetList<LinkMonitoring>(query);
       }
 
     }
@@ -70,11 +73,12 @@ namespace MSacco_BLL
       PaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      string query;
       List<LinkStatusPlusDowntime> linkStatusRecords = new List<LinkStatusPlusDowntime>();
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblLinkMonitoring} 
+        query = $@"SELECT * FROM {_tblLinkMonitoring} 
           ORDER BY [Corporate Name] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
@@ -90,7 +94,7 @@ namespace MSacco_BLL
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, dp, commandType: CommandType.Text))
           {
             IEnumerable<LinkMonitoring> records = results.Read<LinkMonitoring>();
             int totalLoanRecords = results.Read<int>().First();
@@ -108,8 +112,8 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblLinkMonitoring}";
-        IEnumerable<LinkMonitoring> linkInfoRecords = new DapperORM().QueryGetList<LinkMonitoring>(_query);
+        query = $@"SELECT * FROM {_tblLinkMonitoring}";
+        IEnumerable<LinkMonitoring> linkInfoRecords = new DapperORM().QueryGetList<LinkMonitoring>(query);
 
         linkInfoRecords.ToList().ForEach(r =>
         {

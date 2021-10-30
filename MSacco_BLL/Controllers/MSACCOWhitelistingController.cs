@@ -68,6 +68,7 @@ namespace MSacco_BLL.Controllers
     }
     [HttpPost]
     [Authorize]
+    [ValidateXToken]
     public ActionResult WhitelistMemberRecord(string clientCorporateNo, string memberTelephoneNo, string trustReason)
     {
       ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];

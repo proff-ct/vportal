@@ -54,6 +54,7 @@ namespace MSacco_BLL.Controllers
     }
     [HttpPost]
     [Authorize]
+    [ValidateXToken]
     public ActionResult ResetMSACCOPlusDeviceRecord(string clientCorporateNo, string memberTelephoneNo)
     {
       ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];

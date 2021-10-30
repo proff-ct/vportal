@@ -85,29 +85,29 @@ namespace MSacco_BLL
       }
     }
 
-    public IEnumerable<T> QueryGetList<T>(string query)
+    public IEnumerable<T> QueryGetList<T>(string query, DynamicParameters param = null)
     {
       using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
         return sqlCon.Query<T>(
-          query, commandType: CommandType.Text, commandTimeout: sqlCon.ConnectionTimeout);
+          query,param, commandType: CommandType.Text, commandTimeout: sqlCon.ConnectionTimeout);
       }
     }
-    public T QueryGetSingle<T>(string query)
+    public T QueryGetSingle<T>(string query, DynamicParameters param = null)
     {
       using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
-        return sqlCon.QuerySingleOrDefault<T>(query, commandType: CommandType.Text);
+        return sqlCon.QuerySingleOrDefault<T>(query,param, commandType: CommandType.Text);
       }
     }
-    public void ExecuteQuery(string query)
+    public void ExecuteQuery(string query, DynamicParameters param = null)
     {
       using (SqlConnection sqlCon = new SqlConnection(_connectionString))
       {
         sqlCon.Open();
-        sqlCon.Execute(query, commandType: CommandType.Text);
+        sqlCon.Execute(query,param, commandType: CommandType.Text);
       }
     }
   }
