@@ -60,9 +60,19 @@
   @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoPlusNumberChecker.js")
   <!-- Define local scripts-->
   <script>
+    @functions{
+        public string XToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
     $(document).ready(function () {
       @* $('[data-mask]').inputmask();*@
       var applicationTitle = "@ViewBag.Title";
+      var token = "@XToken()";
+
       var searchDeviceRecord = function(phoneNumber){
         SearchMemberDeviceRecord(
           "@Url.Action("GetMSACCOPlusDeviceRecord", "MsaccoPlusNumberChecker")",
@@ -85,7 +95,7 @@
 
       initTabulator(
         "#msaccoPlusMemberDevicesListTable",
-        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
 
       $("#memberTelNo").on("countrychange", function (e, countryData) {
         this.value = "";
@@ -139,7 +149,7 @@
                 "@Url.Action("ResetMSACCOPlusDeviceRecord", "MsaccoPlusNumberChecker")",
                 @activeUserParams.ClientCorporateNo,
                 $("#memberTelNo").intlTelInput("getNumber"),
-                { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
+                { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
             }
           }
 
