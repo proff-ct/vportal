@@ -60,8 +60,18 @@
   @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoTIMSIReset.js")
   <!-- Define local scripts-->
   <script>
+     @functions{
+        public string XToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
     $(document).ready(function () {
       @*$('[data-mask]').inputmask();*@
+      var token = "@XToken()";
+
       var searchPhoneRecord = function(phoneNumber){
         SearchMemberTIMSIRecord(
           "@Url.Action("GetBlockedTIMSIRecord", "TIMSI")",
@@ -84,7 +94,7 @@
 
       initTabulator(
         "#blockedTIMSIRecordsListTable",
-        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
 
     $("#memberTelNo").on("countrychange", function (e, countryData) {
       this.value = "";
@@ -151,7 +161,7 @@
                       @activeUserParams.ClientCorporateNo,
                       $("#memberTelNo").intlTelInput("getNumber"),
                       result,
-                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
+                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token }
                     );
                   }
                 }
