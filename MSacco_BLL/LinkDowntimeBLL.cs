@@ -11,15 +11,17 @@ namespace MSacco_BLL
 {
   public class LinkDowntimeBLL
   {
-    private string _query;
     private readonly string _tblLinkDowntime = LinkDowntime.DBTableName;
     public IEnumerable<LinkDowntime> GetDowntimeRecordsForClient(string corporateNo)
     {
-      _query = $@"SELECT * FROM {_tblLinkDowntime}
-                  WHERE [Corporate No]='{corporateNo}'
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+
+      string query = $@"SELECT * FROM {_tblLinkDowntime}
+                  WHERE [Corporate No]=@CorporateNo
                   ORDER BY[Entry No] DESC";
 
-      return new DapperORM().QueryGetList<LinkDowntime>(_query);
+      return new DapperORM().QueryGetList<LinkDowntime>(query, qryParams);
     }
 
     public IEnumerable<LinkDowntime> GetDowntimeRecordsForAllClients(
@@ -28,10 +30,10 @@ namespace MSacco_BLL
       PaginationParameters pagingParams = null)
     {
       lastPage = 0;
-
+      string query;
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblLinkDowntime} 
+        query = $@"SELECT * FROM {_tblLinkDowntime} 
           ORDER BY [Corporate Name] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
@@ -47,7 +49,7 @@ namespace MSacco_BLL
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, dp, commandType: CommandType.Text))
           {
             IEnumerable<LinkDowntime> records = results.Read<LinkDowntime>();
             int totalLoanRecords = results.Read<int>().First();
@@ -60,8 +62,8 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblLinkDowntime}";
-        return new DapperORM().QueryGetList<LinkDowntime>(_query);
+        query = $@"SELECT * FROM {_tblLinkDowntime}";
+        return new DapperORM().QueryGetList<LinkDowntime>(query);
       }
 
     }

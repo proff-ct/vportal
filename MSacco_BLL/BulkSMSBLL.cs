@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using MSacco_DAL;
 using MSacco_DAL.SMSFloat.Credit;
 using MSacco_DAL.SMSFloat.Debit.Archived;
@@ -14,12 +15,11 @@ namespace MSacco_BLL
 {
   public class BulkSMSBLL
   {
-    string _conString;
-    string _query;
-    string _tblBulkSMSBalances = BulkSMSBalance.DBTableName;
-    string _tblBulkSMSCreditTrx = BulkSMSCredit.DBTableName;
-    string _tblUnarchivedBulkSMSDebitTrx = UnarchivedBulkSMSDebit.DBTableName;
-    string _tblArchivedBulkSMSDebitTrx = ArchivedBulkSMSDebit.DBTableName;
+    private string _conString;
+    private readonly string _tblBulkSMSBalances = BulkSMSBalance.DBTableName;
+    private readonly string _tblBulkSMSCreditTrx = BulkSMSCredit.DBTableName;
+    private readonly string _tblUnarchivedBulkSMSDebitTrx = UnarchivedBulkSMSDebit.DBTableName;
+    private readonly string _tblArchivedBulkSMSDebitTrx = ArchivedBulkSMSDebit.DBTableName;
     //#if DEBUG
     //    string _connString = @ConfigurationManager.ConnectionStrings["visibilityPortalDBConnectionString_testing"].ConnectionString;
     //#else
@@ -27,57 +27,78 @@ namespace MSacco_BLL
     //#endif
     public BulkSMSCredit GetLatestCreditTrxForClient(string corporateNo)
     {
-      _query = $@"SELECT TOP 1 * 
+      string query = string.Empty;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+
+      query = $@"SELECT TOP 1 * 
                 FROM {_tblBulkSMSCreditTrx} 
-                WHERE Sacco = '{corporateNo}' 
+                WHERE Sacco = @CorporateNo
                 ORDER BY[Datetime] DESC";
 
-      return new DapperORM().QueryGetSingle<BulkSMSCredit>(_query);
+      return new DapperORM().QueryGetSingle<BulkSMSCredit>(query, qryParams);
     }
 
     public IEnumerable<BulkSMSCredit> GetCreditTrxListForClient(string corporateNo)
     {
-      _query = $@"SELECT * 
+      string query = string.Empty;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+
+      query = $@"SELECT * 
                 FROM {_tblBulkSMSCreditTrx} 
-                WHERE Sacco = '{corporateNo}' 
+                WHERE Sacco = @CorporateNo
                 ORDER BY [Datetime] DESC";
 
-      return new DapperORM().QueryGetList<BulkSMSCredit>(_query);
+      return new DapperORM().QueryGetList<BulkSMSCredit>(query, qryParams);
     }
 
     public IEnumerable<UnarchivedBulkSMSDebit> GetUnarchivedDebitTrxListForClient(string corporateNo)
     {
       _conString = @ConfigurationManager.ConnectionStrings["messagesDB_prod"].ConnectionString;
-      _query = $@"SELECT * 
+      string query = string.Empty;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      query = $@"SELECT * 
                 FROM {_tblUnarchivedBulkSMSDebitTrx} 
-                WHERE [Corporate No] = '{corporateNo}' 
+                WHERE [Corporate No] = @CorporateNo
                 ORDER BY [Datetime] DESC";
 
-      return new DapperORM(_conString).QueryGetList<UnarchivedBulkSMSDebit>(_query);
+      return new DapperORM(_conString).QueryGetList<UnarchivedBulkSMSDebit>(query, qryParams);
     }
     public IEnumerable<ArchivedBulkSMSDebit> GetArchivedDebitTrxListForClient(string corporateNo)
     {
 
       _conString = @ConfigurationManager.ConnectionStrings["archiveDB_prod"].ConnectionString;
-      SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_conString);
-      connectionStringBuilder.ConnectTimeout = 600; // timeout value is in sec
+      SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_conString)
+      {
+        ConnectTimeout = 600 // timeout value is in sec
+      };
       _conString = connectionStringBuilder.ConnectionString;
 
-      _query = $@"SELECT * 
+      string query = string.Empty;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+
+      query = $@"SELECT * 
                 FROM {_tblArchivedBulkSMSDebitTrx} 
-                WHERE [Corporate No] = '{corporateNo}' 
+                WHERE [Corporate No] = @CorporateNo
                 ORDER BY [Datetime] DESC";
 
-      return new DapperORM(_conString).QueryGetList<ArchivedBulkSMSDebit>(_query);
+      return new DapperORM(_conString).QueryGetList<ArchivedBulkSMSDebit>(query, qryParams);
     }
 
     public BulkSMSBalance GetBulkSMSBalanceForClient(string corporateNo)
     {
-      _query = $@"SELECT * 
-                FROM {_tblBulkSMSBalances} 
-                WHERE [Corporate No] = '{corporateNo}'";
+      string query = string.Empty;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
 
-      return new DapperORM().QueryGetSingle<BulkSMSBalance>(_query);
+      query = $@"SELECT * 
+                FROM {_tblBulkSMSBalances} 
+                WHERE [Corporate No] = @CorporateNo";
+
+      return new DapperORM().QueryGetSingle<BulkSMSBalance>(query, qryParams);
     }
   }
 }

@@ -19,7 +19,8 @@
           <div class="input-group-btn">
             <button type="button" id="btnReActivate" class="btn btn-warning">Authenticate</button>
           </div>
-          <input type="text" class="form-control" id="memberTelNo" data-inputmask='"mask": "+254-999-999999"' data-mask>
+          @*<input type="text" class="form-control" id="memberTelNo" data-inputmask='"mask": "+254-999-999999"' data-mask>*@
+          <input type="text" class="form-control" id="memberTelNo">
           <span class="input-group-btn">
             <button type="button"
                     class="btn btn-info btn-flat"
@@ -59,19 +60,59 @@
   @Scripts.Render($"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msaccoTIMSIReset.js")
   <!-- Define local scripts-->
   <script>
+     @functions{
+        public string XToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
     $(document).ready(function () {
-      $('[data-mask]').inputmask();
+      @*$('[data-mask]').inputmask();*@
+      var token = "@XToken()";
 
-      initTabulator(
-        "#blockedTIMSIRecordsListTable",
-        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
-
-      $("#btnSearchMemberDeviceRecord").on('click', function () {
+      var searchPhoneRecord = function(phoneNumber){
         SearchMemberTIMSIRecord(
           "@Url.Action("GetBlockedTIMSIRecord", "TIMSI")",
           @activeUserParams.ClientCorporateNo,
-          $("#memberTelNo").val()
+          phoneNumber
         );
+      };
+
+      $("#memberTelNo").intlTelInput({
+        geoIpLookup: function (callback) {
+          $.get("http://ipinfo.io", function () { }, "jsonp").always(function (resp) {
+            var countryCode = (resp && resp.country) ? resp.country : "ke";
+            callback(countryCode);
+          });
+        },
+        initialCountry: "ke",
+        separateDialCode: true,
+        //utilsScript: "build/js/utils.js"
+      });
+
+      initTabulator(
+        "#blockedTIMSIRecordsListTable",
+        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
+
+    $("#memberTelNo").on("countrychange", function (e, countryData) {
+      this.value = "";
+    });
+
+      $("#btnSearchMemberDeviceRecord").on('click', function () {
+        try {
+          if (!IsITINumberValid("memberTelNo", applicationTitle, searchPhoneRecord)) return;
+        }
+        catch (error) {
+          bootbox.alert({
+            title: "<h4>" + applicationTitle + " - Phone Number Error</h4>",
+            message: "Fatal error. Contact CoreTec support immediately"
+          });
+          console.log(
+            applicationTitle + ": Error on btnSearchMemberDeviceRecord: " + error.message + "-" + moment().format(PORTAL_DATE_FORMAT));
+          return;
+        }
       });
 
       $("#btnReActivate").on('click', function () {
@@ -110,7 +151,7 @@
                   if (result != undefined) {
                     if (result.length < 5) {
                       bootbox.alert({
-                        title: "<h3>MSACCO IMSI Authentication</h3>",
+                        title: "<h4>MSACCO IMSI Authentication</h4>",
                         message: "KYC info is too short! Please provide substantive information"
                       });
                       return;
@@ -118,9 +159,9 @@
                     ResetMemberDevice(
                       "@Url.Action("ResetMSACCOTIMSIRecord", "TIMSI")",
                       @activeUserParams.ClientCorporateNo,
-                      $("#memberTelNo").val(),
+                      $("#memberTelNo").intlTelInput("getNumber"),
                       result,
-                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" }
+                      { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token }
                     );
                   }
                 }

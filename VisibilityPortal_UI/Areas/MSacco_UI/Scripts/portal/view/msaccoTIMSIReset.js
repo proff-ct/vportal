@@ -92,19 +92,43 @@ function ResetMemberDevice(restUrl, corporateNo, phoneNo, trustReason, apiCommPa
     memberTelephoneNo: phoneNo,
     trustReason: trustReason
   };
+  apiCommParams.requestType = requestType.POST;
 
-  $.post(restUrl, ajaxParams, function (response) {
-    var serverResponse;
+  msaccoCallBack.SUCCESS = function (response) {
     response = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response));
-    if (response.success == true) {
-      serverResponse = "<h4>Status: Success</h4>  <p/><p/>Member can now access MSACCO"
-    } else {
-      serverResponse = "<h4>Status: Failed</h4> <p/><p/>" + response.ex;
-    }
+    ParseIMSIResponse(response);
+  };
 
-    bootbox.alert({
-      title: "<h3>MSACCO IMSI Authentication</h3>",
-      message: serverResponse
-    })
+  msaccoCallBack.ERROR = function (xhr, status, error) {
+    var msg = { success: false, ex: null };
+    var errorCode = xhr.status;
+
+    if (errorCode == ERR_CODE.BAD_REQ) {
+      if (error) {
+        msg.ex = "MSACCO says: " + error + "<p/><p/>Kindly log out then log back in to resolve this error";
+      }
+      else msg.ex = "MSACCO returned an error<p/><p/>Kindly log out then log back in to resolve.";
+    }
+    else if (errorCode == 200 && status == "parsererror") {
+      msg.ex = "Server error. <p/><p/>Close all portal tabs then log out and log back in.";
+    }
+    else msg.ex = "An error occurred communicating with MSACCO. Kindly try again";
+
+    ParseIMSIResponse(msg);
+  };
+ 
+}
+
+function ParseIMSIResponse(serverResponse) {
+  var msg;
+  if (serverResponse.success == true) {
+    msg = "<h4>Status: Success</h4>  <p/><p/>" + serverResponse.ex + "<p/><p/>Member can now access MSACCO"
+  } else {
+    msg = "<h4>Status: Failed</h4> <p/><p/>" + serverResponse.ex;
+  }
+
+  bootbox.alert({
+    title: "<h4>MSACCO IMSI Authentication</h4>",
+    message: msg
   });
 }

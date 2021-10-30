@@ -135,7 +135,7 @@ function initTabulator(tlrModeSpec, apiCommParams) {
 
 function GetFormattedDate(objDate) {
   return (objDate == null) ?
-    'No Date' : moment(objDate).format("DD-MMM-YYYY hh:mm:ss A")
+    'No Date' : moment(objDate).format(PORTAL_DATE_FORMAT)
 }
 
 function ClearFilters(tlrType) {
@@ -175,8 +175,9 @@ function WhitelistMember(restUrl, memberRecord, apiCommParams, batchCallback = n
     memberTelephoneNo: memberRecord.phoneNo,
     trustReason: memberRecord.trustReason
   };
+  apiCommParams.requestType = requestType.POST;
 
-  $.post(restUrl, ajaxParams, function (response) {
+  msaccoCallBack.SUCCESS = function (response) {
     if (response == '') {
       response = { success: false, ex: "Server did not provide a response" };
     }
@@ -186,7 +187,7 @@ function WhitelistMember(restUrl, memberRecord, apiCommParams, batchCallback = n
       }
       catch (err) {
         console.log(
-          "Error on " + ajaxParams.memberTelephoneNo + " Failed interpreting response: " + err.message + " at " + moment().format("DD-MMM-YYYY hh:mm:ss A"));
+          "Error on " + ajaxParams.memberTelephoneNo + " Failed interpreting response: " + err.message + " at " + moment().format(PORTAL_DATE_FORMAT));
         response = { success: false, ex: "An error occurred interpreting the server's response. Kindly try again" };
       }
     }
@@ -198,15 +199,34 @@ function WhitelistMember(restUrl, memberRecord, apiCommParams, batchCallback = n
         ParseBatchWhitelistingResponse(response, batchCallback);
         break;
     }
+  };
 
-  }).fail(function (error) {
+  msaccoCallBack.ERROR = function (xhr, status, error) {
+    var msg = { success: false, ex: null };
+    var errorCode = xhr.status;
+
+    if (errorCode == ERR_CODE.BAD_REQ) {
+      if (error) {
+        msg.ex = "MSACCO says: " + error + "<p/><p/>Kindly log out then log back in to resolve this error";
+      }
+      else msg.ex = "MSACCO returned an error<p/><p/>Kindly log out then log back in to resolve.";
+    }
+    else if (errorCode == 200 && status == "parsererror") {
+      msg.ex = "Server error. <p/><p/>Close all portal tabs then log out and log back in.";
+    }
+    else msg.ex = "An error occurred communicating with MSACCO. Kindly try again";
+
+
     if (batchCallback) {
-      var msg = { success: false, ex: "An error occurred communicating with MSACCO. Kindly try again" };
       ParseBatchWhitelistingResponse(msg, batchCallback);
     }
-  });
-}
+    else {
+      ParseSingleMemberWhitelistingResponse(msg);
+    }
+  };
 
+  CallMSACCO(restUrl, ajaxParams, apiCommParams, msaccoCallBack);
+}
 
 function ParseSingleMemberWhitelistingResponse(serverResponse) {
   var msg;
@@ -217,7 +237,7 @@ function ParseSingleMemberWhitelistingResponse(serverResponse) {
   }
 
   bootbox.alert({
-    title: "<h3>MSACCO Whitelisting</h3>",
+    title: "<h4>MSACCO Whitelisting</h4>",
     message: msg
   });
 }
@@ -299,7 +319,7 @@ function ImportMemberRecordFromFile(evtLoadFile) {
 
   if (selectedMembersBatchFile && recordsToWhitelist.length < 1) {
     bootbox.alert({
-      title: "<h3>MSACCO Whitelisting</h3>",
+      title: "<h4>MSACCO Whitelisting</h4>",
       message: "No records found in " + selectedMembersBatchFile.name + " to import"
     });
   }
@@ -314,7 +334,7 @@ function LoadMemberRecordsToTabulator(parsedMemberRecords) {
     .catch(function (error) {
       //handle error loading data
       bootbox.alert({
-        title: "<h3>MSACCO Whitelisting</h3>",
+        title: "<h4>MSACCO Whitelisting</h4>",
         message: "Error loading data from " + selectedMembersBatchFile.name + ". Kindly try again or select a different file."
       });
     });

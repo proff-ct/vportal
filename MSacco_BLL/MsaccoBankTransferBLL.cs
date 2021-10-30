@@ -17,7 +17,6 @@ namespace MSacco_BLL
 {
   public class MsaccoBankTransferBLL : IBL_BankTransfer
   {
-    private string _query;
     private IBL_SACCO _saccoBLL;
     private readonly string _tblMsaccoBankTransfer = MSACCOBankTransfer.DBTableName;
     private readonly string _pesalinkDBCStr = @ConfigurationManager.ConnectionStrings["pesaLinkDB_prod"].ConnectionString;
@@ -33,28 +32,30 @@ namespace MSacco_BLL
       IPaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblMsaccoBankTransfer} 
-          WHERE [Corporate No]='{corporateNo}'
+        query = $@"SELECT * FROM {_tblMsaccoBankTransfer} 
+          WHERE [Corporate No]=@CorporateNo
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
           FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMsaccoBankTransfer}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           ";
 
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
           {
             IEnumerable<IBankTransfer> records = results.Read<MSACCOBankTransfer>();
             int totalLoanRecords = results.Read<int>().First();
@@ -67,37 +68,45 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMsaccoBankTransfer} WHERE [Corporate No] = '{corporateNo}' ";
-        return new DapperORM().QueryGetList<MSACCOBankTransfer>(_query);
+        query = $@"SELECT * FROM {_tblMsaccoBankTransfer} WHERE [Corporate No] = @CorporateNo ";
+        return new DapperORM().QueryGetList<MSACCOBankTransfer>(query, qryParams);
       }
 
     }
 
     public bool IsClientRegisteredForBankTransfer(string corporateNo)
     {
+#if DEBUG
+      return false;
+#endif
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
       string tblPesaLinkCharges = "CorporateCharges";
 
-      _query = $@"SELECT CASE WHEN EXISTS (
+      string query = $@"SELECT CASE WHEN EXISTS (
                     SELECT *
                     FROM {tblPesaLinkCharges}
-                    WHERE [CorporateNo] = '{corporateNo}'
+                    WHERE [CorporateNo] = @CorporateNo
                   )
                   THEN CAST(1 AS BIT)
                   ELSE CAST(0 AS BIT)
                   END";
 
-      return new DapperORM(_pesalinkDBCStr).QueryGetSingle<bool>(_query);
+      return new DapperORM(_pesalinkDBCStr).QueryGetSingle<bool>(query, qryParams);
     }
 
     public IEnumerable<IBankTransfer> GetClientBankTransferRecordsForToday(
       string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
     {
       lastPage = 0;
+      DynamicParameters qryParams = new DynamicParameters();
+      qryParams.Add("CorporateNo", corporateNo);
+      string query;
 
       if (paginate)
       {
-        _query = $@"SELECT * FROM {_tblMsaccoBankTransfer} 
-          WHERE [Corporate No]='{corporateNo}'
+        query = $@"SELECT * FROM {_tblMsaccoBankTransfer} 
+          WHERE [Corporate No]=@CorporateNo
           AND datediff(dd, [TransactionDate], getdate()) = 0
           ORDER BY [Entry No] DESC
           OFFSET @PageSize * (@PageNumber - 1) ROWS
@@ -105,18 +114,17 @@ namespace MSacco_BLL
 
           Select count([Entry No]) as TotalRecords  
           FROM {_tblMsaccoBankTransfer}
-          WHERE [Corporate No]='{corporateNo}'
+          WHERE [Corporate No]=@CorporateNo
           AND datediff(dd, [TransactionDate], getdate()) = 0
           ";
 
-        DynamicParameters dp = new DynamicParameters();
-        dp.Add("PageSize", pagingParams.PageSize);
-        dp.Add("PageNumber", pagingParams.PageToLoad);
+        qryParams.Add("PageSize", pagingParams.PageSize);
+        qryParams.Add("PageNumber", pagingParams.PageToLoad);
 
         using (SqlConnection sqlCon = new SqlConnection(new DapperORM().ConnectionString))
         {
           sqlCon.Open();
-          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(_query, dp, commandType: CommandType.Text))
+          using (SqlMapper.GridReader results = sqlCon.QueryMultiple(query, qryParams, commandType: CommandType.Text))
           {
             IEnumerable<IBankTransfer> records = results.Read<MSACCOBankTransfer>();
             int totalLoanRecords = results.Read<int>().First();
@@ -129,23 +137,27 @@ namespace MSacco_BLL
       }
       else
       {
-        _query = $@"SELECT * FROM {_tblMsaccoBankTransfer} 
-                  WHERE [Corporate No]='{corporateNo}' AND datediff(dd, [TransactionDate], getdate()) = 0";
-        return new DapperORM().QueryGetList<MSACCOBankTransfer>(_query);
+        query = $@"SELECT * FROM {_tblMsaccoBankTransfer} 
+                  WHERE [Corporate No]=@CorporateNo AND datediff(dd, [TransactionDate], getdate()) = 0";
+        return new DapperORM().QueryGetList<MSACCOBankTransfer>(query, qryParams);
       }
 
     }
 
     public bool IsClientUsingCoretecFloat(string corporateNo)
     {
-      
+#if DEBUG
+      return false;
+#endif
       ISACCO sacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo);
       if (sacco != null)
       {
-        _query = $@"SELECT [UseCoretecPesalinkFloat]
+        DynamicParameters qryParams = new DynamicParameters();
+        qryParams.Add("CorporateNo", corporateNo);
+        string query = $@"SELECT [UseCoretecPesalinkFloat]
               FROM {Sacco.DBTableName}
-              WHERE [Corporate No]='{corporateNo}'";
-        return new DapperORM().QueryGetSingle<bool>(_query);
+              WHERE [Corporate No]=@CorporateNo";
+        return new DapperORM().QueryGetSingle<bool>(query, qryParams);
       }
       else throw new ArgumentException($"No SACCO found matching: {corporateNo}");      
     }
@@ -155,11 +167,13 @@ namespace MSacco_BLL
       ISACCO sacco = _saccoBLL.GetSaccoByUniqueParam(corporateNo);
       if (sacco != null)
       {
-        _query = $@"SELECT *
+        DynamicParameters qryParams = new DynamicParameters();
+        qryParams.Add("CorporateNo", corporateNo);
+        string query = $@"SELECT *
               FROM {PesalinkFloatBalance.DBTableName}
-              WHERE [CorporateNo]='{corporateNo}'";
+              WHERE [CorporateNo]=@CorporateNo";
 
-        IPesalinkFloatBalance pesaLinkFloat = new DapperORM(_pesalinkDBCStr).QueryGetSingle<PesalinkFloatBalance>(_query);
+        IPesalinkFloatBalance pesaLinkFloat = new DapperORM(_pesalinkDBCStr).QueryGetSingle<PesalinkFloatBalance>(query, qryParams);
 
         try
         {

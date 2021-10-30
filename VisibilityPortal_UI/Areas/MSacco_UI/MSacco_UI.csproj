@@ -49,6 +49,12 @@
     <LangVersion>7</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXssLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\AntiXSS.4.3.0\lib\net40\AntiXssLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -137,6 +143,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\msacco-global.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -390,6 +397,13 @@
     <Content Include="plugins\cryptojs_v3.1.2\rollups\sha384.js" />
     <Content Include="plugins\cryptojs_v3.1.2\rollups\sha512.js" />
     <Content Include="plugins\cryptojs_v3.1.2\rollups\tripledes.js" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\css\demo.css" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\css\intlTelInput.css" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\img\flags%402x.png" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\img\flags.png" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\js\intlTelInput.js" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\js\intlTelInput.min.js" />
+    <Content Include="plugins\pg_intl-tel-input-11.1.0\js\utils.js" />
     <Content Include="plugins\Responsive-Tabs\.gitignore" />
     <Content Include="plugins\Responsive-Tabs\AUTHOR.txt" />
     <Content Include="plugins\Responsive-Tabs\css\responsive-tabs.css" />
