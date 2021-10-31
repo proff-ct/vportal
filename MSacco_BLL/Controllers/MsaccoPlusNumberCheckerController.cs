@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -10,6 +11,7 @@ using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
 using MSacco_Dataspecs.MSSQLOperators;
 using MSacco_Dataspecs.Security;
 using Newtonsoft.Json;
+using Utilities;
 using Utilities.PortalApplicationParams;
 using VisibilityPortal_BLL.CustomFilters;
 
@@ -62,9 +64,23 @@ namespace MSacco_BLL.Controllers
       {
         return null;
       }
-      
-      bool isReset = _msaccoPlusNumberCheckerBLL.ResetMsaccoPlusMemberDeviceForClient(
-        clientCorporateNo, memberTelephoneNo, out string resetMessage);
+      bool isReset = false;
+      string resetMessage = string.Empty;
+
+      try
+      {
+        isReset = _msaccoPlusNumberCheckerBLL.ResetMsaccoPlusMemberDeviceForClient(
+        clientCorporateNo, memberTelephoneNo, out resetMessage);
+      }
+      catch (Exception ex)
+      {
+        resetMessage = "Operation failed";
+        AppLogger.LogOperationException(
+          "ResetMSACCOPlusDeviceRecord",
+          $"Exception while trying to reset msacco+ device record: {ex.Message}",
+          new { clientCorporateNo, memberTelephoneNo },
+          ex);
+      }
 
       return Json(
         APICommunication.Encrypt(
