@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Utilities;
 using Utilities.PortalApplicationParams;
 using VisibilityPortal_BLL.CustomFilters;
 using VisibilityPortal_Dataspecs.Models;
@@ -101,7 +102,22 @@ namespace MSacco_BLL.Controllers
         ResetNarration = trustReason,
         ActionUser = User.Identity.Name,
       };
-      bool isReset = _msaccoTIMSIBLL.ResetTIMSIMemberRecordForClient(clientCorporateNo, resetData, out string resetMessage);
+      bool isReset = false;
+      string resetMessage = string.Empty;
+
+      try
+      {
+        isReset = _msaccoTIMSIBLL.ResetTIMSIMemberRecordForClient(clientCorporateNo, resetData, out resetMessage);
+      }
+      catch (Exception ex)
+      {
+        resetMessage = "Operation failed";
+        AppLogger.LogOperationException(
+          "ResetMSACCOTIMSIRecord",
+          $"Exception while trying to reset imsi record: {ex.Message}",
+          new { clientCorporateNo, memberTelephoneNo },
+          ex);
+      }
 
       return Json(
         APICommunication.Encrypt(
