@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
+using MSacco_Dataspecs.Security;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
@@ -29,6 +30,11 @@ namespace MSacco_BLL.Controllers
       {
         return null;
       }
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null)
+      {
+        return Json(new { last_page = 0, data = "" }, JsonRequestBehavior.AllowGet);
+      }
 
       // the flow:
       // 1. get the pagination parameters
@@ -47,7 +53,7 @@ namespace MSacco_BLL.Controllers
       return Json(new
       {
         last_page = lastPage, // last page from the fetched recordset
-        data = airtimeTopupRecords
+        data = APICommunication.Encrypt(airtimeTopupRecords, new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
       }, JsonRequestBehavior.AllowGet);
 
     }[HttpGet]

@@ -401,7 +401,8 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/home.js"
             break;
         }
         tabulatorData.datasetName = dataset;
-        initTabulator(tabulatorData);
+        initTabulator(tabulatorData,
+          { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
       });
 
       // Load the data for the widgets

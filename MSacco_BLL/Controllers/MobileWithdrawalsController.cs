@@ -34,7 +34,11 @@ namespace MSacco_BLL.Controllers
       {
         return null;
       }
-
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null)
+      {
+        return Json(new { last_page = 0, data = "" }, JsonRequestBehavior.AllowGet);
+      }
       // the flow:
       // 1. get the pagination parameters
       // 2. pass the pagination parameters to the bll function
@@ -49,12 +53,6 @@ namespace MSacco_BLL.Controllers
         .GetMobileWithdrawalsTrxListForClient(clientCorporateNo, out int lastPage, true, pagingParams)
         .Select(r => { if (r.Transaction_Date == null) r.Transaction_Date = r.Datetime; return r; }) // didn't want to use ForEach ext. method
         .ToArray();
-
-      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
-      if(userParams == null)
-      {
-        return Json(new { last_page = lastPage, data = ""}, JsonRequestBehavior.AllowGet);
-      }
 
       return Json(new
       {
