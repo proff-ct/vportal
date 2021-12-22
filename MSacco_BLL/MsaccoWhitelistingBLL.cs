@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Activations;
 using Dapper;
 using MSacco_DAL;
+using MSacco_Dataspecs;
 using MSacco_Dataspecs.Feature.MsaccoRegistration.Functions;
 using MSacco_Dataspecs.Feature.MsaccoRegistration.Models;
 using MSacco_Dataspecs.Feature.MsaccoWhitelisting.Functions;
@@ -41,21 +42,6 @@ namespace MSacco_BLL
 
       return success;
     }
-    private string FormatRegistrationPhoneNumberForSQLLookup(IRouting_Table regRecord)
-    {
-      return string.Format("'{0}'", regRecord.Telephone_No);
-    }
-    private string ParsePhoneNo(string TelephoneNo)
-    {
-      int requiredLength = 9;
-      string unwantedChar = Regex.Escape(@"-_();'");
-      string pattern = string.Format("[{0}]", unwantedChar);
-
-      TelephoneNo = Regex.Replace(TelephoneNo, pattern, "");
-      //int phoneLength = TelephoneNo.Length;
-      //return string.Format("+254{0}", TelephoneNo.Substring(phoneLength - requiredLength));
-      return TelephoneNo;
-    }
     #endregion
     public MsaccoWhitelistingBLL()
     {
@@ -80,22 +66,39 @@ namespace MSacco_BLL
         return isWhitelisted;
       }
 
-      if (ParsePhoneNo(whitelistingParams.CustomerPhoneNo).Length < _minimumPhoneLength)
+      try
+      {
+        whitelistingParams.CustomerPhoneNo = MSACCOToolbox.ParsePhoneNo(whitelistingParams.CustomerPhoneNo);
+      }
+      catch (Exception ex)
+      {
+        operationMessage = $"Invalid value '{whitelistingParams.CustomerPhoneNo}' supplied.";
+
+        AppLogger.LogOperationException(
+            nameof(WhitelistMember),
+            $"Error validating phone number for whitelisting: {ex.Message}",
+            new { corporateNo, whitelistingParams.CustomerPhoneNo, whitelistingParams.ActionUser },
+            ex);
+
+        goto exit_fn;
+      }
+
+      if (whitelistingParams.CustomerPhoneNo.Length < _minimumPhoneLength)
       {
         operationMessage = $"Member phone number: {whitelistingParams.CustomerPhoneNo} must have minimum {_minimumPhoneLength} digits.";
+
         return isWhitelisted;
       }
       IRouting_Table regRecord = _msaccoRegistrationsBLL.GetMsaccoRegistrationRecordForClient(
-        corporateNo, ParsePhoneNo(whitelistingParams.CustomerPhoneNo));
+        corporateNo, whitelistingParams.CustomerPhoneNo);
 
       if (regRecord == null)
       {
         operationMessage = $"Phone number: {whitelistingParams.CustomerPhoneNo} not registered for MSACCO with {_activeSACCO.saccoName_1}";
         return isWhitelisted;
       }
-      // TO_DO: log the entry about to be deleted
 
-      whitelistingParams.CustomerPhoneNo = ParsePhoneNo(whitelistingParams.CustomerPhoneNo);
+
       try
       {
         Whitelist msaccoWhitelister = new Whitelist();
@@ -129,6 +132,7 @@ namespace MSacco_BLL
             ex);
       }
 
+      exit_fn:
       return isWhitelisted;
     }
 
