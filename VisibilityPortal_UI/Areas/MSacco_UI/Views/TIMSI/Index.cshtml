@@ -71,6 +71,7 @@
     $(document).ready(function () {
       @*$('[data-mask]').inputmask();*@
       var token = "@XToken()";
+      var applicationTitle = "@ViewBag.Title";
 
       var searchPhoneRecord = function(phoneNumber){
         SearchMemberTIMSIRecord(

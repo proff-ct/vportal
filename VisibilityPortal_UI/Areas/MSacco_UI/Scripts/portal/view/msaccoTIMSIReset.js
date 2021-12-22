@@ -116,7 +116,8 @@ function ResetMemberDevice(restUrl, corporateNo, phoneNo, trustReason, apiCommPa
 
     ParseIMSIResponse(msg);
   };
- 
+
+  CallMSACCO(restUrl, ajaxParams, apiCommParams, msaccoCallBack);
 }
 
 function ParseIMSIResponse(serverResponse) {
