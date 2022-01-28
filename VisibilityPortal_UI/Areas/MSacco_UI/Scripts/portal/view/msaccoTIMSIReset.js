@@ -95,8 +95,8 @@ function ResetMemberDevice(restUrl, corporateNo, phoneNo, trustReason, apiCommPa
   apiCommParams.requestType = requestType.POST;
 
   msaccoCallBack.SUCCESS = function (response) {
-    response = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response));
-    ParseIMSIResponse(response);
+      response = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response));
+      ParseIMSIResponse(response);
   };
 
   msaccoCallBack.ERROR = function (xhr, status, error) {
@@ -116,7 +116,8 @@ function ResetMemberDevice(restUrl, corporateNo, phoneNo, trustReason, apiCommPa
 
     ParseIMSIResponse(msg);
   };
- 
+
+  CallMSACCO(restUrl, ajaxParams, apiCommParams, msaccoCallBack);
 }
 
 function ParseIMSIResponse(serverResponse) {

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MSacco_DAL;
+using MSacco_Dataspecs;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Functions;
 using MSacco_Dataspecs.Feature.MsaccoPlusNumberChecker.Models;
 using MSacco_Dataspecs.Feature.MsaccoRegistration.Functions;
@@ -21,23 +22,7 @@ namespace MSacco_BLL
     private IBL_MsaccoRegistration _msaccoRegistrationsBLL;
     private List<IRouting_Table> _listMSACCORegistrationRecords;
     private List<string> _registeredPhoneNumbers;
-    #region Private Methods
-    private string FormatRegistrationPhoneNumberForSQLLookup(IRouting_Table regRecord)
-    {
-      return string.Format("'{0}'", regRecord.Telephone_No);
-    }
-    private string ParsePhoneNo(string TelephoneNo)
-    {
-      int requiredLength = 9;
-      string unwantedChar = Regex.Escape(@"-_()");
-      string pattern = string.Format("[{0}]", unwantedChar);
-
-      TelephoneNo = Regex.Replace(TelephoneNo, pattern, "");
-      //int phoneLength = TelephoneNo.Length;
-      //return string.Format("+254{0}", TelephoneNo.Substring(phoneLength - requiredLength));
-      return TelephoneNo;
-    }
-    #endregion
+   
     public MsaccoPlusNumberCheckerBLL()
     {
       _msaccoRegistrationsBLL = new MsaccoRegistrationsBLL();
@@ -63,7 +48,7 @@ namespace MSacco_BLL
         return null;
       }
 
-      _listMSACCORegistrationRecords.ForEach(rec => _registeredPhoneNumbers.Add(FormatRegistrationPhoneNumberForSQLLookup(rec)));
+      _listMSACCORegistrationRecords.ForEach(rec => _registeredPhoneNumbers.Add(MSACCOToolbox.FormatPhoneNumberForSQLLookup(rec.Telephone_No)));
 
       if (paginate)
       {
@@ -109,7 +94,8 @@ namespace MSacco_BLL
     {
       if (MemberPhoneNo.Length < _minimumPhoneLength) return null;
 
-      IRouting_Table regRecord = _msaccoRegistrationsBLL.GetMsaccoRegistrationRecordForClient(corporateNo, ParsePhoneNo(MemberPhoneNo));
+      IRouting_Table regRecord = _msaccoRegistrationsBLL.GetMsaccoRegistrationRecordForClient(
+        corporateNo, MSACCOToolbox.ParsePhoneNo(MemberPhoneNo));
 
       if (regRecord == null)
       {
@@ -126,13 +112,13 @@ namespace MSacco_BLL
     {
 
       bool isReset = false;
-      if (ParsePhoneNo(memberPhoneNo).Length < _minimumPhoneLength)
+      if (MSACCOToolbox.ParsePhoneNo(memberPhoneNo).Length < _minimumPhoneLength)
       {
         resetMessage = $"Member phone number: {memberPhoneNo} must have minimum {_minimumPhoneLength} digits.";
         return isReset;
       }
       IRouting_Table regRecord = _msaccoRegistrationsBLL.GetMsaccoRegistrationRecordForClient(
-        corporateNo, ParsePhoneNo(memberPhoneNo));
+        corporateNo, MSACCOToolbox.ParsePhoneNo(memberPhoneNo));
 
       if (regRecord == null)
       {

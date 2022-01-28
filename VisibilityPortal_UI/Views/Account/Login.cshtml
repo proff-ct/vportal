@@ -1,23 +1,26 @@
 ﻿@using VisibilityPortal_BLL.Models.ASP_Identity
+@using CaptchaMvc.HtmlHelpers;
+@using CaptchaMvc;
+
 @model LoginViewModel
 @{
     ViewBag.Title = "Log in";
     Layout = "_AccountShared.cshtml";
 
 }
-    
+
 <div>
-        <h4 class="card-title">
-            Login.
-        </h4>
-        <div class="card-body">
-            <section>
-                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
+    <h4 class="card-title">
+        Login
+    </h4>
+    <div class="card-body">
+        <section>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "frmLogin" }))
+            {
+                @Html.AntiForgeryToken()
 
 
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group row">
                     @Html.LabelFor(m => m.Email, new { @class = "col-sm-2 col-form-label" })
                     <div class="col-md-10">
@@ -26,39 +29,78 @@
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                    <div class="form-group row">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-sm-2 col-form-label" })
-                        <div class="col-md-10">
+                <div class="form-group row">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-sm-2 col-form-label" })
+                    <div class="col-md-10">
 
-                            @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(m => m.OTP, new { @class = "col-sm-2 col-form-label" })
+                    <div class="col-md-10">
+
+                        @Html.TextBoxFor(m => m.OTP, new { @class = "form-control", @disabled="true" })
+                        @Html.ValidationMessageFor(m => m.OTP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*x<div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="checkbox">
-                                @Html.CheckBoxFor(m => m.RememberMe)
-                                @Html.LabelFor(m => m.RememberMe)
-                            </div>
-                        </div>
+                </div>*@
+                @Html.MathCaptcha()
+                <div class="form-group row">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Log in" class="btn btn-default" />
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Log in" class="btn btn-default" />
-                        </div>
-                    </div>
-                    @*<p>
-                        @Html.ActionLink("Register as a new user", "Register")
-                    </p>*@
-                  //Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>
-                }
-            </section>
-        </div>
+                </div>
+                @*<p>
+                @Html.ActionLink("Register as a new user", "Register")
+            </p>*@
+                //Enable this once you have account confirmation enabled for password reset functionality
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>
+            }
+        </section>
     </div>
+</div>
 </>
 @section Scripts {
+    @{
+        string[] scriptFiles = {
+            $"~/Scripts/jquery-3.3.1.min.js",
+            $"~/Scripts/portal/view/accountLogin.js"
+        };
+    }
+    @Scripts.Render(scriptFiles)
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    $(document).ready(function () {
+        // setup email validation
+        $("#frmLogin").validate({
+            debug: true,
+            rules: {
+                Email: {
+                    required: true,
+                    email: true
+                }
+            }
+        });
+        var loginValidator = $("#frmLogin").validate();
+
+        $("#Email").on("blur", function () {
+            if (loginValidator.element("#Email")) {
+                $("#OTP").prop('disabled', !PrevalidateLogin("@Url.Action("Osama", "Account")", $("#Email").val()));
+            }
+        });
+    });
+    </script>
 }

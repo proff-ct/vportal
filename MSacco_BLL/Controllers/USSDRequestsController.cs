@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Functions;
 using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Models;
@@ -16,7 +17,7 @@ using VisibilityPortal_Dataspecs.Models;
 
 namespace MSacco_BLL.Controllers
 {
-  [Authorize]
+  [RequireActiveUserSession]
   public class USSDRequestsController : Controller
   {
     private IBL_USSDRequestLog _ussdRequestsBLL = new USSDRequestLogBLL();

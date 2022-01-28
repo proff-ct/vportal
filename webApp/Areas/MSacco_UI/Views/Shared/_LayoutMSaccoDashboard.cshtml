@@ -12,7 +12,7 @@
     string[] cssFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css",
-"~/msacco/bundles/styles"
+ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Content/msacco-global.css"
 };
 
   }
@@ -207,17 +207,10 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.j
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/adamwdraper-Numeral-js-2.0.6-0-g7de892f/numeral.min.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/cryptojs_v3.1.2/rollups/aes.js",
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msacco.js",
-"~/msacco/bundles/scripts"
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msacco.js"
 };
   }
   @Scripts.Render(scriptFiles)
-  <!-- Define custom scripts-->
-  <script type="text/javascript">
-    $(document).ready(function () {
-
-    });
-  </script>
 
   @RenderSection("Scripts", required: false)
 }

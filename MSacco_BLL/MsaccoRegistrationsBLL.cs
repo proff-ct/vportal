@@ -162,6 +162,7 @@ namespace MSacco_BLL
       IRouting_Table returnRecord = null;
       DynamicParameters qryParams = new DynamicParameters();
       qryParams.Add("CorporateNo", corporateNo);
+      qryParams.Add("PhoneNo", MemberPhoneNo);
       string query;
 
       for (int i = 1; i <= 2; i++)
@@ -178,8 +179,6 @@ namespace MSacco_BLL
             _connString = _newEnvironmentDBConn;
             break;
         }
-        qryParams.Add("CorporateNo", corporateNo);
-        qryParams.Add("PhoneNo", MemberPhoneNo);
 
         query = $@"SELECT * FROM [{_tblMsaccoRegsitrationRecords}]
                 WHERE [Corporate No]=@CorporateNo AND [Telephone No]=@PhoneNo

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OTPAuth.cs" />
     <Compile Include="Models\IPortalModule.cs" />
     <Compile Include="Models\IPortalModuleForClient.cs" />
     <Compile Include="Models\MSACCO_TIMSI_RESET_LOG.cs" />

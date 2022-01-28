@@ -161,20 +161,20 @@ function RefreshFiscalSummary(ds) {
 }
 
 
-function initTabulator(datasetConfig) {
+function initTabulator(datasetConfig, apiCommParams) {
   var datasetTable = {};
   switch (datasetConfig.datasetName) {
     case datasets.loan:
-      datasetTable[datasets.loan] = new LoansTable(datasetConfig.containerRef);
+      datasetTable[datasets.loan] = new LoansTable(datasetConfig.containerRef, apiCommParams);
       break;
     case datasets.withdrawal:
-      datasetTable[datasets.withdrawal] = new WithdrawalsTable(datasetConfig.containerRef);
+      datasetTable[datasets.withdrawal] = new WithdrawalsTable(datasetConfig.containerRef, apiCommParams);
       break;
     case datasets.utilityPayment:
-      datasetTable[datasets.utilityPayment] = new UtilityPaymentsTable(datasetConfig.containerRef);
+      datasetTable[datasets.utilityPayment] = new UtilityPaymentsTable(datasetConfig.containerRef, apiCommParams);
       break;
     case datasets.airtimeTopUp:
-      datasetTable[datasets.airtimeTopUp] = new AirtimeTopUpsTable(datasetConfig.containerRef);
+      datasetTable[datasets.airtimeTopUp] = new AirtimeTopUpsTable(datasetConfig.containerRef, apiCommParams);
       break;
 
   }
@@ -217,7 +217,7 @@ class LoansTable {
   tabulatorAjaxUrlForReload = null;
   tabulatorAjaxParamsForReload = null;
 
-  constructor(htmlContainerRef) {
+  constructor(htmlContainerRef, apiCommParams) {
     var boundInitGuarantorSubTable = this.initGuarantorSubTable.bind(this);
     var boundHideGuarantorSubTables = this.HideGuarantorSubTables.bind(this);
     var boundGetFormattedDate = this.GetFormattedDate.bind(this);
@@ -230,13 +230,14 @@ class LoansTable {
       paginationSizeSelector: true,
       //ajaxProgressiveLoad: "scroll",
       //ajaxURL: 'Loans/GetLoanRecords',
-      //ajaxResponse: function (url, params, response) {
-      //  //url - the URL of the request
-      //  //params - the parameters passed with the request
-      //  //response - the JSON object returned in the body of the response.
+      ajaxResponse: function (url, params, response) {
+        //url - the URL of the request
+        //params - the parameters passed with the request
+        //response - the JSON object returned in the body of the response.
 
-      //  return response.data; //return the tableData property of a response json object
-      //},
+        response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
+        return response.data; //return the tableData property of a response json object
+      },
       // collapse columns that no longer fit on the table into a list under the row
       responsiveLayout: "collapse",
       responsiveLayoutCollapseStartOpen: false,
@@ -434,7 +435,7 @@ class WithdrawalsTable {
   tabulatorAjaxUrlForReload = null;
   tabulatorAjaxParamsForReload = null;
 
-  constructor(htmlContainerRef) {
+  constructor(htmlContainerRef, apiCommParams) {
     var boundGetFormattedDate = this.GetFormattedDate.bind(this);
     this.tblTabulator = new Tabulator(htmlContainerRef, {
       height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -445,13 +446,13 @@ class WithdrawalsTable {
       paginationSizeSelector: true,
       //ajaxProgressiveLoad: "scroll",
       //ajaxURL: 'Loans/GetLoanRecords',
-      //ajaxResponse: function (url, params, response) {
-      //  //url - the URL of the request
-      //  //params - the parameters passed with the request
-      //  //response - the JSON object returned in the body of the response.
-
-      //  return response.data; //return the tableData property of a response json object
-      //},
+      ajaxResponse: function (url, params, response) {
+        //url - the URL of the request
+        //params - the parameters passed with the request
+        //response - the JSON object returned in the body of the response.
+        response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
+        return response.data; //return the tableData property of a response json object
+      },
       // collapse columns that no longer fit on the table into a list under the row
       responsiveLayout: "collapse",
       responsiveLayoutCollapseStartOpen: false,
@@ -550,7 +551,7 @@ class UtilityPaymentsTable {
   tabulatorAjaxUrlForReload = null;
   tabulatorAjaxParamsForReload = null;
 
-  constructor(htmlContainerRef) {
+  constructor(htmlContainerRef, apiCommParams) {
     var boundGetFormattedDate = this.GetFormattedDate.bind(this);
     this.tblTabulator = new Tabulator(htmlContainerRef, {
       height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -561,13 +562,13 @@ class UtilityPaymentsTable {
       paginationSizeSelector: true,
       //ajaxProgressiveLoad: "scroll",
       //ajaxURL: 'Loans/GetLoanRecords',
-      //ajaxResponse: function (url, params, response) {
-      //  //url - the URL of the request
-      //  //params - the parameters passed with the request
-      //  //response - the JSON object returned in the body of the response.
-
-      //  return response.data; //return the tableData property of a response json object
-      //},
+      ajaxResponse: function (url, params, response) {
+        //url - the URL of the request
+        //params - the parameters passed with the request
+        //response - the JSON object returned in the body of the response.
+        response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
+        return response.data; //return the tableData property of a response json object
+      },
       // collapse columns that no longer fit on the table into a list under the row
       responsiveLayout: "collapse",
       responsiveLayoutCollapseStartOpen: false,
@@ -654,7 +655,7 @@ class AirtimeTopUpsTable {
   tabulatorAjaxUrlForReload = null;
   tabulatorAjaxParamsForReload = null;
 
-  constructor(htmlContainerRef) {
+  constructor(htmlContainerRef, apiCommParams) {
     var boundGetFormattedDate = this.GetFormattedDate.bind(this);
     this.tblTabulator = new Tabulator(htmlContainerRef, {
         height: 405, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -665,13 +666,13 @@ class AirtimeTopUpsTable {
         paginationSizeSelector: true,
         //ajaxProgressiveLoad: "scroll",
         //ajaxURL: 'Loans/GetLoanRecords',
-        //ajaxResponse: function (url, params, response) {
-        //  //url - the URL of the request
-        //  //params - the parameters passed with the request
-        //  //response - the JSON object returned in the body of the response.
-
-        //  return response.data; //return the tableData property of a response json object
-        //},
+        ajaxResponse: function (url, params, response) {
+          //url - the URL of the request
+          //params - the parameters passed with the request
+          //response - the JSON object returned in the body of the response.
+          response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
+          return response.data; //return the tableData property of a response json object
+        },
         // collapse columns that no longer fit on the table into a list under the row
         responsiveLayout: "collapse",
         responsiveLayoutCollapseStartOpen: false,

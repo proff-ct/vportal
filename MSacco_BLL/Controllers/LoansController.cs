@@ -31,6 +31,11 @@ namespace MSacco_BLL.Controllers
       {
         return null;
       }
+      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+      if (userParams == null)
+      {
+        return Json(new { last_page = 0, data = "" }, JsonRequestBehavior.AllowGet);
+      }
 
       // the flow:
       // 1. get the pagination parameters
@@ -47,12 +52,6 @@ namespace MSacco_BLL.Controllers
         .GetLoansListWithGuarantorsForClient(clientCorporateNo, out lastPage, true, pagingParams)
         .Where(l => l.Status != "Pending_Appraisal")
         .ToArray();
-
-      ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
-      if (userParams == null)
-      {
-        return Json(new { last_page = lastPage, data = "" }, JsonRequestBehavior.AllowGet);
-      }
 
       return Json(new
       {
