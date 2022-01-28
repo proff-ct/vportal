@@ -1984,6 +1984,7 @@
     <Content Include="Scripts\portal\view\accountAddNew.js" />
     <Content Include="Scripts\portal\view\accountAddRoleToUser.js" />
     <Content Include="Scripts\portal\view\accountEdit.js" />
+    <Content Include="Scripts\portal\view\accountLogin.js" />
     <Content Include="Scripts\portal\view\coretecClient.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\submitform.js" />
