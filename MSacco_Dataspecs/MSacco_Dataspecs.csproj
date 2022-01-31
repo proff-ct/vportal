@@ -49,6 +49,7 @@
     <Compile Include="Models\IMobileWithdrawals_DarajaDB.cs" />
     <Compile Include="Models\IMobileWithdrawals_SACCODB.cs" />
     <Compile Include="Models\ISACCO.cs" />
+    <Compile Include="MPESADeposits.cs" />
     <Compile Include="MsaccoBankTransfer.cs" />
     <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="IPaginationParameters.cs" />

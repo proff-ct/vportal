@@ -625,6 +625,7 @@
     <Content Include="Scripts\portal\view\iprs.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\msacco.js" />
+    <Content Include="Scripts\portal\view\mpesaDeposits.js" />
     <Content Include="Scripts\portal\view\msaccoPlusNumberChecker.js" />
     <Content Include="Scripts\portal\view\bankTransfers.js" />
     <Content Include="Scripts\portal\view\msaccoWhitelisting.js" />
@@ -686,6 +687,7 @@
     <Content Include="Views\MSACCOWhitelisting\Index.cshtml" />
     <Content Include="Views\MSACCOWhitelisting\_SingleMemberWhitelistingPartial.cshtml" />
     <Content Include="Views\MSACCOWhitelisting\_BatchFileWhitelistingPartial.cshtml" />
+    <Content Include="Views\Deposits\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

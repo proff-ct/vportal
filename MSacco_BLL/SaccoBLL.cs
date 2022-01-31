@@ -14,7 +14,7 @@ namespace MSacco_BLL
     string tblSacco = Sacco.DBTableName;
     string[] _saccoColumnNames = new string[]
     {
-      "[Corporate No]" , "[Corporate No 2]", "[Sacco Name 1]", "[Mpesa Float]","Active"
+      "[Corporate No]" , "[Corporate No 2]", "[Sacco Name 1]", "[Mpesa Float]", "c2bPaybill", "Active"
     };
     public IEnumerable<ISACCO> GetSaccoList()
     {
