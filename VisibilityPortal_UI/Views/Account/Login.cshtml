@@ -84,7 +84,6 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
     $(document).ready(function () {
-        // setup email validation
         $("#frmLogin").validate({
             debug: true,
             rules: {
@@ -96,9 +95,9 @@
         });
         var loginValidator = $("#frmLogin").validate();
 
-        $("#Email").on("blur", function () {
+        $("#Email").on("change", function () {
             if (loginValidator.element("#Email")) {
-                $("#OTP").prop('disabled', !PrevalidateLogin("@Url.Action("Osama", "Account")", $("#Email").val()));
+                $("#OTP").attr('disabled', !PrevalidateLogin("@Url.Action("Osama", "Account")", $("#Email").val()));
             }
         });
     });
