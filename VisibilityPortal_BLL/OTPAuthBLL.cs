@@ -106,6 +106,9 @@ namespace VisibilityPortal_BLL
                     return isValidated;
                 }
 
+                // update otp is verified
+                UpdateStatus(userOTP, OTP_STATUS.Verified);
+
                 validationMsg = "";
                 isValidated = true;
             }
@@ -189,14 +192,15 @@ namespace VisibilityPortal_BLL
             bool isUpdated = false;
 
             _query = $@"UPDATE {_tblPortalOTP} 
-                      SET [Status] = @OTP_STATUS
+                      SET [Status] = @OTP_STATUS, [LastUpdatedAt] = @UpdatedAt 
                       WHERE [UserId] = @UserID
                       AND [Code] = @OTP";
 
             _queryParameters = new DynamicParameters();
             _queryParameters.Add("UserID", userOTP.UserId);
             _queryParameters.Add("OTP", userOTP.Code);
-            _queryParameters.Add("OTP_STATUS", nameof(statusToSet));
+            _queryParameters.Add("OTP_STATUS", statusToSet.ToString());
+            _queryParameters.Add("UpdatedAt", DateTime.Now);
 
             try
             {
