@@ -106,6 +106,9 @@ namespace VisibilityPortal_BLL
                     return isValidated;
                 }
 
+                // update otp is verified
+                UpdateStatus(userOTP, OTP_STATUS.Verified);
+
                 validationMsg = "";
                 isValidated = true;
             }

@@ -1,11 +1,11 @@
-﻿function PrevalidateLogin(portalLoginUrl, emailAddress) {
+﻿function PrevalidateLogin(portalLoginUrl, emailAddress, callback) {
     $.post(portalLoginUrl, { email: emailAddress }, function (data) {
         if (data.success == true) {
-            return true;
+            callback(true);
         }
-        else return false;
+        else callback(false);
     })
     .fail(function () {
-        return false;
+        callback(false);
     });
 }

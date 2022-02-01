@@ -42,19 +42,19 @@
                     @Html.LabelFor(m => m.OTP, new { @class = "col-sm-2 col-form-label" })
                     <div class="col-md-10">
 
-                        @Html.TextBoxFor(m => m.OTP, new { @class = "form-control", @disabled="true" })
+                        @Html.TextBoxFor(m => m.OTP, new { @class = "form-control", @disabled = "true" })
                         @Html.ValidationMessageFor(m => m.OTP, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 @*x<div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                        <div class="col-md-offset-2 col-md-10">
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+                            </div>
                         </div>
-                    </div>
-                </div>*@
+                    </div>*@
                 @Html.MathCaptcha()
                 <div class="form-group row">
                     <div class="col-md-offset-2 col-md-10">
@@ -62,8 +62,8 @@
                     </div>
                 </div>
                 @*<p>
-                @Html.ActionLink("Register as a new user", "Register")
-            </p>*@
+                        @Html.ActionLink("Register as a new user", "Register")
+                    </p>*@
                 //Enable this once you have account confirmation enabled for password reset functionality
                 <p>
                     @Html.ActionLink("Forgot your password?", "ForgotPassword")
@@ -76,9 +76,9 @@
 @section Scripts {
     @{
         string[] scriptFiles = {
-            $"~/Scripts/jquery-3.3.1.min.js",
-            $"~/Scripts/portal/view/accountLogin.js"
-        };
+    $"~/Scripts/jquery-3.3.1.min.js",
+    $"~/Scripts/portal/view/accountLogin.js"
+};
     }
     @Scripts.Render(scriptFiles)
     @Scripts.Render("~/bundles/jqueryval")
@@ -97,7 +97,12 @@
 
         $("#Email").on("change", function () {
             if (loginValidator.element("#Email")) {
-                $("#OTP").attr('disabled', !PrevalidateLogin("@Url.Action("Osama", "Account")", $("#Email").val()));
+                PrevalidateLogin("@Url.Action("Osama", "Account")", $("#Email").val(), function (opSuccess) {
+                    if (opSuccess == true) {
+                        $("#OTP").removeAttr('disabled', 'disabled');
+                    }
+                    else $("#OTP").attr('disabled', 'disabled');
+                });
             }
         });
     });
