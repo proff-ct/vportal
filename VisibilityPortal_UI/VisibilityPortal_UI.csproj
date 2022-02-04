@@ -1878,6 +1878,10 @@
       <DependentUpon>SampleAppDBConnectionStrings.config</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Discretionary.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="AppDBConnectionStrings.Debug.config">
       <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>

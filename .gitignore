@@ -270,3 +270,4 @@ __pycache__/
 
 # Miscellaneous exemptions
 /VisibilityPortal_UI/logs
+/VisibilityPortal_UI/Discretionary.config

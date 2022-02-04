@@ -90,7 +90,7 @@ namespace MSacco_BLL.TransactionPortalServices
                     {
                     }
 #else
-    public ApplicationDbContext()
+    public TP_AppDBContext()
         : base(Connection.ProductionConnectionString, throwIfV1Schema: false)
     {
     }

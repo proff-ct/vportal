@@ -175,8 +175,6 @@ function LoadStatementData(evtLoadFile) {
 
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
                 var cell_value = ExtractCellData(ws[cell_ref]);
-                if (!cell_value) break;
-
                 switch (C) {
                     case 0:
                         lineData.ReceiptNo = cell_value;

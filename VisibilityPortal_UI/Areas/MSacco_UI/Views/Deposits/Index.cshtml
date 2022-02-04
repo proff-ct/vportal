@@ -81,10 +81,13 @@
                 fileReader.onload = LoadStatementData;
                 fileReader.readAsBinaryString(selectedStatementFile);
 
-                UploadStatement(
-                    "@Url.Action("BenkiKuu", "Deposits")",
-                    parsedStatementFile,
-                    { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
+                fileReader.onloadend = function (e) {
+                    UploadStatement(
+                        "@Url.Action("BenkiKuu", "Deposits")",
+                        parsedStatementFile,
+                        { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
+                }
+                
             }
         });
 
