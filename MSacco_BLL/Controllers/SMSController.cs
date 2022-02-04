@@ -67,16 +67,18 @@ namespace MSacco_BLL.Controllers
         [ValidateXToken]
         public ActionResult Peperusha(PortalSMSFileViewModel bulkSMSData)
         {
+            bool isDispatched = false;
+            string actionMessage;
+
             ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
             if (userParams == null || bulkSMSData == null || bulkSMSData.RecipientList == null || !bulkSMSData.RecipientList.Any())
             {
-                return null;
+                actionMessage = "Missing message data. Verify and retry";
+                goto exit_fn;
             }
 
-            bool isDispatched = false;
-
             // validate contacts
-            List<ISMSRecipient> smsRecipients = _portalSMSBLL.GenerateRecipientList(bulkSMSData.RecipientList, out string actionMessage);
+            List<ISMSRecipient> smsRecipients = _portalSMSBLL.GenerateRecipientList(bulkSMSData.RecipientList, out actionMessage);
             if (smsRecipients == null || !smsRecipients.Any())
             {
                 actionMessage = string.IsNullOrEmpty(actionMessage) ? "No valid sms recipient phone numbers were found" : actionMessage;
@@ -87,7 +89,7 @@ namespace MSacco_BLL.Controllers
             IFile_PortalSMS smsFile = new PortalSMSFile(smsRecipients)
             {
                 FileName = bulkSMSData.FileName,
-                MessageBody = bulkSMSData.Message
+                MessageBody = bulkSMSData.Message.Trim()
             };
 
             try

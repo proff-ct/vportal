@@ -144,7 +144,7 @@ function LoadRecipientData(evtLoadFile) {
 
 function IsHeaderRowPresent(workSheet) {
     var IDX_HEADER_ROW = 0;
-    var IDX_HEADER_COL = 12;
+    var IDX_HEADER_COL = 0;
 
     var header = workSheet[XLSX.utils.encode_cell({ c: IDX_HEADER_COL, r: IDX_HEADER_ROW })];
     return header !== undefined && DoesStringContainSubString(header.v, "Phone No");
@@ -156,8 +156,9 @@ function ExtractCellData(sheetjs_cell) {
 
 function DispatchSMS(restUrl, parsedSMS, apiCommParams) {
     var ajaxParams = {
-        contactsFile: { FileName: parsedSMS.FileName, Recipients: parsedSMS.RecipientList},
-        MessageBody: parsedSMS.Message,
+        FileName: parsedSMS.FileName,
+        Message: parsedSMS.Message,
+        RecipientList: parsedSMS.RecipientList
     };
     apiCommParams.requestType = requestType.POST;
 
