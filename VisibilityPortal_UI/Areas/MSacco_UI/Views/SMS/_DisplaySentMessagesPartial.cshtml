@@ -1,0 +1,31 @@
+﻿<div class="panel">
+    <div class="panel-heading">
+        <div class="pull-left">
+            <h5 class="panel-info">
+                <button type="button"
+                        class="btn btn-labeled btn-success btn-sm"
+                        onclick="ExportExcel()">
+                    <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>
+                    Export To Excel
+                </button>
+            </h5>
+        </div>
+        <div class="pull-right">
+            <button type="button"
+                    class="btn btn-labeled btn-primary btn-sm"
+                    onclick="ReloadData()">
+                <span class="btn-label"><i class="fa fa-refresh"></i></span>
+                Reload
+            </button>
+            <button type="button" class="btn btn-labeled btn-warning btn-sm" onclick="ClearFilters()">
+                <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
+                Clear filters
+            </button>
+        </div>
+
+    </div>
+    <div class="panel-body">
+        <div id="sentSMSListTable"></div>
+    </div>
+
+</div>
