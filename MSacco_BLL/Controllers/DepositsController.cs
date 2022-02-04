@@ -15,6 +15,7 @@ using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
 {
+    [Authorize]
     [RequireActiveUserSession]
     public class DepositsController : Controller
     {
@@ -28,8 +29,41 @@ namespace MSacco_BLL.Controllers
         }
 
         #region Others
-        [HttpPost]
+        [HttpGet]
         [Authorize]
+        public ActionResult GetUploadedDepositFiles(string clientCorporateNo, int page, int size)
+        {
+            if (string.IsNullOrEmpty(clientCorporateNo))
+            {
+                return null;
+            }
+            ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
+            if (userParams == null)
+            {
+                return Json(new { last_page = 0, data = "" }, JsonRequestBehavior.AllowGet);
+            }
+            // the flow:
+            // 1. get the pagination parameters
+            // 2. pass the pagination parameters to the bll function
+            // 3. retrieve the data from the bll function
+
+            int lastPage;
+
+            PaginationParameters pagingParams = new PaginationParameters(page, size, null);
+
+            dynamic records = _mpesaDepositsBLL
+              .GetUploadedDepositRecordsForClient(clientCorporateNo, out lastPage, true, pagingParams)
+              .ToArray();
+
+            return Json(new
+            {
+                last_page = lastPage, // last page from the fetched recordset
+                data = APICommunication.Encrypt(records, new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpPost]
         [ValidateXToken]
         public ActionResult BenkiKuu(StatementFileViewModel statementFile, List<C2BStatementLines> lines)
         {
