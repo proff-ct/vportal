@@ -46,14 +46,22 @@
     <Reference Include="Dapper.FluentMap, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.FluentMap.1.8.0\lib\net451\Dapper.FluentMap.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
     </Reference>
     <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
     </Reference>
+    <Reference Include="IronXL, Version=2021.12.0.0, Culture=neutral, PublicKeyToken=0f5804b6690bad1e, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronXL.Excel.2021.12.0\lib\net45\IronXL.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VisibilityPortal_UI\Bin\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.2\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
@@ -121,6 +129,7 @@
     <Compile Include="Controllers\MsaccoPlusNumberCheckerController.cs" />
     <Compile Include="Controllers\BankTransferController.cs" />
     <Compile Include="Controllers\MSACCOWhitelistingController.cs" />
+    <Compile Include="Controllers\SMSController.cs" />
     <Compile Include="Controllers\USSDRequestsController.cs" />
     <Compile Include="Controllers\TIMSIController.cs" />
     <Compile Include="Controllers\VirtualRegistrationsController.cs" />
@@ -142,6 +151,8 @@
     <Compile Include="MsaccoPlusNumberCheckerBLL.cs" />
     <Compile Include="MsaccoWhitelistingBLL.cs" />
     <Compile Include="MsaccoTIMSIBLL.cs" />
+    <Compile Include="PortalSMSBLL.cs" />
+    <Compile Include="TransactionPortalServices.cs" />
     <Compile Include="USSDRequestLogBLL.cs" />
     <Compile Include="VirtualRegistrationBLL.cs" />
     <Compile Include="MobileWithdrawalsBLL.cs" />
@@ -168,6 +179,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="MSACCOPathways.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MSacco_DAL\MSacco_DAL.csproj">
