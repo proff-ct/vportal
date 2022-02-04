@@ -71,7 +71,7 @@ namespace MSacco_BLL.Controllers
             string actionMessage;
 
             ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
-            if (userParams == null || bulkSMSData == null || bulkSMSData.RecipientList == null || !bulkSMSData.RecipientList.Any())
+            if (userParams == null || bulkSMSData == null || string.IsNullOrEmpty(bulkSMSData.Message) || bulkSMSData.RecipientList == null || !bulkSMSData.RecipientList.Any())
             {
                 actionMessage = "Missing message data. Verify and retry";
                 goto exit_fn;
