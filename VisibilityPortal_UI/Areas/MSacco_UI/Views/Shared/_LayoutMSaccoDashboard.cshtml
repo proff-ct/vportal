@@ -3,209 +3,215 @@
 @using VisibilityPortal_Dataspecs.Models
 @using Utilities.PortalApplicationParams
 @{
-  Layout = "~/Views/Shared/_Layout.cshtml";
-  ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ActiveUserParams activeUserParams = (ActiveUserParams)Session["ActiveUserParams"];
 }
 @section HtmlHead {
-  @{
+    @{
 
-    string[] cssFiles = {
+        string[] cssFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css",
- $"{MSaccoAreaRegistration.AreaPathFromRoot}/Content/msacco-global.css"
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/Content/msacco-global.css"
 };
 
-  }
-  @Styles.Render(cssFiles)
+    }
+    @Styles.Render(cssFiles)
 
-  @RenderSection("HtmlHead", false)
+    @RenderSection("HtmlHead", false)
 }
 @section MenuLinks {
-  <li class="header">MSACCO |> NAVIGATION</li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Dashboard</span>
-    </a>
-  </li>
-  @*<li class="treeview">
-      <a href="#">
-        <i class="fa fa-wrench"></i> <span>Self Service</span>
-        <span class="pull-right-container">
-          <i class="fa fa-angle-left pull-right"></i>
-        </span>
-      </a>
-      <ul class="treeview-menu">
-        <li>
-          <a href="@Url.Action("Index", "Home")">
-            <i class="fa fa-comments"></i>
-            <span>Bulk sms</span>
+    <li class="header">MSACCO |> NAVIGATION</li>
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-dashboard"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    @*<li class="treeview">
+          <a href="#">
+            <i class="fa fa-wrench"></i> <span>Self Service</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
-        </li>
-        <li>
-          <a href="@Url.Action("Index", "Home")">
-            <i class="fa fa-cogs"></i>
-            <span>Trx. Clearing</span>
-          </a>
-        </li>
-        <li>
-          <a href="@Url.Action("Index", "Home")">
-            <i class="fa fa-key"></i>
-            <span>Pin reset</span>
-          </a>
-        </li>
-      </ul>
-    </li>*@
-  <li>
-    <a href="@Url.Action("Index", "LinkMonitoring")">
-      <i class="fa fa-signal"></i>
-      <span>Link Monitoring</span>
-    </a>
-  </li>
-  <li>
-    <a href="@Url.Action("Index", "MSACCOWhitelisting")">
-      <i class="fa fa-user-plus"></i>
-      <span>Whitelisting</span>
-    </a>
-  </li>
-  @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
-  {
-    if (User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled)
+          <ul class="treeview-menu">
+            <li>
+              <a href="@Url.Action("Index", "Home")">
+                <i class="fa fa-comments"></i>
+                <span>Bulk sms</span>
+              </a>
+            </li>
+            <li>
+              <a href="@Url.Action("Index", "Home")">
+                <i class="fa fa-cogs"></i>
+                <span>Trx. Clearing</span>
+              </a>
+            </li>
+            <li>
+              <a href="@Url.Action("Index", "Home")">
+                <i class="fa fa-key"></i>
+                <span>Pin reset</span>
+              </a>
+            </li>
+          </ul>
+        </li>*@
+    <li>
+        <a href="@Url.Action("Index", "LinkMonitoring")">
+            <i class="fa fa-signal"></i>
+            <span>Link Monitoring</span>
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "SMS")">
+            <i class="fa fa-envelope"></i>
+            <span>SMS</span>
+        </a>
+    </li>
+    <li>
+        <a href="@Url.Action("Index", "MSACCOWhitelisting")">
+            <i class="fa fa-user-plus"></i>
+            <span>Whitelisting</span>
+        </a>
+    </li>
+    @if (Request.IsAuthenticated && ((User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled) || (User.IsInRole(nameof(PortalUserRoles.SystemRoles.Admin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.Admin))).IsEnabled)))
     {
-      <li class="treeview">
+        if (User.IsInRole(nameof(PortalUserRoles.SystemRoles.SystemAdmin)) && activeUserParams.Roles.First(r => r.AspRoleName.Equals(nameof(PortalUserRoles.SystemRoles.SystemAdmin))).IsEnabled)
+        {
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-shield"></i> <span>IMSI</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index","TIMSI")"><i class="fa fa-address-card-o"></i>IMSI Authentication</a></li>
+                    <li><a href="@Url.Action("IMSIAuthenticatedRecords","TIMSI")"><i class="fa fa-file-text-o"></i>IMSI Logs</a></li>
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="@Url.Action("Index", "TIMSI")">
+                    <i class="fa fa-address-card-o"></i>
+                    <span>IMSI Authentication</span>
+                </a>
+            </li>
+        }
+
+        <li>
+            <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
+                <i class="fa fa-mobile fa-lg"></i>
+                <span>MSACCO+ Activation</span>
+            </a>
+        </li>
+    }
+    <li class="treeview">
         <a href="#">
-          <i class="fa fa-shield"></i> <span>IMSI</span>
-          <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
+            <i class="fa fa-database"></i> <span>Transactions</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="@Url.Action("Index","TIMSI")"><i class="fa fa-address-card-o"></i>IMSI Authentication</a></li>
-          <li><a href="@Url.Action("IMSIAuthenticatedRecords","TIMSI")"><i class="fa fa-file-text-o"></i>IMSI Logs</a></li>
+            <li>
+                <a href="@Url.Action("Index", "USSDRequests")">
+                    <i class="fa fa-archive"></i>USSD Logs
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Loans")">
+                    <i class="fa fa-credit-card"></i>Loans
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Deposits")">
+                    <i class="fa fa-credit-card"></i>Deposits
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "MobileWithdrawals")">
+                    <i class="fa fa-money"></i>Withdrawals
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "BankTransfer")">
+                    <i class="fa fa-bank"></i>Bank Transfers
+                </a>
+            </li>
         </ul>
-      </li>
-    }
-    else
-    {
-      <li>
-        <a href="@Url.Action("Index", "TIMSI")">
-          <i class="fa fa-address-card-o"></i>
-          <span>IMSI Authentication</span>
-        </a>
-      </li>
-    }
-
-    <li>
-      <a href="@Url.Action("Index", "MsaccoPlusNumberChecker")">
-        <i class="fa fa-mobile fa-lg"></i>
-        <span>MSACCO+ Activation</span>
-      </a>
     </li>
-  }
-  <li class="treeview">
-    <a href="#">
-      <i class="fa fa-database"></i> <span>Transactions</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li>
-        <a href="@Url.Action("Index", "USSDRequests")">
-          <i class="fa fa-archive"></i>USSD Logs
-        </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "Loans")">
-          <i class="fa fa-credit-card"></i>Loans
-        </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "Deposits")">
-          <i class="fa fa-credit-card"></i>Deposits
-        </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "MobileWithdrawals")">
-          <i class="fa fa-money"></i>Withdrawals
-        </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "BankTransfer")">
-          <i class="fa fa-bank"></i>Bank Transfers
-        </a>
-      </li>
-    </ul>
-  </li>
-  <li class="treeview">
-    <a href="#">
-      <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
-      <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
-    </ul>
-  </li>
-  <!-- Display menu only for Waumini-->
-  @if (activeUserParams.ClientCorporateNo.Equals("700101"))
-  {
     <li class="treeview">
-      <a href="#">
-        <i class="fa fa-address-book-o"></i> <span>MSACCO Registration</span>
-        <span class="pull-right-container">
-          <i class="fa fa-angle-left pull-right"></i>
-        </span>
-      </a>
-      <ul class="treeview-menu">
-        <li><a href="@Url.Action("WauminiMsaccoRegistration","IPRS")"><i class="fa fa-address-card-o"></i>Verify Member</a></li>
-      </ul>
+        <a href="#">
+            <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
+            <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
+        </ul>
     </li>
-  }
-  <li class="treeview">
-    <a href="#">
-      <i class="fa fa-address-book-o"></i> <span>Virtual Registrations</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li><a href="@Url.Action("Index","VirtualRegistrations")"><i class="fa fa-users"></i>Registrations</a></li>
-    </ul>
-  </li>
-  @*<li class="treeview">
-      <a href="#">
-        <i class="fa fa-file"></i> <span>Member Logs</span>
-        <span class="pull-right-container">
-          <i class="fa fa-angle-left pull-right"></i>
-        </span>
-      </a>
-      <ul class="treeview-menu">
-        <li>
-          <a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Msacco+ AppActivity</a>
+    <!-- Display menu only for Waumini-->
+    @if (activeUserParams.ClientCorporateNo.Equals("700101"))
+    {
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-address-book-o"></i> <span>MSACCO Registration</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="@Url.Action("WauminiMsaccoRegistration","IPRS")"><i class="fa fa-address-card-o"></i>Verify Member</a></li>
+            </ul>
         </li>
-        <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Loan history</a></li>
-      </ul>
-    </li>*@
-  @*<li>
-      <a href="@Url.Action("Index", "Home")">
-        <i class="fa fa-dashboard"></i>
-        <span>Deposits</span>
-      </a>
-    </li>*@
-  @*<li>
-      <a href="@Url.Action("Index", "Home")">
-        <i class="fa fa-dashboard"></i>
-        <span>Loan repayments</span>
-      </a>
-    </li>*@
+    }
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-address-book-o"></i> <span>Virtual Registrations</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="@Url.Action("Index","VirtualRegistrations")"><i class="fa fa-users"></i>Registrations</a></li>
+        </ul>
+    </li>
+    @*<li class="treeview">
+          <a href="#">
+            <i class="fa fa-file"></i> <span>Member Logs</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Msacco+ AppActivity</a>
+            </li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-history"></i>Loan history</a></li>
+          </ul>
+        </li>*@
+    @*<li>
+          <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-dashboard"></i>
+            <span>Deposits</span>
+          </a>
+        </li>*@
+    @*<li>
+          <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-dashboard"></i>
+            <span>Loan repayments</span>
+          </a>
+        </li>*@
 }
 @RenderBody()
 @section Scripts{
-  @{
-    string[] scriptFiles = {
+    @{
+        string[] scriptFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/moment.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.js",
@@ -214,8 +220,8 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/cryptojs_v3.1.2/rollups/aes.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msacco.js"
 };
-  }
-  @Scripts.Render(scriptFiles)
+    }
+    @Scripts.Render(scriptFiles)
 
-  @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 }

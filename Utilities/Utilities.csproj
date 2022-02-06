@@ -67,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="custom_nuget_packages\MattAdoUtils.1.0.0.nupkg.zip" />
     <Content Include="front_end\js_plugins\Responsive-Tabs\.gitignore" />
     <Content Include="front_end\js_plugins\Responsive-Tabs\AUTHOR.txt" />

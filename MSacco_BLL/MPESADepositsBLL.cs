@@ -68,8 +68,16 @@ namespace MSacco_BLL
                 }
             });
 
-            operationMessage = $"Uploaded {totalRecords - countFailedUploads} of {totalRecords} records";
+            int numUploadedRecords = totalRecords - countFailedUploads;
+            if(numUploadedRecords < 1)
+            {
+                operationMessage = "Something prevented the upload. Kindly contact support immediately!";
+                return false;
+            }
+
+            operationMessage = $"Uploaded {numUploadedRecords} of {totalRecords} records";
             return true;
+
         }
 
         private void UploadTransaction(IMPESADeposit mpesaDeposit, string C2BPaybill, string actionUser)

@@ -98,14 +98,24 @@ namespace VisibilityPortal_BLL.Controllers
                 ModelState.AddModelError("", "Captcha validation failed");
                 return View(model);
             }
+            string otpErrorMsg = "";
 
-            // Do not allow log in of users whose emails are not confirmed
+
             ApplicationUser user = UserManager.Find(model.Email, model.Password);
-            if (user == null)
+            if (user == null || !_otpAuthBLL.ValidateOTP(user.Id, model.OTP, out otpErrorMsg))
             {
+                if (!string.IsNullOrEmpty(otpErrorMsg))
+                {
+                    AppLogger.LogEvent(
+                        "Account Login",
+                        $"Failed OTP Verification at {DateTime.UtcNow} UTC",
+                        new { userEmail = model.Email, OneTimePin = model.OTP });
+                }
                 ModelState.AddModelError("", "No user found matching supplied credentials");
                 return View(model);
             }
+            
+            // Do not allow log in of users whose emails are not confirmed
             if (!await UserManager.IsEmailConfirmedAsync(user.Id))
             {
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -118,7 +128,7 @@ namespace VisibilityPortal_BLL.Controllers
             }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -136,12 +146,7 @@ namespace VisibilityPortal_BLL.Controllers
                     //  Roles = new List<ActiveUserParams.UserRoles>()
                     //};
 
-                    // Validate the OTP
-                    if (!_otpAuthBLL.ValidateOTP(user.Id, model.OTP, out string otpErrorMsg))
-                    {
-                        ModelState.AddModelError("", otpErrorMsg ?? "OTP verification failed");
-                        return View(model);
-                    }
+                    
 #if DEBUG
                     IActiveUserParams activeUserParams = new ActiveUserParams
                     {
@@ -257,11 +262,20 @@ namespace VisibilityPortal_BLL.Controllers
                     // leaving this here for the time being
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
+                    AppLogger.LogEvent(
+                        "Account Login",
+                        $"User account {user.Email} is locked out until {user.LockoutEndDateUtc} UTC. Processed sign-in attempt at {DateTime.UtcNow} UTC",
+                        new { user });
+
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    AppLogger.LogEvent(
+                        "Account Login",
+                        $"Sign-in failure for {user.Email} at {DateTime.UtcNow} UTC",
+                        new { user });
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
@@ -290,11 +304,10 @@ namespace VisibilityPortal_BLL.Controllers
                 ApplicationUser user = UserManager.FindByEmail(email);
                 if (user == null)
                 {
-                    AppLogger.LogOperationException(
+                    AppLogger.LogEvent(
                       "GenerateLoginOTP",
                       $"User with email {email} NOT found!",
-                      new { email },
-                      new ArgumentException($"UserManager failed to find user having email: {email}"));
+                      new { email });
 
                     return Json(new
                     {
