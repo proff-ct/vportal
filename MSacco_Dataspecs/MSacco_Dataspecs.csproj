@@ -32,8 +32,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\VisibilityPortal_UI\Bin\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\VisibilityPortal_UI\Bin\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\VisibilityPortal_UI\bin\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\VisibilityPortal_UI\Bin\Microsoft.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +63,8 @@
     <Compile Include="Models\IMobileWithdrawals_DarajaDB.cs" />
     <Compile Include="Models\IMobileWithdrawals_SACCODB.cs" />
     <Compile Include="Models\ISACCO.cs" />
+    <Compile Include="PortalSMS.cs" />
+    <Compile Include="MPESADeposits.cs" />
     <Compile Include="MsaccoBankTransfer.cs" />
     <Compile Include="MsaccoPlusNumberChecker.cs" />
     <Compile Include="IPaginationParameters.cs" />
@@ -67,6 +83,9 @@
       <Project>{E72CE19F-D33E-4236-A85C-E584D0C8FCF0}</Project>
       <Name>VisibilityPortal_Dataspecs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

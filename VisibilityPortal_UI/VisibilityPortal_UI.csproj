@@ -1878,6 +1878,10 @@
       <DependentUpon>SampleAppDBConnectionStrings.config</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Discretionary.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="AppDBConnectionStrings.Debug.config">
       <DependentUpon>AppDBConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>
@@ -1984,6 +1988,7 @@
     <Content Include="Scripts\portal\view\accountAddNew.js" />
     <Content Include="Scripts\portal\view\accountAddRoleToUser.js" />
     <Content Include="Scripts\portal\view\accountEdit.js" />
+    <Content Include="Scripts\portal\view\accountLogin.js" />
     <Content Include="Scripts\portal\view\coretecClient.js" />
     <Content Include="Scripts\portal\view\shared.js" />
     <Content Include="Scripts\submitform.js" />

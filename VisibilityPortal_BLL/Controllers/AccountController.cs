@@ -3,6 +3,7 @@ using CaptchaMvc.HtmlHelpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Newtonsoft.Json;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Utilities;
 using Utilities.PortalApplicationParams;
 using Utilities.PortalSecurity;
 using VisibilityPortal_BLL.CustomFilters;
@@ -24,6 +26,7 @@ using VisibilityPortal_BLL.Models.ViewModels;
 using VisibilityPortal_BLL.Utilities.PortalDefaults;
 using VisibilityPortal_DAL;
 using VisibilityPortal_Dataspecs.Models;
+using VisibilityPortal_Dataspecs.OTPAuth.Functions;
 
 namespace VisibilityPortal_BLL.Controllers
 {
@@ -34,6 +37,8 @@ namespace VisibilityPortal_BLL.Controllers
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
         private IBL_PortalModule _portalModuleBLL = new PortalModuleBLL();
+        private IBL_OTPAuth _otpAuthBLL = new OTPAuthBLL();
+
         private PortalUserRoleBLL _portalUserRoleBLL = new PortalUserRoleBLL();
         private CoretecClientBLL _coretecClientBLL = new CoretecClientBLL();
         private SaccoBLL _saccoBLL = new SaccoBLL();
@@ -93,14 +98,24 @@ namespace VisibilityPortal_BLL.Controllers
                 ModelState.AddModelError("", "Captcha validation failed");
                 return View(model);
             }
+            string otpErrorMsg = "";
 
-            // Do not allow log in of users whose emails are not confirmed
+
             ApplicationUser user = UserManager.Find(model.Email, model.Password);
-            if (user == null)
+            if (user == null || !_otpAuthBLL.ValidateOTP(user.Id, model.OTP, out otpErrorMsg))
             {
+                if (!string.IsNullOrEmpty(otpErrorMsg))
+                {
+                    AppLogger.LogEvent(
+                        "Account Login",
+                        $"Failed OTP Verification at {DateTime.UtcNow} UTC",
+                        new { userEmail = model.Email, OneTimePin = model.OTP });
+                }
                 ModelState.AddModelError("", "No user found matching supplied credentials");
                 return View(model);
             }
+            
+            // Do not allow log in of users whose emails are not confirmed
             if (!await UserManager.IsEmailConfirmedAsync(user.Id))
             {
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -113,7 +128,7 @@ namespace VisibilityPortal_BLL.Controllers
             }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -130,14 +145,16 @@ namespace VisibilityPortal_BLL.Controllers
                     //  ClientModuleId = string.Empty, // will get set when the user selects a module on login
                     //  Roles = new List<ActiveUserParams.UserRoles>()
                     //};
+
+                    
 #if DEBUG
-          IActiveUserParams activeUserParams = new ActiveUserParams
-          {
-            ClientCorporateNo = "123456",
-            ClientModuleId = "TCM-ID-U123", // will get set when the user selects a module on login
-            Roles = new List<ActiveUserParams.UserRoles>(),
-            APIAuthID = DateTime.Now.ToString("ddMM-yy-HHmm-sst")
-          };
+                    IActiveUserParams activeUserParams = new ActiveUserParams
+                    {
+                        ClientCorporateNo = "123456",
+                        ClientModuleId = "TCM-ID-U123", // will get set when the user selects a module on login
+                        Roles = new List<ActiveUserParams.UserRoles>(),
+                        APIAuthID = DateTime.Now.ToString("ddMM-yy-HHmm-sst")
+                    };
 #else
                     IActiveUserParams activeUserParams = new ActiveUserParams
                     {
@@ -245,13 +262,97 @@ namespace VisibilityPortal_BLL.Controllers
                     // leaving this here for the time being
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
+                    AppLogger.LogEvent(
+                        "Account Login",
+                        $"User account {user.Email} is locked out until {user.LockoutEndDateUtc} UTC. Processed sign-in attempt at {DateTime.UtcNow} UTC",
+                        new { user });
+
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    AppLogger.LogEvent(
+                        "Account Login",
+                        $"Sign-in failure for {user.Email} at {DateTime.UtcNow} UTC",
+                        new { user });
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
+            }
+        }
+
+
+        //
+        // POST: /Account/Osama
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Osama(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return Json(new
+                {
+                    success = false,
+                    ex = ""
+                },
+                JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+
+                ApplicationUser user = UserManager.FindByEmail(email);
+                if (user == null)
+                {
+                    AppLogger.LogEvent(
+                      "GenerateLoginOTP",
+                      $"User with email {email} NOT found!",
+                      new { email });
+
+                    return Json(new
+                    {
+                        success = false,
+                        ex = ""
+                    },
+                    JsonRequestBehavior.AllowGet);
+                }
+                // User is found, generate otp
+                string pendingOTP = _otpAuthBLL.GenerateOTP(user.Id);
+
+                // Dispatch OTP
+                IdentityMessage _otpEmail = new IdentityMessage
+                {
+                    Destination = user.Email,
+                    Subject = "CoreTec Visibility Portal: Session OTP",
+                    Body = $"Your One Time Pin is: {pendingOTP}" +
+                  $"{Environment.NewLine}Best regards," +
+                  $"{Environment.NewLine}" +
+                  $"{Environment.NewLine}NB: This is a system generated email. You do not need to reply to this message"
+                };
+                UserManager.EmailService.Send(_otpEmail);
+
+                return Json(new
+                {
+                    success = true,
+                    ex = ""
+                },
+                JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                AppLogger.LogOperationException(
+                  "GenerateLoginOTP",
+                  $"Exception while generating OTP: {ex.Message}",
+                  new { email },
+                  ex);
+
+                return Json(new
+                {
+                    success = false,
+                    ex = ""
+                },
+                JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -1111,10 +1212,10 @@ namespace VisibilityPortal_BLL.Controllers
                         c.Users = c.Users
                 .Select(user =>
                 {
-                        user.ClientName = (c.corporateNo == CoreTecOrganisation.CorporateNo) ?
-                  CoreTecOrganisation.CorporateName : c.saccoName_1;
-                        return user;
-                    })
+                    user.ClientName = (c.corporateNo == CoreTecOrganisation.CorporateNo) ?
+              CoreTecOrganisation.CorporateName : c.saccoName_1;
+                    return user;
+                })
                 .ToList();
                     }
                 });

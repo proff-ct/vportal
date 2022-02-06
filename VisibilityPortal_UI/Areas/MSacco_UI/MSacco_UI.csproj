@@ -625,11 +625,13 @@
     <Content Include="Scripts\portal\view\iprs.js" />
     <Content Include="Scripts\portal\view\loans.js" />
     <Content Include="Scripts\portal\view\msacco.js" />
+    <Content Include="Scripts\portal\view\mpesaDeposits.js" />
     <Content Include="Scripts\portal\view\msaccoPlusNumberChecker.js" />
     <Content Include="Scripts\portal\view\bankTransfers.js" />
     <Content Include="Scripts\portal\view\msaccoWhitelisting.js" />
     <Content Include="Scripts\portal\view\msaccoTIMSIResetRecords.js" />
     <Content Include="Scripts\portal\view\msaccoTIMSIReset.js" />
+    <Content Include="Scripts\portal\view\portalSMS.js" />
     <Content Include="Scripts\portal\view\ussdRequests.js" />
     <Content Include="Scripts\portal\view\virtualRegistrations.js" />
     <Content Include="Scripts\portal\view\mobileWithdrawals.js" />
@@ -686,6 +688,10 @@
     <Content Include="Views\MSACCOWhitelisting\Index.cshtml" />
     <Content Include="Views\MSACCOWhitelisting\_SingleMemberWhitelistingPartial.cshtml" />
     <Content Include="Views\MSACCOWhitelisting\_BatchFileWhitelistingPartial.cshtml" />
+    <Content Include="Views\Deposits\Index.cshtml" />
+    <Content Include="Views\SMS\Index.cshtml" />
+    <Content Include="Views\SMS\_ComposeMessagePartial.cshtml" />
+    <Content Include="Views\SMS\_DisplaySentMessagesPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

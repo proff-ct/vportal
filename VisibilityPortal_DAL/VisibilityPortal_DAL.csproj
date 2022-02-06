@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PortalDBContext.cs" />
+    <Compile Include="PortalOTP.cs" />
     <Compile Include="PortalUserRole.cs" />
     <Compile Include="PortalModuleForClient.cs" />
     <Compile Include="EF6 related\PortalModule.cs" />
