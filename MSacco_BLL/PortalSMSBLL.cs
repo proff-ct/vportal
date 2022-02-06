@@ -131,17 +131,18 @@ namespace MSacco_BLL
 
             if (paginate)
             {
-                query = $@"SELECT f.[Id] as FileNo, [FileName] as SMSFileName, [Status], cu.Email as ActionUser, [DateTime] as DateDispatched
+                query = $@"SELECT f.[Id] as FileNo, [FileName] as SMSFileName, Status, cu.Email as ActionUser, [DateTime] as DateDispatched
                 FROM {_tblBulkSMSFile} f
                 INNER JOIN {_tblTrxPortalUsers} cu ON cu.Id = [UploadedBy_Id]
-                WHERE [TransactionType_Id]=@TrxTypeID AND ActionUser = @LoggedInUserEmail
+                WHERE [TransactionType_Id]=@TrxTypeID AND cu.Email = @LoggedInUserEmail
                 ORDER BY FileNo DESC
                 OFFSET @PageSize * (@PageNumber - 1) ROWS
                 FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);
 
-                Select count([Id]) as TotalRecords  
-                FROM {_tblBulkSMSFile}
-                WHERE [TransactionType_Id]=@TrxTypeID AND [Email] = @LoggedInUserEmail
+                Select count(f.[Id]) as TotalRecords  
+                FROM {_tblBulkSMSFile} f
+                INNER JOIN {_tblTrxPortalUsers} cu ON cu.Id = [UploadedBy_Id]
+                WHERE [TransactionType_Id]=@TrxTypeID AND cu.Email = @LoggedInUserEmail
                 ";
 
                 qryParams.Add("PageSize", pagingParams.PageSize);
@@ -164,7 +165,7 @@ namespace MSacco_BLL
             else
             {
                 //query = $@"SELECT * FROM {_tblMsaccoBankTransfer} WHERE [Corporate No] = @CorporateNo ";
-                query = $@"SELECT f.[Id] as FileNo, [FileName] as SMSFileName, [Status], cu.Email as ActionUser, [DateTime] as DateDispatched 
+                query = $@"SELECT f.[Id] as FileNo, [FileName] as SMSFileName, Status, cu.Email as ActionUser, [DateTime] as DateDispatched 
                         FROM {_tblBulkSMSFile} f
                         INNER JOIN {_tblTrxPortalUsers} cu ON cu.Id = [UploadedBy_Id]
                         WHERE [TransactionType_Id]=@TrxTypeID AND ActionUser = @LoggedInUserEmail

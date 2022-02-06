@@ -32,7 +32,6 @@ namespace MSacco_BLL.Controllers
 
         #region Others
         [HttpGet]
-        [Authorize]
         public ActionResult GetPortalSMSRecords(string clientCorporateNo, int page, int size)
         {
             if (string.IsNullOrEmpty(clientCorporateNo))
@@ -54,16 +53,29 @@ namespace MSacco_BLL.Controllers
 
 
             PaginationParameters pagingParams = new PaginationParameters(page, size, null);
+            int lastPage = 0;
+            dynamic records = null;
 
-            dynamic records = _portalSMSBLL
-                .GetUploadedSMSRecordsForClient(User.Identity.Name, out int lastPage, true, pagingParams)
-                .ToArray();
+            try
+            {
+                records = _portalSMSBLL
+                   .GetUploadedSMSRecordsForClient(User.Identity.Name, out lastPage, true, pagingParams)
+                   .ToArray();
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogOperationException("SMSController.GetPortalSMSRecords", "Exception while getting records", new { User.Identity.Name }, ex);
+            }
 
             return Json(new
             {
                 last_page = lastPage, // last page from the fetched recordset
-                data = APICommunication.Encrypt(records, new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
+                data = APICommunication.Encrypt(
+                    JsonConvert.SerializeObject(records),
+                    new MSACCO_AES(userParams.APIAuthID, userParams.APIToken))
             }, JsonRequestBehavior.AllowGet);
+
+
 
         }
 
@@ -82,7 +94,7 @@ namespace MSacco_BLL.Controllers
             }
 
             _portalSMSBLL = new PortalSMSBLL(new SaccoBLL(), HttpContext.GetOwinContext());
-            
+
             // validate contacts
             List<ISMSRecipient> smsRecipients = _portalSMSBLL.GenerateRecipientList(bulkSMSData.RecipientList, out actionMessage);
             if (smsRecipients == null || !smsRecipients.Any())
