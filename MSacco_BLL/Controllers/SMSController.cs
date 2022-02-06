@@ -9,16 +9,18 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Utilities;
 using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
 {
+    [Authorize]
     [RequireActiveUserSession]
     public class SMSController : Controller
     {
-        private readonly IBL_PortalSMS _portalSMSBLL = new PortalSMSBLL(new SaccoBLL());
+        private IBL_PortalSMS _portalSMSBLL;
 
         // GET: IBankTransfer
         public ActionResult Index()
@@ -42,6 +44,9 @@ namespace MSacco_BLL.Controllers
             {
                 return Json(new { last_page = 0, data = "" }, JsonRequestBehavior.AllowGet);
             }
+
+            _portalSMSBLL = new PortalSMSBLL(new SaccoBLL(), HttpContext.GetOwinContext());
+
             // the flow:
             // 1. get the pagination parameters
             // 2. pass the pagination parameters to the bll function
@@ -63,7 +68,6 @@ namespace MSacco_BLL.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateXToken]
         public ActionResult Peperusha(PortalSMSFileViewModel bulkSMSData)
         {
@@ -77,6 +81,8 @@ namespace MSacco_BLL.Controllers
                 goto exit_fn;
             }
 
+            _portalSMSBLL = new PortalSMSBLL(new SaccoBLL(), HttpContext.GetOwinContext());
+            
             // validate contacts
             List<ISMSRecipient> smsRecipients = _portalSMSBLL.GenerateRecipientList(bulkSMSData.RecipientList, out actionMessage);
             if (smsRecipients == null || !smsRecipients.Any())
@@ -106,7 +112,7 @@ namespace MSacco_BLL.Controllers
             }
             catch (Exception ex)
             {
-                actionMessage = "An error occurred sending the sms";
+                actionMessage = "An error occurred queing the sms";
 
                 AppLogger.LogOperationException(
                     "SMSController.Peperusha",

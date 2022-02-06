@@ -56,7 +56,7 @@ function initTabulator(tableContainerID, apiCommParams) {
                 }
             },
             { title: "Submitted By", field: "ActionUser", headerFilter: true },
-            
+
             //{ title: "Session ID", field: "SESSION_ID", headerFilter: true },
             //{ title: "Corporate No", field: "Corporate_No" },
         ],
@@ -96,7 +96,13 @@ function ReloadData() {
     tblTabulator.setData(tabulatorAjaxUrlForReload, tabulatorAjaxParamsForReload);
 }
 
-
+function InitParsedContactFile() {
+    parsedBulkSMSFile = {
+        FileName: null,
+        Message: null,
+        RecipientList: null
+    };
+}
 
 function LoadRecipientData(evtLoadFile) {
     const wsRef = "!ref";
@@ -111,6 +117,9 @@ function LoadRecipientData(evtLoadFile) {
     var ws;
     var range;
 
+    var numContacts = 0;
+    InitParsedContactFile();
+
     workbook.SheetNames.forEach(sheet => {
         // verify sheet has reader row
         range = null;
@@ -120,10 +129,14 @@ function LoadRecipientData(evtLoadFile) {
         range = XLSX.utils.decode_range(ws[wsRef]);
 
         // check line headers present. return if not present
-        if (!IsHeaderRowPresent(ws)) return;
+        if (!IsHeaderRowPresent(ws)) {
+            PopupMessage("Bulk SMS", "Invalid File Header<p><p><em>Cell A1 should have value: Phone No</em>");
+            return;
+        }
 
         var IDX_FIRST_DATA_ROW = 1;
         var IDX_DATA_COL = 0;
+        numContacts = 0;
 
         for (var R = IDX_FIRST_DATA_ROW; R <= range.e.r; ++R) {
 
@@ -132,6 +145,7 @@ function LoadRecipientData(evtLoadFile) {
             if (!cell_value) break;
 
             contactList.push(cell_value);
+            numContacts++;
         }
 
         parsedBulkSMSFile.FileName = selectedSMSContactsFile.name;
@@ -139,6 +153,11 @@ function LoadRecipientData(evtLoadFile) {
 
         // exit on sheet 1
         return;
+    });
+
+    bootbox.alert({
+        title: "<h4>Bulk SMS</h4> - Load Contacts",
+        message: "Imported " + numContacts + " contacts"
     });
 }
 
@@ -154,7 +173,13 @@ function ExtractCellData(sheetjs_cell) {
     return sheetjs_cell ? sheetjs_cell.v : null;
 }
 
-function DispatchSMS(restUrl, parsedSMS, apiCommParams) {
+function DispatchSMS(restUrl, parsedSMS, apiCommParams, successCallBack = null) {
+    if (parsedSMS.FileName == null || parsedSMS.FileName === undefined || parsedSMS.Message == null || parsedSMS.Message === undefined || parsedSMS.RecipientList == null || parsedSMS.RecipientList === undefined) {
+
+        PopupMessage("<h5>Bulk SMS</h5>","Dispatch failed<br><br>Invalid data");
+        return;
+    }
+
     var ajaxParams = {
         FileName: parsedSMS.FileName,
         Message: parsedSMS.Message,
@@ -176,7 +201,7 @@ function DispatchSMS(restUrl, parsedSMS, apiCommParams) {
                 response = { success: false, ex: "An error occurred interpreting the server's response. Kindly try again" };
             }
         }
-        ParseSMSDispatchResponse(response);
+        ParseSMSDispatchResponse(response, successCallBack);
     };
 
     msaccoCallBack.ERROR = function (xhr, status, error) {
@@ -201,10 +226,12 @@ function DispatchSMS(restUrl, parsedSMS, apiCommParams) {
     CallMSACCO(restUrl, ajaxParams, apiCommParams, msaccoCallBack);
 }
 
-function ParseSMSDispatchResponse(serverResponse) {
+function ParseSMSDispatchResponse(serverResponse, successCallBack) {
+    InitParsedContactFile();
     var msg;
     if (serverResponse.success == true) {
         msg = "<h4>Status: Success</h4>  <p/><p/>" + serverResponse.ex;
+        if(successCallBack) successCallBack();
     } else {
         msg = "<h4>Status: Failed</h4> <p/><p/>" + serverResponse.ex;
     }

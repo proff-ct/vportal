@@ -141,7 +141,12 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/portalSMS.js"
                             DispatchSMS(
                                 "@Url.Action("Peperusha", "SMS")",
                                 parsedBulkSMSFile,
-                                { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token });
+                                { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token },
+                                function () {
+                                    selectedSMSContactsFile = null;
+                                    $('#btnImportFromFile').attr('value', '');
+                                    $("#txtSMS").focus().select();
+                                });
                         }
                     }
                 });

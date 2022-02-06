@@ -1,9 +1,11 @@
-﻿using IronXL;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using MSacco_Dataspecs;
 using MSacco_Dataspecs.MSSQLOperators;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -11,11 +13,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data.Entity;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Security;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Utilities;
 
 namespace MSacco_BLL.TransactionPortalServices
 {
@@ -90,10 +98,10 @@ namespace MSacco_BLL.TransactionPortalServices
                     {
                     }
 #else
-    public TP_AppDBContext()
-        : base(Connection.ProductionConnectionString, throwIfV1Schema: false)
-    {
-    }
+                    public TP_AppDBContext()
+                        : base(@ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString, throwIfV1Schema: false)
+                    {
+                    }
 #endif
 
                     public DbSet<ShortCodeType> ShortCodeType { get; set; }
@@ -226,22 +234,21 @@ namespace MSacco_BLL.TransactionPortalServices
             public string SaccoName { get; set; }
         }
 
-        public static class TransactionPortalSMSService
+        public class TransactionPortalSMSService
         {
             private const string BULK_SMS_FILE_STORAGE_PATH_NAME = "BulkSMSFilePath";
-            private static ASP_Identity.IdentityConfig.TP_UserManager _tpUserManager;
-            public static ASP_Identity.IdentityConfig.TP_UserManager TPUserManager
+            private ASP_Identity.IdentityConfig.TP_UserManager TPUserManager
             {
-                get =>
-                    //return _tpUserManager ?? HttpContext.GetOwinContext().GetUserManager<ASP_Identity.IdentityConfig.TP_UserManager>();
-                    _tpUserManager;
-                private set => _tpUserManager = value;
-            }
-            static TransactionPortalSMSService()
-            {
+                get;
+                //_tpUserManager ?? HttpContext.GetOwinContext().GetUserManager<ASP_Identity.IdentityConfig.TP_UserManager>();
 
+                set;
             }
-            private static string GenerateFileName(string tpUserID, string smsFileName)
+            public TransactionPortalSMSService(IOwinContext owinContext)
+            {
+                TPUserManager = owinContext.GetUserManager<ASP_Identity.IdentityConfig.TP_UserManager>();
+            }
+            private string GenerateFileName(string tpUserID, string smsFileName)
             {
                 using (ASP_Identity.IdentityModels.TP_AppDBContext db = new ASP_Identity.IdentityModels.TP_AppDBContext())
                 {
@@ -257,7 +264,7 @@ namespace MSacco_BLL.TransactionPortalServices
                 }
             }
 
-            private static Client NewClient(Client client)
+            private Client NewClient(Client client)
             {
 
                 using (ASP_Identity.IdentityModels.TP_AppDBContext db = new ASP_Identity.IdentityModels.TP_AppDBContext())
@@ -275,7 +282,7 @@ namespace MSacco_BLL.TransactionPortalServices
 
             }
 
-            private static ClientShortCode ClientShortCode(ClientShortCode code)
+            private ClientShortCode ClientShortCode(ClientShortCode code)
             {
 
                 using (ASP_Identity.IdentityModels.TP_AppDBContext db = new ASP_Identity.IdentityModels.TP_AppDBContext())
@@ -285,7 +292,7 @@ namespace MSacco_BLL.TransactionPortalServices
                         return db.ClientShortCode.FirstOrDefault(x => x.ShorCode.Equals(code.ShorCode));
                     }
 
-                    code.CodeType = db.ShortCodeType.First(sc => sc.CodeType == "C2B");
+                    //code.CodeType = db.ShortCodeType.First(sc => sc.CodeType == "C2B");
                     db.ClientShortCode.Add(code);
 
                     //db.ClientShortCode.Add(new ClientShortCode { Active = true, CodeType = db.ShortCodeType.Find(code.CodeType.Id), Client = db.Client.Find(code.Client.Id), ShorCode = code.ShorCode });
@@ -294,17 +301,16 @@ namespace MSacco_BLL.TransactionPortalServices
                 }
 
             }
-            private static ClientUser RegisterUserAccount(string userEmail, string businessShortCode)
+            private ClientUser RegisterUserAccount(string userEmail, string businessShortCode)
             {
                 ASP_Identity.IdentityModels.TP_AppUser user = new ASP_Identity.IdentityModels.TP_AppUser { UserName = userEmail, Email = userEmail };
-                IdentityResult result = TPUserManager.Create(user, "MseeLazimaPasswordIsikosekanangeUsipangingwe");
+                IdentityResult result = TPUserManager.Create(user, "Msee!LazimaPasswordIsikosekanangeUsipangwingwe2022+");
                 if (result.Succeeded)
                 {
 
                     using (ASP_Identity.IdentityModels.TP_AppDBContext db = new ASP_Identity.IdentityModels.TP_AppDBContext())
                     {
                         Client sacco = db.Client.FirstOrDefault(c => c.CorporateNo == businessShortCode);
-
                         if (db.ClientUser.Any(x => x.User.Email.Equals(userEmail)) || sacco == null)
                         {
                             return null;
@@ -316,35 +322,32 @@ namespace MSacco_BLL.TransactionPortalServices
                             Client = sacco,
                             User = db.Users.FirstOrDefault(x => x.UserName.Equals(userEmail))
                         };
-
                         db.ClientUser.Add(clUser);
                         db.SaveChanges();
-
+                        
                         return clUser;
                     }
                 }
-
-
-                return null;
+                throw new ApplicationException($"Failed registering user {userEmail} on Transaction portal");
             }
             private static string GetFileStorageLocation()
             {
                 string storageLocation = string.Empty;
 
                 NameValueCollection section = @ConfigurationManager.GetSection("portalSecrets") as NameValueCollection;
-                if(section!=null && section[BULK_SMS_FILE_STORAGE_PATH_NAME] != null)
+                if (section != null && section[BULK_SMS_FILE_STORAGE_PATH_NAME] != null)
                 {
                     storageLocation = section[BULK_SMS_FILE_STORAGE_PATH_NAME];
                 }
 
                 if (string.IsNullOrEmpty(storageLocation))
                 {
-                    storageLocation = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+                    storageLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
                 }
 
                 return storageLocation;
             }
-            public static bool UploadBulkSMS(VisibilityPortal_SMSMV sms, string userEmail, VisibilityPortal_SaccoInfo saccoInfo)
+            public bool UploadBulkSMS(VisibilityPortal_SMSMV sms, string userEmail, VisibilityPortal_SaccoInfo saccoInfo)
             {
                 using (ASP_Identity.IdentityModels.TP_AppDBContext db = new ASP_Identity.IdentityModels.TP_AppDBContext())
                 {
@@ -365,7 +368,7 @@ namespace MSacco_BLL.TransactionPortalServices
                                 Name = saccoInfo.SaccoName,
                                 Active = true
                             });
-
+                            
                             ClientShortCode(new ClientShortCode
                             {
                                 Client = sacco,
@@ -373,48 +376,79 @@ namespace MSacco_BLL.TransactionPortalServices
                                 Active = true
                             });
                         }
-
-                        RegisterUserAccount(userEmail, sacco.CorporateNo);
+                        clientUser = RegisterUserAccount(userEmail, sacco.CorporateNo);
                     }
 
                     // create file
-                    WorkBook xlsWorkBook = new WorkBook(ExcelFileFormat.XLS);
-                    WorkSheet xlsSheet = xlsWorkBook.CreateWorkSheet("SMS Recipient List");
+                    IWorkbook xlsWorkBook = new HSSFWorkbook();
+                    ISheet xlsSheet = xlsWorkBook.CreateSheet("SMS Recipient List");
 
-                    int numContacts = sms.Recipients.Count;
-                    for (int i = 1; i <= numContacts; i++)
+                    int numContacts = sms.Recipients.Count, IDX_PHONE_NO_CELL = 0;
+                    for (int i = 0; i < numContacts; i++)
                     {
-                        xlsSheet[$"A{i}"].Value = sms.Recipients[i];
+                        IRow row = xlsSheet.CreateRow(i);
+                        ICell cell = row.CreateCell(IDX_PHONE_NO_CELL);
+
+                        cell.SetCellValue(sms.Recipients[i]);
                     }
 
-                    fileName = GenerateFileName(clientUser.User.Id, sms.SMSFileName);
-                    filePath = GetFileStorageLocation();
-                    
-                    xlsWorkBook.SaveAs($"{filePath}/{fileName}");
-                    
-                    // update db accordingly
-                    FilePath fp = new FilePath
+                    try
                     {
-                        Path = filePath,
-                        Status = "Filed",
-                        UploadedBy = db.Users.Find(clientUser.Id),
-                        DateTime = DateTime.Now,
-                        FileName = fileName,
-                        TransactionType = db.TransactionType.FirstOrDefault(x => x.Name.Equals("sms")),
-                        Active = true
-                    };
-                    db.FilePath.Add(fp);
-                    db.SaveChanges();
+                        fileName = GenerateFileName(clientUser.User.Id, sms.SMSFileName);
+                        filePath = GetFileStorageLocation();
+                        string fullFilePath = Path.Combine(filePath, fileName);
+                        using (FileStream stream = new FileStream(fullFilePath, FileMode.Create, FileAccess.Write))
+                        {
+                            xlsWorkBook.Write(stream);
+                        }
 
-                    SmsBatchFile sBF = new SmsBatchFile
+                        // update db accordingly
+                        FilePath fp = new FilePath
+                        {
+                            Path = fullFilePath,
+                            Status = "Filed",
+                            UploadedBy = db.Users.Find(clientUser.User.Id),
+                            DateTime = DateTime.Now,
+                            FileName = fileName,
+                            TransactionType = db.TransactionType.FirstOrDefault(x => x.Name.Equals("sms")),
+                            Active = true
+                        };
+                        db.FilePath.Add(fp);
+                        db.SaveChanges();
+
+                        SmsBatchFile sBF = new SmsBatchFile
+                        {
+                            Mesaage = sms.Message,
+                            FilePath = db.FilePath.Find(fp.Id),
+                            Status = "Filed"
+                        };
+                        db.SmsBatchFile.Add(sBF);
+                        db.SaveChanges();
+
+                        uploadSuccessful = true;
+                    }
+                    catch (ConfigurationException configEx)
                     {
-                        Mesaage = sms.Message,
-                        FilePath = db.FilePath.Find(fp.Id),
-                        Status = "Filed"
-                    };
-                    db.SmsBatchFile.Add(sBF);
-                    db.SaveChanges();
+                        Services.EmailService tpEmailService = new Services.EmailService();
+                        tpEmailService.SendEmail(
+                            "Missing Configuration For SMS Processing from Visibility Portal",
+                            $"Update web.config or relevant config file since {clientUser.User.Email} of {saccoInfo.SaccoName} has tried sending bulk sms but a config exception has occurred: {configEx.Message} with ST: {configEx.StackTrace}",
+                            "madote@coretec.co.ke"
+                            );
 
+                        throw new ApplicationException("SMS service is unable to process this request at the moment");
+                    }
+                    catch(DirectoryNotFoundException dirNFException)
+                    {
+                        Services.EmailService tpEmailService = new Services.EmailService();
+                        tpEmailService.SendEmail(
+                            "Folder for storing uploaded SMS files NOT YET CREATED for Visibility Portal",
+                            $"Create folder {clientUser.User.Email} of {saccoInfo.SaccoName} has tried sending bulk sms but the folder is not yet ready i.e. {dirNFException.Message} with ST: {dirNFException.StackTrace}",
+                            "madote@coretec.co.ke"
+                            );
+
+                        throw new ApplicationException("SMS service is unable to process this request at the moment");
+                    }
 
                     return uploadSuccessful;
                 }
@@ -423,5 +457,142 @@ namespace MSacco_BLL.TransactionPortalServices
 
     }
 
+    namespace Services
+    {
+        public class EmailService : IIdentityMessageService
+        {
+            public Task SendAsync(IdentityMessage message)
+            {
+                // Plug in your email service here to send an email.
+                sendongmail(message.Subject, message.Body, message.Destination);
+                SendEmail(message.Subject, message.Body, message.Destination);
+
+                //gmailgateway(message.Subject, message.Body, message.Destination);
+                return Task.FromResult(0);
+            }
+            public void SendEmail(string Subject, string Body, string mailTo)
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress("coretec.msacco@gmail.com");
+                mail.To.Add(mailTo);
+                mail.CC.Add("kwachira@coretec.co.ke");
+                mail.CC.Add("fkaigwa@coretec.co.ke");
+                // mail.To.Add("aingosi@coretec.co.ke");
+
+                mail.Subject = Subject;
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpServer.Port = 587;
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Credentials = new NetworkCredential("coretec.msacco@gmail.com", "!Team@123");
+                SmtpServer.EnableSsl = true;
+                try
+                {
+                    SmtpServer.Send(mail);
+                }
+                catch
+                {
+                    try
+                    {
+                        SmtpServer.Send(mail);
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            SmtpServer.Send(mail);
+                        }
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+
+                                ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                                { return true; };
+                                SmtpServer.Send(mail);
+                            }
+                            catch (Exception e)
+                            {
+                                try
+                                {
+                                    ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                                    { return true; };
+                                    mail.To.Clear();
+                                    mail.To.Add("coretectests@gmail.com");
+                                    mail.Subject = "Report Not sent: Your service is not working Man";
+                                    mail.Body = "Report Dated " + DateTime.Now.AddDays(-1).ToLongDateString() + "was not sent successfully imagine..Ebu angalia";
+                                    if (mail.Attachments.Count() > 0) { mail.Attachments.Clear(); }
+                                    SmtpServer.Send(mail);
+                                }
+                                catch
+                                {
+                                    //log error to db
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            private void gmailgateway(string subject, string body, string sentto)
+            {
+                try
+                {
+                    var fromAddress = new MailAddress("coretec.msacco@gmail.com", "From coretec mobility");
+                    var toAddress = new MailAddress(sentto, "To Name");
+                    const string fromPassword = "!Team@123";
+                    //const string subject1 = ""+subject;
+                    //const string body1 = "";
+
+                    var smtp = new SmtpClient
+                    {
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                        Timeout = 20000
+                    };
+                    using (var message = new MailMessage(fromAddress, toAddress)
+                    {
+                        Subject = subject,
+                        Body = body
+                    })
+                    {
+                        smtp.Send(message);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    //throw;
+                }
+            }
+            public void sendongmail(string subject, string body, string emailto)
+            {
+                try
+                {
+                    MailMessage mail = new MailMessage();
+                    SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                    mail.Headers.Add("Message-Id", String.Concat("<", DateTime.Now.ToString("yyMMdd"), ".", DateTime.Now.ToString("HHmmss"), "@gmail.com>"));
+                    mail.From = new MailAddress("m.sacco.coretec@gmail.com");
+
+                    mail.To.Add(emailto);
+
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    SmtpServer.Port = 587;
+                    SmtpServer.Credentials = new System.Net.NetworkCredential("m.sacco.coretec", "msacco20rsnma7771@#");
+                    SmtpServer.EnableSsl = true;
+                    SmtpServer.Send(mail);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+    }
 
 }

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Owin;
 using MSacco_BLL.TransactionPortalServices.Models;
 using MSacco_Dataspecs;
 using MSacco_Dataspecs.Feature.PortalSMS.Functions;
@@ -21,12 +22,14 @@ namespace MSacco_BLL
     public class PortalSMSBLL : IBL_PortalSMS
     {
         private readonly IBL_SACCO _saccoBLL;
+        private readonly IOwinContext _owinContext;
         private readonly string _tblBulkSMSFile = "FilePaths";
         private readonly string _tblTrxPortalUsers = "AspNetUsers";
         private readonly string _trxPortalConnString = @ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString;
-        public PortalSMSBLL(IBL_SACCO saccoBLL)
+        public PortalSMSBLL(IBL_SACCO saccoBLL, IOwinContext owinContext)
         {
             _saccoBLL = saccoBLL ?? throw new ArgumentNullException("NULL SACCO BLL given to PortalSMSBLL!");
+            _owinContext = owinContext;
         }
 
         public bool DispatchSMS(string clientCorporateNo, IFile_PortalSMS bulkSMSFile, string actionUser, out string operationMessage)
@@ -67,7 +70,7 @@ namespace MSacco_BLL
                 SaccoName = sacco.saccoName_1
             };
 
-            isDispatched = TransactionPortalSMSService.UploadBulkSMS(smsData, actionUser, saccoData);
+            isDispatched = new TransactionPortalSMSService(_owinContext).UploadBulkSMS(smsData, actionUser, saccoData);
             operationMessage = "";
 
             return isDispatched;
@@ -80,20 +83,38 @@ namespace MSacco_BLL
                 operationMessage = "No recipients specified";
                 return null;
             }
+
+            Func<string, bool> _checkDigits = smsContact => smsContact.Substring(1).All(c => char.IsDigit(c));
+
+            int numPossibleContacts = 0;
+            foreach (string possibleContact in smsRecipients)
+            {
+                if (_checkDigits(possibleContact))
+                {
+                    numPossibleContacts++;
+                }
+            }
+            if (numPossibleContacts == 0)
+            {
+                operationMessage = "No valid contacts";
+                return null;
+            }
+
+
             List<ISMSRecipient> recipients = new List<ISMSRecipient>();
             int numValidContacts = 0;
 
-            smsRecipients.ForEach(phoneNo =>
-            {
-                if (phoneNo.Length > RECIPIENT_PHONE_NO_CONFIG.MAX_LENGTH || phoneNo.Length < RECIPIENT_PHONE_NO_CONFIG.MIN_LENGTH)
+            smsRecipients.Distinct().ToList().ForEach(phoneNo =>
                 {
-                    return;
-                }
-                numValidContacts++;
-                recipients.Add(new SMSRecipient(phoneNo));
-            });
+                    if (phoneNo.Length > RECIPIENT_PHONE_NO_CONFIG.MAX_LENGTH || phoneNo.Length < RECIPIENT_PHONE_NO_CONFIG.MIN_LENGTH)
+                    {
+                        return;
+                    }
+                    numValidContacts++;
+                    recipients.Add(new SMSRecipient(phoneNo));
+                });
 
-            operationMessage = $"Processed {numValidContacts} / {smsRecipients.Count} sms recipients.";
+            operationMessage = $"Processed {numValidContacts} / {numPossibleContacts} sms recipients.";
 
             return recipients;
         }
