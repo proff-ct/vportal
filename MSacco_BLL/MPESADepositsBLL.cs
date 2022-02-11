@@ -64,7 +64,7 @@ namespace MSacco_BLL
                 {
                     countFailedUploads++;
 
-                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", $"Exception while uploading transaction: {ex.Message}", new { msacco_deposit = trx }, ex);
+                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", $"Exception while uploading transaction: {ex.Message}", new { msacco_deposit = trx, client = c2bStatement.Organization, uploadedBy = actionUser }, ex);
                 }
             });
 
