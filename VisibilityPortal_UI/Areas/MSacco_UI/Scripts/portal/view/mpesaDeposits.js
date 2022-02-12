@@ -3,6 +3,7 @@ var parsedStatementFile = {
     METADATA: null,
     Transactions: null
 };
+const MPESA_DATE_FORMAT = "DD-MM-YYYY hh:mm:ss";
 
 var tblTabulator;
 var tabulatorAjaxUrlForReload;
@@ -148,26 +149,28 @@ function LoadStatementData(evtLoadFile) {
             return;
         }
 
-        var lineData = {
-            ReceiptNo: null,
-            CompletionTime: null,
-            InitiationTime: null,
-            Details: null,
-            TransactionStatus: null,
-            PaidIn: null,
-            Withdrawn: null,
-            Balance: null,
-            BalanceConfirmed: null,
-            ReasonType: null,
-            OtherPartyInfo: null,
-            LinkedTransactionID: null,
-            AccNo: null
-        };
+        
 
         var IDX_FIRST_LINE_ROW = 6;
         var IDX_LAST_LINE_COL = 12;
 
         for (var R = IDX_FIRST_LINE_ROW; R <= range.e.r; ++R) {
+            var lineData = {
+                ReceiptNo: null,
+                CompletionTime: null,
+                InitiationTime: null,
+                Details: null,
+                TransactionStatus: null,
+                PaidIn: null,
+                Withdrawn: null,
+                Balance: null,
+                BalanceConfirmed: null,
+                ReasonType: null,
+                OtherPartyInfo: null,
+                LinkedTransactionID: null,
+                AccNo: null
+            };
+
             for (var C = 0; C <= IDX_LAST_LINE_COL; ++C) {
 
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
@@ -177,10 +180,10 @@ function LoadStatementData(evtLoadFile) {
                         lineData.ReceiptNo = cell_value;
                         break;
                     case 1:
-                        lineData.CompletionTime = moment(cell_value).format(PORTAL_DATE_FORMAT);
+                        lineData.CompletionTime = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
                         break;
                     case 2:
-                        lineData.InitiationTime = moment(cell_value).format(PORTAL_DATE_FORMAT);
+                        lineData.InitiationTime = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
                         break;
                     case 3:
                         lineData.Details = cell_value;
@@ -213,11 +216,8 @@ function LoadStatementData(evtLoadFile) {
                         lineData.AccNo = cell_value;
                         break;
                 }
-
-                if (C === IDX_LAST_LINE_COL) {
-                    statementLines.push(lineData);
-                }
             }
+            statementLines.push(lineData);
         }
 
         // set data
@@ -269,7 +269,7 @@ function ExtractFileMetaData(workSheet) {
                             statementFile.Organization = cell_value;
                             break;
                         case 5:
-                            statementFile.ReportDate = moment(cell_value).format(PORTAL_DATE_FORMAT);
+                            statementFile.ReportDate = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
                             break;
                     }
                 }
