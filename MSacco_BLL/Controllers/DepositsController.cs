@@ -67,10 +67,14 @@ namespace MSacco_BLL.Controllers
         [ValidateXToken]
         public ActionResult BenkiKuu(StatementFileViewModel statementFile, List<C2BStatementLines> lines)
         {
+            bool isSubmitted = false;
+            string actionMessage;
+
             ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
-            if (userParams == null || statementFile == null || lines == null || !lines.Any())
+            if (statementFile == null || lines == null || !lines.Any())
             {
-                return null;
+                actionMessage = "No data received";
+                goto exit_fn;
             }
 
             // check if statementShortCode matches the c2bpaybill of the logged in user
@@ -83,15 +87,21 @@ namespace MSacco_BLL.Controllers
                     new { statementFile, loggedInUser = User.Identity.Name },
                     new Exception("C2B Mismatch!"));
 
-                return null;
+                TransactionPortalServices.Services.EmailService tpEmailService = new TransactionPortalServices.Services.EmailService();
+                tpEmailService.SendEmail(
+                    $"C2B Mismatch for Uploaded Deposit File by {User.Identity.Name} for {sacco.saccoName_1}",
+                    $"{User.Identity.Name} has been told to contact CoreTec support so that their details can be verified. We may need to update C2bPaybill in source information.",
+                    "madote@coretec.co.ke"
+                    );
+
+                actionMessage = "Kindly contact CoreTec support to have your details verified.";
+                goto exit_fn;
             }
 
             // submit the data to server
             List<IMPESADeposit> deposits = lines.ToList<IMPESADeposit>();
             IFile_MPESA_C2B_Statement c2BStatement = new MPESA_C2B_StatementFile(statementFile.ShortCode, deposits);
-
-            bool isSubmitted = false;
-            string actionMessage;
+            
             try
             {
                 isSubmitted = _mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage);
@@ -106,6 +116,7 @@ namespace MSacco_BLL.Controllers
                   ex);
             }
 
+        exit_fn:
             return Json(APICommunication.Encrypt(
                   JsonConvert.SerializeObject(new
                   {
