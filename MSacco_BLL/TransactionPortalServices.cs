@@ -250,6 +250,10 @@ namespace MSacco_BLL.TransactionPortalServices
             }
             private string GenerateFileName(string tpUserID, string smsFileName)
             {
+                // Set file extenstion - Defaulting to xls files
+                int idxFileExtension = smsFileName.LastIndexOf('.');
+                smsFileName = string.Format("{0}.xls", smsFileName.Substring(0, idxFileExtension));
+
                 using (ASP_Identity.IdentityModels.TP_AppDBContext db = new ASP_Identity.IdentityModels.TP_AppDBContext())
                 {
                     ClientUser clientUser = db.ClientUser.FirstOrDefault(x => x.User.Id.Equals(tpUserID));
@@ -443,7 +447,7 @@ namespace MSacco_BLL.TransactionPortalServices
                         Services.EmailService tpEmailService = new Services.EmailService();
                         tpEmailService.SendEmail(
                             "Folder for storing uploaded SMS files NOT YET CREATED for Visibility Portal",
-                            $"Create folder {clientUser.User.Email} of {saccoInfo.SaccoName} has tried sending bulk sms but the folder is not yet ready i.e. {dirNFException.Message} with ST: {dirNFException.StackTrace}",
+                            $"Create folder since {clientUser.User.Email} of {saccoInfo.SaccoName} has tried sending bulk sms but the folder is not yet ready i.e. {dirNFException.Message} with ST: {dirNFException.StackTrace}",
                             "madote@coretec.co.ke"
                             );
 
