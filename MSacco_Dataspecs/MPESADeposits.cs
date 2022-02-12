@@ -32,6 +32,7 @@ namespace MSacco_Dataspecs.Feature.Transactions
             string OtherPartyInfo { get; set; }
             string LinkedTransactionID { get; set; }
             string AccNo { get; set; }
+            string PhoneNo { get; }
 
         }
 
@@ -67,6 +68,7 @@ namespace MSacco_Dataspecs.Feature.Transactions
 
         public class C2BStatementLines : IMPESADeposit
         {
+            string _phoneNo, _otherPartyInfo;
             public string ReceiptNo { get; set; }
             public DateTime CompletionTime { get; set; }
             public DateTime InitiationTime { get; set; }
@@ -77,9 +79,21 @@ namespace MSacco_Dataspecs.Feature.Transactions
             public decimal Balance { get; set; }
             public bool BalanceConfirmed { get; set; }
             public string ReasonType { get; set; }
-            public string OtherPartyInfo { get; set; }
+            public string OtherPartyInfo {
+                get => _otherPartyInfo;
+                set
+                {
+                    _otherPartyInfo = value;
+                    if (!string.IsNullOrEmpty(_otherPartyInfo))
+                    {
+                        _phoneNo = Functions.MSACCODeposits_BL.ExtractPhoneNumberFromMPESATrx(_otherPartyInfo);
+                    }
+                }
+            }
             public string LinkedTransactionID { get; set; }
             public string AccNo { get; set; }
+
+            public string PhoneNo => _phoneNo;
         }
 
         public interface IMSACCO_Deposit
@@ -105,6 +119,19 @@ namespace MSacco_Dataspecs.Feature.Transactions
             IEnumerable<Models.IMSACCO_Deposit> GetUploadedDepositRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null);
         }
 
+        public static class MSACCODeposits_BL
+        {
+            public static string C2B_MPESA_USER_INFO_DELIMITER => "-";
+            public static string ExtractPhoneNumberFromMPESATrx(string otherPartyInfo)
+            {
+                int IDX_PHONE_NO = 0;
+                int IDX_FULL_NAME = 1;
+
+                string[] mpesaUserInfo = otherPartyInfo.Split(new string[] { C2B_MPESA_USER_INFO_DELIMITER }, StringSplitOptions.None);
+
+                return MSACCOToolbox.ParsePhoneNumberToMSACCOFormat(mpesaUserInfo[IDX_PHONE_NO].Trim());
+            }
+        }
 
     }
 
