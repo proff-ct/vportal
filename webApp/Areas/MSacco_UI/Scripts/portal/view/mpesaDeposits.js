@@ -3,6 +3,7 @@ var parsedStatementFile = {
     METADATA: null,
     Transactions: null
 };
+const MPESA_DATE_FORMAT = "DD-MM-YYYY hh:mm:ss";
 
 var tblTabulator;
 var tabulatorAjaxUrlForReload;
@@ -39,56 +40,45 @@ function initTabulator(tableContainerID, apiCommParams) {
                 formatter: "responsiveCollapse", width: 30, minWidth: 30,
                 align: "center", resizable: false, headerSort: false
             },
-            { title: "Entry No", field: "Entry_No", headerFilter: true },
+            //{ title: "Entry No", field: "Entry_No", headerFilter: true },
             {
                 title: "Status", field: "Status",
                 headerFilter: "select", headerFilterFunc: "=",
                 headerFilterParams: { values: true }
             },
-            { title: "Telephone No", field: "Telephone_No", headerFilter: true },
+            { title: "Receipt No", field: "ReceiptNo", headerFilter: true },
             {
-                title: "Comments", field: "Comments",
+                title: "Completion Time", field: "Transaction_Date",
+                align: "center", headerFilter: true,
+                formatter: function (cell, formatterParams) {
+                    return GetFormattedDate(cell.getValue());
+                }
+            },
+            {
+                title: "Initiation Time", field: "Transaction_Date",
+                align: "center", headerFilter: true,
+                formatter: function (cell, formatterParams) {
+                    return GetFormattedDate(cell.getValue());
+                }
+            },
+            {
+                title: "Transaction Status", field: "Status",
                 headerFilter: "select", headerFilterFunc: "=",
                 headerFilterParams: { values: true }
             },
-            { title: "Account Name", field: "Account_Name", headerFilter: true },
-            {
-                title: "Trx Date", field: "Transaction_Date",
-                align: "center", headerFilter: true,
-                formatter: function (cell, formatterParams) {
-                    return GetFormattedDate(cell.getValue());
-                }
-            },
-            { title: "Amount", field: "Amount", headerFilter: true },
-            { title: "Account Balance", field: "Account_Balance", headerFilter: true },
-            //{ title: "Request Confirmed", field: "RequestConfirmed", headerFilter: true },
-            { title: "Account No", field: "Account_No", headerFilter: true },
-            { title: "MPESA Result Type", field: "MPESA_Result_Type", headerFilter: true },
-            { title: "MPESA Result Desc", field: "MPESA_Result_Desc", headerFilter: true },
-            { title: "MPESA Receipt #", field: "MPESA_Receipt_No", headerFilter: true },
-            {
-                title: "MPESA DateTime", field: "MPESA_DateTime",
-                align: "center", headerFilter: true,
-                formatter: function (cell, formatterParams) {
-                    return GetFormattedDate(cell.getValue());
-                }
-            },
+            { title: "Paid In", field: "Amount", headerFilter: true },
+            { title: "Till Balance", field: "Account_Balance", headerFilter: true },
+            { title: "Reaason Type", field: "Account_Balance", headerFilter: true },
+            { title: "Other Party Info", field: "Account_Balance", headerFilter: true },
 
-            { title: "MPESA Float Amount", field: "MPESA_Float_Amount", headerFilter: true },
-            { title: "Document No", field: "Document_No", headerFilter: true },
-            { title: "MPesa Name", field: "MPesa_Name", headerFilter: true },
-            {
-                title: "Sent to Journal?", field: "Sent_To_Journal",
-                headerFilter: "select", headerFilterFunc: "=",
-                headerFilterParams: { values: true }
-            },
+            
             //{ title: "Session ID", field: "SESSION_ID", headerFilter: true },
             //{ title: "Corporate No", field: "Corporate_No" },
         ],
         movableColumns: true,
-        index: "Entry_No",
+        index: "ReceiptNo",
         initialSort: [
-            { column: "Entry_No", dir: "desc" }
+            { column: "Completion_Date", dir: "desc" }
         ],
         headerSortTristate: true,
 
@@ -124,6 +114,9 @@ function ReloadData() {
 
 
 function LoadStatementData(evtLoadFile) {
+    const MSG_STRUCTURE = 'Please maintain the original structure of the statement and edit only the transaction data';
+    const MSG_TITLE = '<h4>MSACCO Deposits</h4>';
+
     const wsRef = "!ref";
 
     var data = evtLoadFile.target.result;
@@ -146,31 +139,38 @@ function LoadStatementData(evtLoadFile) {
 
         // get file data. return if no data
         var statementFile = ExtractFileMetaData(ws);
-        if (statementFile == null) return;
-
+        if (statementFile == null) {
+            PopupMessage(MSG_TITLE, "Expected organisation information not found.<br/><br/>" + MSG_STRUCTURE);
+            return;
+        }
         // check line headers present. return if not present
-        if (!IsLineHeaderRowPresent(ws)) return;
+        if (!IsLineHeaderRowPresent(ws)) {
+            PopupMessage(MSG_TITLE, "Expected Header rows for the transactions not found.<br/><br/>" + MSG_STRUCTURE);
+            return;
+        }
 
-        var lineData = {
-            ReceiptNo: null,
-            CompletionTime: null,
-            InitiationTime: null,
-            Details: null,
-            TransactionStatus: null,
-            PaidIn: null,
-            Withdrawn: null,
-            Balance: null,
-            BalanceConfirmed: null,
-            ReasonType: null,
-            OtherPartyInfo: null,
-            LinkedTransactionID: null,
-            AccNo: null
-        };
+        
 
         var IDX_FIRST_LINE_ROW = 6;
         var IDX_LAST_LINE_COL = 12;
 
         for (var R = IDX_FIRST_LINE_ROW; R <= range.e.r; ++R) {
+            var lineData = {
+                ReceiptNo: null,
+                CompletionTime: null,
+                InitiationTime: null,
+                Details: null,
+                TransactionStatus: null,
+                PaidIn: null,
+                Withdrawn: null,
+                Balance: null,
+                BalanceConfirmed: null,
+                ReasonType: null,
+                OtherPartyInfo: null,
+                LinkedTransactionID: null,
+                AccNo: null
+            };
+
             for (var C = 0; C <= IDX_LAST_LINE_COL; ++C) {
 
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
@@ -180,10 +180,10 @@ function LoadStatementData(evtLoadFile) {
                         lineData.ReceiptNo = cell_value;
                         break;
                     case 1:
-                        lineData.CompletionTime = moment(cell_value).format(PORTAL_DATE_FORMAT);
+                        lineData.CompletionTime = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
                         break;
                     case 2:
-                        lineData.InitiationTime = moment(cell_value).format(PORTAL_DATE_FORMAT);
+                        lineData.InitiationTime = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
                         break;
                     case 3:
                         lineData.Details = cell_value;
@@ -216,18 +216,22 @@ function LoadStatementData(evtLoadFile) {
                         lineData.AccNo = cell_value;
                         break;
                 }
-
-                if (C === IDX_LAST_LINE_COL) {
-                    statementLines.push(lineData);
-                }
             }
+            statementLines.push(lineData);
         }
 
-        // set server variable
-        statementFile.StatementFileName = selectedStatementFile.name;
-        parsedStatementFile.METADATA = statementFile;
-        parsedStatementFile.Transactions = statementLines;
-
+        // set data
+        if (statementLines.length == undefined || statementLines.length < 1) {
+            PopupMessage(
+                "",
+                "Failed retrieving deposit transactions from the file.<br><br>" + MSG_STRUCTURE,
+                "<h4>MPESA DEPOSITS - Data error</h4>");
+        }
+        else {
+            statementFile.StatementFileName = selectedStatementFile.name;
+            parsedStatementFile.METADATA = statementFile;
+            parsedStatementFile.Transactions = statementLines;
+        }
     });
 }
 
@@ -265,7 +269,7 @@ function ExtractFileMetaData(workSheet) {
                             statementFile.Organization = cell_value;
                             break;
                         case 5:
-                            statementFile.ReportDate = moment(cell_value).format(PORTAL_DATE_FORMAT);
+                            statementFile.ReportDate = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
                             break;
                     }
                 }
@@ -386,7 +390,7 @@ function UploadStatement(restUrl, statement, apiCommParams) {
 function ParseDepositUploadResponse(serverResponse) {
     var msg;
     if (serverResponse.success == true) {
-        msg = "<h4>Status: Success</h4>  <p/><p/>" + serverResponse.ex + "<p/><p/>Statement file successfully uploaded"
+        msg = "<h4>Status: Success</h4>  <p/><p/>" + serverResponse.ex + "<p/><p/>Statement file successfully uploaded";
     } else {
         msg = "<h4>Status: Failed</h4> <p/><p/>" + serverResponse.ex;
     }
