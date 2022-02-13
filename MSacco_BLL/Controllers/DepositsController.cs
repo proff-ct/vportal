@@ -47,12 +47,11 @@ namespace MSacco_BLL.Controllers
             // 2. pass the pagination parameters to the bll function
             // 3. retrieve the data from the bll function
 
-            int lastPage;
 
             PaginationParameters pagingParams = new PaginationParameters(page, size, null);
 
             dynamic records = _mpesaDepositsBLL
-              .GetUploadedDepositRecordsForClient(clientCorporateNo, out lastPage, true, pagingParams)
+              .GetUploadedDepositRecordsForClient(clientCorporateNo, out int lastPage, true, pagingParams)
               .ToArray();
 
             return Json(new
@@ -90,7 +89,7 @@ namespace MSacco_BLL.Controllers
                 TransactionPortalServices.Services.EmailService tpEmailService = new TransactionPortalServices.Services.EmailService();
                 tpEmailService.SendEmail(
                     $"C2B Mismatch for Uploaded Deposit File by {User.Identity.Name} for {sacco.saccoName_1}",
-                    $"{User.Identity.Name} has been told to contact CoreTec support so that their details can be verified. We may need to update C2bPaybill in source information.",
+                    $"{User.Identity.Name} has been told to contact CoreTec support so that their details can be verified. We may need to update C2bPaybill in source information. Their C2B Paybill is {sacco.c2bPaybill ?? "not set in Source Info"} and they have uploaded a statement with C2B of {statementFile.ShortCode} for organization {statementFile.Organization}",
                     "madote@coretec.co.ke"
                     );
 
@@ -100,8 +99,13 @@ namespace MSacco_BLL.Controllers
 
             // submit the data to server
             List<IMPESADeposit> deposits = lines.ToList<IMPESADeposit>();
-            IFile_MPESA_C2B_Statement c2BStatement = new MPESA_C2B_StatementFile(statementFile.ShortCode, deposits);
-            
+            IFile_MPESA_C2B_Statement c2BStatement = new MPESA_C2B_StatementFile(statementFile.ShortCode, deposits)
+            {
+                Organization = statementFile.Organization,
+                Operator = statementFile.Operator,
+                StatementDate = statementFile.ReportDate
+            };
+
             try
             {
                 isSubmitted = _mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage);

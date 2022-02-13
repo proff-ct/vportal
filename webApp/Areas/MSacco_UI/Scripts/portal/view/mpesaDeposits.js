@@ -4,6 +4,7 @@ var parsedStatementFile = {
     Transactions: null
 };
 const MPESA_DATE_FORMAT = "DD-MM-YYYY hh:mm:ss";
+const MSACCO_DATE_FORMAT = "YYYY-MM-DD hh:mm:ss";
 
 var tblTabulator;
 var tabulatorAjaxUrlForReload;
@@ -180,10 +181,10 @@ function LoadStatementData(evtLoadFile) {
                         lineData.ReceiptNo = cell_value;
                         break;
                     case 1:
-                        lineData.CompletionTime = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
+                        lineData.CompletionTime = moment(cell_value, MPESA_DATE_FORMAT).format(MSACCO_DATE_FORMAT);
                         break;
                     case 2:
-                        lineData.InitiationTime = moment(cell_value, MPESA_DATE_FORMAT).format(PORTAL_DATE_FORMAT);
+                        lineData.InitiationTime = moment(cell_value, MPESA_DATE_FORMAT).format(MSACCO_DATE_FORMAT);
                         break;
                     case 3:
                         lineData.Details = cell_value;

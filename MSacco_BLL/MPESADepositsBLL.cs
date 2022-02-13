@@ -16,7 +16,7 @@ namespace MSacco_BLL
 {
     public class MPESADepositsBLL : IBL_MPESADeposit
     {
-        private readonly string _tblUploadedMPESADeposits = "Mobile Transactions";
+        private readonly string _tblUploadedMPESADeposits = "[Mobile Transactions]";
         //private readonly string _trxPortalConnString = @ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString;
 
         public IEnumerable<IMSACCO_Deposit> GetUploadedDepositRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
@@ -94,7 +94,7 @@ namespace MSacco_BLL
             qryParams.Add("Description", mpesaDeposit.Details);
             qryParams.Add("Status", mpesaDeposit.TransactionStatus);
             qryParams.Add("Org_Account_Balance", mpesaDeposit.Balance);
-            qryParams.Add("Trans_Time", mpesaDeposit.CompletionTime);
+            qryParams.Add("Trans_Time", mpesaDeposit.CompletionTime.ToString("dd-MM-yyyy hh:mm:ss tt"));
 
             query = $@"INSERT INTO {_tblUploadedMPESADeposits}
            ([Corporate No]
@@ -125,7 +125,7 @@ namespace MSacco_BLL
            ,@Trans_Time
            ,'0'
            ,'Deposit'
-           ,{DateTime.Now}
+           ,'{DateTime.Now}'
            ,'Deposit'
            ,'No'
            ,'No'
