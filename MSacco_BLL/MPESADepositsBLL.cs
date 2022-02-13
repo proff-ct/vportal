@@ -6,6 +6,7 @@ using MSacco_Dataspecs.MSSQLOperators;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace MSacco_BLL
 {
     public class MPESADepositsBLL : IBL_MPESADeposit
     {
-        private readonly string _tblUploadedMPESADeposits = "ExcelDatas";
-        private readonly string _trxPortalConnString = @ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString;
+        private readonly string _tblUploadedMPESADeposits = "[Mobile Transactions]";
+        //private readonly string _trxPortalConnString = @ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString;
 
         public IEnumerable<IMSACCO_Deposit> GetUploadedDepositRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
         {
@@ -64,7 +65,7 @@ namespace MSacco_BLL
                 {
                     countFailedUploads++;
 
-                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", $"Exception while uploading transaction: {ex.Message}", new { msacco_deposit = trx }, ex);
+                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", $"Exception while uploading transaction: {ex.Message}", new { msacco_deposit = trx, client = c2bStatement.Organization, uploadedBy = actionUser }, ex);
                 }
             });
 
@@ -85,54 +86,52 @@ namespace MSacco_BLL
             string query;
 
             DynamicParameters qryParams = new DynamicParameters();
+            qryParams.Add("CorporateNo", C2BPaybill);
             qryParams.Add("ReceiptNo", mpesaDeposit.ReceiptNo);
-            qryParams.Add("CompletionTime", mpesaDeposit.CompletionTime);
-            qryParams.Add("InitiationTime", mpesaDeposit.InitiationTime);
-            qryParams.Add("Details", mpesaDeposit.Details);
-            qryParams.Add("TransactionStatus", mpesaDeposit.TransactionStatus);
-            qryParams.Add("PaidIn", mpesaDeposit.PaidIn);
-            qryParams.Add("Withdrawn", mpesaDeposit.Withdrawn);
-            qryParams.Add("Balance", mpesaDeposit.Balance);
-            qryParams.Add("ReasonType", mpesaDeposit.ReasonType);
-            qryParams.Add("OtherPartyInfo", mpesaDeposit.OtherPartyInfo);
             qryParams.Add("AccountNo", mpesaDeposit.AccNo);
-            qryParams.Add("Status", "Pending");
-            qryParams.Add("ShortCode", C2BPaybill);
+            qryParams.Add("MSISDN", mpesaDeposit.PhoneNo);
+            qryParams.Add("Trans_Amount", mpesaDeposit.PaidIn);
+            qryParams.Add("Description", mpesaDeposit.Details);
+            qryParams.Add("Status", mpesaDeposit.TransactionStatus);
+            qryParams.Add("Org_Account_Balance", mpesaDeposit.Balance);
+            qryParams.Add("Trans_Time", mpesaDeposit.CompletionTime.ToString("dd-MM-yyyy hh:mm:ss tt"));
 
             query = $@"INSERT INTO {_tblUploadedMPESADeposits}
-           ([ReceiptNo]
-          ,[Completion]
-          ,[InitiationTime]
-          ,[Details]
-          ,[TransactionStatus]
-          ,[PaidIn]
-          ,[Withdrawn]
-          ,[Balance]
-          ,[ReasonType]
-          ,[OtherPartyInfo]
-          ,[AcNo]
-          ,[Status]
-          ,[ShortCode]
-          ,[DateTime]
-          ,[Retry])
+           ([Corporate No]
+           ,[Receipt No]
+           ,[Account No]
+           ,[MSISDN]
+           ,[Trans Amount]
+           ,[Description]
+           ,[Status]
+           ,[Org Account Balance]
+           ,[Trans Time]
+           ,[Sent to Journal]
+           ,[User Transaction Type]
+           ,[Date Received]
+           ,[Invoice Number]
+           ,[Telephone No Affixed]
+           ,[Account No Affixed]
+           ,[Source])
          VALUES 
-           (@ReceiptNo
-           ,@CompletionTime
-           ,@InitiationTime
-           ,@Details
-           ,@TransactionStatus
-           ,@PaidIn
-           ,@Withdrawn
-           ,@Balance
-           ,@ReasonType
-           ,@OtherPartyInfo
+           (@CorporateNo
+           ,@ReceiptNo
            ,@AccountNo
+           ,@MSISDN
+           ,@Trans_Amount
+           ,@Description
            ,@Status
-           ,@ShortCode
+           ,@Org_Account_Balance
+           ,@Trans_Time
+           ,'0'
+           ,'Deposit'
            ,'{DateTime.Now}'
-           ,'0')";
+           ,'Deposit'
+           ,'No'
+           ,'No'
+           ,'VisPortal')";
 
-            new DapperORM(_trxPortalConnString).ExecuteQuery(query, qryParams);
+            new DapperORM().ExecuteQuery(query, qryParams);
 
         }
     }

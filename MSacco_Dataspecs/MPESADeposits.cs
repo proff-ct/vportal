@@ -32,6 +32,7 @@ namespace MSacco_Dataspecs.Feature.Transactions
             string OtherPartyInfo { get; set; }
             string LinkedTransactionID { get; set; }
             string AccNo { get; set; }
+            string PhoneNo { get; }
 
         }
 
@@ -67,6 +68,7 @@ namespace MSacco_Dataspecs.Feature.Transactions
 
         public class C2BStatementLines : IMPESADeposit
         {
+            string _otherPartyInfo;
             public string ReceiptNo { get; set; }
             public DateTime CompletionTime { get; set; }
             public DateTime InitiationTime { get; set; }
@@ -77,9 +79,21 @@ namespace MSacco_Dataspecs.Feature.Transactions
             public decimal Balance { get; set; }
             public bool BalanceConfirmed { get; set; }
             public string ReasonType { get; set; }
-            public string OtherPartyInfo { get; set; }
+            public string OtherPartyInfo {
+                get => _otherPartyInfo;
+                set
+                {
+                    _otherPartyInfo = value;
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        PhoneNo = Functions.MSACCODeposits_BL.ExtractPhoneNumberFromMPESATrx(value);
+                    }
+                }
+            }
             public string LinkedTransactionID { get; set; }
             public string AccNo { get; set; }
+
+            public string PhoneNo { get; private set; }
         }
 
         public interface IMSACCO_Deposit
@@ -105,6 +119,55 @@ namespace MSacco_Dataspecs.Feature.Transactions
             IEnumerable<Models.IMSACCO_Deposit> GetUploadedDepositRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null);
         }
 
+        public static class MSACCODeposits_BL
+        {
+            public const string C2B_MPESA_USER_INFO_DELIMITER = "-";
+            /// <summary>
+            /// encountered this when I edited the excel file in libreofficecalc
+            /// </summary>
+            public const string C2B_MPESA_USER_INFO_DELIMITER_2 = "–";
+            /// <summary>
+            /// this is an 'empty' space delimiter
+            /// </summary>
+            public const string C2B_MPESA_USER_INFO_DELIMITER_3 = " ";
+            public static string ExtractPhoneNumberFromMPESATrx(string otherPartyInfo)
+            {
+                int IDX_PHONE_NO = 0;
+                int IDX_FULL_NAME = 1;
+                string phoneNo;
+
+                string[] mpesaUserInfo = otherPartyInfo.Split(new string[] { C2B_MPESA_USER_INFO_DELIMITER }, StringSplitOptions.None);
+
+                // check that we do have a number and iterate over the delimiters
+
+                if (!mpesaUserInfo[IDX_PHONE_NO].Trim().All(char.IsDigit))
+                {
+                    mpesaUserInfo = otherPartyInfo.Split(new string[] { C2B_MPESA_USER_INFO_DELIMITER_2 }, StringSplitOptions.None);
+                    if (!mpesaUserInfo[IDX_PHONE_NO].Trim().All(char.IsDigit))
+                    {
+                        mpesaUserInfo = otherPartyInfo.Split(new string[] { C2B_MPESA_USER_INFO_DELIMITER_3 }, StringSplitOptions.None);
+                        if (!mpesaUserInfo[IDX_PHONE_NO].Trim().All(char.IsDigit))
+                        {
+                            phoneNo = "Number Parse Failure";
+                        }
+                        else
+                        {
+                            phoneNo = mpesaUserInfo[IDX_PHONE_NO].Trim();
+                        }
+                    }
+                    else
+                    {
+                        phoneNo = mpesaUserInfo[IDX_PHONE_NO].Trim();
+                    }
+                }
+                else
+                {
+                    phoneNo = mpesaUserInfo[IDX_PHONE_NO].Trim();
+                }
+
+                return MSACCOToolbox.ParsePhoneNumberToMSACCOFormat(phoneNo);
+            }
+        }
 
     }
 
