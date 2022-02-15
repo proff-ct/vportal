@@ -113,23 +113,43 @@ namespace MSacco_BLL
            ,[Telephone No Affixed]
            ,[Account No Affixed]
            ,[Source])
-         VALUES 
-           (@CorporateNo
-           ,@ReceiptNo
-           ,@AccountNo
-           ,@MSISDN
-           ,@Trans_Amount
-           ,@Description
-           ,@Status
-           ,@Org_Account_Balance
-           ,@Trans_Time
-           ,'0'
-           ,'Deposit'
-           ,'{DateTime.Now}'
-           ,'Deposit'
-           ,'No'
-           ,'No'
-           ,'VisPortal')";
+         SELECT * FROM (
+            VALUES(@CorporateNo
+               ,@ReceiptNo
+               ,@AccountNo
+               ,@MSISDN
+               ,@Trans_Amount
+               ,@Description
+               ,@Status
+               ,@Org_Account_Balance
+               ,@Trans_Time
+               ,'0'
+               ,'Deposit'
+               ,'{DateTime.Now}'
+               ,'Deposit'
+               ,'No'
+               ,'No'
+               ,'VisPortal')
+        ) AS s([Corporate No]
+               ,[Receipt No]
+               ,[Account No]
+               ,[MSISDN]
+               ,[Trans Amount]
+               ,[Description]
+               ,[Status]
+               ,[Org Account Balance]
+               ,[Trans Time]
+               ,[Sent to Journal]
+               ,[User Transaction Type]
+               ,[Date Received]
+               ,[Invoice Number]
+               ,[Telephone No Affixed]
+               ,[Account No Affixed]
+               ,[Source]) 
+        WHERE NOT EXISTS ( 
+            SELECT * FROM {_tblUploadedMPESADeposits} t WITH (UPDLOCK) 
+            WHERE s.[Receipt No] = t.[Receipt No] 
+        )";
 
             new DapperORM().ExecuteQuery(query, qryParams);
 
