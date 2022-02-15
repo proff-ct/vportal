@@ -19,6 +19,7 @@ namespace MSacco_BLL
         private readonly string _tblUploadedMPESADeposits = "[Mobile Transactions]";
         //private readonly string _trxPortalConnString = @ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString;
 
+        Func<IMPESADeposit, bool> isDepositTrx = (statementLine) => statementLine.PaidIn > 0;
         public IEnumerable<IMSACCO_Deposit> GetUploadedDepositRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
         {
             throw new NotImplementedException();
@@ -53,9 +54,12 @@ namespace MSacco_BLL
                 return false;
             }
 
-            int totalRecords = c2bStatement.Deposits.Count, countFailedUploads = 0;
+            int totalRecords = c2bStatement.Deposits.Count, totalDepositTrx = 0, countFailedUploads = 0;
 
-            c2bStatement.Deposits.ForEach(trx =>
+            var validDeposits = c2bStatement.Deposits.Where(isDepositTrx).ToList();
+            totalDepositTrx = validDeposits.Count;
+
+            validDeposits.ForEach(trx =>
             {
                 try
                 {
@@ -69,14 +73,14 @@ namespace MSacco_BLL
                 }
             });
 
-            int numUploadedRecords = totalRecords - countFailedUploads;
+            int numUploadedRecords = totalDepositTrx - countFailedUploads;
             if(numUploadedRecords < 1)
             {
                 operationMessage = "Something prevented the upload. Kindly contact support immediately!";
                 return false;
             }
 
-            operationMessage = $"Uploaded {numUploadedRecords} of {totalRecords} records";
+            operationMessage = $"Total records processed:{totalRecords}{Environment.NewLine}Uploaded {numUploadedRecords} of {totalDepositTrx} paid in records";
             return true;
 
         }
