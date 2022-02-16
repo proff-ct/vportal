@@ -120,7 +120,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/portalSMS.js"
             }
         });
         $("#sendSMS").on('click', function () {
-            if (selectedSMSContactsFile && $("#txtSMS").val()) {
+            if (selectedSMSContactsFile && $("#txtSMS").val() && parsedBulkSMSFile.RecipientList != null && typeof parsedBulkSMSFile.RecipientList != "undefined") {
                 parsedBulkSMSFile.Message = $("#txtSMS").val();
 
                 bootbox.confirm({
@@ -129,11 +129,11 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/portalSMS.js"
                     buttons: {
                         cancel: {
                             label: '<i class="fa fa-times"></i> Cancel',
-                            className: 'btn-success'
+                            className: 'btn-danger'
                         },
                         confirm: {
                             label: '<i class="fa fa-check"></i> Confirm',
-                            className: 'btn-danger'
+                            className: 'btn-success'
                         }
                     },
                     callback: function (result) {

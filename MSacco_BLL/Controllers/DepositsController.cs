@@ -109,6 +109,7 @@ namespace MSacco_BLL.Controllers
             try
             {
                 isSubmitted = _mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage);
+                actionMessage = actionMessage.Replace(Environment.NewLine, "<br /> <br />");
             }
             catch (Exception ex)
             {
