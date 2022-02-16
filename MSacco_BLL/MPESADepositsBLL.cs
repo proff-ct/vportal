@@ -80,7 +80,7 @@ namespace MSacco_BLL
                 return false;
             }
 
-            operationMessage = $"Total records processed:{totalRecords}{Environment.NewLine}Uploaded {numUploadedRecords} of {totalDepositTrx} paid in records";
+            operationMessage = $"Total records processed: {totalRecords}{Environment.NewLine}Uploaded {numUploadedRecords} of {totalDepositTrx} paid in records";
             return true;
 
         }
