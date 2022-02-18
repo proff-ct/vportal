@@ -1,10 +1,12 @@
-﻿using MSacco_BLL.CustomFilters;
+﻿using Microsoft.AspNet.SignalR;
+using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
 using MSacco_Dataspecs.Feature.Transactions.Functions;
 using MSacco_Dataspecs.Feature.Transactions.Models;
 using MSacco_Dataspecs.Functions;
 using MSacco_Dataspecs.Security;
+using MSacco_Dataspecs.SignalR_Hubs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,12 +17,23 @@ using Utilities.PortalApplicationParams;
 
 namespace MSacco_BLL.Controllers
 {
-    [Authorize]
+    [System.Web.Mvc.Authorize]
     [RequireActiveUserSession]
     public class DepositsController : Controller
     {
         private readonly IBL_MPESADeposit _mpesaDepositsBLL = new MPESADepositsBLL();
         private readonly IBL_SACCO _saccoBLL = new SaccoBLL();
+        private readonly IHubContext<IMSACCOClientHub> _ctxMSACCOClientHub;
+
+        public DepositsController() : this(GlobalHost.ConnectionManager.GetHubContext<IMSACCOClientHub>("msaccoClient"))
+        {
+        }
+
+        public DepositsController(IHubContext<IMSACCOClientHub> ctxMSACCOClientHub)
+        {
+            _ctxMSACCOClientHub = ctxMSACCOClientHub;
+        }
+
         // GET: Home
         public ActionResult Index()
         {
@@ -30,7 +43,7 @@ namespace MSacco_BLL.Controllers
 
         #region Others
         [HttpGet]
-        [Authorize]
+        [System.Web.Mvc.Authorize]
         public ActionResult GetUploadedDepositFiles(string clientCorporateNo, int page, int size)
         {
             if (string.IsNullOrEmpty(clientCorporateNo))
@@ -122,14 +135,22 @@ namespace MSacco_BLL.Controllers
             }
 
         exit_fn:
-            return Json(APICommunication.Encrypt(
+            string serverResponse = APICommunication.Encrypt(
                   JsonConvert.SerializeObject(new
                   {
                       success = isSubmitted,
                       ex = actionMessage
                   }),
-                  new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)),
-                  JsonRequestBehavior.AllowGet);
+                  new MSACCO_AES(userParams.APIAuthID, userParams.APIToken));
+
+            if (!Response.IsClientConnected)
+            {
+                _ctxMSACCOClientHub.Clients.User(User.Identity.Name).Onyesha(
+                    User.Identity.Name,
+                    serverResponse,
+                    new MSACCO_AES(userParams.APIAuthID, userParams.APIToken));
+            }
+            return Json(serverResponse, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
