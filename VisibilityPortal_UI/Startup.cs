@@ -9,6 +9,7 @@ namespace Visibility_Portal
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            app.MapSignalR();
         }
     }
 }

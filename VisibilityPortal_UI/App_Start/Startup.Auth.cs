@@ -23,8 +23,6 @@ namespace Visibility_Portal
             app.CreatePerOwinContext(MSacco_BLL.TransactionPortalServices.Models.ASP_Identity.IdentityModels.TP_AppDBContext.Create);
             app.CreatePerOwinContext<MSacco_BLL.TransactionPortalServices.Models.ASP_Identity.IdentityConfig.TP_UserManager>(MSacco_BLL.TransactionPortalServices.Models.ASP_Identity.IdentityConfig.TP_UserManager.Create);
 
-            app.MapSignalR();
-
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
             // Configure the sign in cookie
