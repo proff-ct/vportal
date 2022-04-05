@@ -25,7 +25,7 @@
                 </div>
 
             </div>
-            <div class="pull-right">
+            @*<div class="pull-right">
                 <button type="button"
                         class="btn btn-labeled btn-primary btn-sm"
                         onclick="ReloadData()">
@@ -36,11 +36,11 @@
                     <span class="btn-label"><i class="glyphicon glyphicon-remove-circle"></i></span>
                     Clear filters
                 </button>
-            </div>
+            </div>*@
 
         </div>
         <div class="panel-body">
-            <div id="mpesaDepositsListTable"></div>
+            <!--div id="mpesaDepositsListTable"></div-->
         </div>
 
     </div>
@@ -92,13 +92,13 @@
         });
 
 
-        initTabulator(
+        @*initTabulator(
         "#mpesaDepositsListTable",
         { encSecret:"@activeUserParams.APIAuthID", encKey:"@activeUserParams.APIToken" });
 
       LoadData(
         "@Url.Action("GetUploadedDepositFiles", "Deposits")",
-        @activeUserParams.ClientCorporateNo);
+        @activeUserParams.ClientCorporateNo);*@
     });
 </script>
     }

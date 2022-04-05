@@ -45,8 +45,7 @@
         }
 
     }
-
-    $.connection.hub.logging = true;
+    
     $.connection.hub.start()
         .done(function () { console.log("Connected to MSACCO | " + moment().format(PORTAL_DATE_FORMAT) + " | Connection ID: " + $.connection.hub.id); })
         .fail(function (error) { console.log("Failed connecting to MSACCO->"+error +" | " + moment().format(PORTAL_DATE_FORMAT)) });
