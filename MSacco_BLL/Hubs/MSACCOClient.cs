@@ -27,7 +27,13 @@ namespace MSacco_BLL.Hubs
             else
             {
                 AppLogger.LogDevNotes("MSACCOClientHub.OnConnected", "Connected to client hub without user in Context", null);
+
+                if(!string.IsNullOrEmpty(Context.Request.User.Identity.Name))
+                {
+                    AppLogger.LogDevNotes("MSACCOClientHub.OnConnected", "but Context.Request.User is not null", new { Context.Request.User.Identity.Name });
+                }
             }
+
 
             return base.OnConnected();
         }
@@ -35,10 +41,10 @@ namespace MSacco_BLL.Hubs
         {
             return base.OnReconnected();
         }
-        public string GetClientID()
-        {
-            return Context.ConnectionId;
-        }
+        //public string GetClientID()
+        //{
+        //    return Context.ConnectionId;
+        //}
 
         public void Onyesha(string userID, string message, IMSACCO_AES_Credentials commParams)
         {

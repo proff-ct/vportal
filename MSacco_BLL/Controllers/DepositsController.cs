@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using MSacco_BLL.CustomFilters;
+using MSacco_BLL.Hubs;
 using MSacco_BLL.MSSQLOperators;
 using MSacco_DAL;
 using MSacco_Dataspecs.Feature.Transactions.Functions;
@@ -11,6 +12,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Utilities;
 using Utilities.PortalApplicationParams;
@@ -23,15 +26,15 @@ namespace MSacco_BLL.Controllers
     {
         private readonly IBL_MPESADeposit _mpesaDepositsBLL = new MPESADepositsBLL();
         private readonly IBL_SACCO _saccoBLL = new SaccoBLL();
-        private readonly IHubContext<IMSACCOClientHub> _ctxMSACCOClientHub;
+        private readonly IHubContext<IMSACCOClientApp> _ctxMSACCOClientApp;
 
-        public DepositsController() : this(GlobalHost.ConnectionManager.GetHubContext<IMSACCOClientHub>("msaccoClient"))
+        public DepositsController() : this(GlobalHost.ConnectionManager.GetHubContext<IMSACCOClientApp>("msaccoClient"))
         {
         }
 
-        public DepositsController(IHubContext<IMSACCOClientHub> ctxMSACCOClientHub)
+        public DepositsController(IHubContext<IMSACCOClientApp> ctxMSACCOClientHub)
         {
-            _ctxMSACCOClientHub = ctxMSACCOClientHub;
+            _ctxMSACCOClientApp = ctxMSACCOClientHub;
         }
 
         // GET: Home
@@ -76,16 +79,28 @@ namespace MSacco_BLL.Controllers
         }
 
         [HttpPost]
+        [NoAsyncTimeout]
         [ValidateXToken]
-        public ActionResult BenkiKuu(StatementFileViewModel statementFile, List<C2BStatementLines> lines)
+        public async Task<ActionResult> BenkiKuu(StatementFileViewModel statementFile, List<C2BStatementLines> lines, CancellationToken cancel)
         {
             bool isSubmitted = false;
-            string actionMessage;
+            string actionMessage = null;
 
             ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
             if (statementFile == null || lines == null || !lines.Any())
             {
                 actionMessage = "No data received";
+                goto exit_fn;
+            }
+            else if (string.IsNullOrEmpty(User.Identity.Name))
+            {
+                AppLogger.LogOperationException(
+                    "DepositsController.BenkiKuu",
+                    "User.Identity.Name is either null or empty for logged in user session",
+                    new { statementFile, loggedInUser = User.Identity.Name },
+                    new Exception("Missing Identity info"));
+
+                actionMessage = $"Missing info.<br /> <br />Log out then log back in.";
                 goto exit_fn;
             }
 
@@ -102,27 +117,109 @@ namespace MSacco_BLL.Controllers
                 TransactionPortalServices.Services.EmailService tpEmailService = new TransactionPortalServices.Services.EmailService();
                 tpEmailService.SendEmail(
                     $"C2B Mismatch for Uploaded Deposit File by {User.Identity.Name} for {sacco.saccoName_1}",
-                    $"{User.Identity.Name} has been told to contact CoreTec support so that their details can be verified. We may need to update C2bPaybill in source information. Their C2B Paybill is {sacco.c2bPaybill ?? "not set in Source Info"} and they have uploaded a statement with C2B of {statementFile.ShortCode} for organization {statementFile.Organization}",
+                    $"{User.Identity.Name} has been told to contact CoreTec support so that their details can be verified. We may need to update C2bPaybill in source information. Their C2B Paybill is {(string.IsNullOrEmpty(sacco.c2bPaybill) ? "not set in Source Info" : sacco.c2bPaybill)} and they have uploaded a statement with C2B of {statementFile.ShortCode} for organization {statementFile.Organization}",
                     "madote@coretec.co.ke"
                     );
 
                 actionMessage = "Kindly contact CoreTec support to have your details verified.";
                 goto exit_fn;
             }
-
             // submit the data to server
             List<IMPESADeposit> deposits = lines.ToList<IMPESADeposit>();
-            IFile_MPESA_C2B_Statement c2BStatement = new MPESA_C2B_StatementFile(statementFile.ShortCode, deposits)
+            IFile_MPESA_C2B_Statement c2BStatement = new MPESA_C2B_StatementFile(statementFile.ShortCode, deposits, User.Identity.Name)
             {
                 Organization = statementFile.Organization,
                 Operator = statementFile.Operator,
-                StatementDate = statementFile.ReportDate
+                StatementDate = statementFile.ReportDate,
+                StatementFileName = statementFile.StatementFileName
             };
+            // ensure upload proceeds even when user disconnects
+            CancellationTokenSource s = CancellationTokenSource.CreateLinkedTokenSource(cancel, Response.ClientDisconnectedToken);
+            s.Token.Register(() =>
+            {
+                AppLogger.LogEvent(
+                    "DepositsConroller.BenkiKuu", $"File upload by {User.Identity.Name} for {statementFile.StatementFileName} has been cancelled. Performing retry. . . ", new { statementFile });
+                Task.Run(() =>
+                {
 
+                    // process remaining deposits if present else notify user that uploads seem to have processed successfully
+                    //if (_mpesaDepositsBLL.StatementInProcessing == null || !_mpesaDepositsBLL.StatementInProcessing.Deposits.Any())
+                    //{
+                    //    isSubmitted = true;
+                    //    actionMessage = $"Successful upload reported for file {statementFile.StatementFileName}";
+
+                    //    goto exit_aysnc;
+                    //}
+
+                    isSubmitted = _mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage);
+                    actionMessage = actionMessage.Replace(Environment.NewLine, "<br /> <br />");
+
+                    //exit_aysnc:
+                    string asyncServerResponse = APICommunication.Encrypt(
+                      JsonConvert.SerializeObject(new
+                      {
+                          success = isSubmitted,
+                          ex = actionMessage,
+                          title = "MSACCO Deposits"
+                      }),
+                      new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)
+                      );
+
+                    _ctxMSACCOClientApp.Clients.User(User.Identity.Name).serverMessage(
+                        JsonConvert.SerializeObject(new
+                        {
+                            encKey = userParams.APIToken,
+                            encSecret = userParams.APIAuthID
+                        }),
+                        asyncServerResponse
+                        );
+
+                });
+            });
             try
             {
-                isSubmitted = _mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage);
-                actionMessage = actionMessage.Replace(Environment.NewLine, "<br /> <br />");
+                Task<(bool, string actionMessage)> taskSubmit = Task.Run(() =>
+                    (_mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage), actionMessage));
+
+                do
+                {
+                    if (!cancel.IsCancellationRequested)
+                    {
+                        switch (taskSubmit.Status)
+                        {
+                            case TaskStatus.WaitingToRun:
+                            case TaskStatus.Running:
+                                (bool, string actionMessage) submitOutcome = await taskSubmit;
+                                isSubmitted = submitOutcome.Item1;
+                                actionMessage = submitOutcome.actionMessage.Replace(Environment.NewLine, "<br /> <br />");
+
+                                break;
+                            case TaskStatus.RanToCompletion:
+                                isSubmitted = taskSubmit.Result.Item1;
+                                actionMessage = taskSubmit.Result.actionMessage.Replace(Environment.NewLine, "<br /> <br />");
+
+                                break;
+                            default:
+                                isSubmitted = false;
+                                actionMessage = $"MSACCO failed to process file upload of {statementFile.StatementFileName}.";
+
+                                break;
+                        }
+
+                        goto exit_fn;
+                    }
+                    else
+                    {
+                        isSubmitted = false;
+                        actionMessage = $"File upload of {statementFile.StatementFileName} was cancelled.";
+
+                        goto exit_fn;
+                    }
+                }
+                while (!cancel.IsCancellationRequested);
+
+                //isSubmitted = _mpesaDepositsBLL.SubmitTransaction(c2BStatement, User.Identity.Name, out actionMessage);
+                //actionMessage = actionMessage.Replace(Environment.NewLine, "<br /> <br />");
             }
             catch (Exception ex)
             {
@@ -139,16 +236,22 @@ namespace MSacco_BLL.Controllers
                   JsonConvert.SerializeObject(new
                   {
                       success = isSubmitted,
-                      ex = actionMessage
+                      ex = actionMessage,
+                      title = "MSACCO Deposits"
                   }),
-                  new MSACCO_AES(userParams.APIAuthID, userParams.APIToken));
+                  new MSACCO_AES(userParams.APIAuthID, userParams.APIToken)
+                  );
 
-            if (!Response.IsClientConnected)
+            if (!Response.IsClientConnected || Response.ClientDisconnectedToken.IsCancellationRequested)
             {
-                _ctxMSACCOClientHub.Clients.User(User.Identity.Name).Onyesha(
-                    User.Identity.Name,
-                    serverResponse,
-                    new MSACCO_AES(userParams.APIAuthID, userParams.APIToken));
+                _ctxMSACCOClientApp.Clients.User(User.Identity.Name).serverMessage(
+                    JsonConvert.SerializeObject(new
+                    {
+                        encKey = userParams.APIToken,
+                        encSecret = userParams.APIAuthID
+                    }),
+                    serverResponse
+                    );
             }
             return Json(serverResponse, JsonRequestBehavior.AllowGet);
         }
