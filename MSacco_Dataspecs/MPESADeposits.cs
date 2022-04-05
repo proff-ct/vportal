@@ -14,8 +14,11 @@ namespace MSacco_Dataspecs.Feature.Transactions
             string Operator { get; set; }
             string Organization { get; set; }
             DateTime StatementDate { get; set; }
+            string StatementFileName { get; set; }
+            string UploadedBy { get; }
             string ShortCode { get; }
             List<IMPESADeposit> Deposits { get; }
+            void ExpungeTransaction(IMPESADeposit recordToExpunge);
         }
         public interface IMPESADeposit
         {
@@ -49,11 +52,23 @@ namespace MSacco_Dataspecs.Feature.Transactions
                 get => _transactions;
                 private set => _transactions = value ?? new List<IMPESADeposit>();
             }
+            public string StatementFileName { get; set; }
 
-            public MPESA_C2B_StatementFile(string c2bPaybill, List<IMPESADeposit> transactions)
+            public string UploadedBy { get; private set; }
+
+            public MPESA_C2B_StatementFile(string c2bPaybill, List<IMPESADeposit> transactions, string actionUser)
             {
                 ShortCode = c2bPaybill;
-                Deposits = transactions;
+                Deposits = transactions.OrderBy(trx=>trx.CompletionTime).ToList();
+                UploadedBy = actionUser;
+            }
+
+            public void ExpungeTransaction(IMPESADeposit recordToExpunge)
+            {
+                if(_transactions != null && _transactions.Any())
+                {
+                    _transactions.RemoveAll(trx => trx.ReceiptNo == recordToExpunge.ReceiptNo);
+                }
             }
         }
 
@@ -113,6 +128,7 @@ namespace MSacco_Dataspecs.Feature.Transactions
     {
         public interface IBL_MPESADeposit
         {
+            Models.IFile_MPESA_C2B_Statement StatementInProcessing { get; }
             bool SubmitTransaction(
                 Models.IFile_MPESA_C2B_Statement c2bStatement, string actionUser, out string operationMessage);
 

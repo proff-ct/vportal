@@ -17,9 +17,13 @@ namespace MSacco_BLL
     public class MPESADepositsBLL : IBL_MPESADeposit
     {
         private readonly string _tblUploadedMPESADeposits = "[Mobile Transactions]";
+
         //private readonly string _trxPortalConnString = @ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString;
 
-        Func<IMPESADeposit, bool> isDepositTrx = (statementLine) => statementLine.PaidIn > 0;
+        private readonly Func<IMPESADeposit, bool> isDepositTrx = (statementLine) => statementLine.PaidIn > 0;
+
+        public IFile_MPESA_C2B_Statement StatementInProcessing { get; private set; }
+
         public IEnumerable<IMSACCO_Deposit> GetUploadedDepositRecordsForClient(string corporateNo, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
         {
             throw new NotImplementedException();
@@ -46,35 +50,91 @@ namespace MSacco_BLL
                 AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", "c2bStatement is null!", null, new ArgumentException("Missing c2bStatement"));
                 return false;
             }
-            else if (c2bStatement.Deposits == null || !c2bStatement.Deposits.Any())
-            {
-                operationMessage = "No deposit transactions found";
+            // 1. Check if we have a statement in processing
+            // 2. If yes, check if the statement in processing is equal to the one passed in
+            // 2.1 IS_EQUAL:
+            // set the valid deposits equal to that in processing
+            // 2.2 ISNOT_EQUAL:
+            // set the statement in processing to null
+            // goto statement upload flow
+            // if NO:
+            // set the statement in processing to null
+            // goto statement upload flow
+            // ELSE (we do not have a statement in processing)
+            // goto statement upload flow
+            int totalRecords = 0, totalDepositTrx = 0, countFailedUploads = 0;
+            List<IMPESADeposit> validDeposits = null;
 
-                AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", "c2bStatement has no transactions!", null, new ArgumentException("Missing c2bStatement.Deposits"));
-                return false;
+            if (StatementInProcessing != null && StatementInProcessing.Deposits.Any())
+            {
+                if (StatementInProcessing.StatementFileName.ToLower() != c2bStatement.StatementFileName.ToLower())
+                {
+                    StatementInProcessing = null;
+                    goto Upload_MSACCO_Deposits;
+                }
+
+                validDeposits = StatementInProcessing.Deposits.Where(isDepositTrx).ToList();
+                goto Upload_MSACCO_Deposits;
+
+            }
+        
+        Upload_MSACCO_Deposits:
+            if (validDeposits == null)
+            {
+                if (c2bStatement.Deposits == null || !c2bStatement.Deposits.Any())
+                {
+                    operationMessage = "No deposit transactions found";
+
+                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", "c2bStatement has no transactions!", null, new ArgumentException("Missing c2bStatement.Deposits"));
+                    return false;
+                }
+
+                totalRecords = c2bStatement.Deposits.Count;
+                validDeposits = c2bStatement.Deposits.Where(isDepositTrx).ToList();
+                StatementInProcessing = new MPESA_C2B_StatementFile(c2bStatement.ShortCode, validDeposits, c2bStatement.UploadedBy)
+                {
+                    Organization = c2bStatement.Organization,
+                    Operator = c2bStatement.Operator,
+                    StatementDate = c2bStatement.StatementDate,
+                    StatementFileName = c2bStatement.StatementFileName
+                };
             }
 
-            int totalRecords = c2bStatement.Deposits.Count, totalDepositTrx = 0, countFailedUploads = 0;
-
-            var validDeposits = c2bStatement.Deposits.Where(isDepositTrx).ToList();
             totalDepositTrx = validDeposits.Count;
 
-            validDeposits.ForEach(trx =>
+            for (int i = totalDepositTrx - 1; i >= 0; i--)
             {
                 try
                 {
-                    UploadTransaction(trx, c2bStatement.ShortCode, actionUser);
+                    UploadTransaction(validDeposits.ElementAt(i), c2bStatement.ShortCode, actionUser);
                 }
                 catch (Exception ex)
                 {
                     countFailedUploads++;
 
-                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", $"Exception while uploading transaction: {ex.Message}", new { msacco_deposit = trx, client = c2bStatement.Organization, uploadedBy = actionUser }, ex);
+                    AppLogger.LogOperationException("MPESADepositsBLL.SubmitTransaction", $"Exception while uploading transaction: {ex.Message}", new { msacco_deposit = validDeposits.ElementAt(i), client = c2bStatement.Organization, uploadedBy = actionUser }, ex);
                 }
-            });
+
+                int n = StatementInProcessing.Deposits.FindAll(deposits => deposits.ReceiptNo == validDeposits.ElementAt(i).ReceiptNo).Count;
+
+                IMPESADeposit processed = StatementInProcessing.Deposits.Find(deposits => deposits.ReceiptNo == validDeposits.ElementAt(i).ReceiptNo);
+                StatementInProcessing.ExpungeTransaction(processed);
+
+                if (n > 1)
+                {
+                    AppLogger.LogEvent("MPESADepositsBLL.SubmitTransaction", $"Found {n} duplicate trx in StatementInProcessing for receipt number {processed.ReceiptNo}", new { uploadedTrx = validDeposits.ElementAt(i), duplicates = StatementInProcessing.Deposits.FindAll(deposits => deposits.ReceiptNo == validDeposits.ElementAt(i).ReceiptNo) });
+                }
+                //AppLogger.LogDevNotes("MPESADepositsBLL.SubmitTransaction", "Removed trx from StatementInProcessing", new { trx = validDeposits.ElementAt(i), StatementInProcessing });
+            }
+
+            if (!StatementInProcessing.Deposits.Any())
+            {
+                StatementInProcessing = null;
+                AppLogger.LogDevNotes("MPESADepositsBLL.SubmitTransaction", "Set StatementInProcessing to null", null);
+            }
 
             int numUploadedRecords = totalDepositTrx - countFailedUploads;
-            if(numUploadedRecords < 1)
+            if (numUploadedRecords < 1)
             {
                 operationMessage = "Something prevented the upload. Kindly contact support immediately!";
                 return false;
@@ -98,7 +158,7 @@ namespace MSacco_BLL
             qryParams.Add("Description", mpesaDeposit.Details);
             qryParams.Add("Status", mpesaDeposit.TransactionStatus);
             qryParams.Add("Org_Account_Balance", mpesaDeposit.Balance);
-            qryParams.Add("Trans_Time", mpesaDeposit.CompletionTime.ToString("dd-MM-yyyy hh:mm:ss tt"));
+            qryParams.Add("Trans_Time", mpesaDeposit.CompletionTime.ToString("yyyyMMddhhmmss"));
 
             query = $@"INSERT INTO {_tblUploadedMPESADeposits}
            ([Corporate No]
