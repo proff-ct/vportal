@@ -61,3 +61,7 @@ function PopupMessage(alertTitle, alertMessage, titleOverride = null) {
         message: alertMessage
     });
 }
+
+function ToastPrompt(promptMessage) {
+
+}

@@ -75,6 +75,7 @@
     <Compile Include="MSACCOToolbox.cs" />
     <Compile Include="MsaccoWhitelisting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR Hubs\IMSACCOClientHub.cs" />
     <Compile Include="USSDRequestsLog.cs" />
     <Compile Include="VirtualRegistrationIPRS.cs" />
   </ItemGroup>

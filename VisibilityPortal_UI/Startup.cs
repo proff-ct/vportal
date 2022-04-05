@@ -9,6 +9,8 @@ namespace Visibility_Portal
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            Microsoft.AspNet.SignalR.GlobalHost.DependencyResolver = new Microsoft.AspNet.SignalR.DefaultDependencyResolver();
+            app.MapSignalR();
         }
     }
 }

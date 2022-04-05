@@ -369,7 +369,7 @@ function UploadStatement(restUrl, statement, apiCommParams) {
     msaccoCallBack.ERROR = function (xhr, status, error) {
         var msg = { success: false, ex: null };
         var errorCode = xhr.status;
-
+        
         if (errorCode == ERR_CODE.BAD_REQ) {
             if (error) {
                 msg.ex = "MSACCO says: " + error + "<p/><p/>Kindly log out then log back in to resolve this error";
@@ -379,6 +379,10 @@ function UploadStatement(restUrl, statement, apiCommParams) {
         else if (errorCode == 200 && status == "parsererror") {
             msg.ex = "Server error. <p/><p/>Close all portal tabs then log out and log back in.";
         }
+        else if (errorCode == 0) {
+            msg.success = "Ongoing";
+            msg.ex = "You will get a status alert when process is completed.";
+        }
         else msg.ex = "An error occurred communicating with MSACCO. Kindly try again";
 
         ParseDepositUploadResponse(msg);
@@ -386,13 +390,20 @@ function UploadStatement(restUrl, statement, apiCommParams) {
 
 
     CallMSACCO(restUrl, ajaxParams, apiCommParams, msaccoCallBack);
+    PopupMessage(
+        "MSACCO Deposits",
+        "The file upload is in progress.<br/><br/>If no response within one mimute, you can choose to wait or do other things. A status alert will be issued when process is completed.");
 }
 
 function ParseDepositUploadResponse(serverResponse) {
     var msg;
     if (serverResponse.success == true) {
         msg = "<h4>Status: Success</h4>  <p/><p/>" + serverResponse.ex + "<p/><p/>Statement file successfully uploaded";
-    } else {
+    }
+    else if (serverResponse.success) {
+        msg = "<h4>Status: Ongoing</h4>  <p/><p/>" + serverResponse.ex;
+    }
+    else {
         msg = "<h4>Status: Failed</h4> <p/><p/>" + serverResponse.ex;
     }
 
