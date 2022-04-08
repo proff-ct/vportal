@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MSacco_BLL.CustomFilters;
 using MSacco_BLL.MSSQLOperators;
-using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Functions;
-using MSacco_Dataspecs.Feature.MsaccoTIMSINumberChecker.Models;
+using MSacco_Dataspecs;
 using MSacco_Dataspecs.Feature.USSDRequestLogging.Functions;
 using MSacco_Dataspecs.MSSQLOperators;
 using System;
@@ -65,7 +64,7 @@ namespace MSacco_BLL.Controllers
       // 1. get the member's record from db
       // 2. parse and pass the record to client
       dynamic[] registeredMemberDeviceRecord = _ussdRequestsBLL
-        .GetMemberUSSDRequestLogForClient(clientCorporateNo, memberTelephoneNo.Replace("-",""))
+        .GetMemberUSSDRequestLogForClient(clientCorporateNo, MSACCOToolbox.ParsePhoneNo(memberTelephoneNo))
         .ToArray();
 
       return Json(new
