@@ -59,7 +59,7 @@
     $(document).ready(function () {
       $('[data-mask]').inputmask();
 
-      initTabulator("#ussdRequestsListTable");
+      initTabulator("#ussdRequestsListTable", { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken" });
 
       $("#btnSearchMemberUSSDLogs").on('click', function () {
         SearchMemberUSSDLogs(
