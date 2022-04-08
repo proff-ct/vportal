@@ -236,7 +236,7 @@ class LoansTable {
         //response - the JSON object returned in the body of the response.
 
         response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
-        return response.data; //return the tableData property of a response json object
+        return response; //return the tableData property of a response json object
       },
       // collapse columns that no longer fit on the table into a list under the row
       responsiveLayout: "collapse",
@@ -451,7 +451,7 @@ class WithdrawalsTable {
         //params - the parameters passed with the request
         //response - the JSON object returned in the body of the response.
         response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
-        return response.data; //return the tableData property of a response json object
+        return response; //return the tableData property of a response json object
       },
       // collapse columns that no longer fit on the table into a list under the row
       responsiveLayout: "collapse",
@@ -567,7 +567,7 @@ class UtilityPaymentsTable {
         //params - the parameters passed with the request
         //response - the JSON object returned in the body of the response.
         response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
-        return response.data; //return the tableData property of a response json object
+        return response; //return the tableData property of a response json object
       },
       // collapse columns that no longer fit on the table into a list under the row
       responsiveLayout: "collapse",
@@ -671,7 +671,7 @@ class AirtimeTopUpsTable {
           //params - the parameters passed with the request
           //response - the JSON object returned in the body of the response.
           response.data = JSON.parse(MSACCODecryptor(apiCommParams.encSecret, apiCommParams.encKey, response.data));
-          return response.data; //return the tableData property of a response json object
+          return response; //return the tableData property of a response json object
         },
         // collapse columns that no longer fit on the table into a list under the row
         responsiveLayout: "collapse",
