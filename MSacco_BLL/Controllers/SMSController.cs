@@ -103,13 +103,14 @@ namespace MSacco_BLL.Controllers
                 goto exit_fn;
             }
 
-            // send sms
+            // create sms file data
             IFile_PortalSMS smsFile = new PortalSMSFile(smsRecipients)
             {
                 FileName = bulkSMSData.FileName,
                 MessageBody = bulkSMSData.Message.Trim()
             };
 
+            // send sms
             try
             {
                 if (_portalSMSBLL.DispatchSMS(userParams.ClientCorporateNo, smsFile, User.Identity.Name, out actionMessage))
@@ -124,7 +125,7 @@ namespace MSacco_BLL.Controllers
             }
             catch (Exception ex)
             {
-                actionMessage = "An error occurred queing the sms";
+                actionMessage = "An error occurred queuing the sms";
 
                 AppLogger.LogOperationException(
                     "SMSController.Peperusha",

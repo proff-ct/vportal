@@ -7,6 +7,7 @@ using MSacco_Dataspecs.Feature.PortalSMS.Models;
 using MSacco_Dataspecs.Functions;
 using MSacco_Dataspecs.Models;
 using MSacco_Dataspecs.MSSQLOperators;
+using MSACCO_SharedFunctions;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -55,6 +56,33 @@ namespace MSacco_BLL
             {
                 operationMessage = "Failed retrieving client information";
                 return isDispatched;
+            }
+
+            // verify that bulk sms float is sufficient
+            IMSACCO_BulkSMSBalance msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
+            if (msaccoSMSBalance.AvailableBalance < 1)
+            {
+                operationMessage = $"Insufficient sms balance: {msaccoSMSBalance.ActualBalance}";
+                return isDispatched;
+            }
+            
+            msaccoSMSBalance.AvailableBalance = msaccoSMSBalance.ActualBalance - MSACCO_BULKSMS.MIN_RESERVE_LEVEL;
+            if (msaccoSMSBalance.AvailableBalance <= 0)
+            {
+                operationMessage = $"Available balance is less than the MSACCO reserve balance of {MSACCO_BULKSMS.MIN_RESERVE_LEVEL} units";
+                return isDispatched;
+            }
+            else
+            {
+                if (bulkSMSFile.GetTotalSMSToSend() > msaccoSMSBalance.AvailableBalance)
+                {
+                    int maxRecipients = msaccoSMSBalance.AvailableBalance / bulkSMSFile.NUM_SMS_PARTS;
+                    operationMessage = maxRecipients == 0 
+                        ? string.Format("Available balance({1}) is insufficient to send your message of {0} total sms units", bulkSMSFile.NUM_SMS_PARTS, msaccoSMSBalance.AvailableBalance)
+                        : string.Format("Available balance({1} unit(s)) can support {0} MAX number of recipients because your message has {2} sms units per recipient.", maxRecipients, msaccoSMSBalance.AvailableBalance, bulkSMSFile.NUM_SMS_PARTS);
+
+                    return isDispatched;
+                }
             }
 
             VisibilityPortal_SMSMV smsData = new VisibilityPortal_SMSMV
@@ -117,6 +145,11 @@ namespace MSacco_BLL
             operationMessage = $"Processed {numValidContacts} / {numPossibleContacts} sms recipients.";
 
             return recipients;
+        }
+
+        public IMSACCO_BulkSMSBalance GetMSACCOBulkSMSBalance(string clientCorporateNo)
+        {
+            return new MSACCO_BulkSMSBalance(AccountSync.BulkSMSCount(clientCorporateNo));
         }
 
         public IEnumerable<IFile_DispatchedPortalSMS> GetUploadedSMSRecordsForClient(string userEmail, out int lastPage, bool paginate = false, IPaginationParameters pagingParams = null)
