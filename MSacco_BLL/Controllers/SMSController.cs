@@ -125,7 +125,7 @@ namespace MSacco_BLL.Controllers
             }
             catch (Exception ex)
             {
-                actionMessage = "An error occurred queing the sms";
+                actionMessage = "An error occurred queuing the sms";
 
                 AppLogger.LogOperationException(
                     "SMSController.Peperusha",

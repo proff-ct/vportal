@@ -65,8 +65,8 @@ namespace MSacco_BLL
                 operationMessage = $"Insufficient sms balance: {msaccoSMSBalance.ActualBalance}";
                 return isDispatched;
             }
+            
             msaccoSMSBalance.AvailableBalance = msaccoSMSBalance.ActualBalance - MSACCO_BULKSMS.MIN_RESERVE_LEVEL;
-
             if (msaccoSMSBalance.AvailableBalance <= 0)
             {
                 operationMessage = $"Available balance is less than the MSACCO reserve balance of {MSACCO_BULKSMS.MIN_RESERVE_LEVEL} units";
@@ -79,7 +79,7 @@ namespace MSacco_BLL
                     int maxRecipients = msaccoSMSBalance.AvailableBalance / bulkSMSFile.NUM_SMS_PARTS;
                     operationMessage = maxRecipients == 0 
                         ? string.Format("Available balance({1}) is insufficient to send your message of {0} total sms units", bulkSMSFile.NUM_SMS_PARTS, msaccoSMSBalance.AvailableBalance)
-                        : string.Format("Available balance({1}) can support {0} MAX number of recipients.", maxRecipients, msaccoSMSBalance.AvailableBalance);
+                        : string.Format("Available balance({1} unit(s)) can support {0} MAX number of recipients because your message has {2} sms units per recipient.", maxRecipients, msaccoSMSBalance.AvailableBalance, bulkSMSFile.NUM_SMS_PARTS);
 
                     return isDispatched;
                 }
