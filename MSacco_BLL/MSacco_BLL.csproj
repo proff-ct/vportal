@@ -87,6 +87,10 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.0\lib\net451\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="MSACCO_SharedFunctions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3PP\MSACCO_SharedFunctions\MSACCO_SharedFunctions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -197,6 +201,7 @@
     <Compile Include="Utilities\AutoMapper\ModelMetadataProviderConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="3PP\MSACCO_SharedFunctions\MSACCO_SharedFunctions.dll.config" />
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -227,6 +232,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="3PP\Activations.dll" />
+    <Content Include="3PP\MSACCO_SharedFunctions\EntityFramework.dll" />
+    <Content Include="3PP\MSACCO_SharedFunctions\EntityFramework.SqlServer.dll" />
+    <Content Include="3PP\MSACCO_SharedFunctions\MSACCO_SharedFunctions.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
