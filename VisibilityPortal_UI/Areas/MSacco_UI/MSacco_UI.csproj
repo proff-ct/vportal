@@ -451,6 +451,8 @@
     <Content Include="plugins\sheetjs\xlsx.js" />
     <Content Include="plugins\sheetjs\xlsx.min.js" />
     <Content Include="plugins\sheetjs\xlsx.mini.min.js" />
+    <Content Include="plugins\sms_char_count\sms_counter.js" />
+    <Content Include="plugins\sms_char_count\sms_counter.min.js" />
     <Content Include="plugins\tabulator_4.4\css\bootstrap\tabulator_bootstrap.css" />
     <Content Include="plugins\tabulator_4.4\css\bootstrap\tabulator_bootstrap.min.css" />
     <Content Include="plugins\tabulator_4.4\css\bootstrap\tabulator_bootstrap4.css" />
