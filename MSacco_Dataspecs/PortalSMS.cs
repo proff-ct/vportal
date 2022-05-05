@@ -1,5 +1,4 @@
-﻿using MSacco_Dataspecs.MSACCO_SMS;
-using MSacco_Dataspecs.MSSQLOperators;
+﻿using MSacco_Dataspecs.MSSQLOperators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,9 +75,9 @@ namespace MSacco_Dataspecs.Feature.PortalSMS
             {
                 if (string.IsNullOrEmpty(MessageBody)) return 0;
 
-                if (MessageBody.Length <= SMS_SPEC.MAX_SMS_CHAR) return 1;
+                if (MessageBody.Length <= Cellular.GSM_03_38.SMS.SINGLE_MSG_MAX_CHAR) return 1;
 
-                int numParts = Math.DivRem(MessageBody.Length, SMS_SPEC.MAX_SMS_CHAR, out int remainder);
+                int numParts = Math.DivRem(MessageBody.Length, Cellular.GSM_03_38.SMS.MULTIPART_MSG_MAX_CHAR, out int remainder);
 
                 return numParts + (remainder > 0 ? 1 : 0);
             }

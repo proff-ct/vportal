@@ -59,11 +59,11 @@
     <Compile Include="DBConnectionStrings.cs" />
     <Compile Include="Functions\IBL_MobileWithdrawals.cs" />
     <Compile Include="Functions\IBL_SACCO.cs" />
+    <Compile Include="GSM_SMS.cs" />
     <Compile Include="HardCoded.cs" />
     <Compile Include="Models\IMobileWithdrawals_DarajaDB.cs" />
     <Compile Include="Models\IMobileWithdrawals_SACCODB.cs" />
     <Compile Include="Models\ISACCO.cs" />
-    <Compile Include="MSACCO_SMS.cs" />
     <Compile Include="PortalSMS.cs" />
     <Compile Include="MPESADeposits.cs" />
     <Compile Include="MsaccoBankTransfer.cs" />
