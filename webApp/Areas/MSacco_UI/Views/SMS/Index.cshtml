@@ -88,6 +88,7 @@
         string[] scriptFiles = {
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/shim.min.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/xlsx.full.min.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sms_char_count/sms_counter.min.js",
 $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/portalSMS.js"
 };
     }
@@ -167,6 +168,8 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/portalSMS.js"
       LoadData(
         "@Url.Action("GetPortalSMSRecords", "SMS")",
         @activeUserParams.ClientCorporateNo);
+
+        $('#txtSMS').countSms('#sms-counter');
     });
     </script>
 }
