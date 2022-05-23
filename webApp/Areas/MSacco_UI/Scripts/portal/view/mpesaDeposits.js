@@ -145,17 +145,18 @@ function LoadStatementData(evtLoadFile) {
             return;
         }
         // check line headers present. return if not present
-        if (!IsLineHeaderRowPresent(ws)) {
+        var lineDataConfig = {
+            startDataRowIdx: 6
+        };
+        if (!IsLineHeaderRowPresent(ws, lineDataConfig)) {
             PopupMessage(MSG_TITLE, "Expected Header rows for the transactions not found.<br/><br/>" + MSG_STRUCTURE);
             return;
         }
 
-        
-
-        var IDX_FIRST_LINE_ROW = 6;
+        //var IDX_FIRST_LINE_ROW = 6;
         var IDX_LAST_LINE_COL = 12;
 
-        for (var R = IDX_FIRST_LINE_ROW; R <= range.e.r; ++R) {
+        for (var R = lineDataConfig.startDataRowIdx; R <= range.e.r; ++R) {
             var lineData = {
                 ReceiptNo: null,
                 CompletionTime: null,
@@ -281,60 +282,72 @@ function ExtractFileMetaData(workSheet) {
     return statementFile;
 }
 
-function IsLineHeaderRowPresent(workSheet) {
+function IsLineHeaderRowPresent(workSheet, lineConfig) {
     var headerRowsPresent = false;
+    var passOneHasHeader = false;
+    var NUM_PASS = 2;
 
     var IDX_LINE_HEADER_ROW = 5;
+    var IDX2_LINE_HEADER_ROW = 6;
     var IDX_LAST_HEADER_COL = 12;
 
-    for (var C = 0; C <= IDX_LAST_HEADER_COL; ++C) {
+    for (var pass = 1; pass <= NUM_PASS; ++pass) {
+        for (var C = 0; C <= IDX_LAST_HEADER_COL; ++C) {
+            var header = workSheet[XLSX.utils.encode_cell({ c: C, r: IDX_LINE_HEADER_ROW })];
+            switch (pass) {
+                case 2:
+                    header = workSheet[XLSX.utils.encode_cell({ c: C, r: IDX2_LINE_HEADER_ROW })];
+                    break;
+            }
+            
+            switch (C) {
+                case 0:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Receipt No");
+                    break;
+                case 1:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Completion Time");
+                    break;
+                case 2:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Initiation Time");
+                    break;
+                case 3:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Details");
+                    break;
+                case 4:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Transaction Status");
+                    break;
+                case 5:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Paid In");
+                    break;
+                case 6:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Withdrawn");
+                    break;
+                case 7:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Balance");
+                    break;
+                case 8:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Balance Confirmed");
+                    break;
+                case 9:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Reason Type");
+                    break;
+                case 10:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Other Party Info");
+                    break;
+                case 11:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Linked Transaction ID");
+                    break;
+                case 12:
+                    headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "A/C No");
+                    break;
+            }
 
-        var header = workSheet[XLSX.utils.encode_cell({ c: C, r: IDX_LINE_HEADER_ROW })];
-        switch (C) {
-            case 0:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Receipt No");
-                break;
-            case 1:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Completion Time");
-                break;
-            case 2:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Initiation Time");
-                break;
-            case 3:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Details");
-                break;
-            case 4:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Transaction Status");
-                break;
-            case 5:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Paid In");
-                break;
-            case 6:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Withdrawn");
-                break;
-            case 7:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Balance");
-                break;
-            case 8:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Balance Confirmed");
-                break;
-            case 9:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Reason Type");
-                break;
-            case 10:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Other Party Info");
-                break;
-            case 11:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "Linked Transaction ID");
-                break;
-            case 12:
-                headerRowsPresent = header !== undefined && DoesStringContainSubString(header.v, "A/C No");
-                break;
+            if (!headerRowsPresent) break;
+            if (pass == 1) passOneHasHeader = true;
         }
-
-        if (!headerRowsPresent) return;
+        if (passOneHasHeader) break;
+        if (pass == 2) lineConfig.startDataRowIdx += 1;
     }
-
     return headerRowsPresent;
 }
 
