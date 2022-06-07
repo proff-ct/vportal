@@ -17,16 +17,16 @@ namespace VisibilityPortal_BLL.Services.Messaging
         {
             _smtpClient = new SmtpClient
             {
-                Host = GMAILConfig.host,
-                Port = GMAILConfig.port,
+                Host = OutlookConfig.host,
+                Port = OutlookConfig.port,
                 EnableSsl = GMAILConfig.GmailSSL,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(GMAILConfig.username, GMAILConfig.password)
+                Credentials = new NetworkCredential(OutlookConfig.username, OutlookConfig.password)
             };
 
 
-            MailMessage email = new MailMessage(GMAILConfig.username, message.Destination)
+            MailMessage email = new MailMessage(OutlookConfig.username, message.Destination)
             {
                 Subject = message.Subject, Body = message.Body, IsBodyHtml = true, Priority = MailPriority.High
             };
