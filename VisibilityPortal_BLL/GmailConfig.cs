@@ -25,4 +25,21 @@ namespace VisibilityPortal_BLL
             GmailSSL = true;
         }
     }
+    public static class OutlookConfig
+    {
+        public static string username { get; set; }
+        public static string password { get; set; }
+        public static string host { get; set; }
+        public static int port { get; set; }
+        public static string EncryptionMethod { get; set; }
+
+        static OutlookConfig()
+        {
+            username = "msacco@coretec.co.ke";
+            password = "!Team@123";
+            host = "smtp.office365.com";
+            port = 587;
+            EncryptionMethod = "STARTTLS";
+        }
+    }
 }
