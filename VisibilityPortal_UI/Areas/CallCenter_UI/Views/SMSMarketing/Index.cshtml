@@ -86,10 +86,10 @@
         /**/
 
         string[] scriptFiles = {
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/shim.min.js",
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/xlsx.full.min.js",
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sms_char_count/sms_counter.min.js",
-$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing.js"
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/shim.min.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/xlsx.full.min.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/sms_char_count/sms_counter.min.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing.js"
 };
     }
     @Scripts.Render(scriptFiles)
@@ -107,6 +107,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing.js"
     $(document).ready(function () {
         var applicationTitle = "@ViewBag.Title";
         var token = "@XToken()";
+        var selectedSaccoCorporateNo;
 
         $("#smsContactsFile").on('change', function (event) {
             selectedSMSContactsFile = event.target.files[0];
@@ -139,6 +140,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing.js"
                     },
                     callback: function (result) {
                         if (result == true) {
+                            parsedBulkSMSFile.C = selectedSaccoCorporateNo;
                             DispatchSMS(
                                 "@Url.Action("Taarifa", "SMSMarketing")",
                                 parsedBulkSMSFile,
@@ -166,7 +168,7 @@ $"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing.js"
         { encSecret:"@activeUserParams.APIAuthID", encKey:"@activeUserParams.APIToken" });
 
         $("#selectSacco").change(function () {
-        var selectedSaccoCorporateNo = $(this).val();
+        selectedSaccoCorporateNo = $(this).val();
         if (!selectedSaccoCorporateNo) return;
             LoadData("@Url.Action("GetSMSMarketingRecords", "SMSMarketing")", selectedSaccoCorporateNo);
       });

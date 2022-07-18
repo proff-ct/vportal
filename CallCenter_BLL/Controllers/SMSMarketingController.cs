@@ -89,7 +89,7 @@ namespace CallCenter_BLL.Controllers
             string actionMessage;
 
             ActiveUserParams userParams = (ActiveUserParams)Session["ActiveUserParams"];
-            if (userParams == null || bulkSMSData == null || string.IsNullOrEmpty(bulkSMSData.Message) || bulkSMSData.RecipientList == null || !bulkSMSData.RecipientList.Any())
+            if (userParams == null || bulkSMSData == null || string.IsNullOrEmpty(bulkSMSData.Message) || string.IsNullOrEmpty(bulkSMSData.Corp) || bulkSMSData.RecipientList == null || !bulkSMSData.RecipientList.Any())
             {
                 actionMessage = "Missing message data. Verify and retry";
                 goto exit_fn;
@@ -117,7 +117,7 @@ namespace CallCenter_BLL.Controllers
             // send sms
             try
             {
-                if (_smsMarketingBLL.DispatchSMS(userParams.ClientCorporateNo, smsFile, User.Identity.Name, out actionMessage))
+                if (_smsMarketingBLL.DispatchSMS(bulkSMSData.Corp, smsFile, User.Identity.Name, out actionMessage))
                 {
                     actionMessage = string.IsNullOrEmpty(actionMessage) ? "SMS queued for sending" : actionMessage;
                     isDispatched = true;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using CallCenter_Dataspecs;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -98,7 +99,7 @@ namespace CallCenter_BLL.TransactionPortalServices
                     }
 #else
                     public TP_AppDBContext()
-                        : base(@ConfigurationManager.ConnectionStrings[MS_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString, throwIfV1Schema: false)
+                        : base(@ConfigurationManager.ConnectionStrings[CC_DBConnectionStrings.TransactionPortalDBConnectionStringName].ConnectionString, throwIfV1Schema: false)
                     {
                     }
 #endif

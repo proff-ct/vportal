@@ -181,6 +181,7 @@ function DispatchSMS(restUrl, parsedSMS, apiCommParams, successCallBack = null) 
     }
 
     var ajaxParams = {
+        Corp: parsedSMS.C,
         FileName: parsedSMS.FileName,
         Message: parsedSMS.Message,
         RecipientList: parsedSMS.RecipientList

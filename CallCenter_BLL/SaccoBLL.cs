@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace CallCenter_BLL
 {
@@ -57,15 +58,14 @@ namespace CallCenter_BLL
             string tblPortalModuleForClient = "PortalModuleForClient";
 
             DynamicParameters qryParams = new DynamicParameters();
-            qryParams.Add("TBL_PortalModuleForClient", tblPortalModuleForClient);
             qryParams.Add("CorporateNo", corporateNo);
             qryParams.Add("PortalModule", "MSacco");
-
+            
             string query = $@"SELECT ClientModuleId 
-                            FROM @TBL_PortalModuleForClient 
+                            FROM {tblPortalModuleForClient}
                             WHERE ClientCorporateNo=@CorporateNo AND PortalModuleName=@PortalModule";
-
-            return new DapperORM(connString).QueryGetSingle<string>(query);
+            
+            return new DapperORM(connString).QueryGetSingle<string>(query, qryParams);
         }
     }
 }

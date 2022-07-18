@@ -1,4 +1,6 @@
-﻿function initSelectPicker(selectRef) {
+﻿var PORTAL_DATE_FORMAT = "DD-MMM-YYYY hh:mm:ss A";
+
+function initSelectPicker(selectRef) {
   $(selectRef).selectpicker({
     liveSearch: true,
     showTick: true

@@ -155,6 +155,7 @@ namespace CallCenter_Dataspecs.SMSMarketing
         }
         public class PortalSMSFileViewModel
         {
+            public string Corp { get; set; }
             public string FileName { get; set; }
             public string Message { get; set; }
             public List<string> RecipientList { get; set; }

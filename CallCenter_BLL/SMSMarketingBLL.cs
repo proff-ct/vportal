@@ -43,14 +43,13 @@ namespace CallCenter_BLL
             string MSACCOFinanceUser = "VOLENDIEMA@CORETEC.CO.KE";
 
             DynamicParameters qryParams = new DynamicParameters();
-            qryParams.Add("tblBulkSMSTopup", tblBulkSMSTopUp);
             qryParams.Add("CorporateNo", msaccoClient.corporateNo);
             qryParams.Add("SMSUnits", numUnits);
             qryParams.Add("TrxDescription", trxDescription);
             qryParams.Add("TopupDate", DateTime.Now);
             qryParams.Add("MSACCOFinanceUser", MSACCOFinanceUser);
 
-            string query = $@"INSERT INTO @tblBulkSMSTopup
+            string query = $@"INSERT INTO {tblBulkSMSTopUp}
                 (Sacco
                 ,SmsCount
                 ,[DateTime]
@@ -89,30 +88,26 @@ namespace CallCenter_BLL
             string query;
 
             DynamicParameters qryParams = new DynamicParameters();
-            qryParams.Add("TBL_PortalUserRole", tblPortalUserRole);
             qryParams.Add("ClientModuleID", clientMSACCOModuleID);
             qryParams.Add("PortalRole", "SystemAdmin");
             qryParams.Add("IsRoleEnabled", true);
 
             // 1. Get first user with enabled SystemAdmin role
-            query = $@"SELECT UserId
-                FROM @TBL_PortalUserRole
+            query = $@"SELECT TOP 1 UserId
+                FROM {tblPortalUserRole}
                 WHERE [ClientModuleId] = @ClientModuleID AND [AspRoleName] = @PortalRole AND IsEnabled = @IsRoleEnabled
-                LIMIT 1
                 ";
             string userId = new DapperORM(vpDBConn).QueryGetSingle<string>(query, qryParams);
 
 
             // 2. Get email address assoicated with that user id
-            string tblPortalUsers = "ASPNetUsers";
+            string tblPortalUsers = "AspNetUsers";
             DynamicParameters qryUserParams = new DynamicParameters();
-            qryUserParams.Add("TBL_ASPNetUsers", tblPortalUsers);
             qryUserParams.Add("UserID", userId);
 
-            query = $@"SELECT UserName
-                FROM @TBL_ASPNetUsers
+            query = $@"SELECT TOP 1 UserName
+                FROM {tblPortalUsers}
                 WHERE [Id] = @UserID
-                LIMIT 1
                 ";
 
             return new DapperORM(vpDBConn).QueryGetSingle<string>(query, qryUserParams) ?? throw new ApplicationException($"Email address for user id {userId} of {msaccoClient.saccoName_1} not found");
