@@ -12,5 +12,7 @@ namespace CallCenter_Dataspecs.Functions
     ISACCO GetSaccoById(int id);
     ISACCO GetSaccoByUniqueParam(string corporateNo = null, string saccoName = null);
     IEnumerable<ISACCO> GetSaccoList();
+
+    string GetMSACCOModuleID(string corporateNo);
   }
 }
