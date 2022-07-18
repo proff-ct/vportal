@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ActiveUserParams.cs" />
     <Compile Include="AppLogger.cs" />
+    <Compile Include="GSM_SMS.cs" />
     <Compile Include="IActiveUserParams.cs" />
     <Compile Include="MSACCO_SERVICE_SPEC.cs" />
     <Compile Include="PortalSecurity.cs" />

@@ -1,0 +1,178 @@
+﻿@using System.Web.Optimization
+@using Visibility_Portal
+@using Utilities.PortalApplicationParams
+@{
+    ViewBag.Title = "SMS Marketing";
+
+    Layout = $"{CallCenterAreaRegistration.AreaPathFromRoot}/Views/Shared/_LayoutCallCenter.cshtml";
+    ActiveUserParams activeUserParams = ViewBag.ActiveUserParams;
+}
+<section class="content-header">
+    <h2>@ViewBag.Title</h2>
+</section>
+<section class="content">
+    <div class="row">
+        <section class="col-sm-12 connectedSortable">
+            <div class="box box-info collapsed-box ui-sortable-handle">
+                <div class="box-header with-border ">
+                    <h3 class="box-title">
+                        <p>Compose Message <i class="fa fa-pencil-square-o" aria-hidden="true"></i></p>
+                    </h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row col-sm-12">
+                        @Html.Partial("_ComposeMessagePartial")
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-labeled btn-success btn-sm" id="sendSMS">
+                            <span class="btn-label"><i class=" 	fa fa-paper-plane-o"></i></span>
+                            Send
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </section>
+    </div>
+
+    <div class="row">
+        <section class="col-sm-12 connectedSortable">
+            <div class="box box-info collapsed-box ui-sortable-handle">
+                <div class="box-header with-border ">
+                    <h3 class="box-title">
+                        <p>Sent Messages <i class="fa fa-envelope" aria-hidden="true"></i></p>
+                    </h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row col-sm-12">
+                        @Html.Partial("_DisplaySentMessagesPartial")
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    @*<a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">
+                          <span>
+                            <i class="fa fa-refresh"></i>
+                          </span>
+                          Refresh Data
+                        </a>*@
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </section>
+    </div>
+
+</section>
+
+
+@section Scripts {
+    <!-- Include external scripts-->
+    @{
+        /**/
+
+        string[] scriptFiles = {
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/shim.min.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sheetjs/xlsx.full.min.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/plugins/sms_char_count/sms_counter.min.js",
+$"{MSaccoAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing.js"
+};
+    }
+    @Scripts.Render(scriptFiles)
+    <!-- Define local scripts-->
+<script>
+    @functions{
+        public string XToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;
+        }
+    }
+
+    $(document).ready(function () {
+        var applicationTitle = "@ViewBag.Title";
+        var token = "@XToken()";
+
+        $("#smsContactsFile").on('change', function (event) {
+            selectedSMSContactsFile = event.target.files[0];
+        });
+
+        $("#btnImportFromFile").on('click', function () {
+            if (selectedSMSContactsFile) {
+                var fileReader = new FileReader();
+
+                fileReader.onload = LoadRecipientData;
+                fileReader.readAsBinaryString(selectedSMSContactsFile);
+            }
+        });
+        $("#sendSMS").on('click', function () {
+            if (selectedSMSContactsFile && $("#txtSMS").val() && parsedBulkSMSFile.RecipientList != null && typeof parsedBulkSMSFile.RecipientList != "undefined") {
+                parsedBulkSMSFile.Message = $("#txtSMS").val();
+
+                bootbox.confirm({
+                    title: "Confirm to send SMS",
+                    message: "Are you sure you want to send this sms?",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel',
+                            className: 'btn-danger'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm',
+                            className: 'btn-success'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result == true) {
+                            DispatchSMS(
+                                "@Url.Action("Taarifa", "SMSMarketing")",
+                                parsedBulkSMSFile,
+                                { encSecret: "@activeUserParams.APIAuthID", encKey: "@activeUserParams.APIToken", xToken: token },
+                                function () {
+                                    selectedSMSContactsFile = null;
+                                    $('#btnImportFromFile').attr('value', '');
+                                    $("#txtSMS").focus().select();
+                                });
+                        }
+                    }
+                });
+
+            }
+            else {
+                bootbox.alert({
+                    title: "<h4>" + applicationTitle + " - Send Failed</h4>",
+                    message: "Please ensure you have imported contacts and supplied the message to send"
+                });
+            }
+        });
+
+        initTabulator(
+        "#sentSMSListTable",
+        { encSecret:"@activeUserParams.APIAuthID", encKey:"@activeUserParams.APIToken" });
+
+        $("#selectSacco").change(function () {
+        var selectedSaccoCorporateNo = $(this).val();
+        if (!selectedSaccoCorporateNo) return;
+            LoadData("@Url.Action("GetSMSMarketingRecords", "SMSMarketing")", selectedSaccoCorporateNo);
+      });
+
+
+        $('#txtSMS').countSms('#sms-counter');
+    });
+</script>
+}
