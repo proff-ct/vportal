@@ -1,0 +1,21 @@
+﻿<div class="form-group col-sm-8">
+    <textarea class="form-control" rows="4" id="txtSMS" placeholder="Type here ..."></textarea>
+    <ul id="sms-counter" class="bg-light-blue">
+        @*<li>Encoding: <span class="encoding"></span></li>*@
+        <li>Characters: <span class="length"></span></li>
+        <li>SMS Units: <span class="messages"></span></li>
+        @*<li>Char per SMS Unit: <span class="per_message"></span></li>
+        <li>Remaining: <span class="remaining"></span></li>*@
+    </ul>
+</div>
+
+<div class="input-group">
+    <input type="file" class="form-control" id="smsContactsFile" accept=".xls,.xlsx">
+    <span class="input-group-btn">
+        <button type="button"
+                class="btn btn-info btn-flat"
+                id="btnImportFromFile">
+            Import Contacts
+        </button>
+    </span>
+</div>
