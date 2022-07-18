@@ -144,20 +144,25 @@ namespace CallCenter_BLL
                 operationMessage = $"Failed retrieving System Admin email for {sacco.saccoName_1}. Please confirm whether System Admin has been created for the sacco.";
                 return isDispatched;
             }
+            
+            // verify that bulk sms float is sufficient
+            IMSACCO_BulkSMSBalance msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
+            if (msaccoSMSBalance.AvailableBalance < 0)
+            {
+                operationMessage = $"{sacco.saccoName_1} has sms arrears of {msaccoSMSBalance.ActualBalance} sms units which need to be settled first.";
+                return isDispatched;
+            }
 
             // pre-load sms units
             PreLoadSMSUnits(sacco, bulkSMSFile.GetTotalSMSToSend(), $"MSACCO Marketing by {actionUser}", actionUser);
 
-            // verify that bulk sms float is sufficient
-            IMSACCO_BulkSMSBalance msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
-            if (msaccoSMSBalance.AvailableBalance < 1)
-            {
-                operationMessage = $"Insufficient sms balance: {msaccoSMSBalance.ActualBalance}";
-                return isDispatched;
-            }
+            // re-check available balance
+            msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
 
             if (bulkSMSFile.GetTotalSMSToSend() > msaccoSMSBalance.AvailableBalance)
             {
+                AppLogger.LogEvent("SMSMarketingBLL.DispatchSMS", $"{bulkSMSFile.GetTotalSMSToSend()} units have just been pre-loaded but have already been consumed. Current available balance is {msaccoSMSBalance.AvailableBalance}.", null);
+
                 int maxRecipients = msaccoSMSBalance.AvailableBalance / bulkSMSFile.NUM_SMS_PARTS;
                 operationMessage = maxRecipients == 0
                     ? string.Format("Available balance({1}) is insufficient to send your message of {0} total sms units", bulkSMSFile.NUM_SMS_PARTS, msaccoSMSBalance.AvailableBalance)
