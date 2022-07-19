@@ -126,9 +126,11 @@ namespace MSacco_BLL
         return isReset;
       }
       string partialPhoneNo = regRecord.Telephone_No.Substring(regRecord.Telephone_No.Length - 9);
+      //string query = $@"DELETE FROM {_tblMsaccoPlusNumberChecker}
+      //          WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' AND ([Comments] IS NOT NULL OR [Comments] <> ''))
+      //          OR [Comments] LIKE '%{partialPhoneNo}%' ";
       string query = $@"DELETE FROM {_tblMsaccoPlusNumberChecker}
-                WHERE ([PhoneNumber] = '{regRecord.Telephone_No}' AND ([Comments] IS NOT NULL OR [Comments] <> ''))
-                OR [Comments] LIKE '%{partialPhoneNo}%' ";
+                    WHERE [PhoneNumber] = '{regRecord.Telephone_No}' ";
       try
       {
         new DapperORM().ExecuteQuery(query);
