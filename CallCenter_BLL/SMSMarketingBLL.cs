@@ -147,7 +147,7 @@ namespace CallCenter_BLL
             
             // verify that bulk sms float is sufficient
             IMSACCO_BulkSMSBalance msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
-            if (msaccoSMSBalance.AvailableBalance < 0)
+            if (msaccoSMSBalance.ActualBalance < 0)
             {
                 operationMessage = $"{sacco.saccoName_1} has sms arrears of {msaccoSMSBalance.ActualBalance} sms units which need to be settled first.";
                 return isDispatched;
