@@ -1,105 +1,124 @@
 ﻿@using System.Web.Optimization
 @using Visibility_Portal
 @{
-  Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section HtmlHead {
-  @{
+    @{
 
-    string[] cssFiles = {
+        string[] cssFiles = {
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/css/bootstrap-select.css",
 //$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/bootstrap/tabulator_bootstrap4.css",
-      $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/css/tabulator_simple.css",
 //$"{CallCenterAreaRegistration.AreaPathFromRoot}/Content/portal/view/_setActiveSacco.css",
 };
 
-  }
-  @Styles.Render(cssFiles)
+    }
+    @Styles.Render(cssFiles)
 
-  @RenderSection("HtmlHead", false)
+    @RenderSection("HtmlHead", false)
 }
 @section MenuLinks {
-  <li class="header">CALL CENTER |> NAVIGATION</li>
-  <li>
-    <a href="@Url.Action("Index", "Home")">
-      <i class="fa fa-dashboard"></i>
-      <span>Dashboard</span>
-    </a>
-  </li>
-  <li class="treeview">
-    <a href="#">
-      <i class="fa fa-bank"></i> <span>Saccos</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li>
-        <a href="@Url.Action("Index", "TIMSI")">
-          <i class="fa fa-mobile fa-lg"></i>
-          <span>TIMSI Activation</span>
+    <li class="header">CALL CENTER |> NAVIGATION</li>
+    <li>
+        <a href="@Url.Action("Index", "Home")">
+            <i class="fa fa-dashboard"></i>
+            <span>Dashboard</span>
         </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "FloatAlerts")">
-          <i class="fa fa-exclamation-triangle"></i>Float Alerts
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-bank"></i> <span>Value Added Services</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
         </a>
-      </li>
-    </ul>
-  </li>
-  <li class="treeview">
-    <a href="#">
-      <i class="fa fa-database"></i> <span>Transactions</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li>
-        <a href="@Url.Action("Index", "USSDRequests")">
-          <i class="fa fa-archive"></i>USSD Logs
+        <ul class="treeview-menu">
+            <li>
+                <a href="@Url.Action("Index", "SMSMarketing")">
+                    <i class="fa fa-mobile fa-lg"></i>
+                    <span>SMS Marketing</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-bank"></i> <span>Saccos</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
         </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "Loans")">
-          <i class="fa fa-credit-card"></i>Loans
+        <ul class="treeview-menu">
+            <li>
+                <a href="@Url.Action("Index", "TIMSI")">
+                    <i class="fa fa-mobile fa-lg"></i>
+                    <span>TIMSI Activation</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "FloatAlerts")">
+                    <i class="fa fa-exclamation-triangle"></i>Float Alerts
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-database"></i> <span>Transactions</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
         </a>
-      </li>
-      <li>
-        <a href="@Url.Action("Index", "MobileWithdrawals")">
-          <i class="fa fa-money"></i>Withdrawals
+        <ul class="treeview-menu">
+            <li>
+                <a href="@Url.Action("Index", "USSDRequests")">
+                    <i class="fa fa-archive"></i>USSD Logs
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Loans")">
+                    <i class="fa fa-credit-card"></i>Loans
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "MobileWithdrawals")">
+                    <i class="fa fa-money"></i>Withdrawals
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
         </a>
-      </li>
-    </ul>
-  </li>
-  <li class="treeview">
-    <a href="#">
-      <i class="fa fa-shopping-basket"></i> <span>Utilities</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
-    </a>
-    <ul class="treeview-menu">
-      <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
-      <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
-    </ul>
-  </li>
+        <ul class="treeview-menu">
+            <li><a href="@Url.Action("Index","UtilityPayments")"><i class="fa fa-money"></i>Payments</a></li>
+            <li><a href="@Url.Action("Index","AirtimeTopups")"><i class="fa fa-mobile"></i>Airtime</a></li>
+        </ul>
+    </li>
 }
 @*@Html.Partial("_SetActiveSaccoPartial")*@
 @RenderBody()
 @section Scripts{
-  @{
-    string[] scriptFiles = {
+    @{
+        string[] scriptFiles = {
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/bootstrap-select-1.13.9/js/bootstrap-select.js",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/moment.js",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/tabulator_4.4/js/tabulator.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/plugins/cryptojs_v3.1.2/rollups/aes.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/toastr.js",
 $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
+$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/msacco.js"
 //$"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/_setActiveSacco.js"
 };
-  }
-  @Scripts.Render(scriptFiles)
-  <!-- Define custom scripts-->
-  <script type="text/javascript">
+    }
+    @Scripts.Render(scriptFiles)
+    <!-- Define custom scripts-->
+    <script type="text/javascript">
       $(document).ready(function () {
         @*// 1. Initialize the select
         initSelectPicker('#selectSacco');
@@ -114,7 +133,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/shared.js",
             { placeholderContainerId: '#currentActiveSacco', placeholder:'#activeSaccoPlaceholder'});
         });*@
       });
-  </script>
+    </script>
 
-  @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 }
