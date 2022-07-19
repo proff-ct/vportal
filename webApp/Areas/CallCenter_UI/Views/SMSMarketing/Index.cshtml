@@ -94,7 +94,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing
     }
     @Scripts.Render(scriptFiles)
     <!-- Define local scripts-->
-<script>
+    <script>
     @functions{
         public string XToken()
         {
@@ -168,6 +168,7 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing
         { encSecret:"@activeUserParams.APIAuthID", encKey:"@activeUserParams.APIToken" });
 
         $("#selectSacco").change(function () {
+            selectedSMSContactsFile = null;
         selectedSaccoCorporateNo = $(this).val();
         if (!selectedSaccoCorporateNo) return;
             LoadData("@Url.Action("GetSMSMarketingRecords", "SMSMarketing")", selectedSaccoCorporateNo);
@@ -176,5 +177,5 @@ $"{CallCenterAreaRegistration.AreaPathFromRoot}/Scripts/portal/view/smsMarketing
 
         $('#txtSMS').countSms('#sms-counter');
     });
-</script>
+    </script>
 }
