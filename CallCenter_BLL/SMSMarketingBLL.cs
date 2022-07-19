@@ -146,18 +146,18 @@ namespace CallCenter_BLL
             }
             
             // verify that bulk sms float is sufficient
-            IMSACCO_BulkSMSBalance msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
+            /*IMSACCO_BulkSMSBalance msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
             if (msaccoSMSBalance.AvailableBalance < 0)
             {
                 operationMessage = $"{sacco.saccoName_1} has sms arrears of {msaccoSMSBalance.ActualBalance} sms units which need to be settled first.";
                 return isDispatched;
-            }
+            }*/
 
             // pre-load sms units
             PreLoadSMSUnits(sacco, bulkSMSFile.GetTotalSMSToSend(), $"MSACCO Marketing by {actionUser}", actionUser);
 
             // re-check available balance
-            msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
+           /* msaccoSMSBalance = GetMSACCOBulkSMSBalance(clientCorporateNo);
 
             if (bulkSMSFile.GetTotalSMSToSend() > msaccoSMSBalance.AvailableBalance)
             {
@@ -169,7 +169,7 @@ namespace CallCenter_BLL
                     : string.Format("Available balance({1} unit(s)) can support {0} MAX number of recipients because your message has {2} sms units per recipient.", maxRecipients, msaccoSMSBalance.AvailableBalance, bulkSMSFile.NUM_SMS_PARTS);
 
                 return isDispatched;
-            }
+            }*/
 
             VisibilityPortal_SMSMV smsData = new VisibilityPortal_SMSMV
             {
